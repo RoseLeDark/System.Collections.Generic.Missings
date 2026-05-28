@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   viewBox="0 0 4096 4096"
+   version="1.1"
+   width="4096"
+   height="4096"
+   sodipodi:docname="System.Collections.Generic.Extras.svg"
+   inkscape:export-filename="System.Collections.Generic.Extras.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showguides="false"
+     inkscape:zoom="0.19702148"
+     inkscape:cx="2045.4622"
+     inkscape:cy="2053.0756"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">.cls-1{fill:#5c2d91;}.cls-2,.cls-3{fill:#fff;}.cls-2{opacity:0.1;}.cls-4{fill:#f2f2f2;}</style>
+  </defs>
+  <title
+     id="title1">logo_NETcore</title>
+  <g
+     id="g1"
+     transform="matrix(63.026452,0,0,63.026452,65.400034,0)">
+    <circle
+       class="cls-1"
+       cx="32"
+       cy="32"
+       r="32"
+       id="circle1" />
+    <g
+       id="g2">
+      <path
+         id="circle1-8"
+         style="display:inline;opacity:0.11;mix-blend-mode:lighten;fill:#ffffff;fill-opacity:1"
+         class="cls-1"
+         d="M 9.8522368,8.9028839 A 32,32 0 0 0 5.6583385e-6,31.999988 32,32 0 0 0 31.999994,64.000007 32,32 0 0 0 55.126692,54.11688 H 55.09248 L 9.9950959,9.0194645 Z M 63.90686,29.560443 l -0.0074,4.974009 a 32,32 0 0 0 0.100529,-2.534464 32,32 0 0 0 -0.09315,-2.439545 z" />
+    </g>
+    <path
+       class="cls-3"
+       d="m 7.4,37.25 a 1.35,1.35 0 0 1 -1,-0.42 1.38,1.38 0 0 1 -0.41,-1 1.4,1.4 0 0 1 0.41,-1 1.34,1.34 0 0 1 1,-0.43 1.37,1.37 0 0 1 1,0.43 1.39,1.39 0 0 1 0.42,1 1.37,1.37 0 0 1 -0.42,1 1.38,1.38 0 0 1 -1,0.42 z"
+       id="path2" />
+    <path
+       class="cls-3"
+       d="M 27.27,37 H 24.65 L 15.28,22.46 A 6,6 0 0 1 14.7,21.32 h -0.08 a 18.72,18.72 0 0 1 0.1,2.5 V 37 H 12.59 V 18.77 h 2.77 l 9.12,14.28 q 0.57,0.89 0.74,1.22 h 0.05 A 19.28,19.28 0 0 1 25.14,31.59 V 18.77 h 2.13 z"
+       id="path3" />
+    <path
+       class="cls-3"
+       d="M 41.69,37 H 32 V 18.77 h 9.24 v 1.93 h -7.06 v 6.06 h 6.58 v 1.92 H 34.18 V 35 h 7.52 z"
+       id="path4" />
+    <path
+       class="cls-3"
+       d="M 56,20.7 H 50.7 V 37 H 48.57 V 20.7 H 43.33 V 18.77 H 56 Z"
+       id="path5" />
+    <path
+       class="cls-4"
+       d="m 26.12,49.4 a 4.93,4.93 0 0 1 -2.32,0.49 3.74,3.74 0 0 1 -2.87,-1.15 4.26,4.26 0 0 1 -1.08,-3 4.46,4.46 0 0 1 1.21,-3.26 4.12,4.12 0 0 1 3.08,-1.24 4.93,4.93 0 0 1 2,0.35 v 1 a 4,4 0 0 0 -2,-0.5 3.06,3.06 0 0 0 -2.35,1 3.64,3.64 0 0 0 -0.9,2.58 3.47,3.47 0 0 0 0.84,2.45 2.86,2.86 0 0 0 2.21,0.91 4.14,4.14 0 0 0 2.19,-0.56 z"
+       id="path6" />
+    <path
+       class="cls-4"
+       d="M 30.21,49.89 A 2.78,2.78 0 0 1 28.08,49 a 3.11,3.11 0 0 1 -0.79,-2.23 3.24,3.24 0 0 1 0.83,-2.36 3,3 0 0 1 2.23,-0.85 2.69,2.69 0 0 1 2.09,0.83 3.28,3.28 0 0 1 0.75,2.29 3.22,3.22 0 0 1 -0.81,2.3 2.84,2.84 0 0 1 -2.17,0.91 z m 0.07,-5.47 a 1.83,1.83 0 0 0 -1.46,0.63 2.59,2.59 0 0 0 -0.54,1.74 2.45,2.45 0 0 0 0.54,1.68 1.85,1.85 0 0 0 1.46,0.62 1.76,1.76 0 0 0 1.43,-0.6 2.62,2.62 0 0 0 0.5,-1.72 2.66,2.66 0 0 0 -0.5,-1.73 1.75,1.75 0 0 0 -1.43,-0.62 z"
+       id="path7" />
+    <path
+       class="cls-4"
+       d="m 37.86,44.72 a 1.18,1.18 0 0 0 -0.73,-0.19 1.23,1.23 0 0 0 -1,0.58 2.68,2.68 0 0 0 -0.41,1.58 v 3.06 h -1 v -6 h 1 V 45 45 a 2.1,2.1 0 0 1 0.63,-1 1.43,1.43 0 0 1 0.94,-0.35 1.57,1.57 0 0 1 0.57,0.08 z"
+       id="path8" />
+    <path
+       class="cls-4"
+       d="m 43.72,47 h -4.23 a 2.24,2.24 0 0 0 0.51,1.54 1.86,1.86 0 0 0 1.42,0.54 3,3 0 0 0 1.86,-0.67 v 0.9 a 3.48,3.48 0 0 1 -2.09,0.57 2.54,2.54 0 0 1 -2,-0.82 3.35,3.35 0 0 1 -0.73,-2.3 3.28,3.28 0 0 1 0.79,-2.28 2.55,2.55 0 0 1 2,-0.88 2.26,2.26 0 0 1 1.82,0.76 3.18,3.18 0 0 1 0.64,2.12 z m -1,-0.81 a 2,2 0 0 0 -0.4,-1.29 1.37,1.37 0 0 0 -1.1,-0.46 1.55,1.55 0 0 0 -1.15,0.49 2.21,2.21 0 0 0 -0.59,1.27 z"
+       id="path9" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.1931px;font-family:'Microsoft Sans Serif';-inkscape-font-specification:'Microsoft Sans Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#50e600;fill-opacity:0.847866;stroke:none;stroke-width:0.422032;stroke-linejoin:round;stroke-miterlimit:1;stroke-dasharray:none;stroke-opacity:1"
+       x="-20.803125"
+       y="49.06892"
+       id="text9"
+       transform="matrix(0.86717247,-0.49933862,0.50066226,0.86487986,0,0)"><tspan
+         id="tspan9"
+         x="-20.803125"
+         y="49.06892"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.1931px;font-family:'Microsoft Sans Serif';-inkscape-font-specification:'Microsoft Sans Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#50e600;fill-opacity:0.847866;stroke:none;stroke-width:0.422032;stroke-dasharray:none;stroke-opacity:1">+Missing</tspan></text>
+  </g>
+</svg>
