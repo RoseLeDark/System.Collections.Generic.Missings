@@ -46,6 +46,10 @@ namespace System.Collections.Generic.Missings {
                 m_elements.Add(item);
         }
 
+        public virtual void Add(T k, U v) {
+            Add(new Pair<T, U>(k, v));
+        }
+
         public Pair<T, U> this[int Key] {
             get => m_elements[Key];
             set => m_elements[Key] = value;
