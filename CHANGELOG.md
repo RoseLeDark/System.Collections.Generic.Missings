@@ -1,46 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyName>System.Collections.Generic.Missings</AssemblyName>
-    <Title>RoseLeDark.Collections.Missings</Title>
-    <Company>Amber-Sophia Schröck</Company>
-    <PackageIcon>System.Collections.Generic.Extras.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.5.0</AssemblyVersion>
-    <FileVersion>0.5.0</FileVersion>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <Description>Additional generic collection types missing in .NET.</Description>
-    <PackageTags>collections;generic:stack;buffer;cache;utilities;map;MultiMap;Pair;Tuple;Generic;Array</PackageTags>
-    <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
-    <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <Version>0.7.0</Version>
-    <PackageProjectUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings</PackageProjectUrl>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Authors>Amber-Sophia Schröck</Authors>
-    <PackageId>RoseLeDark.Collections.Missings</PackageId>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <Product>RoseLeDark.Collections.Missings</Product>
-    <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
-    <AnalysisLevel>latest-recommended</AnalysisLevel>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RootNamespace>System</RootNamespace>
-    <PackageReleaseNotes># Changelog
+# Changelog
 
 ## [0.7.0] 03.06.2026
 ### Added
 - Introduced `RandPasswordLevel` enum (`Simple = 16`, `Strong = 32`)
-- Added `RandPassword(int length, FixedArray&lt;char&gt; allowed, Endian endian)`:
+- Added `RandPassword(int length, FixedArray<char> allowed, Endian endian)`:
   - Zero‑allocation inner loop
   - Endian‑aware random character generation
-  - Filtering via `FixedArray&lt;char&gt;.TryGet`
+  - Filtering via `FixedArray<char>.TryGet`
 - Added `string.Rand(RandPasswordLevel level, Endian endian)` extension:
   - Uses predefined password character sets
   - Supports Simple and Strong password generation
@@ -67,10 +33,10 @@
   - Internal `MakeHardwareBuffer(int size)` for pinned byte‑array allocation
   - Extended `System.Missings.Binary` utilities:
   - Endian‑aware primitive conversions (`ToBytes`/`ToInt`/`ToUInt`/`ToShort`)
-  - Generic unmanaged serialization: `ToBytes&lt;T&gt;(T value, Endian)`
-  - Generic unmanaged array serialization: `ToBytes&lt;T&gt;(T[] array)`
-  - Generic unmanaged deserialization: `FromBytes&lt;T&gt;(byte[])`
-  - Unmanaged array deserialization: `FromBytesArray&lt;T&gt;(byte[])`
+  - Generic unmanaged serialization: `ToBytes<T>(T value, Endian)`
+  - Generic unmanaged array serialization: `ToBytes<T>(T[] array)`
+  - Generic unmanaged deserialization: `FromBytes<T>(byte[])`
+  - Unmanaged array deserialization: `FromBytesArray<T>(byte[])`
   - `ToBoundary(uint, uint)` for alignment calculations
   - `SizeCalc(string)` for parsing size strings (`4K`, `16M`, `2G`, etc.)
 
@@ -87,7 +53,7 @@
   - Combined high/low 32‑bit random generation for 64‑bit values
   - Ensures correct endian interpretation using `System.Missings.Binary` utilities
   - Added struct layout validation under `System.Missings.Binary.Layout`:
-    - `Layout.Check&lt;T&gt;(uint expectedUnmanagedSize)`
+    - `Layout.Check<T>(uint expectedUnmanagedSize)`
     - Throws `MissingStructLayoutSequentialException` if `[StructLayout(LayoutKind.Sequential)]` is missing
 
 ### Improved
@@ -104,7 +70,7 @@
 ### Added
 - Introduced a full low-level cache subsystem under `System.Collections.Generic.Missings`
 - Added `Cache` class providing:
-  - Raw byte buffer management using custom `Array&lt;byte&gt;`
+  - Raw byte buffer management using custom `Array<byte>`
   - Seek operations (`SeekOrigin.Begin`, `Current`, `End`)
   - Direct indexed byte access (`cache[position]`)
   - Endian-aware read/write operations:
@@ -166,34 +132,3 @@
 - Grundlegende Collections (Map, Queue, Stack, BinQueue, FixedMap)
 - IArray, ITuple, Quad, Pair
 - Basis-Iteratoren
-</PackageReleaseNotes>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <IsAotCompatible>True</IsAotCompatible>
-    <Deterministic>False</Deterministic>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <IsAotCompatible>True</IsAotCompatible>
-    <Deterministic>False</Deterministic>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Update="LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="System.Collections.Generic.Extras.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
-</Project>
