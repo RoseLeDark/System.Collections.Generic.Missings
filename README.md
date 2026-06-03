@@ -58,30 +58,30 @@ Console.WriteLine(Find);
 Projektstruktur
 ---------------
 System/
-  Collections/
-    Generic/
-      Missings/
-        Array.cs
-        BinQueue.cs
-        BinQueue.cs
-        FixedArray.cs
-        FixedMap.cs
-        IArray.cs
-        IMap.cs
-        IPair.cs
-        ISortedMap.cs
-        ITuple.cs
-        Map.cs
-        MultiMap.cs
-        Node.cs
-        Pair.cs
-        Quad.cs
-        Queue.cs
-        SortedMap.cs
-        Stack.cs
-        Trople.cs
-        Tuple.cs
-        TupleList.cs
+  - Collections/
+     * Generic/
+      + Missings/
+        1. Array.cs
+        2. BinQueue.cs
+        3. BinQueue.cs
+        4. FixedArray.cs
+        5. FixedMap.cs
+        6. IArray.cs
+        7. IMap.cs
+        8. IPair.cs
+        9. ISortedMap.cs
+        10. ITuple.cs
+        11. Map.cs
+        12. MultiMap.cs
+        13. Node.cs
+        14. Pair.cs
+        15. Quad.cs
+        16 Queue.cs
+        17. SortedMap.cs
+       18.  Stack.cs
+       19. Trople.cs
+        20. Tuple.cs
+        21. TupleList.cs
 LICENSE
 README.txt
 
