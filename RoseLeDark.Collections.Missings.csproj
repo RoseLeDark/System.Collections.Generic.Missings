@@ -1,0 +1,109 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>RoseLeDark.Collections.Missings</AssemblyName>
+    <Title>RoseLeDark.Collections.Missings</Title>
+    <Company>Amber-Sophia Schröck</Company>
+    <PackageIcon>RoseLeDark.Collections.Missings.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyVersion>0.8.1</AssemblyVersion>
+    <FileVersion>0.8.1</FileVersion>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Description>A foundational low‑level extension to .NET’s collection ecosystem.
+This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIterator, IBidirectionalIterator, IRandomAccessIterator), traversal utilities, generic algorithms (Distance, Find, LowerBound, UpperBound, Reverse, Rotate, ForEach), and deterministic byte‑level data structures. Includes advanced map types, MultiMap, Pair/Tuple structures, fixed‑size arrays and buffers, and a modular cache/RAID architecture. Designed for high‑performance, engine‑oriented, allocation‑controlled applications where .NET’s built‑in collections are insufficient.</Description>
+    <PackageTags>collections;generic;map;multimap;cache;buffer;datastructures;lowlevel;cache;pair;nodes;multimap;tuple;triple</PackageTags>
+    <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
+    <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>0.8.1</Version>
+    <PackageProjectUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Amber-Sophia Schröck</Authors>
+    <PackageId>RoseLeDark.Collections.Missings</PackageId>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <Product>RoseLeDark.Collections.Missings</Product>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <RootNamespace>System</RootNamespace>
+    <PackageReleaseNotes>## [0.8.5] 04.06.2026
+### Very Important
+- **Major namespace restructuring** to reflect the engine architecture and clarify responsibilities across collections, device memory, and interop layers.
+- This release contains **breaking changes**: update all `using`/imports to the new namespaces.
+
+### Changed
+  - Moved device memory types (`DeviceBuffer`, `DeviceSharedBuffer&lt;TDeviceSharedBackend&gt;`) to **`SystemEx.Device.Memory`**.
+  - Moved native interop and backend implementations (`UnmanagedObject`, `RamSharedBackend`, `IDeviceSharedBackend`, platform kernel loaders) to **`SystemEx.Device.Interop`**.
+  - Kept kernel and execution interfaces (`IKernel&lt;TBackend&gt;`, `RamKernel`, kernel lifecycle orchestration) under **`SystemEx.Device`**.
+- Removed legacy `SystemEx.Device.Memory.Missings` layout and deprecated `System.Memory.Missings` placements; types have been relocated to the new namespaces above.
+- Updated internal references and XML docs to reflect new namespace locations.
+
+### Added
+- Migration guidance notes and quick reference mapping for common types:
+  - `SystemEx.Device.Memory.Missings.RamSharedBackend` → `SystemEx.Device.Interop.RamSharedBackend`
+  - `SystemEx.Device.Memory.DeviceSharedBuffer` → `SystemEx.Device.Memory.DeviceSharedBuffer`
+  - `SystemEx.Collections.Generic.SharedCache` → `SystemEx.Collections.Generic.Cache` (and related cache types)
+
+### Improved
+- Clear separation of concerns between collection‑level caches and device‑level memory/backends.
+- Improved discoverability and consistency for public APIs across Collections, Device, and Interop subsystems.
+- Simplified developer mental model for where to place new types: Collections for logical cache/data structures; Device.Memory for managed device memory abstractions; Device.Interop for native/backends.
+
+### Fixed
+- Resolved ambiguous type collisions caused by previous overlapping namespaces.
+
+### Notes / Migration
+- **Breaking change:** update all `using` directives and project references to the new namespaces.  
+  Example mappings:
+  - `using SystemEx.Device.Memory.Missings;` → `using SystemEx.Device.Memory;`
+  - `using SystemEx.Collection.Generic;` (old cache location) → `using SystemEx.Collections.Generic;`
+  - `using SystemEx.Device.Intertropt;` → `using SystemEx.Device.Interop;`
+- Search your codebase for the old namespace tokens (`Missings`, `Intertropt`, `System.Memory.Missings`) and replace with the new targets.</PackageReleaseNotes>
+    <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="SystemEx\Collections\Generic\Missings\**" />
+    <EmbeddedResource Remove="SystemEx\Collections\Generic\Missings\**" />
+    <None Remove="SystemEx\Collections\Generic\Missings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CHANGELOG.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="RoseLeDark.Collections.Missings.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+	<None Update="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

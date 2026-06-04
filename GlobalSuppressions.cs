@@ -43,3 +43,4 @@ using System.Diagnostics.CodeAnalysis;
     "CA1711:Bezeichner dürfen kein falsches Suffix aufweisen", 
     Justification = "<Ausstehend>", 
     Scope = "namespace", Target = "~N:System.Collections.Generic.Missings")]
+[assembly: SuppressMessage("Performance", "CA1806:Methodenergebnisse nicht ignorieren", Justification = "<Ausstehend>", Scope = "member", Target = "~M:System.Platform.Missings.WinLoader.Call(System.Diagnostics.Process,System.IntPtr,System.IntPtr)~System.Int32")]

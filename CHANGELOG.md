@@ -1,5 +1,92 @@
 # Changelog
+## Planned to Version 1.0
+### Add
+- Cache and collection primitives (`Cache`, `CacheRaid`, `CacheRaidMirror`, `CacheRaidStripe`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
+- Add Locking System 
+- OpenCL Kerneal Call with my  SystemEx.Device System
+- ADD Dokumentation !!!
 
+## [0.8.5] 04.06.2026
+### Very Important
+- **Major namespace restructuring** to reflect the engine architecture and clarify responsibilities across collections, device memory, and interop layers.
+- This release contains **breaking changes**: update all `using`/imports to the new namespaces.
+
+### Changed
+  - Moved device memory types (`DeviceBuffer`, `DeviceSharedBuffer<TDeviceSharedBackend>`) to **`SystemEx.Device.Memory`**.
+  - Moved native interop and backend implementations (`UnmanagedObject`, `RamSharedBackend`, `IDeviceSharedBackend`, platform kernel loaders) to **`SystemEx.Device.Interop`**.
+  - Kept kernel and execution interfaces (`IKernel<TBackend>`, `RamKernel`, kernel lifecycle orchestration) under **`SystemEx.Device`**.
+- Removed legacy `SystemEx.Device.Memory.Missings` layout and deprecated `System.Memory.Missings` placements; types have been relocated to the new namespaces above.
+- Updated internal references and XML docs to reflect new namespace locations.
+
+### Added
+- Migration guidance notes and quick reference mapping for common types:
+  - `SystemEx.Device.Memory.Missings.RamSharedBackend` → `SystemEx.Device.Interop.RamSharedBackend`
+  - `SystemEx.Device.Memory.DeviceSharedBuffer` → `SystemEx.Device.Memory.DeviceSharedBuffer`
+  - `SystemEx.Collections.Generic.SharedCache` → `SystemEx.Collections.Generic.Cache` (and related cache types)
+
+### Improved
+- Clear separation of concerns between collection‑level caches and device‑level memory/backends.
+- Improved discoverability and consistency for public APIs across Collections, Device, and Interop subsystems.
+- Simplified developer mental model for where to place new types: Collections for logical cache/data structures; Device.Memory for managed device memory abstractions; Device.Interop for native/backends.
+
+### Fixed
+- Resolved ambiguous type collisions caused by previous overlapping namespaces.
+
+### Notes / Migration
+- **Breaking change:** update all `using` directives and project references to the new namespaces.  
+  Example mappings:
+  - `using SystemEx.Device.Memory.Missings;` → `using SystemEx.Device.Memory;`
+  - `using SystemEx.Collection.Generic;` (old cache location) → `using SystemEx.Collections.Generic;`
+  - `using SystemEx.Device.Intertropt;` → `using SystemEx.Device.Interop;`
+- Search your codebase for the old namespace tokens (`Missings`, `Intertropt`, `System.Memory.Missings`) and replace with the new targets.
+---
+
+## [0.8.1] 04.06.2026
+### Added
+- Introduced full RAM backend under `System.Memory.Missings`:
+  - Added `RamSharedBackend` implementing `IDeviceSharedBackend`
+  - Added `RamUnmanagedObject` for unmanaged buffer handling:
+    - Stores pinned GCHandle
+    - Exposes native pointer via `IntPtr`
+    - Holds buffer size
+    - Deterministic disposal for pin/unpin lifecycle
+  - Added RAM‑based hardware buffer creation:
+    - `CreateWriteHardwareBuffer(byte[], out object)`
+    - `CreateReadHardwareBuffer(int, out object)`
+    - `CloseHardwareBuffer(ref object)`
+    - `ReciveFromHardwareBuffer(out byte[], ref object)`
+
+- Added `RamKernel`:
+  - Supports multi‑buffer binding via `AddBuffer`
+  - Executes native DLL kernels via `ExecuteKernel(IntPtr[], int[], int)`
+  - Collects pointers and sizes from all attached RAM buffers
+  - Fully compatible mit Begin/Run/End‑Flow der bestehenden Kernel‑API
+
+### Changed
+- Moved `SharedCache` / `DeviceSharedCache` aus `System.Collections.Generic.Missings`
+  nach `System.Memory.Missings` und in `DeviceSharedBuffer` überführt
+- Replaced previous MemoryHandle‑based RAM pinning with explicit GCHandle pinning
+- Unified hardware buffer representation:
+  - `DeviceSharedBuffer` now always exposes a `RamUnmanagedObject` for RAM backends
+- Simplified RAM buffer lifecycle:
+  - Pinning occurs exactly once during Begin()
+  - Unpinning handled exclusively through `RamUnmanagedObject.Dispose()`
+
+### Improved
+- Clear separation between managed cache (`DeviceBuffer`) and unmanaged hardware buffer
+- Consistent pointer and size access for all RAM kernel operations
+- Improved Begin/End semantics:
+  - Begin() creates pinned unmanaged buffer
+  - End() copies data back depending on `SharedCacheType`
+- More consistent behavior with GPU backends through unified kernel interface
+
+### Fixed
+- Fixed missing unpin in `ReciveFromHardwareBuffer`
+- Fixed invalid hardware buffer state after End()
+- Fixed potential GCHandle leaks during repeated Begin/End cycles
+- Fixed incorrect buffer size propagation to native kernel calls
+
+---
 ## [0.7.0] 03.06.2026
 ### Added
 - Introduced `RandPasswordLevel` enum (`Simple = 16`, `Strong = 32`)
