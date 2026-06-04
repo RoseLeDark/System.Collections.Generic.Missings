@@ -272,7 +272,7 @@ namespace SystemEx.Utils {
             byte[] bytes = new byte[8];
 
             fixed ( byte* b = bytes )
-                *(double*)b = value;
+                *(long*)b = value;
 
             if ( endian == Endian.BigEndian ) {
                 // reverse 8 bytes
@@ -304,7 +304,7 @@ namespace SystemEx.Utils {
             byte[] bytes = new byte[8];
 
             fixed ( byte* b = bytes )
-                *(double*)b = value;
+                *(ulong*)b = value;
 
             if ( endian == Endian.BigEndian ) {
                 // reverse 8 bytes
