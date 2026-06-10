@@ -3,9 +3,10 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Missings.Binary;
 using System.Runtime.InteropServices;
 using System.Text;
+using SystemEx.Collection.Generic.Interfaces;
+using SystemEx.Utils;
 
 namespace SystemEx.Collection.Generic{
     public enum CacheType {
@@ -18,9 +19,9 @@ namespace SystemEx.Collection.Generic{
         public CacheIsSharedException() : base() { }
     }
 
-    public class Cache {
+    public class Cache : ICache {
         private FixedArray<byte> m_rawBuffer;
-        private int m_position;
+        private ulong m_position;
         private bool m_isLocked;
        
         protected bool IsLocked { get { return m_isLocked; }  set => m_isLocked = value;  }
@@ -28,136 +29,82 @@ namespace SystemEx.Collection.Generic{
             get {  return m_rawBuffer[adress]; }
             set {  m_rawBuffer[adress] = value; }
         }
-        public int Length => m_rawBuffer.Size;
-        public bool IsEmpty => m_rawBuffer.Size == 0;
+        public virtual int Length => m_rawBuffer.Size;
+
+        public virtual ulong LongLength { get; internal set; }
+        public bool IsEmpty => LongLength == 0;
 
         public CacheType Type { get; private set; }
 
+        public ulong Position { get => m_position; internal set => m_position = value; }
         public Cache(int capacity, CacheType type) {
             m_rawBuffer = new FixedArray<byte>(capacity);
             this.Type = type;
+            LongLength = (ulong)m_rawBuffer.Size;
         }
 
-        public int Seek(SeekOrigin org, int pos) {
+        public ulong Seek(SeekOrigin org, int pos) {
             if ( m_rawBuffer.Size == 0 ) return 0;
 
             switch ( org ) {
-                case SeekOrigin.Begin: m_position = pos; break;
-                case SeekOrigin.Current: m_position += pos; break;
-                case SeekOrigin.End:  m_position = (m_rawBuffer.Size) - pos; break;
 
+            case SeekOrigin.Begin:
+                m_position = (ulong)Math.Max(pos, 0);
+                break;
+            case SeekOrigin.Current:
+                if ( pos >= 0 )
+                    m_position += (ulong)pos;
+                else {
+                    ulong neg = (ulong)(-pos);
+                    m_position = (m_position > neg) ? (m_position - neg) : 0;
+                }
+                break;
+            case SeekOrigin.End:
+                if ( pos >= 0 ) {
+                    ulong p = (ulong)pos;
+                    m_position = (p > LongLength) ? 0 : (LongLength - p);
+                } else {
+                    // End + negative pos = End - (-pos) = End + pos
+                    ulong add = (ulong)(-pos);
+                    m_position = LongLength + add; // wird unten gekappt
+                }
+                break;
             }
 
-            if( m_position < 0) m_position = 0;
-            else if ( m_position > m_rawBuffer.Size ) m_position = m_rawBuffer.Size;
+            if ( m_position > LongLength )
+                m_position = LongLength;
 
             return m_position;
         }
-        
 
-        public int Write(int position, uint value, Endian endian) {
-            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
-            byte[] b = value.ToBytes(endian);
+        public virtual ulong WriteRange(ulong position, byte[] data) {
 
-            return WriteRange(position, b);
+            return WriteRange(position, (ulong)data.LongLength, data);
         }
-
-        public int Write(int position, int value, Endian endian) {
-            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
-
-            byte[] b = value.ToBytes(endian);
-
-            return WriteRange(position, b);
-        }
-        public int Write(int position, short value, Endian endian) {
-            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
-
-            byte[] b = value.ToBytes(endian);
-
-            return WriteRange(position, b);
-        }
-        public uint ReadUInt32(int position, Endian endian) {
-            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
-
-            byte[] b = new byte[4];
-
-            b[0] = m_rawBuffer[position + 0];
-            b[1] = m_rawBuffer[position + 1];
-            b[2] = m_rawBuffer[position + 2];
-            b[3] = m_rawBuffer[position + 3];
-
-            return b.ToUInt(endian); 
-        }
-        public int ReadInt32(int position, Endian endian) {
-            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
-
-            byte[] b = new byte[4];
-
-            b[0] = m_rawBuffer[position + 0];
-            b[1] = m_rawBuffer[position + 1];
-            b[2] = m_rawBuffer[position + 2];
-            b[3] = m_rawBuffer[position + 3];
-
-            return b.ToInt(endian);
-        }
-        public short ReadInt16(int position, Endian endian) {
-            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
-
-            byte[] b = new byte[2];
-
-            b[0] = m_rawBuffer[position + 0];
-            b[1] = m_rawBuffer[position + 1];
-
-
-            return b.ToShort(endian);
-        }
-
-
-
-        public byte[]? Read(int position, int count) {
-            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
-
-            if ( position < 0 || count < 0 ) return null;
-            if ( position + count > m_rawBuffer.Size ) return null;
-
-            byte[] result = new byte[count];
-            m_rawBuffer.CopyTo(position, result, 0, count);
-            return result;
-        }
-
-        public int Write(byte[] data) {
-            int written = WriteRange(m_position, m_position + data.Length, data);
-            m_position += written;
-            return written;
-        }
-        public int WriteRange(int position, byte[] data) {
-
-            return WriteRange(position, data.Length, data);
-        }
-        public int WriteRange(int start, int end, byte[] data) {
+        public virtual ulong WriteRange(ulong start, ulong end, byte[] data) {
             if ( m_isLocked )
                 throw new InvalidOperationException("is Locked");
 
             // Start ungültig?
-            if ( start < 0 || start >= m_rawBuffer.Size )
+            if ( start < 0 || start >= (ulong)m_rawBuffer.Size )
                 return 0;
 
             // End über Größe → kappen
-            if ( end > m_rawBuffer.Size )
-                end = m_rawBuffer.Size;
+            if ( end > (ulong)m_rawBuffer.Size )
+                end = (ulong)m_rawBuffer.Size;
 
             // Bereich ungültig?
             if ( end <= start )
                 return 0;
 
-            int rangeLen = end - start;
-            int writable = Math.Min(rangeLen, data.Length);
+            ulong rangeLen = end - start;
+            ulong writable = Math.Min((uint)rangeLen, (uint)data.Length);
 
-            for ( int i = 0; i < writable; i++ )
-                m_rawBuffer[start + i] = data[i];
+            for ( ulong i = 0; i < (ulong)writable; i++ )
+                m_rawBuffer[(int)(start + i)] = data[i];
 
-            return writable;
+            return (ulong)writable;
         }
         
 
@@ -175,11 +122,233 @@ namespace SystemEx.Collection.Generic{
         }
 
 
+        
 
+        public int Write(ulong position, uint value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, int value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+        public int Write(ulong position, short value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, char value) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(Endian.LittleEndian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, byte value) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(Endian.LittleEndian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, ushort value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, long value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, ulong value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, float value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public int Write(ulong position, double value, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = value.ToBytes(endian);
+
+            return (int)WriteRange(position, b);
+        }
+
+        public uint ReadUInt(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[4];
+
+            b[0] = m_rawBuffer[(int)position + 0];
+            b[1] = m_rawBuffer[(int)position + 1];
+            b[2] = m_rawBuffer[(int)position + 2];
+            b[3] = m_rawBuffer[(int)position + 3];
+
+            return b.ToUInt(endian);
+        }
+
+        public int ReadInt(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[4];
+            int _pos = (int)position;
+
+            b[0] = m_rawBuffer[_pos + 0];
+            b[1] = m_rawBuffer[_pos + 1];
+            b[2] = m_rawBuffer[_pos + 2];
+            b[3] = m_rawBuffer[_pos + 3];
+
+            return b.ToInt(endian);
+        }
+
+        public short ReadShort(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[2];
+            int _pos = (int)position;
+
+            b[0] = m_rawBuffer[_pos + 0];
+            b[1] = m_rawBuffer[_pos + 1];
+
+            return b.ToShort(endian);
+        }
+
+        public ushort ReadUShort(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[2];
+            int _pos = (int)position;
+
+            b[0] = m_rawBuffer[_pos + 0];
+            b[1] = m_rawBuffer[_pos + 1];
+
+            return b.ToUShort(endian);
+        }
+
+        public long ReadLong(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[8];
+            int _pos = (int)position;
+
+            b[0] = m_rawBuffer[_pos + 0];
+            b[1] = m_rawBuffer[_pos + 1];
+            b[2] = m_rawBuffer[_pos + 2];
+            b[3] = m_rawBuffer[_pos + 3];
+            b[4] = m_rawBuffer[_pos + 4];
+            b[5] = m_rawBuffer[_pos + 5];
+            b[6] = m_rawBuffer[_pos + 6];
+            b[7] = m_rawBuffer[_pos + 7];
+
+            return b.ToLong(endian);
+        }
+
+        public ulong ReadULong(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[8];
+            int _pos = (int)position;
+
+            b[0] = m_rawBuffer[_pos + 0];
+            b[1] = m_rawBuffer[_pos + 1];
+            b[2] = m_rawBuffer[_pos + 2];
+            b[3] = m_rawBuffer[_pos + 3];
+            b[4] = m_rawBuffer[_pos + 4];
+            b[5] = m_rawBuffer[_pos + 5];
+            b[6] = m_rawBuffer[_pos + 6];
+            b[7] = m_rawBuffer[_pos + 7];
+
+            return b.ToULong(endian);
+        }
+
+        public char ReadChar(ulong position) {
+            byte b = m_rawBuffer[(int)position];
+            return (char)b;
+        }
+
+        public float ReadFloat(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[4];
+
+            b[0] = m_rawBuffer[(int)position + 0];
+            b[1] = m_rawBuffer[(int)position + 1];
+            b[2] = m_rawBuffer[(int)position + 2];
+            b[3] = m_rawBuffer[(int)position + 3];
+
+            return b.ToFloat(endian);
+        }
+
+        public double ReadDouble(ulong position, Endian endian) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            byte[] b = new byte[8];
+
+            b[0] = m_rawBuffer[(int)position + 0];
+            b[1] = m_rawBuffer[(int)position + 1];
+            b[2] = m_rawBuffer[(int)position + 2];
+            b[3] = m_rawBuffer[(int)position + 3];
+            b[4] = m_rawBuffer[(int)position + 4];
+            b[5] = m_rawBuffer[(int)position + 5];
+            b[6] = m_rawBuffer[(int)position + 6];
+            b[7] = m_rawBuffer[(int)position + 7];
+
+            return b.ToDouble(endian);
+        }
+
+        public int Write(byte data) {
+            var written = WriteRange(m_position, m_position + 1, new byte[1] { data } );
+            m_position += written;
+            return (int)written;
+        }
+
+        public byte Read(ulong position) {
+            return m_rawBuffer[(int)position];
+        }
+
+        public virtual byte[]? ReadRange(ulong position, uint count) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            if ( (int)position + count > m_rawBuffer.Size ) return null;
+
+            byte[] result = new byte[count];
+            m_rawBuffer.CopyTo((uint)position, result, 0, (uint)count);
+            return result;
+        }
         public byte[] ToArray() {
             if ( m_isLocked ) throw new CacheIsSharedException();
             return m_rawBuffer.ToArray();
         }
+
+        
     }
 }

@@ -100,7 +100,7 @@ namespace SystemEx.Device {
                     var unmanagedC = (UnmanagedObject)C.HardwareBuffer!;
 
                     // DLL-Kernel aufrufen
-                    unmanagedC.Size = KernelLoader.call(_dllPath, m_func, unmanagedA.Point, unmanagedA.Size, unmanagedB.Point, unmanagedB.Size, unmanagedC.Point);
+                    unmanagedC.Size = KernelLoader.call(m_dllPath, m_func, unmanagedA.Point, unmanagedA.Size, unmanagedB.Point, unmanagedB.Size, unmanagedC.Point);
 
                 } finally {
                     m_running = false;

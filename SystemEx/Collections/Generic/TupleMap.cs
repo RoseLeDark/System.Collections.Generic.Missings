@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace SystemEx.Collection.Generic {
     [Serializable]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
-    public class Map<T, TU> : IEnumerable<Pair<T, TU>>, ICollection<Pair<T, TU>>, IEnumerable, IMap<T, TU>, ITraverse<Pair<T, TU>>{
-        internal List<Pair<T, TU>> m_elements;
+    public class TupleMap : IEnumerable<ITuple>, ICollection<ITuple>, IEnumerable, ITupleMap, ITraverse<ITuple>  {
+        
+        internal List<ITuple> m_elements;
 
-        protected List<Pair<T, TU>> Elements {  get { return m_elements; } set { m_elements = value; } }
+        protected List<ITuple> Elements {  get { return m_elements; } set { m_elements = value; } }
 
         public int Count => m_elements.Count;
 
@@ -19,7 +21,7 @@ namespace SystemEx.Collection.Generic {
 
         public bool IsReadOnly => false;
 
-        public Pair<T, TU>? First {
+        public ITuple? First {
             get {
                 if ( m_elements.Count == 0 )
                     throw new InvalidOperationException("Map is empty");
@@ -27,7 +29,7 @@ namespace SystemEx.Collection.Generic {
             }
         }
 
-        public Pair<T, TU>? Last {
+        public ITuple? Last {
             get {
                 if ( m_elements.Count == 0 ) 
                     throw new InvalidOperationException("Map is empty");
@@ -35,48 +37,56 @@ namespace SystemEx.Collection.Generic {
             }
         }
 
-        public int Size => Int32.MaxValue;
-
-        public Map() {
-            m_elements = new List<Pair<T, TU>>();
-        }
-        public Map(IEnumerable<Pair<T, TU>> elements) {
-            m_elements = [.. elements]; ;
-        }
-        public virtual void Add(Pair<T, TU> item) {
-            if(m_elements.Contains(item) == false)
-                m_elements.Add(item);
-        }
-
-        public virtual void Add(T k, TU v) {
-            Add(new Pair<T, TU>(k, v));
-        }
-
-        public Pair<T, TU> this[int Key] {
+        public ITuple this[int Key] {
             get => m_elements[Key];
             set => m_elements[Key] = value;
         }
 
-        public virtual bool Insert(int pos, Pair<T, TU> item) {
+        public int Size => Int32.MaxValue;
+
+        public TupleMap() {
+            m_elements = new List<ITuple>();
+        }
+        public TupleMap(IEnumerable<ITuple> elements) {
+            m_elements = [.. elements]; ;
+        }
+        protected virtual bool Add(ITuple item, bool multi) {
+            bool _ret = false;
+
+            bool _contains = multi ? false : m_elements.Contains(item);
+
+            if ( _contains == false ) {
+                m_elements.Add(item);
+                _ret = true;
+            }
+
+            return _ret;
+        }
+        public virtual void Add(ITuple item) {
+            Add(item, false);
+        }
+        
+
+        public virtual bool Insert(int pos, ITuple item) {
             m_elements.Insert(pos, item);
             return true;
         }
-        public virtual bool InsertRange(int pos, IEnumerable<Pair<T, TU>> items) {
+        public virtual bool InsertRange(int pos, IEnumerable<ITuple> items) {
             m_elements.InsertRange(pos, items);
             return true;
         }
 
-        public IEnumerable<Pair<T, TU>> Find(T Key) {
+        public virtual IEnumerable<ITuple> Find(object Key) {
             foreach ( var item in m_elements ) {
-                if ( item.First!.Equals(Key) )
+                if ( item.Get(0)!.Equals(Key) )
                     yield return item;
             }
         }
 
-        public delegate bool Compare(Pair<T, TU> A, T Key, TU Value);
+        public delegate bool Compare(ITuple A, object Key, object Value);
 
-        public List<Pair<T, TU>> Findex(Compare func, T Key, TU Value) {
-            List<Pair<T, TU>> _find = new List<Pair<T, TU>>();
+        public List<ITuple> Findex(Compare func, object Key, object Value) {
+            List<ITuple> _find = new List<ITuple>();
 
             foreach ( var item in m_elements ) {
                 if ( func(item, Key, Value) )
@@ -85,7 +95,7 @@ namespace SystemEx.Collection.Generic {
             return _find;
         }
 
-        public void Traverse(TraversMode mode, int startIndex, int endIndex, Action<Pair<T, TU>> func) {
+        public void Traverse(TraversMode mode, int startIndex, int endIndex, Action<ITuple> func) {
             int start = Math.Max(startIndex, 0);
             int end = Math.Min(endIndex, m_elements.Count);
 
@@ -98,23 +108,29 @@ namespace SystemEx.Collection.Generic {
             }
         }
 
-        public UInt64 NumberOfElementsWithKey(T Key) {
+        public UInt64 NumberOfElementsWithKey(object Key) {
             UInt64 _find = 0;
 
             foreach ( var item in m_elements ) {
-                if ( item.First == null ) continue;
-                if ( item.First.Equals(Key) ) _find++;
+                var obj = item.Get(0);
+
+                if ( obj == null ) continue;
+                if ( obj.Equals(Key) ) _find++;
             }
 
             return _find;
         }
 
-        public UInt64 NumberOfElementsWithValue(TU Value) {
+        public UInt64 NumberOfElementsWithValue(object Value) {
             UInt64 _find = 0;
 
             foreach ( var item in m_elements ) {
-                if ( item.Second == null ) continue;
-                if ( item.Second.Equals(Value) ) _find++;
+                var obj = item.Get(1);
+
+                if(obj == null ) continue;
+                if ( obj.Equals(Value) )
+                    continue;
+                _find++;
             }
 
             return _find;
@@ -124,43 +140,46 @@ namespace SystemEx.Collection.Generic {
             m_elements.Clear();
         }
 
-        public bool Contains(Pair<T, TU> item) {
+        public bool Contains(ITuple item) {
             return m_elements.Contains(item);
         }
-        public bool ContainsKey(T Key) {
+        public bool ContainsKey(object Key) {
             foreach ( var p in m_elements ) {
-                if ( p.First!.Equals(Key) )
+                var obj = p.Get(0);
+
+                if ( obj == null ) continue;
+                if ( obj.Equals(Key) )
                     return true;
             }
             return false;
         }
 
-        public TU? Get(T Key) {
-            var p = FindFirst(Key);
-            if ( p.HasValue ) return p.Value.Second;
+        public object? Get(object Key) {
+            ITuple? p = FindFirst(Key);
+            if ( p != null) return p.Get(1);
             throw new KeyNotFoundException();
 
         }
 
-        public void CopyTo(Pair<T, TU>[] array, int arrayIndex) {
+        public void CopyTo(ITuple[] array, int arrayIndex) {
             m_elements.CopyTo(array, arrayIndex);
         }
 
-        public IEnumerator<Pair<T, TU>> GetEnumerator() {
+        public IEnumerator<ITuple> GetEnumerator() {
             return m_elements.GetEnumerator();
         }
 
-        public bool Remove(Pair<T, TU> item) {
+        public bool Remove(ITuple item) {
             return m_elements.Remove(item);
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
-        public bool TryGet(T Key, out TU Value) {
+        public bool TryGet(object Key, out object Value) {
             foreach ( var p in m_elements ) {
-                if ( p.First!.Equals(Key) ) {
-                    Value = p.Second!;
+                if ( p.Get(0)!.Equals(Key) ) {
+                    Value = p.Get(1)!;
                     return true;
                 }
             }
@@ -179,28 +198,25 @@ namespace SystemEx.Collection.Generic {
 
         }
 
-        public Pair<T, TU>? FindFirst(T key) {
+        public ITuple? FindFirst(object key) {
             foreach ( var p in m_elements ) {
-                if(p.EqualFirst(key)) return p;   
+                var _i = p.Get(0);
+                if(_i == null) continue;
+
+                if ( _i.Equals(key)) return p;   
             }
             return null;
         }
 
-        public Pair<T, TU>? FindLast(T key) {
+        public ITuple? FindLast(object key) {
             for ( int i = m_elements.Count - 1; i >= 0; i-- ) {
-                if ( m_elements[i].EqualFirst(key)  )
+                if ( m_elements[i].Equals(key)  )
                     return m_elements[i];
             }
             return null;
         }
-        public Pair<T, TU>[] ToArray() {
+        public ITuple[] ToArray() {
             return [.. m_elements];
         }
-
-        public ulong NumberOfElement(object Key) {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

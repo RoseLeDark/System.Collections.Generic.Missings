@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using SystemEx.Device.Intertropt;
+using SystemEx.Utils;
 
 namespace SystemEx.Device.Memory {
 
@@ -53,10 +54,10 @@ namespace SystemEx.Device.Memory {
         public void End() {
 
             if ( m_type != SharedCacheType.ReadOnly ) {
-                byte[] cahetmp;
-                long startPos = m_backend.ReciveFromHardwareBuffer(out cahetmp, ref m_hardwareBuffer);
+                byte[] cachetmp;
+                long startPos = m_backend.ReciveFromHardwareBuffer(out cachetmp, ref m_hardwareBuffer);
 
-                m_cache.Write((int)startPos, cahetmp); 
+                m_cache.WriteRange((ulong)startPos, cachetmp); 
             } else {
                 m_backend.CloseHardwareBuffer(ref m_hardwareBuffer);
             }

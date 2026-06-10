@@ -69,5 +69,13 @@ namespace SystemEx.Collection.Generic {
                 return m_third;
             }
         }
+
+        public bool EqualFirst(object key) {
+            if ( key is TT ) {
+                TT _g = (TT)key;
+                return EqualFirst(_g);
+            }
+            return false;
+        }
     }
 }

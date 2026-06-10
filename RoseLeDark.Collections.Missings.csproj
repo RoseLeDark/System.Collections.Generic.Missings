@@ -9,8 +9,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>RoseLeDark.Collections.Missings.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.8.1</AssemblyVersion>
-    <FileVersion>0.8.1</FileVersion>
+    <AssemblyVersion>0.8.5</AssemblyVersion>
+    <FileVersion>0.8.5</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>A foundational low‑level extension to .NET’s collection ecosystem.
 This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIterator, IBidirectionalIterator, IRandomAccessIterator), traversal utilities, generic algorithms (Distance, Find, LowerBound, UpperBound, Reverse, Rotate, ForEach), and deterministic byte‑level data structures. Includes advanced map types, MultiMap, Pair/Tuple structures, fixed‑size arrays and buffers, and a modular cache/RAID architecture. Designed for high‑performance, engine‑oriented, allocation‑controlled applications where .NET’s built‑in collections are insufficient.</Description>
@@ -18,7 +18,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.8.1</Version>
+    <Version>0.8.4.2</Version>
     <PackageProjectUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -32,7 +32,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RootNamespace>System</RootNamespace>
+    <RootNamespace>SystemEx</RootNamespace>
     <PackageReleaseNotes>## [0.8.5] 04.06.2026
 ### Very Important
 - **Major namespace restructuring** to reflect the engine architecture and clarify responsibilities across collections, device memory, and interop layers.

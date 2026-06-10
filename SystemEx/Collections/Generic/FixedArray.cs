@@ -5,14 +5,12 @@ using System.Text;
 
 namespace SystemEx.Collection.Generic {
     public class FixedArray<T> : IEnumerable<T> , IArray<T> {
-        private T[] m_elements;
-
-        private int m_index;
+        internal T[] m_elements;
+        internal int m_index;
 
         public int Size => m_elements.Length;
         public T Front => m_elements[0];
         public T Back => m_elements[m_elements.Length - 1];
-        public T Next => m_elements[m_index];
 
         public bool IsFull => m_index == Size;
 
@@ -31,10 +29,10 @@ namespace SystemEx.Collection.Generic {
 
         public FixedArray(T[] e) {
             m_elements = e;
-            m_index = 0;
+            m_index = e.Length;
         }
 
-        public bool Add(T entry) {
+        public virtual bool Add(T entry) {
             if ( m_index >= Size ) {
                 return false;
             }
@@ -49,7 +47,7 @@ namespace SystemEx.Collection.Generic {
             item = m_elements[index];
             return true;
         }
-        public bool Remove() {
+        public virtual bool Remove() {
             if ( IsEmpty ) return false;
             m_index--;
             return true;
@@ -60,7 +58,7 @@ namespace SystemEx.Collection.Generic {
         }
 
         public IEnumerator<T> GetEnumerator() {
-            for ( int i = 0; i < m_index; i++ )
+            for ( int i = 0; i < Size; i++ )
                 yield return m_elements[i];
         }
 
@@ -68,51 +66,39 @@ namespace SystemEx.Collection.Generic {
             return GetEnumerator();
         }
 
-        public void Insert(int pos, T item) {
-            if ( pos < 0 || pos > m_index )
-                throw new ArgumentOutOfRangeException(nameof(pos));
+        public virtual int Insert(int pos, T item) {
+            if ( pos < 0 || pos >= Size ) return 0;
 
-            // Wenn voll → ggf. wachsen
-            if ( m_index >= Size ) {
-                 throw new InvalidOperationException("Array is full and AutoGrow is disabled.");
-            }
-
-            // Elemente nach rechts schieben
-            for ( int i = m_index; i > pos; i-- )
-                m_elements[i] = m_elements[i - 1];
-
-            // Einfügen
             m_elements[pos] = item;
-            m_index++;
+            m_index = pos + 1;
+            return 1;
         }
 
-        public void InsertRange(int pos, IEnumerable<T> items) {
-            if ( pos < 0 || pos > m_index )
-                throw new ArgumentOutOfRangeException(nameof(pos));
+        public virtual int InsertRange(int pos, IEnumerable<T> items) {
+            if ( pos < 0 || pos > Size ) return 0; 
 
             // Materialisieren, damit wir Count kennen
             var list = items as ICollection<T> ?? new List<T>(items);
             int count = list.Count;
 
             if ( count == 0 )
-                return;
+                return 0;
 
             // Prüfen ob genug Platz ist
-            int required = m_index + count;
-            if ( required > Size ) {
-                 throw new InvalidOperationException("Array is full and AutoGrow is disabled.");
+            int space = Size - pos;          // wie viel passt ab pos?
+            int toWrite = count > space ? space : count;
+
+            int idx = pos;
+            int written = 0;
+            foreach ( var item in list ) {
+                if ( written >= toWrite )
+                    break;
+
+                m_elements[idx++] = item;
+                written++;
             }
 
-            // Platz schaffen: Block nach rechts schieben
-            for ( int i = m_index - 1; i >= pos; i-- )
-                m_elements[i + count] = m_elements[i];
-
-            // Elemente einfügen
-            int idx = pos;
-            foreach ( var item in list )
-                m_elements[idx++] = item;
-
-            m_index += count;
+            return written;
         }
 
 
@@ -129,7 +115,7 @@ namespace SystemEx.Collection.Generic {
 
         public void Traverse(TraversMode mode, int startIndex, int endIndex, Action<T> func) {
             int start = Math.Max(startIndex, 0);
-            int end = Math.Min(endIndex, m_index);
+            int end = Math.Min(endIndex, Size);
 
             if ( mode == TraversMode.Forwards ) {
                 for ( int i = start; i < end; i++ )
@@ -158,7 +144,7 @@ namespace SystemEx.Collection.Generic {
         }
 
         public bool TryGet(T Key, out int index) {
-            for ( int i = 0; i < m_index; i++ ) {
+            for ( int i = 0; i < Size; i++ ) {
                 var p = m_elements[i];
 
                 if ( p != null )
@@ -171,9 +157,44 @@ namespace SystemEx.Collection.Generic {
             return false;
         }
 
-        public void CopyTo(int sourceIndex, byte[] destination, int destinationIndex, int count) {
-            Buffer.BlockCopy(m_elements, sourceIndex, destination, destinationIndex, count);
+        public int CopyTo(uint sourceOffset, byte[] destination, uint destinationOffset, uint count) {
+            if ( destination == null ) return 0;
+
+            int src = (int)sourceOffset;
+            int dst = (int)destinationOffset;
+
+            if ( src > Size ) src = Size;
+
+            int toCopy = Math.Min((int)count,
+                Math.Min(Math.Max(0, Size - src),
+                 Math.Max(0, destination.Length - dst)));
+
+            if ( toCopy <= 0 ) return 0;
+
+            Buffer.BlockCopy(m_elements, src, destination, dst, toCopy);
+            return toCopy;
         }
+
+
+
+        public int CopyFrom(byte[] source, uint sourceOffset, uint destinationOffset, uint count) {
+            if ( source == null ) return 0;
+
+            int src = (int)sourceOffset;
+            int dst = (int)destinationOffset;
+
+            if ( dst > Size ) dst = Size;
+
+            int toCopy = Math.Min((int)count,
+                Math.Min(Math.Max(0, source.Length - src),
+                 Math.Max(0, Size - dst)));
+
+            if ( toCopy <= 0 ) return 0;
+
+            Buffer.BlockCopy(source, src, m_elements, dst, toCopy);
+            return toCopy;
+        }
+
 
 
         public T[] ToArray() => m_elements;

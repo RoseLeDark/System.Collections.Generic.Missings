@@ -1,7 +1,7 @@
 # Changelog
 ## Planned to Version 1.0
 ### Add
-- Cache and collection primitives (`Cache`, `CacheRaid`, `CacheRaidMirror`, `CacheRaidStripe`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
+- Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
 - Add Locking System 
 - OpenCL Kerneal Call with my  SystemEx.Device System
 - ADD Dokumentation !!!
@@ -23,15 +23,31 @@
   - `SystemEx.Device.Memory.Missings.RamSharedBackend` → `SystemEx.Device.Interop.RamSharedBackend`
   - `SystemEx.Device.Memory.DeviceSharedBuffer` → `SystemEx.Device.Memory.DeviceSharedBuffer`
   - `SystemEx.Collections.Generic.SharedCache` → `SystemEx.Collections.Generic.Cache` (and related cache types)
+  
+- Add a Map for ITuples `SystemEx.Collections.Generic.TupleMap`, `SystemEx.Collections.Generic.MultiTupleMap` and `SystemEx.Collections.Generic.SortedTupleMap` 
+- Add `SystemEx.Collections.Generic.StrippedCache` (segmented virtual cache over N sub‑caches; global addressing, byte‑wise distribution).
+- Added full support for:
+    - WriteRange(ulong position, byte[] data)
+    - WriteRange(ulong start, ulong end, byte[] data)
+    - ToArray(int index) for exporting individual cache segments.
+    - Added unsigned‑safe global addressing logic for multi‑cache memory systems.
+    - Added overflow‑safe Seek logic compatible with segmented caches.
 
+- Add `SystemEx.Collection.Generic.MirroredCache` (dual‑cache pair; writes to A and mirrored A‑reverse; consistent read/write symmetry).
+    
 ### Improved
 - Clear separation of concerns between collection‑level caches and device‑level memory/backends.
 - Improved discoverability and consistency for public APIs across Collections, Device, and Interop subsystems.
 - Simplified developer mental model for where to place new types: Collections for logical cache/data structures; Device.Memory for managed device memory abstractions; Device.Interop for native/backends.
-
+- Improved Seek implementation to be fully ulong‑safe and handle negative offsets without overflow.
+- Improved internal consistency between Cache and StrippedCache semantics (global vs. local addressing).
+- Improved index validation for segmented cache exports (ToArray(index)).
+- 
 ### Fixed
 - Resolved ambiguous type collisions caused by previous overlapping namespaces.
-
+- Fixed incorrect index comparison in ToArray(int index) (unsigned‑correct boundary check).
+- Fixed potential overflow in SeekOrigin.Current and SeekOrigin.End when negative offsets were cast to ulong.
+- Fixed incorrect cast from ulong to long in cache index validation.
 ### Notes / Migration
 - **Breaking change:** update all `using` directives and project references to the new namespaces.  
   Example mappings:

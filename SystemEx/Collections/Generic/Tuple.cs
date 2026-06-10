@@ -37,5 +37,9 @@ namespace SystemEx.Collection.Generic {
 
             m_elements.Insert(index, value);
         }
+
+        bool ITuple.EqualFirst(object key) {
+            throw new NotImplementedException();
+        }
     }
 }

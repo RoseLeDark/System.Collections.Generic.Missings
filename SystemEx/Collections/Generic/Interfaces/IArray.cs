@@ -9,7 +9,6 @@ namespace SystemEx.Collection.Generic {
         public T Front { get; }
         public T Back { get; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1716:Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen", Justification = "<Ausstehend>")]
-        public T Next { get; }
 
         public bool IsFull { get; }
 
@@ -24,9 +23,9 @@ namespace SystemEx.Collection.Generic {
 
         
 
-        public void Insert(int pos, T item);
+        public int Insert(int pos, T item);
 
-        public void InsertRange(int pos, IEnumerable<T> items);
+        public int InsertRange(int pos, IEnumerable<T> items);
 
         public UInt64 NumberOfElements(T Key);
 

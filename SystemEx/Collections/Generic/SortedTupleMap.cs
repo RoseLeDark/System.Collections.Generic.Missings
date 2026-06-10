@@ -9,15 +9,15 @@ using SystemEx.Utils;
 namespace SystemEx.Collection.Generic {
     [Serializable]
 #pragma warning disable CA1710 // Bezeichner müssen ein korrektes Suffix aufweisen
-    public class SortedMap<T, TU> : Map<T, TU>, ISortedMap<T, TU> {
+    public class SortedTupleMap : TupleMap, ISortedTupleMap
 #pragma warning restore CA1710 // Bezeichner müssen ein korrektes Suffix aufweisen
- 
+    {
 
-        private SortFunc<T, TU> m_sort;
+        private SortTupleFunc m_sort;
 
-        private ICompared<IPair<T, TU>>? m_comparer;
+        private ICompared<ITuple>? m_comparer;
 
-        public ICompared<IPair<T, TU>>? Comparer {
+        public ICompared<ITuple>? Comparer {
             get => m_comparer;
             set {
                 m_comparer = value;
@@ -25,7 +25,7 @@ namespace SystemEx.Collection.Generic {
             }
         }
 
-        public SortFunc<T, TU> SortFunctions {
+        public SortTupleFunc SortFunctions {
             get => m_sort;
             set {
                 m_sort = value;
@@ -35,30 +35,29 @@ namespace SystemEx.Collection.Generic {
 
         public bool AutoSort { get; set; }
 
-        public SortedMap(SortFunc<T, TU> sort) : base() {
+        public SortedTupleMap(SortTupleFunc sort) : base() {
             m_sort = sort;
-            m_elements = new List<Pair<T, TU>>();
             AutoSort = true;
         }
 
-        public SortedMap(IMap<T, TU> source, SortFunc<T, TU> sort) : base() {
+        public SortedTupleMap(ITupleMap source, SortTupleFunc sort) : base() {
             m_sort = sort;
             m_elements = [.. source.ToArray()];
             Sort();
         }
 
-        public override void Add(Pair<T, TU> item) {
+        public override void Add(ITuple item) {
             base.Add(item);
-            if( AutoSort) Sort();
+            if ( AutoSort ) Sort();
         }
 
-        public override bool Insert(int pos, Pair<T, TU> item) {
+        public override bool Insert(int pos, ITuple item) {
             m_elements.Insert(pos, item);
             Sort();
 
-            return true; 
+            return true;
         }
-        public override bool InsertRange(int pos, IEnumerable<Pair<T, TU>> items) {
+        public override bool InsertRange(int pos, IEnumerable<ITuple> items) {
             m_elements.InsertRange(pos, items);
             if ( AutoSort ) Sort();
 
@@ -66,8 +65,8 @@ namespace SystemEx.Collection.Generic {
         }
 
         public void Sort() {
-            for ( int i = 0; i < Size - 1; i++ ) {
-                for ( int j = i + 1; j < Size; j++ ) {
+            for ( int i = 0; i < base.Count - 1; i++ ) {
+                for ( int j = i + 1; j < base.Count; j++ ) {
 
                     CompareResult cmp = m_comparer != null
                     ? m_comparer.Compare(m_elements[i], m_elements[j])
@@ -86,8 +85,8 @@ namespace SystemEx.Collection.Generic {
             m_elements[i] = m_elements[j];
             m_elements[j] = tmp;
         }
-        public IMap<T, TU> ToUnorderedMap() {
-            Map<T, TU> map = [.. m_elements];
+        public ITupleMap ToUnorderedMap() {
+            TupleMap map = [.. m_elements];
             return map;
         }
     }

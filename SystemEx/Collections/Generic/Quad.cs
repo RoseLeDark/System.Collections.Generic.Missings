@@ -75,5 +75,9 @@ namespace SystemEx.Collection.Generic {
             default: return null; // wird nie erreicht aber save ist save
             }
         }
+
+        bool ITuple.EqualFirst(object key) {
+            return EqualFirst((TT)key);
+        }
     }
 }

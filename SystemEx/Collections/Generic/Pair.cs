@@ -1,6 +1,6 @@
 ﻿namespace SystemEx.Collection.Generic {
     [Serializable]
-    public struct Pair<T, TU> : IPair<T, TU>, ITuple
+    public struct Pair<T, TU> : IPair<T, TU>
  {
 
         private T m_key;
@@ -38,6 +38,14 @@
 
             if ( index == 0 ) return m_key;
             else return m_value;
+        }
+
+        bool ITuple.EqualFirst(object key) {
+            if(key is T) {
+                T _g = (T)key;
+                return EqualFirst(_g );
+            }
+            return false;
         }
     }
 }
