@@ -23,8 +23,17 @@ namespace SystemEx.Utils {
     /// Specifies the result of a comparison between two values.
     /// </summary>
     public enum CompareResult {
+        /// <summary>
+        /// A is larger as B
+        /// </summary>
         AIsLargerB = 1,
+        /// <summary>
+        /// A is smaller  as B
+        /// </summary>
         AIsSmallerB = 2,
+        /// <summary>
+        /// A is Equal B
+        /// </summary>
         Equal = 3,
     }
 
