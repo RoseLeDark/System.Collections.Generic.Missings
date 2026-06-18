@@ -3,20 +3,20 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 
 // Basis-Infos
-[assembly: AssemblyTitle("System.Collections.Generic.Missings")]
+[assembly: AssemblyTitle("SystemEx.Collections.Generic.Missings")]
 [assembly: AssemblyDescription("as Simple for Complex assembling")]
 [assembly: AssemblyCompany("KSchattenfeld")]
 [assembly: AssemblyProduct("System.Collections.Generic.Missings")]
 
 // Versionen
-[assembly: AssemblyVersion("0.2.*")]
-[assembly: AssemblyFileVersion("0.2.0")]
-[assembly: AssemblyInformationalVersion("0.2.0")]
+[assembly: AssemblyVersion("0.9.*")]
+[assembly: AssemblyFileVersion("0.9.0")]
+[assembly: AssemblyInformationalVersion("0.9.0")]
 
 // Rechtliches
 [assembly: AssemblyCopyright(
     "© 2026 KSchattenfeld - Licensed under the EUPL")]
-[assembly: AssemblyTrademark("System.Collections.Generic.Missings")]
+[assembly: AssemblyTrademark("SystemEx.Collections.Generic.Missings")]
 
 // Sprache
 [assembly: NeutralResourcesLanguage("de-DE")]
@@ -36,3 +36,9 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyMetadata("TargetFramework", "net10.0")]
 [assembly: AssemblyMetadata("Architecture", "Any")]
+
+[assembly: System.Reflection.AssemblyMetadata("IsTrimmable", "True")]
+[assembly: System.Reflection.AssemblyMetadata("IsAotCompatible", "True")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/RoseLeDark/System.Collections.Generic.Missings.git")]
+[assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
+[assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]

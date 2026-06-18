@@ -4,7 +4,19 @@
 - Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
 - Add Locking System 
 - OpenCL Kerneal Call with my  SystemEx.Device System
-- ADD Dokumentation !!!
+
+
+## [0.9.5] 18.06.2026
+### Very Important 
+- Namespace: `SystemEx.Collection.Generic` To `SystemEx.Collections.Generic`
+## Add
+- Add class `Cluster<T>` at `SystemEx.Collections.Generic` Represents a cluster node in a weighted graph structure.
+- Add class `CacheStream<TCache>` at `SystemEx.IO`A Stream wrapper around a `Cache<T>` instance.  
+- Add Color Classes to `SystemEx.Drawing` - ColorHSL, ColorHSV, ColorRGB, ColorGray, ... Start with build in next
+  Version are ready
+# Docu
+- The Doku in `SystemEx.Collections.Generic`, `SystemEx.IO`, `SysrtemEx` and `SysrtemEx.Utils` is ready
+---
 
 ## [0.8.5] 04.06.2026
 ### Very Important
