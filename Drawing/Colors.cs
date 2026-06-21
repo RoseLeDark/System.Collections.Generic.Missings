@@ -71,7 +71,7 @@ namespace SystemEx.Drawing {
     public sealed class PurpelColors {
         /// <summary> Lavender #E6E6FA </summary>
         public static ColorR8G8B8 Lavender => new ColorR8G8B8((byte)0xE6, (byte)0xE6, (byte)0xFA);
-         /// <summary> Thistle  #D8BFD8 </summary>
+        /// <summary> Thistle  #D8BFD8 </summary>
         public static ColorR8G8B8 Thistle => new ColorR8G8B8((byte)0xD8, (byte)0xBF, (byte)0xD8);
         /// <summary> Plum 	#DDA0DD </summary>
         public static ColorR8G8B8 Plum => new ColorR8G8B8((byte)0xDD, (byte)0xA0, (byte)0xDD);
@@ -106,7 +106,7 @@ namespace SystemEx.Drawing {
         /// <summary> RebeccaPurple 	#663399 </summary>
         public static ColorR8G8B8 RebeccaPurple => new ColorR8G8B8((byte)0x66, (byte)0x33, (byte)0x99);
         /// <summary> Indigo  	#4B0082</summary>
-        public static ColorR8G8B8 Indigo  => new ColorR8G8B8((byte)0x4B, (byte)0x00, (byte)0x82);
+        public static ColorR8G8B8 Indigo => new ColorR8G8B8((byte)0x4B, (byte)0x00, (byte)0x82);
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ namespace SystemEx.Drawing {
     public static class RedColors {
         /// <summary> LightSalmon </summary>
         public static ColorR8G8B8 LightSalmon => new ColorR8G8B8((byte)0xFF, (byte)0xA0, (byte)0x7A);
-        /// <summary> Salmon 	#FA8072
+        /// <summary> Salmon 	#FA8072</summary>
         public static ColorR8G8B8 Salmon => new ColorR8G8B8((byte)0xFA, (byte)0x80, (byte)0x72);
         /// <summary> DarkSalmon 	#E9967A  </summary>
         public static ColorR8G8B8 DarkSalmon => new ColorR8G8B8((byte)0xE9, (byte)0x96, (byte)0x7A);
@@ -170,7 +170,7 @@ namespace SystemEx.Drawing {
         /// <summary> PeachPuff 	#FFDAB9  </summary>
         public static ColorR8G8B8 PeachPuff => new ColorR8G8B8((byte)0xFF, (byte)0xDA, (byte)0xB9);
         /// <summary> PaleGoldenRod 	#EEE8AA </summary>
-        public static ColorR8G8B8 PaleGoldenRod  => new ColorR8G8B8((byte)0xEE, (byte)0xE8, (byte)0xAA);
+        public static ColorR8G8B8 PaleGoldenRod => new ColorR8G8B8((byte)0xEE, (byte)0xE8, (byte)0xAA);
         /// <summary> Khaki 	#F0E68C</summary>
         public static ColorR8G8B8 Khaki => new ColorR8G8B8((byte)0xF0, (byte)0xE6, (byte)0x8C);
         /// <summary> DarkKhaki 	#BDB76B</summary>
@@ -184,9 +184,9 @@ namespace SystemEx.Drawing {
         /// <summary> GreenYellow 	#ADFF2F	 	</summary>
         public static ColorR8G8B8 GreenYellow => new ColorR8G8B8((byte)0xAD, (byte)0xFF, (byte)0x2F);
         /// <summary> Chartreuse 	#7FFF00	 	</summary>
-        public static ColorR8G8B8 Chartreuse => new ColorR8G8B8((byte)0x7F,(byte)0xFF,(byte)0x00);
+        public static ColorR8G8B8 Chartreuse => new ColorR8G8B8((byte)0x7F, (byte)0xFF, (byte)0x00);
         /// <summary> LawnGreen 	#7CFC00	 	</summary>
-        public static ColorR8G8B8 LawnGreen => new ColorR8G8B8((byte)0x7C,(byte)0xFC,(byte)0x00);
+        public static ColorR8G8B8 LawnGreen => new ColorR8G8B8((byte)0x7C, (byte)0xFC, (byte)0x00);
         /// <summary> Lime 	#00FF00	 	</summary>
         public static ColorR8G8B8 Lime => new ColorR8G8B8((byte)0x00, (byte)0xFF, (byte)0x00);
         /// <summary> LimeGreen 	#32CD32	 	</summary>
@@ -206,23 +206,23 @@ namespace SystemEx.Drawing {
         /// <summary> ForestGreen 	#228B22	 	</summary>
         public static ColorR8G8B8 ForestGreen => new ColorR8G8B8((byte)0x22, (byte)0x8B, (byte)0x22);
         /// <summary> Green 	#008000	 	</summary>
-        public static ColorR8G8B8  Green => new ColorR8G8B8((byte)0x00, (byte)0x80, (byte)0x00);
+        public static ColorR8G8B8 Green => new ColorR8G8B8((byte)0x00, (byte)0x80, (byte)0x00);
         /// <summary> DarkGreen 	#006400	 	</summary>
         public static ColorR8G8B8 DarkGreen => new ColorR8G8B8((byte)0x00, (byte)0x64, (byte)0x00);
         /// <summary> YellowGreen 	#9ACD32	 	</summary>
         public static ColorR8G8B8 YellowGreen => new ColorR8G8B8((byte)0x9A, (byte)0xCD, (byte)0x32);
         /// <summary> OliveDrab 	#6B8E23	 	</summary>
-        public static ColorR8G8B8 OliveDrab  => new ColorR8G8B8((byte)0x6B, (byte)0x8E, (byte)0x23);
+        public static ColorR8G8B8 OliveDrab => new ColorR8G8B8((byte)0x6B, (byte)0x8E, (byte)0x23);
         /// <summary> DarkOliveGreen 	#556B2F	 	</summary>
-        public static ColorR8G8B8 DarkOliveGreen   => new ColorR8G8B8((byte)0x55, (byte)0x6B, (byte)0x2F);
+        public static ColorR8G8B8 DarkOliveGreen => new ColorR8G8B8((byte)0x55, (byte)0x6B, (byte)0x2F);
         /// <summary>  MediumAquaMarine 	#66CDAA	 	</summary>
-        public static ColorR8G8B8 MediumAquaMarine  => new ColorR8G8B8((byte)0x66, (byte)0xCD, (byte)0xAA);
+        public static ColorR8G8B8 MediumAquaMarine => new ColorR8G8B8((byte)0x66, (byte)0xCD, (byte)0xAA);
         /// <summary>  DarkSeaGreen 	#8FBC8F	 	</summary>
         public static ColorR8G8B8 DarkSeaGreen => new ColorR8G8B8((byte)0x8F, (byte)0xBC, (byte)0x8F);
         /// <summary>  LightSeaGreen 	#20B2AA	 	</summary>
         public static ColorR8G8B8 LightSeaGreen => new ColorR8G8B8((byte)0x20, (byte)0xB2, (byte)0xAA);
         /// <summary>  DarkCyan 	#008B8B	 	</summary>
-        public static ColorR8G8B8 DarkCyan  => new ColorR8G8B8((byte)0x00, (byte)0x8B, (byte)0x8B);
+        public static ColorR8G8B8 DarkCyan => new ColorR8G8B8((byte)0x00, (byte)0x8B, (byte)0x8B);
         /// <summary>  Teal 	#008080	 	</summary>
         public static ColorR8G8B8 Teal => new ColorR8G8B8((byte)0x00, (byte)0x80, (byte)0x80);
 
@@ -249,7 +249,7 @@ namespace SystemEx.Drawing {
         /// <summary> DarkTurquoise 	#00CED1 </summary>
         public static ColorR8G8B8 DarkTurquoise => new ColorR8G8B8((byte)0x00, (byte)0xCE, (byte)0xD1);
     }
-    
+
     /// <summary>
     /// White ColorsGroup
     /// </summary>
@@ -271,11 +271,11 @@ namespace SystemEx.Drawing {
         /// <summary>  WhiteSmoke 	#F5F5F5	 	</summary>
         public static ColorGray WhiteSmoke => new ColorGray((byte)0xF5);
         /// <summary>    SeaShell 	#FFF5EE	 	</summary>
-        public static ColorR8G8B8 SeaShell  => new ColorR8G8B8((byte)0xFF, (byte)0xF5, (byte)0xEE);
+        public static ColorR8G8B8 SeaShell => new ColorR8G8B8((byte)0xFF, (byte)0xF5, (byte)0xEE);
         /// <summary>    Beige 	#F5F5DC	 	</summary>
         public static ColorR8G8B8 Beige => new ColorR8G8B8((byte)0xF5, (byte)0xF5, (byte)0xDC);
         /// <summary>   OldLace 	#FDF5E6	 	</summary>
-        public static ColorR8G8B8  OldLace  => new ColorR8G8B8((byte)0xFD, (byte)0xF5, (byte)0xE6);
+        public static ColorR8G8B8 OldLace => new ColorR8G8B8((byte)0xFD, (byte)0xF5, (byte)0xE6);
         /// <summary>   FloralWhite 	#FFFAF0	 	</summary>
         public static ColorR8G8B8 FloralWhite => new ColorR8G8B8((byte)0xFF, (byte)0xFA, (byte)0xF0);
         /// <summary>   Ivory 	#FFFFF0	 	</summary>
@@ -287,7 +287,7 @@ namespace SystemEx.Drawing {
         /// <summary>  LavenderBlush 	#FFF0F5	 	</summary>
         public static ColorR8G8B8 LavenderBlush => new ColorR8G8B8((byte)0xFF, (byte)0xF0, (byte)0xF5);
         /// <summary>  MistyRose 	#FFE4E1	 	</summary>
-        public static ColorR8G8B8 MistyRose  => new ColorR8G8B8((byte)0xFF, (byte)0xE4, (byte)0xE1);
+        public static ColorR8G8B8 MistyRose => new ColorR8G8B8((byte)0xFF, (byte)0xE4, (byte)0xE1);
     }
     /// <summary>
     /// Grey ColorsGroup
@@ -300,7 +300,7 @@ namespace SystemEx.Drawing {
         /// <summary>  Silver 	#C0C0C0	 	</summary>
         public static ColorGray Silver => new ColorGray((byte)0xC0);
         /// <summary>  DarkGray 	#A9A9A9	 	</summary>
-        public static ColorGray DarkGray  => new ColorGray((byte)0xA9);
+        public static ColorGray DarkGray => new ColorGray((byte)0xA9);
         /// <summary>  DimGray 	#696969	 	</summary>
         public static ColorGray DimGray => new ColorGray((byte)0x69);
         /// <summary>  Gray 	#808080	 	</summary>
@@ -308,9 +308,10 @@ namespace SystemEx.Drawing {
         /// <summary> LightSlateGray 	#778899	 	</summary>
         public static ColorR8G8B8 LightSlateGray => new ColorR8G8B8((byte)0x77, (byte)0x88, (byte)0x99);
         /// <summary> SlateGray 	#708090	 	</summary>
-        public static ColorR8G8B8 SlateGray  => new ColorR8G8B8((byte)0x70, (byte)0x80, (byte)0x90);
+        public static ColorR8G8B8 SlateGray => new ColorR8G8B8((byte)0x70, (byte)0x80, (byte)0x90);
         /// <summary>  DarkSlateGray 	#2F4F4F	 	</summary>
         public static ColorR8G8B8 DarkSlateGray => new ColorR8G8B8((byte)0x2F, (byte)0x4F, (byte)0x4F);
         /// <summary>  Black 	#000000</summary>
         public static ColorGray Black => new ColorGray(0);
     }
+}

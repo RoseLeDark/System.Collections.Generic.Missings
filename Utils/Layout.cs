@@ -17,11 +17,14 @@ namespace SystemEx.Utils {
         /// </summary>
         public Type StructType { get; }
 
+
+#pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
         /// <summary>
         /// Creates a new exception indicating that the specified struct type
-        /// must be declared with <see cref="StructLayout(LayoutKind.Sequential)"/>.
+        /// must be declared with <see cref="System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential)"/>.
         /// </summary>
         public MissingStructLayoutSequentialException(Type type)
+#pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
             : base($"{type.Name} must use [StructLayout(LayoutKind.Sequential)]") {
             StructType = type;
         }
@@ -70,7 +73,7 @@ namespace SystemEx.Utils {
     /// Ensures that a struct:
     /// <list type="bullet">
     /// <item><description>uses <see cref="LayoutKind.Sequential"/></description></item>
-    /// <item><description>has identical <c>sizeof(T)</c> and <see cref="System.Runtime.InteropServices.Marshal.SizeOf{T}"/></description></item>
+    /// <item><description>has identical <c>sizeof(T)</c> and <see cref="System.Runtime.InteropServices.Marshal.SizeOf{T}(T)"/></description></item>
     /// <item><description>matches an optional expected unmanaged size</description></item>
     /// </list>
     /// </summary>
@@ -89,7 +92,7 @@ namespace SystemEx.Utils {
         /// Thrown when the struct does not use <see cref="LayoutKind.Sequential"/>.
         /// </exception>
         /// <exception cref="SerializationException">
-        /// Thrown when <c>sizeof(T)</c> differs from <see cref="System.Runtime.InteropServices.Marshal.SizeOf{T}"/>.
+        /// Thrown when <c>sizeof(T)</c> differs from <see cref="System.Runtime.InteropServices.Marshal.SizeOf{T}(T)"/>.
         /// </exception>
         /// <exception cref="SizeMismatchException">
         /// Thrown when <c>sizeof(T)</c> does not match <paramref name="expectedUnmanagedSize"/>.

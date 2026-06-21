@@ -50,21 +50,31 @@ namespace SystemEx.Collections.Generic {
         /// Gets or sets the previous node in the linked chain.
         /// </summary>
         public INode<T> Prev { get => m_pChilds[PREV]; set => m_pChilds[PREV] = value; }
-
+        /// <summary>
+        /// Get or sets the current value
+        /// </summary>
         public T? Value { get => m_nodes[0].Value; set => m_nodes[0].Value = value; }
 
         /// <summary>
         /// Number of childs in this group,
         /// </summary>
-        public int? NChilds =>  m_pChilds.Count();
+        public int? NChilds =>  m_pChilds.Count;
 
         /// <summary>
         /// Number of sibling in this group.
         /// </summary>
-        public int? NSiblings => m_pSiblings.Count();
-
+        public int? NSiblings => m_pSiblings.Count;
+        /// <summary>
+        /// Get Sibling at
+        /// </summary>
+        /// <param name="index">index</param>
+        /// <returns></returns>
         public INode<T> GetSiblingsAt(int index) => m_pSiblings.ElementAt(index);
-
+        /// <summary>
+        /// Get child at
+        /// </summary>
+        /// <param name="index">index</param>
+        /// <returns></returns>
         public INode<T> GetChildAt(int index) => m_pChilds.ElementAt(index);
         /// <summary>
         /// Indicates whether this node has a next neighbor.
@@ -84,7 +94,7 @@ namespace SystemEx.Collections.Generic {
 
         /// <summary>
         /// Initializes a new group node.  
-        /// The base <see cref="TNode{T}"/> </c>
+        /// The base <c><see cref="INode{T}"/> </c>
         /// because the group itself does not represent a single node value.
         /// </summary>
         public GroupNode(T value) : base() {
@@ -125,6 +135,10 @@ namespace SystemEx.Collections.Generic {
             m_pChilds = node.m_pChilds;
             m_pSiblings = node.m_pSiblings;
         }
+        /// <summary>
+        /// Copy constructor from 1 node
+        /// </summary>
+        /// <param name="node"></param>
         public GroupNode(Node<T> node) {
             m_nodes = new List<INode<T>>();
             m_nodes.Add(new Node<T>(node.Value!));

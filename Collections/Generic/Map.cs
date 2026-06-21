@@ -15,6 +15,7 @@
  */
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -36,6 +37,7 @@ namespace SystemEx.Collections.Generic {
         ICollection<Pair<T, TU>>,
         IEnumerable,
         IMap<T, TU>,
+        IReadOnlyMap<T, TU>,
         ITraverse<Pair<T, TU>> {
         /// <summary>
         /// Internal list storing all key/value pairs.
@@ -99,6 +101,30 @@ namespace SystemEx.Collections.Generic {
         /// Always <see cref="Int32.MaxValue"/>.
         /// </summary>
         public int Size => Int32.MaxValue;
+        /// <summary>
+        /// Gets an enumerable collection of all keys contained in the map.
+        /// </summary>
+        public ICollection<T> Keys {
+            get {
+                List<T> tmp = new List<T>();
+                foreach ( var t in m_elements ) { tmp.Add(t.First); }
+                return tmp; 
+            }
+        }
+        /// <summary>
+        /// Gets an enumerable collection of all values contained in the map.
+        /// </summary>
+        public ICollection<TU> Values {
+            get {
+                List<TU> tmp = new List<TU>();
+                foreach ( var t in m_elements ) { tmp.Add(t.Second); }
+                return tmp;
+            }
+        }
+
+        IEnumerable<T> IReadOnlyMap<T, TU>.Keys => Keys;
+
+        IEnumerable<TU> IReadOnlyMap<T, TU>.Values => Values;
 
         /// <summary>
         /// Creates an empty map.
@@ -331,15 +357,35 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Attempts to retrieve the value associated with the specified key.
         /// </summary>
-        public bool TryGet(T Key, out TU Value) {
+        public bool TryGeValue(T key, [MaybeNullWhen(false)] out TU value) {
             foreach ( var p in m_elements ) {
-                if ( p.First!.Equals(Key) ) {
-                    Value = p.Second!;
+                if ( p.EqualFirst(key) ) {
+                    value = p.Second!;
                     return true;
                 }
             }
-            Value = default!;
+            value = default!;
             return false;
+        }
+        /// <summary>
+        /// Remove the first element with the specified key.
+        /// </summary>
+        /// <param name="key">The key to remove from the map.</param>
+        /// <returns>true when remove and false when not.</returns>
+        public bool Remove(T key) {
+            bool _ret = false;
+
+            for(int i = 0; i < m_elements.Count; i++ ) {
+                if ( m_elements[i].EqualFirst(key) ) {
+                    m_elements.RemoveAt(i);
+                    break;
+                }
+            }
+            return _ret;
+        }
+
+        IEnumerator<Pair<T, TU>> IEnumerable<Pair<T, TU>>.GetEnumerator() {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -384,6 +430,8 @@ namespace SystemEx.Collections.Generic {
         public Pair<T, TU>[] ToArray() {
             return [.. m_elements];
         }
+
+        
     }
 
 }

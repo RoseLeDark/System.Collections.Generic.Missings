@@ -16,6 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// <summary>
+    /// A lightweight interface for serializable N‑element tuple consisting of strongly typed 
+    /// </summary>
     public interface ITuple {
         /// <summary>
         /// Gets the number of elements stored in the tuple.

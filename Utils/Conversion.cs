@@ -14,6 +14,12 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+using Microsoft.VisualBasic;
+using System.Reflection;
+using SystemEx.Collections.Generic;
+using SystemEx.IO.Provider;
+using SystemEx.SystemEx.Drawing;
+
 namespace SystemEx {
     /// <summary>
     /// Specifies the byte order used when converting values to and from raw byte
@@ -31,8 +37,10 @@ namespace SystemEx {
         BigEndian
     }
 
-
-    public static class CovertUtils {
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class Conversion {
         /// <summary>
         /// Provides low‑level conversion utilities for primitive numeric types,
         /// unmanaged structs, and arrays.  
@@ -209,6 +217,31 @@ namespace SystemEx {
         #endregion
 
         #region STRUCT
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static byte[] ToBytes<T>(this T value, ByteSeriablizeProvider provider) 
+            where T : IIsByteSeriablize  {
+
+            return provider.ToBytes<T>(value).ToArray();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bytes"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static T FromBytes<T>(this byte[] bytes, ByteSeriablizeProvider provider) 
+            where T : IIsByteSeriablize {
+           
+            return provider.FromBytes<T>(new Cache(bytes, CacheType.Both));
+        }
 
         /// <summary>
         /// Converts an unmanaged struct into a byte array using the specified endianness.

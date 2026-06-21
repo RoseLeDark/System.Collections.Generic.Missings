@@ -52,15 +52,13 @@ namespace SystemEx.Collections.Generic.Interfaces {
         public bool IsFixed { get; }
 
 
+
+#pragma warning disable CA1716 // Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen
         /// <summary>
         /// Attempts to retrieve an element at the specified index.
         /// </summary>
-        /// <param name="index">The index to read from.</param>
-        /// <param name="item">Receives the retrieved element.</param>
-        /// <returns><c>true</c> if the element was retrieved; otherwise <c>false</c>.</returns>
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1716:Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen", Justification = "<Ausstehend>")]
         public bool Get(int index, ref T item);
+#pragma warning restore CA1716 // Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen
 
 
         /// <summary>

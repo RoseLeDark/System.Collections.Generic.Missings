@@ -5,3 +5,12 @@ dotnet_analyzer_diagnostic.severity = none
 
 # CS8632: Die Anmerkung für Nullable-Verweistypen darf nur in Code innerhalb eines #nullable-Anmerkungskontexts verwendet werden.
 dotnet_diagnostic.CS8632.severity = none
+
+# Default severity for analyzer diagnostics with category 'Naming'
+dotnet_analyzer_diagnostic.category-Naming.severity = none
+
+# CA1710: Bezeichner müssen ein korrektes Suffix aufweisen
+dotnet_diagnostic.CA1710.severity = none
+
+# CS1591: Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
+dotnet_diagnostic.CS1591.severity = silent

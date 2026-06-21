@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using SystemEx.SystemEx.Drawing;
 
@@ -159,6 +160,63 @@ namespace SystemEx.Drawing {
             return new ColorHSV(h, s, v);
         }
         /// <summary>
+        /// Converts an sRGB color to HWB.
+        /// </summary>
+        public static ColorHWB ToColorHWB(this ColorR8G8B8 color) {
+            var c = color.AsNormalized();
+
+            float max = System.Math.Max(c.Red, System.Math.Max(c.Green, c.Blue));
+            float min = System.Math.Min(c.Red, System.Math.Min(c.Green, c.Blue));
+            float delta = max - min;
+
+            float w = min;
+            float b = 1 - max;
+            float h;
+
+            if ( delta == 0 )
+                h = 0;
+            else if ( max == c.Red )
+                h = (c.Green - c.Blue) / delta;
+            else if ( max == c.Green )
+                h = 2 + (c.Blue - c.Red) / delta;
+            else
+                h = 4 + (c.Red - c.Green) / delta;
+
+            h *= 60;
+            if ( h < 0 ) h += 360;
+
+            return new ColorHWB(h, w *= 100, b *= 100);
+        }
+        /// <summary>
+        /// Converts an HWB color to sRGB.
+        /// </summary>
+        public static ColorR8G8B8 ToColorR8G8B8(this ColorHWB color) {
+            float h = Math.FMod(color.Hue, 360.0f) / 60.0f;
+            float w = color.Whiteness / 100.0f;
+            float bl = color.Blackness / 100.0f;
+
+            float v = 1 - bl;
+            float s = v == 0 ? 0 : 1 - w / v;
+            float c = v * s;
+            float x = c * (1 - System.Math.Abs( Math.FMod (h, 2.0f) - 1f));
+            float m = v - c;
+
+            float r, g, b;
+            if ( h < 1 ) { r = c; g = x; b = 0; } 
+            else if ( h < 2 ) { r = x; g = c; b = 0; } 
+            else if ( h < 3 ) { r = 0; g = c; b = x; } 
+            else if ( h < 4 ) { r = 0; g = x; b = c; } 
+            else if ( h < 5 ) { r = x; g = 0; b = c; } 
+            else { r = c; g = 0; b = x; }
+
+            return new ColorR8G8B8(
+                ((r + m)),
+                ((g + m)),
+                ((b + m))
+            );
+        }
+
+        /// <summary>
         /// Converts an HSV color to sRGB.
         /// </summary>
         public static ColorR8G8B8 ToColorR8G8B8(this ColorHSV color) {
@@ -234,17 +292,64 @@ namespace SystemEx.Drawing {
         /// Converts a 16‑bit RGB color (R16G16B16) to a 10‑bit RGB holder (R10G10B10).
         /// No quantization is applied; values remain normalized floats.
         /// </summary>
-        public static ColorR10G10B10 ToColorR10G10B10(this ColorR16G16B16 color) {
-            return new ColorR10G10B10(color.R, color.G, color.B);
+        public static ColorR10G10B10A2 ToColorR10G10B10(this ColorR16G16B16 color) {
+            return new ColorR10G10B10A2(color.R, color.G, color.B);
         }
         /// <summary>
         /// Converts a 10‑bit RGB holder (R10G10B10) to a 16‑bit RGB color (R16G16B16).
         /// No quantization is applied; values remain normalized floats.
         /// </summary>
-        public static ColorR16G16B16 ToColorR16G16B16(this ColorR10G10B10 color) {
+        public static ColorR16G16B16 ToColorR16G16B16(this ColorR10G10B10A2 color) {
             return new ColorR16G16B16(color.R, color.G, color.B);
         }
+        /// <summary>
+        /// Converts an HSV color to sRGB.
+        /// </summary>
+        public static ColorNCol ToColorNCol(this  ColorR8G8B8 color) {
+            var hwb = color.ToColorHWB();
 
+            byte     hueIndex = (byte) ((hwb.Hue / 60) % 6);
+            byte     huePercent = (byte) (Math.FMod(hwb.Hue, 60) / 60 * 100) ;
 
+            char N = ColorNCol.HUENAME[hueIndex];
+
+            return new ColorNCol(hueIndex, huePercent, hwb.Whiteness, (100 - hwb.Blackness));
+        }
+        /// <summary>
+        /// Converts an NCol color to sRGB.
+        /// </summary>
+        public static ColorR8G8B8 ToColorR8G8B8(this ColorNCol color) {
+            byte hueIndex = color.I;
+            byte huePercent = color.P;
+
+            float h = Math.FMod(hueIndex * 60f + huePercent * 0.6f, 360f);
+            float w = System.Math.Clamp(color.C, 0.0f, 100.0f);
+            float b = System.Math.Clamp(color.L, 0.0f, 100.0f);
+
+            var nwb = new ColorHWB(h, w, b);
+
+            return nwb.ToColorR8G8B8();
+        }
+        /// <summary>
+        /// Converts an NCol color to RGB16.
+        /// </summary>
+        public static ColorR16G16B16 ToColorR16G16B16(this ColorNCol color) {
+            ColorR8G8B8 rgb = color.ToColorR8G8B8();
+            return new ColorR16G16B16(rgb.Red, rgb.Green, rgb.Blue);
+        }
+        /// <summary>
+        /// Converts an NCol color to RGB10.
+        /// </summary>
+        public static ColorR10G10B10A2 ToColorR10G10B10(this ColorNCol color) {
+            ColorR8G8B8 rgb = color.ToColorR8G8B8();
+            return new ColorR10G10B10A2(rgb.Red, rgb.Green, rgb.Blue);
+        }
+        /// <summary>
+        /// Converts an Gray color to HSV.
+        /// </summary>
+        public static ColorHSV ToColorHSV(this ColorGray color) {
+            return new ColorHSV(color.Gray, color.Gray, color.Gray);
+        }
     }
+
 }

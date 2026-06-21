@@ -41,11 +41,6 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         private readonly ICache[] m_caches;
         /// <summary>
-        /// Tracks the currently active segment index (not used for write logic,
-        /// but maintained for compatibility with the base class).
-        /// </summary>
-        private int m_currentCache;
-        /// <summary>
         /// Gets the total length of the cache in bytes.
         /// </summary>
         public override int Length => (int)LongLength;
@@ -63,7 +58,7 @@ namespace SystemEx.Collections.Generic {
                 m_caches[i] = new Cache(cacheSize, CacheType.Both);
 
             LongLength = (ulong)(cacheCount * cacheSize);
-            m_currentCache = 0;
+           // m_currentCache = 0;
             SetSavePosition(0);
 
             m_segmentTemp = new FixedArray<byte>(cacheSize);

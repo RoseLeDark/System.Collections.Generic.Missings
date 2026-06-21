@@ -32,9 +32,7 @@ namespace SystemEx.Collections.Generic {
     /// <typeparam name="T">The key type.</typeparam>
     /// <typeparam name="TU">The value type.</typeparam>
     [Serializable]
-#pragma warning disable CA1710
     public class SortedMap<T, TU> : Map<T, TU>, ISortedMap<T, TU>
-#pragma warning restore CA1710
     {
         /// <summary>
         /// Delegate-based sorting function used when no comparer is provided.

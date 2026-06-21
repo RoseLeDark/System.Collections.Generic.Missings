@@ -17,12 +17,18 @@
  * changes and the date.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// 
     /// <summary>
     /// Defines the basic contract for a map-like container that stores elements
     /// in positional order and supports indexed removal and clearing operations.
     /// </summary>
     public interface IMap {
+
 
         /// <summary>
         /// Gets the number of elements currently stored in the map.
@@ -73,7 +79,30 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// </summary>
     /// <typeparam name="T">The key type.</typeparam>
     /// <typeparam name="TU">The value type.</typeparam>
-    public interface IMap<T, TU> : IMap {
+    public interface IMap<T, TU> : IMap, ICollection<Pair<T, TU>> where T : notnull {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        TU this[T key] {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Returns a collections of the keys in this map.
+        /// </summary>
+        ICollection<T> Keys {
+            get;
+        }
+        /// <summary>
+        /// Returns a collections of the values in this map.
+        /// </summary>
+        ICollection<TU> Values {
+            get;
+        }
         /// <summary>
         /// Gets the first element in the map, or <c>null</c> if the map is empty.
         /// </summary>
@@ -85,17 +114,19 @@ namespace SystemEx.Collections.Generic.Interfaces {
         Pair<T, TU>? Last { get; }
 
         /// <summary>
-        /// Adds a new key/value pair to the map.
+        /// Adds a key-value pair to the dictionary.
         /// </summary>
-        /// <param name="item">The pair to add.</param>
-        void Add(Pair<T, TU> item);
+        /// <param name="key">The key of the pair to add.</param>
+        /// <param name="value">The value of the pair to add.</param>
+        void Add(T key, TU value);
+
 
         /// <summary>
-        /// Removes the specified key/value pair from the map.
+        /// Removes the specified key from the map.
         /// </summary>
-        /// <param name="item">The pair to remove.</param>
+        /// <param name="key">The key to find and remove from the map</param>
         /// <returns><c>true</c> if the element was removed; otherwise <c>false</c>.</returns>
-        bool Remove(Pair<T, TU> item);
+        bool Remove(T key);
 
         /// <summary>
         /// Inserts a key/value pair at the specified position.
@@ -148,5 +179,82 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         /// <returns>An array containing all pairs in the map.</returns>
         Pair<T, TU>[] ToArray();
+
+
+        /// <summary>
+        /// Finds the first key/value pair whose key matches the specified value.
+        /// </summary>
+        /// <param name="key">The key to search for.</param>
+        /// <param name="value">when find a key in the map then out the value.</param>
+        /// <returns>true when find a matching pair, with given key, or  <c>false</c> if none is found.</returns>
+        bool TryGeValue(T key, [MaybeNullWhen(false)] out TU value);
     }
+
+    
+
+    /// <summary>
+    /// Defines a read‑only associative container mapping keys of type <typeparamref name="T"/>
+    /// to values of type <typeparamref name="TU"/>.
+    /// 
+    /// This interface provides lookup operations, key/value enumeration and
+    /// index‑based access without exposing any modification capabilities.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The key type. Must be suitable for equality comparison.
+    /// </typeparam>
+    /// <typeparam name="TU">
+    /// The value type associated with each key.
+    /// </typeparam>
+    public interface IReadOnlyMap<T, TU>
+        : IEnumerable<Pair<T, TU>>, IReadOnlyCollection<Pair<T, TU>> where T : notnull {
+        /// <summary>
+        /// Determines whether the map contains an entry for the specified key.
+        /// </summary>
+        /// <param name="key">The key to test for existence.</param>
+        /// <returns>
+        /// <c>true</c> if the key exists in the map; otherwise <c>false</c>.
+        /// </returns>
+        bool ContainsKey(T key);
+
+        /// <summary>
+        /// Attempts to retrieve the value associated with the specified key.
+        /// </summary>
+        /// <param name="key">The key whose value should be retrieved.</param>
+        /// <param name="value">
+        /// When this method returns <c>true</c>, contains the value associated with
+        /// <paramref name="key"/>; otherwise <c>null</c>.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if the key exists and a value was returned; otherwise <c>false</c>.
+        /// </returns>
+        bool TryGeValue(T key, [MaybeNullWhen(false)] out TU value);
+
+        /// <summary>
+        /// Gets the value associated with the specified key.
+        /// </summary>
+        /// <param name="key">The key whose value should be returned.</param>
+        /// <returns>
+        /// The value associated with <paramref name="key"/>.
+        /// </returns>
+        /// <exception cref="KeyNotFoundException">
+        /// Thrown if the key does not exist in the map.
+        /// </exception>
+        TU this[T key] { get; }
+
+        /// <summary>
+        /// Gets an enumerable collection of all keys contained in the map.
+        /// </summary>
+        IEnumerable<T> Keys { get; }
+
+        /// <summary>
+        /// Gets an enumerable collection of all values contained in the map.
+        /// </summary>
+        IEnumerable<TU> Values { get; }
+    }
+
+
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+
 }
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

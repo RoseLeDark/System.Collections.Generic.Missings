@@ -1,9 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Cryptography;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 
 namespace SystemEx.Drawing {
     /// <summary>
@@ -12,10 +22,12 @@ namespace SystemEx.Drawing {
     /// Provides hue‑aware interpolation, component manipulation, arithmetic
     /// operations, and normalization utilities.
     /// </summary>
-    public class ColorHSV : IColor<ColorHSV>, IEquatable<ColorHSV> {
+    public class ColorHSV : IColor<ColorHSV>, IEquatable<ColorHSV>, IComparable<ColorHSV> {
         internal float m_hue;         // 0–360°
         internal float m_saturation;  // 0–1
         internal float m_value;       // 0–1
+
+        public static ColorHSV Zero => GreyColors.Black.ToColorHSV();
 
         /// <summary>
         /// Gets or sets the hue component in degrees (0–360).  
@@ -26,12 +38,12 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Gets or sets the value (brightness) component in the range 0–1.
         /// </summary>
-        public virtual float V { get => m_value; set => m_value = Math.Clamp(value, 0f, 1f); }
+        public virtual float V { get => m_value; set => m_value = System.Math.Clamp(value, 0f, 1f); }
 
         /// <summary>
         /// Gets or sets the saturation component in the range 0–1.
         /// </summary>
-        public virtual float S { get => m_saturation; set => m_saturation = Math.Clamp(value, 0f, 1f); }
+        public virtual float S { get => m_saturation; set => m_saturation = System.Math.Clamp(value, 0f, 1f); }
 
         /// <summary>
         /// Initializes a new HSV color with the specified component values.
@@ -46,7 +58,7 @@ namespace SystemEx.Drawing {
         /// Adjusts the saturation by the specified delta.
         /// </summary>
         public virtual ColorHSV Saturation(float delta) {
-            m_saturation = Math.Clamp(m_saturation + delta, 0f, 1f);
+            m_saturation = System.Math.Clamp(m_saturation + delta, 0f, 1f);
             return this;
         }
 
@@ -54,7 +66,7 @@ namespace SystemEx.Drawing {
         /// Adjusts the value (brightness) by the specified delta.
         /// </summary>
         public virtual ColorHSV Brightness(float delta) {
-            m_value = Math.Clamp(m_value + delta, 0f, 1f);
+            m_value = System.Math.Clamp(m_value + delta, 0f, 1f);
             return this;
         }
 
@@ -63,8 +75,8 @@ namespace SystemEx.Drawing {
         /// Hue is wrapped, saturation and value are clamped.
         /// </summary>
         public virtual ColorHSV Addition(ColorHSV a) {
-            m_saturation = Math.Clamp(m_saturation + a.m_saturation, 0f, 1f);
-            m_value = Math.Clamp(m_value + a.m_value, 0f, 1f);
+            m_saturation = System.Math.Clamp(m_saturation + a.m_saturation, 0f, 1f);
+            m_value = System.Math.Clamp(m_value + a.m_value, 0f, 1f);
             m_hue = ClampHue(m_hue + a.m_hue);
             return this;
         }
@@ -74,8 +86,8 @@ namespace SystemEx.Drawing {
         /// Hue is wrapped, saturation and value are clamped.
         /// </summary>
         public virtual ColorHSV Subtraction(ColorHSV a) {
-            m_saturation = Math.Clamp(m_saturation - a.m_saturation, 0f, 1f);
-            m_value = Math.Clamp(m_value - a.m_value, 0f, 1f);
+            m_saturation = System.Math.Clamp(m_saturation - a.m_saturation, 0f, 1f);
+            m_value = System.Math.Clamp(m_value - a.m_value, 0f, 1f);
             m_hue = ClampHue(m_hue - a.m_hue);
             return this;
         }
@@ -85,8 +97,8 @@ namespace SystemEx.Drawing {
         /// Hue is not affected.
         /// </summary>
         public virtual ColorHSV Multiplication(ColorHSV a) {
-            m_saturation = Math.Clamp(m_saturation * a.m_saturation, 0f, 1f);
-            m_value = Math.Clamp(m_value * a.m_value, 0f, 1f);
+            m_saturation = System.Math.Clamp(m_saturation * a.m_saturation, 0f, 1f);
+            m_value = System.Math.Clamp(m_value * a.m_value, 0f, 1f);
             return this;
         }
 
@@ -96,10 +108,10 @@ namespace SystemEx.Drawing {
         /// </summary>
         public virtual ColorHSV Division(ColorHSV a) {
             if ( a.m_saturation != 0f )
-                m_saturation = Math.Clamp(m_saturation / a.m_saturation, 0f, 1f);
+                m_saturation = System.Math.Clamp(m_saturation / a.m_saturation, 0f, 1f);
 
             if ( a.m_value != 0f )
-                m_value = Math.Clamp(m_value / a.m_value, 0f, 1f);
+                m_value = System.Math.Clamp(m_value / a.m_value, 0f, 1f);
 
             return this;
         }
@@ -168,6 +180,60 @@ namespace SystemEx.Drawing {
         /// </summary>
         public override string ToString() {
             return string.Create(null, stackalloc char[256], $"[{m_hue}, {m_saturation}, {m_value}]");
+        }
+        /// <summary>
+        /// Addition  another color in r, g, b channels with this one
+        /// </summary>
+        public ColorHSV Addition(float a, float b, float c) {
+            return Addition(new ColorHSV(a, b, c));
+        }
+        /// <summary>
+        /// Subtraction  another color in r, g, b channels with this one
+        /// </summary>
+        public ColorHSV Subtraction(float a, float b, float c) {
+            return Subtraction(new ColorHSV(a, b, c));
+        }
+        /// <summary>
+        /// Multiplication  another color in r, g, b channels with this one
+        /// </summary>
+        public ColorHSV Multiplication(float a, float b, float c) {
+            return Multiplication(new ColorHSV(a, b, c));
+        }
+        /// <summary>
+        /// Divisionication  another color in r, g, b channels with this one
+        /// </summary>
+        public ColorHSV Division(float a, float b, float c) {
+            return Division(new ColorHSV(a, b, c));
+        }
+
+        public int CompareTo(ColorHSV other) {
+            if(other == null) return 1;
+            if(this > other ) return -1;
+            return 0;
+        }
+
+        public static bool operator ==(ColorHSV left, ColorHSV right) {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ColorHSV left, ColorHSV right) {
+            return !(left == right);
+        }
+
+        public static bool operator <(ColorHSV left, ColorHSV right) {
+            return left.GetHashCode() < right.GetHashCode();
+        }
+
+        public static bool operator <=(ColorHSV left, ColorHSV right) {
+            return left.GetHashCode() <= right.GetHashCode();
+        }
+
+        public static bool operator >(ColorHSV left, ColorHSV right) {
+            return left.GetHashCode() > right.GetHashCode();
+        }
+
+        public static bool operator >=(ColorHSV left, ColorHSV right) {
+            return left.GetHashCode() >= right.GetHashCode();
         }
     }
 }

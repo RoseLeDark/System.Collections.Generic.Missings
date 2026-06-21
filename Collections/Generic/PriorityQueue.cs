@@ -93,9 +93,9 @@ namespace SystemEx.Collections.Generic {
     /// </typeparam>
     public class PriorityQueueEx<T, TU>
         where TU : INumber<TU> {
-        // <summary>
+        /// <summary>
         /// Internal sorted map storing all (value, priority) pairs.
-        /// </summary>
+        ///</summary>
         private readonly SortedMap<T, TU> m_map;
 
         /// <summary>

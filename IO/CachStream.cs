@@ -81,7 +81,7 @@ namespace SystemEx.IO {
             }
 
         }
-        // <summary>
+        /// <summary>
         /// Indicates whether the stream supports reading.
         /// </summary>
         public override bool CanRead => m_cache.CanRead;

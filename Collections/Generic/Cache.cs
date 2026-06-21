@@ -44,6 +44,9 @@ namespace SystemEx.Collections.Generic{
     /// Exception thrown when an operation is attempted on a shared or locked cache.
     /// </summary>
     public class CacheIsSharedException : Exception {
+        /// <summary>
+        /// Exception thrown when an operation is attempted on a shared or locked cache.
+        /// </summary>
         public CacheIsSharedException() : base() { }
     }
     /// <summary>
@@ -113,6 +116,27 @@ namespace SystemEx.Collections.Generic{
         /// </summary>
         public Cache(int capacity, CacheType type) {
             m_rawBuffer = new FixedArray<byte>(capacity);
+            this.Type = type;
+            LongLength = (ulong)m_rawBuffer.Size;
+        }
+        /// <summary>
+        /// Initializes a new cache from given array
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="type"></param>
+        public Cache(byte[] arr, CacheType type) {
+            m_rawBuffer = new FixedArray<byte>(arr);
+            this.Type = type;
+            LongLength = (ulong)m_rawBuffer.Size;
+        }
+
+        /// <summary>
+        /// Initializes a new cache from given array
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="type"></param>
+        public Cache(Array<byte> arr, CacheType type) {
+            m_rawBuffer = new FixedArray<byte>(arr.ToArray());
             this.Type = type;
             LongLength = (ulong)m_rawBuffer.Size;
         }
@@ -519,9 +543,16 @@ namespace SystemEx.Collections.Generic{
 
             return chunk.Length;
         }
+
         /// <summary>
         /// Writes bytes from the specified buffer and advances the internal position.
         /// </summary>
+        /// <param name="buffer">The byte buffer to write</param>
+        /// <param name="offset"></param>
+        /// <param name="count">Size of the buffer to write</param>
+        /// <returns>NUmber of bytes are written</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public int Write(byte[] buffer, int offset, int count) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
             if ( offset < 0 || count < 0 ) throw new ArgumentOutOfRangeException("offset,count");
@@ -561,7 +592,15 @@ namespace SystemEx.Collections.Generic{
             if ( m_isLocked ) throw new CacheIsSharedException();
             return m_rawBuffer.ToArray();
         }
-
+        /// <summary>
+        /// Returns a copy of the internal buffer, as <see cref="Array{T}"/> 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="CacheIsSharedException"></exception>
+        public Array<byte> ToArrayEx() {
+            if ( m_isLocked ) throw new CacheIsSharedException();
+            return m_rawBuffer;
+        }
         
     }
 }

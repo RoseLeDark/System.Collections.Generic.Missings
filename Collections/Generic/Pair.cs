@@ -129,5 +129,6 @@ namespace SystemEx.Collections.Generic {
 
             return false;
         }
+        
     }
 }

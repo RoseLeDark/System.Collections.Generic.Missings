@@ -1,4 +1,4 @@
-﻿namespace SHstemEx.Drawing {
+﻿namespace SystemEx.Drawing {
     /// <summary>
     /// Represents a color in the HSL (Hue–Saturation–Lightness) color space using
     /// floating‑point components.  
@@ -13,6 +13,7 @@
 
         /// <summary>
         /// Gets the hue component 
+        /// </summary>
         public virtual float H { get => m_h; } 
 
         /// <summary>

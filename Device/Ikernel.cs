@@ -113,7 +113,9 @@ namespace SystemEx.Device.Memory {
         /// Ends the kernel execution session, synchronizes buffers, and performs
         /// backend cleanup operations.
         /// </summary>
+#pragma warning disable CA1716 // Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen
         void End();
+#pragma warning restore CA1716 // Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen
     }
 
 

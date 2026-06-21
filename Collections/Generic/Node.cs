@@ -87,10 +87,17 @@ namespace SystemEx.Collections.Generic {
         public void Back() {
             m_pCurrent = m_pCurrent.Prev;
         }
-
+        /// <summary>
+        /// The type of objects to enumerate.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<T> GetEnumerator() => this;
+        
         IEnumerator IEnumerable.GetEnumerator() => this;
-
+        /// <summary>
+        /// Go to the next node
+        /// </summary>
+        /// <returns></returns>
         public bool MoveNext() {
             if ( IsEnd )
                 return false;
@@ -98,9 +105,13 @@ namespace SystemEx.Collections.Generic {
             Forward();
             return !IsEnd;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void Reset() { }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose() {
             GC.SuppressFinalize(this);
         }
@@ -138,13 +149,21 @@ namespace SystemEx.Collections.Generic {
 
             return m_pCurrent.Equals(other.m_pCurrent);
         }
-
+        /// <summary>
+        /// Is the given node equels witrh this node
+        /// </summary>
+        /// <param name="obj">the oter node</param>
+        /// <returns>true the given obj ist equal, otherwise false</returns>
         public override bool Equals(object? obj) {
             if ( obj is NodeIterrator<T> ) {
                 return Equals((NodeIterrator<T>)obj);
             }
             return false;
         }
+        /// <summary>
+        /// Get the Hash Code
+        /// </summary>
+        /// <returns>the hash code</returns>
         public override int GetHashCode() {
             return m_pCurrent.GetHashCode();
         }
@@ -224,11 +243,18 @@ namespace SystemEx.Collections.Generic {
         /// Iterator positioned at this node plus an offset.
         /// </summary>
         public NodeIterrator<T> Offset(int offset) => new NodeIterrator<T>(this, offset);
-
+        /// <summary>
+        /// Reverse Iterator positioned at the last node in the chain.
+        /// </summary>
         public NodeIterrator<T> ReversFirst => End;
+        /// <summary>
+        /// Reverse Iterator positioned at the first node in the chain.
+        /// </summary>
         public NodeIterrator<T> ReversEnd => First;
 
-
+        /// <summary>
+        /// Create a default node
+        /// </summary>
         protected Node() {
             m_value = default(T);
 
@@ -465,15 +491,26 @@ namespace SystemEx.Collections.Generic {
         public Node<T> Clone() {
             return new Node<T>(this);
         }
-
+        /// <summary>
+        /// Create a Range <see cref="NodeRange{T}"/>
+        /// </summary>
+        /// <returns></returns>
         public NodeRange<T> AsRange() {
             return new NodeRange<T>(First, End);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public NodeSlice<T> Slice(int start, int length) {
             return new NodeSlice<T>((NodeIterrator<T>)First.Advance(start), length);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public NodeChain<T> AsChain() {
             return new NodeChain<T>().Add(First, End);
         }

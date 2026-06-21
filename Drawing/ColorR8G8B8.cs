@@ -198,9 +198,9 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Addition  another color in r, g, b channels with this one
         /// </summary>
-        /// <param name="r">The red color channel</param>
-        /// <param name="g">The green color channel</param>
-        /// <param name="b">The blue color channel</param>
+        /// <param name="a">The red color channel</param>
+        /// <param name="b">The green color channel</param>
+        /// <param name="c">The blue color channel</param>
         /// <returns>this</returns>
         public ColorR8G8B8 Addition(float a, float b, float c) {
             return Addition(new ColorR8G8B8(a, b, c));
@@ -208,9 +208,9 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Subtraction  another color in r, g, b channels with this one
         /// </summary>
-        /// <param name="r">The red color channel</param>
-        /// <param name="g">The green color channel</param>
-        /// <param name="b">The blue color channel</param>
+        /// <param name="a">The red color channel</param>
+        /// <param name="b">The green color channel</param>
+        /// <param name="c">The blue color channel</param>
         /// <returns>this</returns>
         public ColorR8G8B8 Subtraction(float a, float b, float c) {
             return Subtraction(new ColorR8G8B8(a, b, c));
@@ -218,19 +218,19 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Multiplication  another color in r, g, b channels with this one
         /// </summary>
-        /// <param name="r">The red color channel</param>
-        /// <param name="g">The green color channel</param>
-        /// <param name="b">The blue color channel</param>
+        /// <param name="a">The red color channel</param>
+        /// <param name="b">The green color channel</param>
+        /// <param name="c">The blue color channel</param>
         /// <returns>this</returns>
-        public ColorR8G8B8 Multiplication(float r, float g, float b) {
-            return Multiplication(new ColorR8G8B8(r, g, b));
+        public ColorR8G8B8 Multiplication(float a, float b, float c) {
+            return Multiplication(new ColorR8G8B8(a, b, c));
         }
         /// <summary>
         /// Division  another color in r, g, b channels with this one
         /// </summary>
-        /// <param name="r">The red color channel</param>
-        /// <param name="g">The green color channel</param>
-        /// <param name="b">The blue color channel</param>
+        /// <param name="a">The red color channel</param>
+        /// <param name="b">The green color channel</param>
+        /// <param name="c">The blue color channel</param>
         /// <returns>this</returns>
         public ColorR8G8B8 Division(float a, float b, float c) {
             return Division(new ColorR8G8B8(a, b, c));

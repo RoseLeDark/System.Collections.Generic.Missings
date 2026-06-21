@@ -103,6 +103,9 @@ namespace SystemEx.Collections.Generic {
             base.AddRange(items);
             if ( AutoSort ) Sort();
         }
+        /// <summary>
+        /// Remove the given item from the List
+        /// </summary>
         public override bool Remove(Interfaces.ITuple item) {
             bool _ret = base.Remove(item);
             if ( AutoSort && _ret) Sort();

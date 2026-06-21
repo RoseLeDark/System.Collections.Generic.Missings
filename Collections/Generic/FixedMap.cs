@@ -16,6 +16,7 @@
  */
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -35,7 +36,8 @@ namespace SystemEx.Collections.Generic {
         IEnumerable<Pair<T, TU>>,
         ICollection<Pair<T, TU>>,
         IEnumerable,
-        IMap<T, TU>
+        IMap<T, TU>, 
+        IReadOnlyMap<T, TU>
         where T : notnull
         where TU : notnull {
         /// <summary>
@@ -110,6 +112,51 @@ namespace SystemEx.Collections.Generic {
                     throw new InvalidOperationException("Map is empty");
                 return m_elements[m_count - 1];
             }
+        }
+
+        /// <summary>
+        /// Gets an enumerable collection of all keys contained in the map.
+        /// </summary>
+        public ICollection<T> Keys {
+            get {
+                List<T> tmp = new List<T>();
+                foreach ( var t in m_elements ) { tmp.Add(t.First); }
+                return tmp;
+            }
+        }
+        /// <summary>
+        /// Gets an enumerable collection of all values contained in the map.
+        /// </summary>
+        public ICollection<TU> Values {
+            get {
+                List<TU> tmp = new List<TU>();
+                foreach ( var t in m_elements ) { tmp.Add(t.Second); }
+                return tmp;
+            }
+        }
+        /// <summary>
+        /// Gets an enumerable collection of all keys contained in the map.
+        /// </summary>
+        IEnumerable<T> IReadOnlyMap<T, TU>.Keys => Keys;
+        /// <summary>
+        /// Gets an enumerable collection of all values contained in the map.
+        /// </summary>
+        IEnumerable<TU> IReadOnlyMap<T, TU>.Values => Values;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public TU this[T key] {
+            get => Get(key);
+            set {
+                    for ( int i = 0; i < m_count; i++ ) {
+                        if ( m_elements[i].EqualFirst(key) ) {
+                            m_elements[i].Second = value;
+                        }
+                    }
+                }
         }
 
         /// <summary>
@@ -329,6 +376,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public void RemoveAt(int start, int iend) {
             return;
+         
         }
 
         /// <summary>
@@ -359,6 +407,33 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public Pair<T, TU>[] ToArray() {
             return m_elements;
+        }
+        /// <summary>
+        /// Adds a key/value pair to the map.
+        /// </summary>
+        public void Add(T key, TU value) {
+            Add(new Pair<T, TU>(key, value));
+        }
+
+        /// <summary>
+        /// Range removal is not supported in <see cref="FixedMap{T, TU}"/>.
+        /// </summary>
+        public bool Remove(T key) {
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the value associated with the specified key.
+        /// </summary>
+        public bool TryGeValue(T key, [MaybeNullWhen(false)] out TU value) {
+            foreach ( var p in m_elements ) {
+                if ( p.EqualFirst(key) ) {
+                    value = p.Second!;
+                    return true;
+                }
+            }
+            value = default!;
+            return false;
         }
     }
 

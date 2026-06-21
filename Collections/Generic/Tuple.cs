@@ -34,7 +34,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Gets the number of elements stored in the tuple.
         /// </summary>
-        public int Count => m_elements.Count();
+        public int Count => m_elements.Count;
 
         /// <summary>
         /// Gets or sets the element at the specified index.
@@ -97,7 +97,7 @@ namespace SystemEx.Collections.Generic {
         /// If the index is out of range, the operation is ignored.
         /// </remarks>
         public void Set(int index, object value) {
-            if ( index < 0 || index >= m_elements.Count() )
+            if ( index < 0 || index >= m_elements.Count )
                 return;
 
             m_elements.Insert(index, value);

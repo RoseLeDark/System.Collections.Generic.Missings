@@ -166,7 +166,7 @@ namespace SystemEx.Collections.Generic {
     /// indexed access, insertion, removal, traversal, and basic search operations.
     /// </summary>
     /// <typeparam name="T">The element type stored in the array.</typeparam>
-    public class Array<T> : IEnumerable<T>, IDynamicArray<T> {
+    public class Array<T> : IEnumerable<T>, IDynamicArray<T>, ICollection<T> {
 #pragma warning disable CA1051
         /// <summary>
         /// Internal storage buffer for array elements.
@@ -233,6 +233,16 @@ namespace SystemEx.Collections.Generic {
         /// Indicates whether the array has a fixed size (AutoGrow disabled).
         /// </summary>
         public bool IsFixed => AutoGrow == false;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Count => m_elements.Length;
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsReadOnly => false;
+
         /// <summary>
         /// Provides indexed access to the array elements.
         /// </summary>
@@ -464,9 +474,9 @@ namespace SystemEx.Collections.Generic {
         }
 
         /// <summary>
-        /// Copies a range of elements into a byte array.
+        /// Copies a range of elements into a T array.
         /// </summary>
-        public int CopyTo(uint sourceOffset, byte[] destination, uint destinationOffset, uint count) {
+        public int CopyTo(uint sourceOffset, T[] destination, uint destinationOffset, uint count) {
             if ( destination == null ) return 0;
 
             int src = (int)sourceOffset;
@@ -486,9 +496,9 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Copies data from a byte array into this array.
+        /// Copies data from a T array into this array.
         /// </summary>
-        public int CopyFrom(byte[] source, uint sourceOffset, uint destinationOffset, uint count) {
+        public int CopyFrom(T[] source, uint sourceOffset, uint destinationOffset, uint count) {
             if ( source == null ) return 0;
 
             int src = (int)sourceOffset;
@@ -529,5 +539,35 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public T[] ToArray() => m_elements.ToArray();
 
+        void ICollection<T>.Add(T item) => Add(item);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Clear() {
+            return;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool Contains(T item) => Is(item);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
+        public void CopyTo(T[] array, int arrayIndex) {
+            CopyTo(0, array, 0, (uint)arrayIndex);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool Remove(T item) {
+            return false;
+        }
     }
 }

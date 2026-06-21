@@ -16,7 +16,9 @@ using KernelLoader = SystemEx.Device.Interop.NoSupportKernelLoader;
 
 
 namespace SystemEx.Device {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class RamKernel : IKernel<RamSharedBackend> {
 
 
@@ -24,19 +26,29 @@ namespace SystemEx.Device {
         private readonly Map<string, DeviceSharedBuffer<RamSharedBackend>> m_buffers;
         private Task? m_task;
         private bool m_running;
-
+        /// <summary>
+        /// 
+        /// </summary>
         private string  m_func;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public RamKernel(string dllPath, string funcName) {
             m_dllPath = dllPath;
             m_buffers = new Map<string, DeviceSharedBuffer<RamSharedBackend>>();
             m_func = funcName;
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public int AddBuffer(DeviceSharedBuffer<RamSharedBackend> buffer, string name, BufferType type, object? confgs) {
             m_buffers.Add(name, buffer);
 
             return m_buffers.Count;
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public bool Begin(string strFunction) {
             foreach ( var buf in m_buffers ) {
 
@@ -51,7 +63,9 @@ namespace SystemEx.Device {
             }
             return true;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void End() {
             foreach ( var buf in m_buffers ) {
 
@@ -65,19 +79,27 @@ namespace SystemEx.Device {
 #endif
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsRunning() {
             return m_running;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public int RemoveBuffer(string name, BufferType type) {
             return 0;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public int RemoveBuffer(int index, BufferType type) {
             return 0;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public unsafe bool Run(object? options) {
             if ( m_running )
                 return false; // läuft schon

@@ -18,8 +18,8 @@
 using SystemEx.Collections.Generic;
 using SystemEx.Device.Intertropt;
 
-/** Plan:
- * IKernel OpenCL = new OpenCLKErnel("Main.cl", ....);
+/* Plan:
+ Kernel OpenCL = new OpenCLKErnel("Main.cl", ....);
 DeviceBuffer <OpenCLDeviceSharedBackend> memA = new DeviceBuffer(new OpenCLSharedBackend(..), 32, CacheType.ToDevice);
 DeviceBuffer <OpenCLDeviceSharedBackend> memB = new DeviceBuffer(new OpenCLSharedBackend(..), 32, CacheType.ToDevice);
 DeviceBuffer <OpenCLDeviceSharedBackend> memC =new DeviceBuffer(new OpenCLSharedBackend(..), 32, CacheType.Both);

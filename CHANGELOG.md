@@ -4,6 +4,67 @@
 - Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
 - Add Locking System 
 - OpenCL Kerneal Call with my  SystemEx.Device System
+## [0.9.6] 21.06.2026
+## Added
+- Introduced new HWB and NCol color models under `SystemEx.Drawing`:
+  - Added `ColorHWB` with hue/whiteness/blackness representation
+  - Added `ColorNCol` hue‑index color model with percent‑based hue interpolation
+  - Added full conversion pipeline:
+    - `ColorR8G8B8 → ColorHWB`
+    - `ColorHWB → ColorR8G8B8`
+    - `ColorR8G8B8 → ColorNCol`
+    - `ColorNCol → ColorR8G8B8`
+    - `ColorNCol → ColorR16G16B16`
+    - `ColorNCol → ColorR10G10B10`
+
+- Added new canvas abstraction:
+  - Introduced `ICanvas<T>` interface
+  - Added support for region copy, fill, clear, resize and color search
+
+- Added new byte‑serialization infrastructure:
+  - Added `ByteSeriablizeProvider`
+  - Added `IByteSerialize`, `IHasByteSchema`
+  - Added `RawByteProvider`
+  - Added `ColorR10G10B10FormatSchema` and serializer implementation
+
+- Added new constructors to `Cache`:
+  - `Cache(byte[], CacheType)`
+  - `Cache(Array<byte>, CacheType)`
+  - Added `ToArrayEx()` for direct `Array<byte>` access
+
+## Changed
+- Updated `Map` and `IMap`:
+  - Added `Add(key, value)` overload
+  - Added `Remove(key)`
+  - Added `TryGeValue(key, out value)`
+  - Added `Keys` and `Values` collections
+  - Extended `Map<T,TU>` to implement `IReadOnlyMap<T,TU>`
+
+- Updated color classes:
+  - Fixed namespace typo in `ColorHSL`
+  - Corrected constructor names in `ColorCMY`
+  - Replaced `Math.Clamp` with `System.Math.Clamp` for consistency
+  - Added float‑based arithmetic helpers to `ColorHSV`
+
+- Updated `ColorConverter`:
+  - Added HWB and NCol conversion logic
+  - Improved sRGB conversion accuracy
+  - Added additional RGB16/RGB10 conversion helpers
+
+- Renamed `Utils/Utils.cs` → `Utils/Conversion.cs`
+
+## Improved**
+- More consistent color conversion pipeline across all color models
+- Unified clamping and normalization behavior in HSV/HSL/CMY models
+- Improved documentation and XML comments across multiple files
+- Cleaner separation between read‑only and mutable map interfaces
+
+## Fixed
+- Fixed incorrect index usage in `ColorCMY(float[] x)`
+- Fixed namespace mismatch in `ColorHSL`
+- Fixed missing `System.` prefix for `Math.Clamp` in HSV operations
+- Fixed minor documentation errors and typos across drawing and collection modules
+- Removed unused `m_currentCache` field from `StrippedCache`
 
 
 ## [0.9.5] 18.06.2026

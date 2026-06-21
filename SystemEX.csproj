@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>warnings</Nullable>
     <AssemblyName>RoseLeDark.Collections.Missings</AssemblyName>
@@ -9,8 +9,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.8.5</AssemblyVersion>
-    <FileVersion>0.8.5</FileVersion>
+    <AssemblyVersion>0.9.5</AssemblyVersion>
+    <FileVersion>0.9.5</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>A foundational low‑level extension to .NET’s collection ecosystem.
 This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIterator, IBidirectionalIterator, IRandomAccessIterator), traversal utilities, generic algorithms (Distance, Find, LowerBound, UpperBound, Reverse, Rotate, ForEach), and deterministic byte‑level data structures. Includes advanced map types, MultiMap, Pair/Tuple structures, fixed‑size arrays and buffers, and a modular cache/RAID architecture. Designed for high‑performance, engine‑oriented, allocation‑controlled applications where .NET’s built‑in collections are insufficient.</Description>
@@ -98,6 +98,38 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>direct</NuGetAuditMode>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Platforms>ARM32;AnyCPU</Platforms>
+    <Configurations>Debug;Release;Release_ARM32</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM32'">
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+    <WarningsAsErrors />
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM32'">
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+    <WarningsAsErrors />
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_ARM32|ARM32'">
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+    <WarningsAsErrors />
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_ARM32|AnyCPU'">
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+    <WarningsAsErrors />
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -105,6 +137,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Deterministic>False</Deterministic>
     <WarningsAsErrors />
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -112,6 +145,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Deterministic>False</Deterministic>
     <WarningsAsErrors />
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+
   </PropertyGroup>
 
   <ItemGroup>
