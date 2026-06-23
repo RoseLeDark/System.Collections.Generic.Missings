@@ -4,6 +4,20 @@
 - Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
 - Add Locking System 
 - OpenCL Kerneal Call with my  SystemEx.Device System
+
+## [0.9.64] 23.06.2026
+### Changed
+- `public int Length { get; }` → `public ulong Length { get; }`
+- `Cache<T>` is now fully ulong‑addressed instead of int‑based
+- Renamed `ITerator` → `IIterator` (updated across all dependent iterator‑based classes)
+
+### Added
+- Added `Free` and `Used` properties to `Cache<T>` with new internal member `m_maxUsedAddress`  
+- Added `Clear()` implementation to reset cache content and usage state  
+- Added `Range`, `NumberRange` and forward iterator `NumberRangeIterator<T>`  
+- Added `NumberRangeStepper<T>`: cursor‑based stepper over normalized numeric ranges (fixed increments, forward/backward stepping, reset, enumeration)  
+- Added `TypeBuffer<T>` and `ITypeBuffer<T>` to `SystemEx.Collections.Generic` A typed view over a raw <c>Cache</c> that exposes elements of an unmanaged type <typeparamref name="T"/>
+
 ## [0.9.6] 21.06.2026
 ## Added
 - Introduced new HWB and NCol color models under `SystemEx.Drawing`:

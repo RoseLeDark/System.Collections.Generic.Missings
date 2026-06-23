@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>warnings</Nullable>
+    <Nullable>enable</Nullable>
     <AssemblyName>RoseLeDark.Collections.Missings</AssemblyName>
     <Title>RoseLeDark.Collections.Missings</Title>
     <Company>Amber-Sophia Schröck</Company>
@@ -171,6 +171,14 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="E:\repo\System.Collections.Generic.Extras\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="E:\repo\System.Collections.Generic.Extras\.editorconfig" />
   </ItemGroup>
 
 </Project>
