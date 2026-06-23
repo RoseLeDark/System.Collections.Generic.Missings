@@ -276,12 +276,15 @@ namespace SystemEx {
         /// <summary>
         /// Converts a byte array into an unmanaged struct of type <typeparamref name="T"/>.
         /// </summary>
-        public static unsafe T FromBytes<T>(byte[] bytes) where T : unmanaged {
+        public static unsafe T FromBytes<T>(byte[] bytes, Endian endian) where T : unmanaged {
             T value = default;
 
             int size = sizeof(T);
-            if ( bytes.Length < size )
-                throw new ArgumentException($"Byte array too small for type {typeof(T).Name}");
+            if ( bytes.Length < size )  throw new ArgumentException($"Byte array too small for type {typeof(T).Name}");
+
+            if ( endian == Endian.BigEndian ) {
+                Array.Reverse(bytes);
+            }
 
             fixed ( byte* b = bytes ) {
                 value = *(T*)b;
