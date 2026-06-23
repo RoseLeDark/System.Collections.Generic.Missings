@@ -18,7 +18,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.9.64</Version>
+    <Version>0.9.66</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
