@@ -43,7 +43,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Gets the total length of the cache in bytes.
         /// </summary>
-        public override int Length => (int)LongLength;
+        public override ulong Length => LongLength;
 
         /// <summary>
         /// Creates a new segmented cache with the specified number of segments

@@ -22,7 +22,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// Defines the base functionality for all iterators.
     /// Provides forward-only movement.
     /// </summary>
-    public interface ITerator {
+    public interface IIterator {
         /// <summary>
         /// Moves the iterator one step forward.
         /// </summary>
@@ -30,16 +30,16 @@ namespace SystemEx.Collections.Generic.Interfaces {
     }
 
     /// <summary>
-    /// Extends <see cref="ITerator"/> with cloning support,
+    /// Extends <see cref="IIterator"/> with cloning support,
     /// allowing iterators to be duplicated without affecting the original.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface ITerator<T> : ITerator {
+    public interface IIterator<T> : IIterator {
         /// <summary>
         /// Creates a copy of the iterator at its current position.
         /// </summary>
         /// <returns>A new iterator instance positioned identically.</returns>
-        ITerator<T> Clone();
+        IIterator<T> Clone();
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// and an end-of-range indicator.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IForwardIterator<T> : ITerator<T> {
+    public interface IForwardIterator<T> : IIterator<T> {
         /// <summary>
         /// Gets the element at the current iterator position.
         /// </summary>
@@ -64,7 +64,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// Represents an iterator that can move both forward and backward.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IBidirectionalIterator<T> : ITerator<T> {
+    public interface IBidirectionalIterator<T> : IIterator<T> {
 
         /// <summary>
         /// Gets or sets the element at the current iterator position.
@@ -92,7 +92,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// in addition to forward and backward stepping.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IRandomAccessIterator<T> : ITerator<T> {
+    public interface IRandomAccessIterator<T> : IIterator<T> {
 
         /// <summary>
         /// Returns a new iterator advanced by the specified offset.
@@ -161,7 +161,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <param name="first">The starting iterator.</param>
         /// <param name="last">The ending iterator.</param>
         /// <returns>The number of steps required to reach <paramref name="last"/>.</returns>
-        public static int Distance<T>(ITerator<T> first, ITerator<T> last) {
+        public static int Distance<T>(IIterator<T> first, IIterator<T> last) {
             int count = 0;
             while ( !first.Equals(last) ) {
                 first.Forward();

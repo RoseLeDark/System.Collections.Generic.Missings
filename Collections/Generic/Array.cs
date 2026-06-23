@@ -89,7 +89,7 @@ namespace SystemEx.Collections.Generic {
         /// Creates a deep clone of the iterator, including a copy of the underlying array.
         /// </summary>
         /// <returns>A new iterator instance with its own array copy.</returns>
-        public ITerator<T> Clone() {
+        public IIterator<T> Clone() {
             return new ArrayRandomAccessIterator<T>(m_values.ToArray(), m_ipos);
         }
 

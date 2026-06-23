@@ -44,7 +44,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Gets the total cache size in bytes.
         /// </summary>
-        public int Size => Length;
+        public int Size => (int)Length;
 
         /// <summary>
         /// Creates a mirrored cache with the specified size.  

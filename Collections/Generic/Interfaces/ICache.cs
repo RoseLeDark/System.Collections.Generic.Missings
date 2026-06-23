@@ -25,7 +25,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <summary>
         /// Gets the total buffer length in bytes.
         /// </summary>
-        public int Length { get; }
+        public ulong Length { get; }
         /// <summary>
         /// Gets the logical length of the cache as an unsigned 64-bit value.
         /// </summary>

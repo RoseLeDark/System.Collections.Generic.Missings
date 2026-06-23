@@ -37,7 +37,11 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Cache supports both reading and writing operations.
         /// </summary>
-        Both
+        Both,
+        /// <summary>
+        /// Cache ist only on host, don't used with a device
+        /// </summary>
+        OnlySystem,
     }
 
     /// <summary>
@@ -54,6 +58,7 @@ namespace SystemEx.Collections.Generic{
     /// typed read/write helpers, and optional locking behavior.
     /// </summary>
     public class Cache : ICache {
+        private ulong m_maxUsedAdress;
         /// <summary>
         /// Internal raw byte buffer.
         /// </summary>
@@ -81,7 +86,16 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Gets the total buffer length in bytes.
         /// </summary>
-        public virtual int Length => m_rawBuffer.Size;
+        public virtual ulong Length => (ulong)m_rawBuffer.Size;
+        /// <summary>
+        /// Gets the total free bytes.
+        /// </summary>
+        public virtual ulong Free => Length - m_maxUsedAdress;
+        /// <summary>
+        /// Gets the total used bytes.
+        /// </summary>
+        public virtual ulong Used => Length - Free;
+
         /// <summary>
         /// Gets the logical length of the cache as an unsigned 64-bit value.
         /// </summary>
@@ -103,9 +117,9 @@ namespace SystemEx.Collections.Generic{
         /// </summary>
         public bool CanRead { get => !m_isLocked; }
         /// <summary>
-        /// Gets the current read/write position.
+        /// Gets and Set the current read/write position.
         /// </summary>
-        public ulong Position { get => m_position;  }
+        public ulong Position { get => m_position; set => m_position = value; }
         /// <summary>
         /// Sets the internal position without validation.
         /// Intended for controlled use by higher-level abstractions.
@@ -114,11 +128,24 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Initializes a new cache with the specified capacity and type.
         /// </summary>
-        public Cache(int capacity, CacheType type) {
+        public Cache(int capacity, CacheType type = CacheType.OnlySystem) {
             m_rawBuffer = new FixedArray<byte>(capacity);
             this.Type = type;
             LongLength = (ulong)m_rawBuffer.Size;
         }
+        /// <summary>
+        /// Set Cache to Zero
+        /// </summary>
+        public void SetZero() {
+            for ( int i = 0; i < m_rawBuffer.Size; i++ )
+                m_rawBuffer[i] = 0;
+            m_maxUsedAdress = 0;
+        }
+        /// <summary>
+        /// See SetZero
+        /// </summary>
+        public void Clear () => SetZero();
+
         /// <summary>
         /// Initializes a new cache from given array
         /// </summary>
@@ -136,10 +163,25 @@ namespace SystemEx.Collections.Generic{
         /// <param name="arr"></param>
         /// <param name="type"></param>
         public Cache(Array<byte> arr, CacheType type) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
             m_rawBuffer = new FixedArray<byte>(arr.ToArray());
             this.Type = type;
             LongLength = (ulong)m_rawBuffer.Size;
         }
+        /// <summary>
+        /// Create a Copy from stream
+        /// </summary>
+        /// <param name="cache">The orignal cache</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public Cache(Cache cache) {
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
+
+            m_rawBuffer = new FixedArray<byte>(cache.ToArray());
+            this.Type = cache.Type;
+            LongLength = cache.LongLength;
+        }
+
         /// <summary>
         /// Moves the internal position according to the specified origin and offset.
         /// </summary>
@@ -184,15 +226,13 @@ namespace SystemEx.Collections.Generic{
         /// Writes a byte range into the cache starting at the specified position.
         /// </summary>
         public virtual ulong WriteRange(ulong position, byte[] data) {
-
             return WriteRange(position, (ulong)data.LongLength, data);
         }
         /// <summary>
         /// Writes a byte range into the cache between <paramref name="start"/> and <paramref name="iend"/>.
         /// </summary>
         public virtual ulong WriteRange(ulong start, ulong iend, byte[] data) {
-            if ( m_isLocked )
-                throw new InvalidOperationException("is Locked");
+            if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
             // Start ungültig?
             if ( start < 0 || start >= (ulong)m_rawBuffer.Size )
@@ -211,6 +251,8 @@ namespace SystemEx.Collections.Generic{
 
             for ( ulong i = 0; i < (ulong)writable; i++ )
                 m_rawBuffer[(int)(start + i)] = data[i];
+
+            if ( (start + writable) > m_maxUsedAdress ) m_maxUsedAdress = start + writable;
 
             return (ulong)writable;
         }
@@ -582,6 +624,8 @@ namespace SystemEx.Collections.Generic{
 
             // advance internal position
             m_position += (ulong)toWrite;
+
+            if ( m_position > m_maxUsedAdress ) m_maxUsedAdress = m_position;
 
             return toWrite;
         }

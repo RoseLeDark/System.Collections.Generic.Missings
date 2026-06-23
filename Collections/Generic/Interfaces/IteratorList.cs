@@ -114,7 +114,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// Creates a deep clone of the iterator, including a copy of the underlying list.
         /// </summary>
         /// <returns>A new iterator instance with its own list copy.</returns>
-        public ITerator<T> Clone() {
+        public IIterator<T> Clone() {
             return new ListIterator<T>(m_list.ToList(), m_index);
         }
         /// <summary>

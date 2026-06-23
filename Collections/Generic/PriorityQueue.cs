@@ -64,7 +64,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Creates a shallow clone of this iterator referencing the same queue.
         /// </summary>
-        public ITerator<T> Clone() {
+        public IIterator<T> Clone() {
             return new PriorityQueueExIterator<T, TU>(m_queue);
         }
 

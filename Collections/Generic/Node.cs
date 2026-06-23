@@ -72,7 +72,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Creates a clone of this iterator referencing the same logical position.
         /// </summary>
-        public ITerator<T> Clone() {
+        public IIterator<T> Clone() {
             return new NodeIterrator<T>(m_pCurrent);
         }
         /// <summary>
