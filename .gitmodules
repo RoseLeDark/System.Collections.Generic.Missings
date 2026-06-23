@@ -1,0 +1,3 @@
+[submodule "Docs/remote"]
+	path = Docs/remote
+	url = https://github.com/RoseLeDark/SystemEx.Docs.git

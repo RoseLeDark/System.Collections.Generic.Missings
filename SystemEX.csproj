@@ -9,8 +9,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.9.5</AssemblyVersion>
-    <FileVersion>0.9.5</FileVersion>
+    <AssemblyVersion>0.9.65</AssemblyVersion>
+    <FileVersion>0.9.65</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>A foundational low‑level extension to .NET’s collection ecosystem.
 This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIterator, IBidirectionalIterator, IRandomAccessIterator), traversal utilities, generic algorithms (Distance, Find, LowerBound, UpperBound, Reverse, Rotate, ForEach), and deterministic byte‑level data structures. Includes advanced map types, MultiMap, Pair/Tuple structures, fixed‑size arrays and buffers, and a modular cache/RAID architecture. Designed for high‑performance, engine‑oriented, allocation‑controlled applications where .NET’s built‑in collections are insufficient.</Description>
@@ -18,8 +18,8 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.9.5</Version>
-    <PackageProjectUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings</PackageProjectUrl>
+    <Version>0.9.64</Version>
+    <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
     <PackageId>RoseLeDark.Collections.Missings</PackageId>
@@ -33,67 +33,80 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.9.5] 18.06.2026
-### Very Important 
-- Namespace: `SystemEx.Collection.Generic` To `SystemEx.Collections.Generic`
-## Add
-- Add class `Cluster&lt;T&gt;` at `SystemEx.Collections.Generic` Represents a cluster node in a weighted graph structure.
-- Add class `CacheStream&lt;TCache&gt;` at `SystemEx.IO`A Stream wrapper around a `Cache&lt;T&gt;` instance.  
-- Add Color Classes to `SystemEx.Drawing` - ColorHSL, ColorHSV, ColorRGB, ColorGray, ... Start with build in next
-  Version are ready
-# Docu
-- The Doku in `SystemEx.Collections.Generic`, `SystemEx.IO`, `SysrtemEx` and `SysrtemEx.Utils` is ready
----
-
-## [0.8.5] 04.06.2026
-### Very Important
-- **Major namespace restructuring** to reflect the engine architecture and clarify responsibilities across collections, device memory, and interop layers.
-- This release contains **breaking changes**: update all `using`/imports to the new namespaces.
-
+    <PackageReleaseNotes>## [0.9.64] 23.06.2026
 ### Changed
-  - Moved device memory types (`DeviceBuffer`, `DeviceSharedBuffer&lt;TDeviceSharedBackend&gt;`) to **`SystemEx.Device.Memory`**.
-  - Moved native interop and backend implementations (`UnmanagedObject`, `RamSharedBackend`, `IDeviceSharedBackend`, platform kernel loaders) to **`SystemEx.Device.Interop`**.
-  - Kept kernel and execution interfaces (`IKernel&lt;TBackend&gt;`, `RamKernel`, kernel lifecycle orchestration) under **`SystemEx.Device`**.
-- Removed legacy `SystemEx.Device.Memory.Missings` layout and deprecated `System.Memory.Missings` placements; types have been relocated to the new namespaces above.
-- Updated internal references and XML docs to reflect new namespace locations.
+- `public int Length { get; }` → `public ulong Length { get; }`
+- `Cache&lt;T&gt;` is now fully ulong‑addressed instead of int‑based
+- Renamed `ITerator` → `IIterator` (updated across all dependent iterator‑based classes)
 
 ### Added
-- Migration guidance notes and quick reference mapping for common types:
-  - `SystemEx.Device.Memory.Missings.RamSharedBackend` → `SystemEx.Device.Interop.RamSharedBackend`
-  - `SystemEx.Device.Memory.DeviceSharedBuffer` → `SystemEx.Device.Memory.DeviceSharedBuffer`
-  - `SystemEx.Collections.Generic.SharedCache` → `SystemEx.Collections.Generic.Cache` (and related cache types)
-  
-- Add a Map for ITuples `SystemEx.Collections.Generic.TupleMap`, `SystemEx.Collections.Generic.MultiTupleMap` and `SystemEx.Collections.Generic.SortedTupleMap` 
-- Add `SystemEx.Collections.Generic.StrippedCache` (segmented virtual cache over N sub‑caches; global addressing, byte‑wise distribution).
-- Added full support for:
-    - WriteRange(ulong position, byte[] data)
-    - WriteRange(ulong start, ulong end, byte[] data)
-    - ToArray(int index) for exporting individual cache segments.
-    - Added unsigned‑safe global addressing logic for multi‑cache memory systems.
-    - Added overflow‑safe Seek logic compatible with segmented caches.
+- Added `Free` and `Used` properties to `Cache&lt;T&gt;` with new internal member `m_maxUsedAddress`  
+- Added `Clear()` implementation to reset cache content and usage state  
+- Added `Range`, `NumberRange` and forward iterator `NumberRangeIterator&lt;T&gt;`  
+- Added `NumberRangeStepper&lt;T&gt;`: cursor‑based stepper over normalized numeric ranges (fixed increments, forward/backward stepping, reset, enumeration)  
+- Added `TypeBuffer&lt;T&gt;` and `ITypeBuffer&lt;T&gt;` to `SystemEx.Collections.Generic` A typed view over a raw &lt;c&gt;Cache&lt;/c&gt; that exposes elements of an unmanaged type &lt;typeparamref name="T"/&gt;
 
-- Add `SystemEx.Collection.Generic.MirroredCache` (dual‑cache pair; writes to A and mirrored A‑reverse; consistent read/write symmetry).
-    
-### Improved
-- Clear separation of concerns between collection‑level caches and device‑level memory/backends.
-- Improved discoverability and consistency for public APIs across Collections, Device, and Interop subsystems.
-- Simplified developer mental model for where to place new types: Collections for logical cache/data structures; Device.Memory for managed device memory abstractions; Device.Interop for native/backends.
-- Improved Seek implementation to be fully ulong‑safe and handle negative offsets without overflow.
-- Improved internal consistency between Cache and StrippedCache semantics (global vs. local addressing).
-- Improved index validation for segmented cache exports (ToArray(index)).
-- 
-### Fixed
-- Resolved ambiguous type collisions caused by previous overlapping namespaces.
-- Fixed incorrect index comparison in ToArray(int index) (unsigned‑correct boundary check).
-- Fixed potential overflow in SeekOrigin.Current and SeekOrigin.End when negative offsets were cast to ulong.
-- Fixed incorrect cast from ulong to long in cache index validation.
-### Notes / Migration
-- **Breaking change:** update all `using` directives and project references to the new namespaces.  
-  Example mappings:
-  - `using SystemEx.Device.Memory.Missings;` → `using SystemEx.Device.Memory;`
-  - `using SystemEx.Collection.Generic;` (old cache location) → `using SystemEx.Collections.Generic;`
-  - `using SystemEx.Device.Intertropt;` → `using SystemEx.Device.Interop;`
-- Search your codebase for the old namespace tokens (`Missings`, `Intertropt`, `System.Memory.Missings`) and replace with the new targets.
+## [0.9.6] 21.06.2026
+## Added
+- Introduced new HWB and NCol color models under `SystemEx.Drawing`:
+  - Added `ColorHWB` with hue/whiteness/blackness representation
+  - Added `ColorNCol` hue‑index color model with percent‑based hue interpolation
+  - Added full conversion pipeline:
+    - `ColorR8G8B8 → ColorHWB`
+    - `ColorHWB → ColorR8G8B8`
+    - `ColorR8G8B8 → ColorNCol`
+    - `ColorNCol → ColorR8G8B8`
+    - `ColorNCol → ColorR16G16B16`
+    - `ColorNCol → ColorR10G10B10`
+
+- Added new canvas abstraction:
+  - Introduced `ICanvas&lt;T&gt;` interface
+  - Added support for region copy, fill, clear, resize and color search
+
+- Added new byte‑serialization infrastructure:
+  - Added `ByteSeriablizeProvider`
+  - Added `IByteSerialize`, `IHasByteSchema`
+  - Added `RawByteProvider`
+  - Added `ColorR10G10B10FormatSchema` and serializer implementation
+
+- Added new constructors to `Cache`:
+  - `Cache(byte[], CacheType)`
+  - `Cache(Array&lt;byte&gt;, CacheType)`
+  - Added `ToArrayEx()` for direct `Array&lt;byte&gt;` access
+
+## Changed
+- Updated `Map` and `IMap`:
+  - Added `Add(key, value)` overload
+  - Added `Remove(key)`
+  - Added `TryGeValue(key, out value)`
+  - Added `Keys` and `Values` collections
+  - Extended `Map&lt;T,TU&gt;` to implement `IReadOnlyMap&lt;T,TU&gt;`
+
+- Updated color classes:
+  - Fixed namespace typo in `ColorHSL`
+  - Corrected constructor names in `ColorCMY`
+  - Replaced `Math.Clamp` with `System.Math.Clamp` for consistency
+  - Added float‑based arithmetic helpers to `ColorHSV`
+
+- Updated `ColorConverter`:
+  - Added HWB and NCol conversion logic
+  - Improved sRGB conversion accuracy
+  - Added additional RGB16/RGB10 conversion helpers
+
+- Renamed `Utils/Utils.cs` → `Utils/Conversion.cs`
+
+## Improved**
+- More consistent color conversion pipeline across all color models
+- Unified clamping and normalization behavior in HSV/HSL/CMY models
+- Improved documentation and XML comments across multiple files
+- Cleaner separation between read‑only and mutable map interfaces
+
+## Fixed
+- Fixed incorrect index usage in `ColorCMY(float[] x)`
+- Fixed namespace mismatch in `ColorHSL`
+- Fixed missing `System.` prefix for `Math.Clamp` in HSV operations
+- Fixed minor documentation errors and typos across drawing and collection modules
+- Removed unused `m_currentCache` field from `StrippedCache`
 </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>direct</NuGetAuditMode>
@@ -121,7 +134,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Deterministic>False</Deterministic>
     <WarningsAsErrors />
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <Optimize>True</Optimize>
+    <Optimize>False</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_ARM32|AnyCPU'">
