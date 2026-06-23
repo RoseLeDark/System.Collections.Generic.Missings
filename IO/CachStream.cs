@@ -97,7 +97,7 @@ namespace SystemEx.IO {
         /// <summary>
         /// Gets the length of the underlying cache.
         /// </summary>
-        public override long Length => m_cache.Length;
+        public override long Length => (int)m_cache.Length;
         /// <summary>
         /// Gets the number of bytes written by the last write operation.
         /// </summary>

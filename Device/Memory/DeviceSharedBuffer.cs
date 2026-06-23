@@ -16,6 +16,13 @@
  */
 
 using SystemEx.Device.Intertropt;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
+using System.Runtime.Versioning;
 
 namespace SystemEx.Device.Memory {
 
@@ -61,7 +68,7 @@ namespace SystemEx.Device.Memory {
         /// <summary>
         /// The underlying cache whose contents are synchronized with the hardware buffer.
         /// </summary>
-        private readonly DeviceBuffer m_cache;
+        private DeviceBuffer m_cache;
 
         /// <summary>
         /// The configured access mode controlling read/write direction.
@@ -136,7 +143,7 @@ namespace SystemEx.Device.Memory {
             if ( m_type != SharedCacheType.ReadOnly ) {
                 m_backend.CreateWriteHardwareBuffer(m_cache.ToArray(), out m_hardwareBuffer);
             } else {
-                m_backend.CreateReadHardwareBuffer(m_cache.Length, out m_hardwareBuffer);
+                m_backend.CreateReadHardwareBuffer((int)m_cache.Length, out m_hardwareBuffer);
             }
 
             return true;
