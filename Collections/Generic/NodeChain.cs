@@ -21,6 +21,8 @@ using System.Collections;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
 
     /// <summary>
     /// Represents a chained view over multiple <see cref="NodeRange{T}"/> segments,
@@ -79,6 +81,8 @@ namespace SystemEx.Collections.Generic {
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 
 }

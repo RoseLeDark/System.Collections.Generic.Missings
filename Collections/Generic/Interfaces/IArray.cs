@@ -16,6 +16,10 @@
  */
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines the basic operations for a fixed-size or dynamic array structure,
     /// including indexed access, insertion, removal, traversal, and search utilities.
@@ -53,12 +57,10 @@ namespace SystemEx.Collections.Generic.Interfaces {
 
 
 
-#pragma warning disable CA1716 // Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen
         /// <summary>
         /// Attempts to retrieve an element at the specified index.
         /// </summary>
         public bool Get(int index, ref T item);
-#pragma warning restore CA1716 // Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen
 
 
         /// <summary>
@@ -151,4 +153,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         public bool AutoGrow { get; set; }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

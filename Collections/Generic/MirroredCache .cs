@@ -18,6 +18,8 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A cache that maintains a mirrored copy of all written data.  
     /// Every write operation is performed on the primary cache and a reversed
@@ -132,5 +134,7 @@ namespace SystemEx.Collections.Generic {
             return m;
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

@@ -20,6 +20,8 @@ using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Iterator for <see cref="PriorityQueueEx{T, TU}"/> that consumes elements
     /// in priority order.  
@@ -269,5 +271,7 @@ namespace SystemEx.Collections.Generic {
             return CompareResult.Equal;
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

@@ -17,7 +17,10 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic.Interfaces {
-
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines the base functionality for all iterators.
     /// Provides forward-only movement.
@@ -264,4 +267,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         }
 
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

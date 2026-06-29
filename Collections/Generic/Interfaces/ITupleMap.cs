@@ -16,6 +16,10 @@
  */
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines a map structure specialized for storing and retrieving <see cref="ITuple"/> objects.
     /// Provides tuple‑based search, traversal, and range‑insertion functionality.
@@ -82,5 +86,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <returns>An array containing all tuples in the map.</returns>
         ITuple[] ToArray();
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

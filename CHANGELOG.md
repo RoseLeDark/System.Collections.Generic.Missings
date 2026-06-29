@@ -5,7 +5,73 @@
 - Add Locking System 
 - OpenCL Kerneal Call with my  SystemEx.Device System
 
+## [0.10.70] 29.06.206
+
+### Very Important
+- **Renamed `RamKernel` → `NativeRAMKernel<TDelegate>`**  
+  New unified kernel base class replacing the old RAM‑only implementation.  
+  See example: `Examples/ExampleRamKernelAdd.cs`.
+
+- **Removed all legacy platform kernel loaders**  
+  (`WindowsKernelLoader`, `LinuxKernelLoader`, `MacKernelLoader`, `NoSupportKernelLoader`)  
+  Replaced by new module‑centric loader architecture.
+
+### Added
+- Introduced full native module system under `SystemEx.Runtime`:
+  - `Module` (DLL/SO/DYLIB abstraction with handle + function lookup)
+  - `NativeHost` (module cache, unload, delegate binding)
+
+- Added platform loader backends under `SystemEx.Runtime.InteropServices.Platform`:
+  - `WindowsProcLoader`
+  - `LinuxProcLoader`
+  - `MacProcLoader`
+  - `NoSupportProcLoader` (simulated backend)
+
+- Added new kernel base class `NativeRAMKernel<TDelegate>`:
+  - Backend‑neutral kernel lifecycle (`Create`, `BeginRun`, `Run`, `EndRun`)
+  - Automatic buffer lock/unlock
+  - Delegate‑based native function invocation
+  - Backend hooks (`OnCreate`, `OnBegin`, `OnRun`, `OnEnd`, `OnAddBuffer`)
+
+- Added example kernel:  
+  - `ExampleRamKernelAdd` demonstrating the new API.
+
+### Changed
+- Replaced unmanaged call pipeline:
+  - Old: `KernelLoader.call(...)`
+  - New: delegate binding via `Marshal.GetDelegateForFunctionPointer<T>()`
+
+- Updated RAM backend to use unified module + loader system.
+
+- Updated namespaces:
+  - `SystemEx.Device.Intertropt` → `SystemEx.Device.Interop`
+  - New runtime loaders under `SystemEx.Runtime.InteropServices.Platform`
+
+- Updated buffer lifecycle to match new kernel execution model.
+
+### Improved
+- Unified module loading across Windows/Linux/macOS.
+- Clear separation between:
+  - module loading
+  - function resolution
+  - kernel lifecycle
+  - buffer lifecycle
+- More consistent behavior with future GPU backends.
+- Cleaner example code and documentation.
+
+### Removed
+- `RamKernel`
+- All `KernelLoader` platform variants
+- Old Begin/Run/End RAM kernel implementation
+- Old unmanaged call logic
+
+### Notes
+- This update contains **breaking changes**. All code using `RamKernel` or `KernelLoader` must migrate to `NativeRAMKernel<TDelegate>`.
+
+---
+
 ## [0.9.64] 23.06.2026
+
 ### Changed
 - `public int Length { get; }` → `public ulong Length { get; }`
 - `Cache<T>` is now fully ulong‑addressed instead of int‑based
@@ -18,8 +84,11 @@
 - Added `NumberRangeStepper<T>`: cursor‑based stepper over normalized numeric ranges (fixed increments, forward/backward stepping, reset, enumeration)  
 - Added `TypeBuffer<T>` and `ITypeBuffer<T>` to `SystemEx.Collections.Generic` A typed view over a raw <c>Cache</c> that exposes elements of an unmanaged type <typeparamref name="T"/>
 
+---
+
 ## [0.9.6] 21.06.2026
-## Added
+
+### Added
 - Introduced new HWB and NCol color models under `SystemEx.Drawing`:
   - Added `ColorHWB` with hue/whiteness/blackness representation
   - Added `ColorNCol` hue‑index color model with percent‑based hue interpolation
@@ -46,7 +115,7 @@
   - `Cache(Array<byte>, CacheType)`
   - Added `ToArrayEx()` for direct `Array<byte>` access
 
-## Changed
+### Changed
 - Updated `Map` and `IMap`:
   - Added `Add(key, value)` overload
   - Added `Remove(key)`
@@ -67,33 +136,37 @@
 
 - Renamed `Utils/Utils.cs` → `Utils/Conversion.cs`
 
-## Improved**
+### Improved**
 - More consistent color conversion pipeline across all color models
 - Unified clamping and normalization behavior in HSV/HSL/CMY models
 - Improved documentation and XML comments across multiple files
 - Cleaner separation between read‑only and mutable map interfaces
 
-## Fixed
+### Fixed
 - Fixed incorrect index usage in `ColorCMY(float[] x)`
 - Fixed namespace mismatch in `ColorHSL`
 - Fixed missing `System.` prefix for `Math.Clamp` in HSV operations
 - Fixed minor documentation errors and typos across drawing and collection modules
 - Removed unused `m_currentCache` field from `StrippedCache`
 
+---
 
 ## [0.9.5] 18.06.2026
+
 ### Very Important 
 - Namespace: `SystemEx.Collection.Generic` To `SystemEx.Collections.Generic`
-## Add
+### Add
 - Add class `Cluster<T>` at `SystemEx.Collections.Generic` Represents a cluster node in a weighted graph structure.
 - Add class `CacheStream<TCache>` at `SystemEx.IO`A Stream wrapper around a `Cache<T>` instance.  
 - Add Color Classes to `SystemEx.Drawing` - ColorHSL, ColorHSV, ColorRGB, ColorGray, ... Start with build in next
   Version are ready
-# Docu
+### Docu
 - The Doku in `SystemEx.Collections.Generic`, `SystemEx.IO`, `SysrtemEx` and `SysrtemEx.Utils` is ready
+
 ---
 
 ## [0.8.5] 04.06.2026
+
 ### Very Important
 - **Major namespace restructuring** to reflect the engine architecture and clarify responsibilities across collections, device memory, and interop layers.
 - This release contains **breaking changes**: update all `using`/imports to the new namespaces.
@@ -142,9 +215,11 @@
   - `using SystemEx.Collection.Generic;` (old cache location) → `using SystemEx.Collections.Generic;`
   - `using SystemEx.Device.Intertropt;` → `using SystemEx.Device.Interop;`
 - Search your codebase for the old namespace tokens (`Missings`, `Intertropt`, `System.Memory.Missings`) and replace with the new targets.
+
 ---
 
 ## [0.8.1] 04.06.2026
+
 ### Added
 - Introduced full RAM backend under `System.Memory.Missings`:
   - Added `RamSharedBackend` implementing `IDeviceSharedBackend`
@@ -190,7 +265,9 @@
 - Fixed incorrect buffer size propagation to native kernel calls
 
 ---
+
 ## [0.7.0] 03.06.2026
+
 ### Added
 - Introduced `RandPasswordLevel` enum (`Simple = 16`, `Strong = 32`)
 - Added `RandPassword(int length, FixedArray<char> allowed, Endian endian)`:
@@ -213,6 +290,7 @@
 ---
 
 ## [0.6.5]
+
 ### Added
 - Introduced `SharedCache` for hardware‑shared memory operations:
   - Supports `ReadOnly`, `WriteOnly`, and `ReadWrite` modes via `SharedCacheType`
@@ -256,7 +334,9 @@
 - Ensured random byte arrays always fill the requested size
 
 ---
+
 ## [0.6.1]
+
 ### Added
 - Introduced a full low-level cache subsystem under `System.Collections.Generic.Missings`
 - Added `Cache` class providing:
@@ -294,6 +374,7 @@
 ---
 
 ## [0.5.8]
+
 ### Added
 - NodeIterator: intrusive Iterator für Next/Prev Traversal
 - NodeRange: Iterator-basierter Bereich (begin/end)
@@ -317,6 +398,7 @@
 ---
 
 ## [0.5.0] – 2026-06-03
+
 ### Added
 - Erste öffentliche Version
 - Grundlegende Collections (Map, Queue, Stack, BinQueue, FixedMap)

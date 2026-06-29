@@ -22,6 +22,8 @@ using SystemEx.Collections.Generic.Interfaces;
 
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A map that maintains its elements in sorted order using either a custom
     /// comparer (<see cref="ICompared{T}"/>) or a delegate-based sorting function
@@ -32,7 +34,7 @@ namespace SystemEx.Collections.Generic {
     /// <typeparam name="T">The key type.</typeparam>
     /// <typeparam name="TU">The value type.</typeparam>
     [Serializable]
-    public class SortedMap<T, TU> : Map<T, TU>, ISortedMap<T, TU>
+    public class SortedMap<T, TU> : Map<T, TU>, ISortedMap<T, TU> where T : notnull
     {
         /// <summary>
         /// Delegate-based sorting function used when no comparer is provided.
@@ -186,5 +188,7 @@ namespace SystemEx.Collections.Generic {
             return pair;
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

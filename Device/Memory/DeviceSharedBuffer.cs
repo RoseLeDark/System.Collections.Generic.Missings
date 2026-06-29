@@ -117,14 +117,19 @@ namespace SystemEx.Device.Memory {
         /// <summary>
         /// Creates a new shared buffer wrapper for the specified cache and backend.
         /// </summary>
-        internal DeviceSharedBuffer(
-            DeviceBuffer cache,
-            SharedCacheType type,
-            TDeviceSharedBackend backend,
-            int flags,
-            object? config) {
+        internal DeviceSharedBuffer( DeviceBuffer cache, TDeviceSharedBackend backend, int flags, object? config) {
+
             m_cache = cache;
-            m_type = type;
+
+            if ( cache.Type == Collections.Generic.CacheType.ToDevice )
+                m_type = SharedCacheType.WriteOnly;
+            else if ( cache.Type == Collections.Generic.CacheType.FromDevice )
+                m_type = SharedCacheType.ReadOnly;
+            else if ( cache.Type == Collections.Generic.CacheType.Both )
+                m_type = SharedCacheType.ReadWrite;
+            else
+                throw new NotSupportedException("DeviceBuffer is System Only ");
+
             m_backend = backend;
             m_hardwareBuffer = new object();
         }

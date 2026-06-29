@@ -15,6 +15,10 @@
  * changes and the date.
  */
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Represents a two‑element tuple consisting of a key and a value.
     /// Extends <see cref="ITuple"/> with strongly typed accessors and
@@ -54,5 +58,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </returns>
         bool EqualSecond(TU other);
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

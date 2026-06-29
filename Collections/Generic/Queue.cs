@@ -18,7 +18,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
-
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A simple fixed‑size FIFO queue implemented as a thin wrapper around
     /// a <see cref="Deque{T}"/>.  
@@ -93,5 +94,7 @@ namespace SystemEx.Collections.Generic {
         }
     }
 
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

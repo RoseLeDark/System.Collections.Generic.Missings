@@ -22,6 +22,8 @@ using SystemEx.Collections.Generic.Interfaces;
 
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Represents a simple range defined by a begin and end iterator over
     /// intrusive <see cref="Node{T}"/> structures.  
@@ -75,5 +77,7 @@ namespace SystemEx.Collections.Generic {
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

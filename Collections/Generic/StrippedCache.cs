@@ -17,6 +17,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A segmented cache implementation that splits a large logical address space
     /// into multiple fixed-size cache segments.  
@@ -161,4 +163,7 @@ namespace SystemEx.Collections.Generic {
 
 
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

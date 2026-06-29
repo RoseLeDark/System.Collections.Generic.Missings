@@ -16,6 +16,8 @@
  */
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A specialized <see cref="Node{T}"/> that represents a star‑shaped structure,
     /// where the node may have an arbitrary number of child nodes.
@@ -45,5 +47,7 @@ namespace SystemEx.Collections.Generic {
         public IEnumerable<Node<T>> Children => m_pChilds;
     }
 
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

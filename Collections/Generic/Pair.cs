@@ -18,6 +18,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A lightweight, serializable two‑element tuple consisting of a strongly typed
     /// key and value. Implements <see cref="IPair{T, TU}"/> and provides typed
@@ -131,4 +133,7 @@ namespace SystemEx.Collections.Generic {
         }
         
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

@@ -19,6 +19,8 @@ using SystemEx.Collections.Generic.Interfaces;
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A dynamic, list‑backed map structure that stores <see cref="ITuple"/> objects.
     /// Provides tuple‑based lookup, traversal, range operations, and key/value
@@ -344,5 +346,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public ITuple[] ToArray() => [.. m_elements];
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

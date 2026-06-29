@@ -19,6 +19,8 @@ using System.Collections;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Represents a grouping node that stores an arbitrary number of intrusive
     /// <see cref="Node{T}"/> instances inside a standard <see cref="List{T}"/>.  
@@ -204,4 +206,7 @@ namespace SystemEx.Collections.Generic {
                 action(n);
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

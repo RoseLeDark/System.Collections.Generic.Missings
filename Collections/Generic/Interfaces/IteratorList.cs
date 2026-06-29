@@ -18,6 +18,10 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// A random‑access iterator for <see cref="List{T}"/> that also implements
     /// <see cref="IForeachIterator{T}"/> to support foreach‑style enumeration.
@@ -182,4 +186,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         public static IRandomAccessIterator<T> End<T>(this List<T> list)
             => new ListIterator<T>(list, list.Count);
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

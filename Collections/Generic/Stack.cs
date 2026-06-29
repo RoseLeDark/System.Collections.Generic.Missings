@@ -21,7 +21,8 @@ using SystemEx.Collections.Generic.Interfaces;
 using System.Runtime.CompilerServices;
 
 namespace SystemEx.Collections.Generic {
-
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Represents a logical sub‑stack inside a shared stack buffer.
     /// A layer defines its own independent boundaries and a current pointer,
@@ -315,4 +316,7 @@ namespace SystemEx.Collections.Generic {
             m_end = value;
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

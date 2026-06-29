@@ -20,6 +20,8 @@ using System.Drawing;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A fixed-size array container that provides indexed access, insertion,
     /// traversal, and basic search operations. Unlike dynamic arrays, this
@@ -94,4 +96,7 @@ namespace SystemEx.Collections.Generic {
             return written;
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

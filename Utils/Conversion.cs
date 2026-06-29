@@ -227,7 +227,9 @@ namespace SystemEx {
         public static byte[] ToBytes<T>(this T value, ByteSeriablizeProvider provider) 
             where T : IIsByteSeriablize  {
 
-            return provider.ToBytes<T>(value).ToArray();
+            var x = provider.ToBytes<T>(value);
+            if(x == null) return new byte[]  {  0 };
+            else return x.ToArray();
         }
 
         /// <summary>
@@ -239,8 +241,9 @@ namespace SystemEx {
         /// <returns></returns>
         public static T FromBytes<T>(this byte[] bytes, ByteSeriablizeProvider provider) 
             where T : IIsByteSeriablize {
-           
-            return provider.FromBytes<T>(new Cache(bytes, CacheType.Both));
+            var x = new Cache(bytes, CacheType.OnlySystem);
+
+            return provider.FromBytes<T>(x)!;
         }
 
         /// <summary>
@@ -259,6 +262,25 @@ namespace SystemEx {
 
             return bytes;
         }
+
+
+        public static unsafe byte[] ToBytes ( object obj, Endian endian ) {
+            var type = obj.GetType();
+            int size = System.Runtime.InteropServices.Marshal.SizeOf(type);
+            byte[] bytes = new byte[size];
+
+            fixed ( byte* b = bytes ) {
+#pragma warning disable CS8500 // Erfasst die Adresse, ermittelt die Größe oder deklariert einen Zeiger auf einen verwalteten Typ.
+                *(object*)b = obj; // funktioniert, wenn obj wirklich unmanaged ist
+#pragma warning restore CS8500 // Erfasst die Adresse, ermittelt die Größe oder deklariert einen Zeiger auf einen verwalteten Typ.
+            }
+
+            if ( endian == Endian.BigEndian )
+                Array.Reverse(bytes);
+
+            return bytes;
+        }
+
         /// <summary>
         /// Converts an array of unmanaged structs into a contiguous byte array.
         /// </summary>
@@ -470,6 +492,7 @@ namespace SystemEx {
         }
         #endregion
 
+        
 
 
         /// <summary>

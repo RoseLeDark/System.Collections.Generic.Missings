@@ -19,6 +19,8 @@ using System.Collections;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A map that allows multiple entries with the same key.  
     /// Unlike <see cref="Map{T, TU}"/>, which prevents duplicate pairs,
@@ -50,4 +52,7 @@ namespace SystemEx.Collections.Generic {
             m_elements.Add(item);
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

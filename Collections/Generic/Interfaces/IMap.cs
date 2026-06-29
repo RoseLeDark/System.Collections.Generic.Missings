@@ -22,6 +22,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace SystemEx.Collections.Generic.Interfaces {
     /// \addtogroup collections
     /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// 
     /// <summary>
     /// Defines the basic contract for a map-like container that stores elements
@@ -255,6 +257,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
 
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}
-
-}
+    /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+}
+

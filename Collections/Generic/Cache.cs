@@ -20,6 +20,8 @@ using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic{
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Specifies the access mode of a <see cref="Cache"/> instance.
     /// </summary>
@@ -645,6 +647,8 @@ namespace SystemEx.Collections.Generic{
             if ( m_isLocked ) throw new CacheIsSharedException();
             return m_rawBuffer;
         }
-        
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+        /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     }
 }

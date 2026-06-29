@@ -78,22 +78,10 @@ namespace SystemEx.Device.Memory {
         /// <param name="shared">The backend instance.</param>
         /// <param name="flags">Backend‑specific flags.</param>
         /// <param name="config">Optional backend configuration.</param>
-        public DeviceSharedBuffer<TDeviceSharedBackend> ToShared<TDeviceSharedBackend>(
-            TDeviceSharedBackend shared,
-            int flags,
-            object? config)
+        public DeviceSharedBuffer<TDeviceSharedBackend> ToShared<TDeviceSharedBackend>( TDeviceSharedBackend shared, int flags, object? config) 
             where TDeviceSharedBackend : IDeviceSharedBackend {
-            return this.Type switch
-            {
-                CacheType.ToDevice =>
-                    new DeviceSharedBuffer<TDeviceSharedBackend>(this, SharedCacheType.ReadOnly, shared, flags, config),
 
-                CacheType.FromDevice =>
-                    new DeviceSharedBuffer<TDeviceSharedBackend>(this, SharedCacheType.WriteOnly, shared, flags, config),
-
-                _ =>
-                    new DeviceSharedBuffer<TDeviceSharedBackend>(this, SharedCacheType.ReadWrite, shared, flags, config),
-            };
+            return new DeviceSharedBuffer<TDeviceSharedBackend>(this, shared, flags, config);
         }
 
         /// <summary>

@@ -16,11 +16,13 @@
  */
 
 using System.Collections;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
-
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A simple random-access iterator for array-based data structures.
     /// Provides forward, backward, and offset-based movement.
@@ -250,11 +252,17 @@ namespace SystemEx.Collections.Generic {
                 get => m_elements[adress];
                 set => m_elements[adress] = value;
             }
+
+        public Array( int growSize = 16 ) {
+            m_elements = new T[1];
+            m_index = 0;
+            GrowSize = growSize;
+        }
         /// <summary>
         /// Creates a new array with the specified initial size.
         /// </summary>
         public Array(int size, int growSize = 16) {
-            m_elements = new T[size];
+            m_elements = Array.Empty<T>();
             m_index = 0;
             GrowSize = growSize;
         }
@@ -290,6 +298,18 @@ namespace SystemEx.Collections.Generic {
             m_elements[m_index] = entry;
             m_index++;
             return true;
+        }
+        /// <summary>
+        /// Add a range of elements to the end of the array.
+        /// </summary>
+        /// <param name="entry">The range of elements to add</param>
+        /// <returns></returns>
+        public virtual int AddRange ( T[] entry) {
+            int _ret = 0;
+            for( ; _ret < entry.Length ; _ret++ ) {
+                if ( !Add(entry[_ret]) ) break;
+            }
+            return _ret;
         }
         /// <summary>
         /// Retrieves an element at the specified index.
@@ -570,4 +590,7 @@ namespace SystemEx.Collections.Generic {
             return false;
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

@@ -20,6 +20,8 @@ using SystemEx.Collections.Generic.Interfaces;
 using System.Runtime.CompilerServices;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A tuple map that maintains its elements in sorted order.  
     /// Sorting is performed using either a custom <see cref="ICompared{T}"/>
@@ -158,4 +160,7 @@ namespace SystemEx.Collections.Generic {
             return map;
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

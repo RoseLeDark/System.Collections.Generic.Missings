@@ -17,7 +17,10 @@
 
 namespace SystemEx.Collections.Generic.Interfaces {
 
-
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Specifies the traversal direction for iterating over a sequence.
     /// </summary>
@@ -49,5 +52,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <param name="func">The action to apply to each visited element.</param>
         void Traverse(TraversMode mode, int startIndex, int endIndex, Action<T> func);
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

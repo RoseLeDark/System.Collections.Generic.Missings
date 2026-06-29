@@ -20,6 +20,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A sorted tuple map that allows multiple entries with identical tuple keys.  
     /// Unlike <see cref="SortedTupleMap"/>, which prevents duplicate tuples,
@@ -55,5 +57,7 @@ namespace SystemEx.Collections.Generic {
                 Sort();
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

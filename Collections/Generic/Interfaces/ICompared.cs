@@ -18,7 +18,10 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic.Interfaces {
-
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines a comparison interface for types that support custom ordering.
     /// Implementations return a <see cref="CompareResult"/> describing the
@@ -42,5 +45,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </returns>
         CompareResult Compare(T? x, T? y);
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

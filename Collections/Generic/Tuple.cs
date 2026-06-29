@@ -18,7 +18,8 @@ using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
 
-
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A dynamically sized tuple storing elements as <see cref="object"/> values.
     /// Provides indexed access, mutation, and compatibility with the <see cref="ITuple"/>
@@ -115,5 +116,7 @@ namespace SystemEx.Collections.Generic {
             throw new NotImplementedException();
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

@@ -17,6 +17,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A lightweight, serializable three‑element tuple consisting of strongly typed
     /// first, second, and third values. Implements <see cref="ITuple"/> and
@@ -162,4 +164,7 @@ namespace SystemEx.Collections.Generic {
             return false;
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

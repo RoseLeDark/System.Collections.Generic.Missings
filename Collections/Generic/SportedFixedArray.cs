@@ -21,6 +21,8 @@ using SystemEx.Collections.Generic.Interfaces;
 using System.Runtime.CompilerServices;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A fixed-size array that supports automatic sorting using either a comparer
     /// interface or a delegate-based sort function. Sorting can be triggered
@@ -150,4 +152,7 @@ namespace SystemEx.Collections.Generic {
             return new Array<T>(this.ToArray());
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

@@ -166,11 +166,20 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <EmbeddedResource Remove="Collections\Generic\Missings\**" />
     <None Remove="Collections\Generic\Missings\**" />
   </ItemGroup>
+  <ItemGroup>
+	  <None Include="Examples\**\*.*" Pack="true" PackagePath="Examples" />
+	</ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Examples\ExampleRamKernelAdd.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="CHANGELOG.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+    </None>
+    <None Update="Examples\ExampleHasher.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="README.md">
       <Pack>True</Pack>
@@ -191,6 +200,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Device\ExampleRamKernelAdd.cs" />
     <None Include="E:\repo\System.Collections.Generic.Extras\.editorconfig" />
   </ItemGroup>
 

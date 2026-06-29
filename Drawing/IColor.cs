@@ -20,5 +20,6 @@ namespace SystemEx.Drawing {
 
         // Interpolation
         T Lerp(T value, float amount);
+
     }
 }

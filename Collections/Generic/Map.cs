@@ -19,6 +19,8 @@ using System.Diagnostics.CodeAnalysis;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A dynamic map storing <see cref="Pair{T, TU}"/> elements in a list.  
     /// The map supports duplicate keys but prevents duplicate pairs unless
@@ -315,7 +317,18 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public bool ContainsKey(T Key) {
             foreach ( var p in m_elements ) {
-                if ( p.First!.Equals(Key) )
+                if ( p.EqualFirst(Key) )
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether any element has the specified value.
+        /// </summary>
+        public bool ContainsValue ( TU value ) {
+            foreach ( var p in m_elements ) {
+                if ( p.EqualSecond(value) )
                     return true;
             }
             return false;
@@ -433,5 +446,8 @@ namespace SystemEx.Collections.Generic {
 
         
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 
 }

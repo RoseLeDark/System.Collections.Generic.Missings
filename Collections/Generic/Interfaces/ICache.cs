@@ -17,6 +17,10 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines a typed cache a low-level byte buffer with position tracking, 
     /// typed read/write helpers, and optional locking behavior.
@@ -174,4 +178,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         public byte[] ToArray();
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

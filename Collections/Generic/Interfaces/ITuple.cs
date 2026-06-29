@@ -16,6 +16,10 @@
  */
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// A lightweight interface for serializable N‑element tuple consisting of strongly typed 
     /// </summary>
@@ -43,8 +47,10 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <returns>
         /// The element at the given index, or <c>null</c> if the index is out of range.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1716:Bezeichner dürfen nicht mit Schlüsselwörtern übereinstimmen", Justification = "<Ausstehend>")]
         object? Get(int index);
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

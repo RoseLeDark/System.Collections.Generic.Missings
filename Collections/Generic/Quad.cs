@@ -18,6 +18,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A lightweight, serializable four‑element tuple consisting of strongly typed
     /// first, second, third, and fourth values.  
@@ -186,5 +188,7 @@ namespace SystemEx.Collections.Generic {
             return EqualFirst((TT)key);
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

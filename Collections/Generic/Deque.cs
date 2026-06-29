@@ -19,6 +19,8 @@ using System.Collections;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A simple fixed‑size double‑ended queue (deque) implemented using a linear array.
     /// Supports pushing and popping at both the front and the back.  
@@ -140,5 +142,7 @@ namespace SystemEx.Collections.Generic {
             m_count = 0;
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines a typed, fixed‑stride buffer abstraction for unmanaged element types.
     /// </summary>
@@ -77,4 +81,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </remarks>
         ITypeBuffer<T> Clone ();
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

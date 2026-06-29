@@ -32,7 +32,7 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The key type (non‑null).</typeparam>
     /// <typeparam name="TU">The value type (non‑null).</typeparam>
-    public class SortedMultiMap<T, TU> : SortedMap<T, TU> {
+    public class SortedMultiMap<T, TU> : SortedMap<T, TU> where T : notnull {
         /// <summary>
         /// Creates a sorted map using a delegate-based sorting function.
         /// </summary>
@@ -57,4 +57,7 @@ namespace SystemEx.Collections.Generic {
             if ( AutoSort ) Sort();
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

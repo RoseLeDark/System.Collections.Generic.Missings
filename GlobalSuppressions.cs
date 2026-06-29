@@ -7,3 +7,4 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Naming", "CA1711:Bezeichner dürfen kein falsches Suffix aufweisen", Justification = "<Ausstehend>", Scope = "member", Target = "~M:SystemEx.Collections.Generic.Cache.ToArrayEx~SystemEx.Collections.Generic.Array{System.Byte}")]
 [assembly: SuppressMessage("Naming", "CA1711:Bezeichner dürfen kein falsches Suffix aufweisen", Justification = "<Ausstehend>", Scope = "type", Target = "~T:SystemEx.Collections.Generic.PriorityQueueEx`2")]
+[assembly: SuppressMessage("Design", "CA1051:Sichtbare Instanzfelder nicht deklarieren", Justification = "<Ausstehend>", Scope = "member", Target = "~F:SystemEx.Device.NativeRAMKernel`1.m_running")]

@@ -20,6 +20,8 @@ using SystemEx.Collections.Generic.Interfaces;
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Represents a dynamic list of <see cref="ITuple"/> objects.  
     /// Provides filtering utilities, indexed access, and basic list operations
@@ -154,4 +156,7 @@ namespace SystemEx.Collections.Generic {
         public virtual void RemoveAt(int index) =>
              m_elements.RemoveAt(index);
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

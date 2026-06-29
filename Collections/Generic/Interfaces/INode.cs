@@ -16,6 +16,10 @@
  */
 
 namespace SystemEx.Collections.Generic.Interfaces {
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines the basic contract for a node in a multi‑linked structure,
     /// such as a tree, graph, or intrusive node network.
@@ -41,5 +45,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         int? NSiblings { get; }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

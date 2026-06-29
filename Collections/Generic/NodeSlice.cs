@@ -19,6 +19,8 @@ using System.Collections;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Represents a slice over intrusive <see cref="Node{T}"/> structures,
     /// defined by a starting iterator and a fixed length.  
@@ -87,5 +89,7 @@ namespace SystemEx.Collections.Generic {
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

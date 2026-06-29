@@ -18,6 +18,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A typed view over a raw <c>Cache</c> that exposes elements of an unmanaged type <typeparamref name="T"/>.
     /// </summary>
@@ -175,4 +177,7 @@ namespace SystemEx.Collections.Generic {
             return Conversion.FromBytes<T>(buffer, endian);
         }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

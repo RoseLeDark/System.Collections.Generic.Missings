@@ -43,7 +43,8 @@ namespace SystemEx.IO.Provider {
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public Cache ToBytes<T>(T obj) {
+        public Cache? ToBytes<T>(T? obj) {
+            if ( obj == null ) return null;
             
             var ret = new Cache((int)(m_schema.TotalSize / 8), CacheType.Both); // Bits → Bytes
 
@@ -76,11 +77,11 @@ namespace SystemEx.IO.Provider {
                 var size = GetEntrySize(obj, name, m_endian);
                 if ( size <= 0 ) continue; 
 
-                byte[] raw = obj.ReadRange((ulong)offset, (uint)size);
+                byte[] raw = obj.ReadRange((ulong)offset, (uint)size)!;
 
                 entries.Add(name, raw);
             }
-            return (T)CreateObjectFromEntrys(entries, m_endian);
+            return (T)CreateObjectFromEntrys(entries, m_endian)!;
         }
         /// <summary>
         /// 

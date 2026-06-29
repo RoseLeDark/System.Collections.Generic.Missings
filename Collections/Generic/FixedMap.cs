@@ -20,6 +20,8 @@ using System.Diagnostics.CodeAnalysis;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A fixed‑size map storing <see cref="Pair{T, TU}"/> elements in a
     /// contiguous array.  
@@ -436,5 +438,7 @@ namespace SystemEx.Collections.Generic {
             return false;
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

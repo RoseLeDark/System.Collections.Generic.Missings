@@ -21,6 +21,8 @@ using System.Collections;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A tuple map that allows multiple entries with identical tuple keys.  
     /// Unlike <see cref="TupleMap"/>, which prevents duplicate tuples,
@@ -40,4 +42,7 @@ namespace SystemEx.Collections.Generic {
         /// <param name="item">The tuple to add.</param>
         public override void Add(ITuple item) { m_elements.Add(item); }
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

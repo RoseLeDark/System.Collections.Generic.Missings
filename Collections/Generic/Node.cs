@@ -21,6 +21,8 @@ using SystemEx.Collections.Generic.Interfaces;
 
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Defines the supported traversal orders for <see cref="Node{T}"/> structures.
     /// </summary>
@@ -561,5 +563,7 @@ namespace SystemEx.Collections.Generic {
         
     }
 
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

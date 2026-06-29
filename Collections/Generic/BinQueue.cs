@@ -19,6 +19,8 @@ using System.Collections;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// A fixed-size queue that stores up to two elements. When full, the oldest
     /// element is automatically removed to make room for a new one.
@@ -102,5 +104,7 @@ namespace SystemEx.Collections.Generic {
             m_deque.Clear();
         }
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }
