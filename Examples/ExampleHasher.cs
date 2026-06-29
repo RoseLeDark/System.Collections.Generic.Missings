@@ -19,70 +19,21 @@ using SystemEx.Hash;
 using SystemEx.Collections.Generic;
 
 namespace Examples {
-    /// \addtogroup Examples
-    /// @{
-    /// <summary>
-    /// A very simple example hasher.
-    /// </summary>
-    /// Purpose:
-    ///   - Demonstrates how to implement a custom hasher for SystemEx.
-    ///   - Not optimized, not cryptographic.
-    ///   - Only deterministic byte processing.
-    ///
-    /// Notes:
-    ///   - Works on Array<byte> (SystemEx container).
-    ///   - Endian is accepted but not used in this simple example.
-    public sealed class SimpleHasher : IHasher {
-
-        /// <summary>
-        /// Computes a simple 32‑bit hash from the given bytes.
-        /// </summary>
-        public Hash32 Compute ( Array<byte> input, Endian endian ) {
-            if ( input == null || input.Count == 0 )
-                return new Hash32(0);
-
-            int hash = 0;
-
-            // Simple deterministic byte loop
-            for ( int i = 0 ; i < input.Count ; i++ ) {
-                hash = (hash * 31) ^ input[i];
-            }
-
-            return new Hash32(hash);
-        }
-
-        /// <summary>
-        /// Computes a simple 64‑bit hash from the given bytes.
-        /// </summary>
-        public Hash64 ComputeLong ( Array<byte> input, Endian endian ) {
-            if ( input == null || input.Count == 0 )
-                return new Hash64(0);
-
-            long hash = 0;
-
-            // Larger multiplier for 64‑bit
-            for ( int i = 0 ; i < input.Count ; i++ ) {
-                hash = (hash * 1315423911L) ^ input[i];
-            }
-
-            return new Hash64(hash);
-        }
-    }
-
+    
 
     /// <summary>
     /// Example data class using HashableObject.
     /// </summary>
     /// The HashAlgorithm attribute tells HashableObject:
-    ///   - Use SimpleHasher
+    ///   - Use BernsteinHash
     ///   - Use LittleEndian for byte interpretation
     ///
     /// HashableObject automatically:
     ///   1. Calls ToBytes()
     ///   2. Passes the bytes to the selected hasher
     ///   3. Returns Hash32 / Hash64
-    [HashAlgorithm(typeof(SimpleHasher), Endian.LittleEndian)]
-    public class SensorData : HashableObject {
+    [HashAlgorithm(typeof(BernsteinHash), Endian.LittleEndian)]
+    public class SensorData : Hashable {
 
         /// <summary>
         /// Example fields that participate in hashing.

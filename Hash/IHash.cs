@@ -1,113 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
 using SystemEx.Collections.Generic;
-using SystemEx.IO.Provider;
 
 namespace SystemEx.Hash {
-    // Endian enum (falls noch nicht vorhanden)
-
-    // Attribute zum Binden eines Hasher-Typs und Endian
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-    public sealed class HashAlgorithmAttribute : Attribute {
-        public Type HasherType { get; }
-        public Endian Endian { get; }
-
-        public HashAlgorithmAttribute ( Type hasherType, Endian endian ) {
-            HasherType = hasherType;
-            Endian = endian;
-        }
-    }
-
-    // Ergebnis-Typen
+    /// \addtogroup hash
+    /// @{
+    /// <summary>
+    /// Represents a 32‑bit hash value produced by a SystemEx hashing algorithm.
+    /// 
+    /// The struct is immutable and stores the raw 32‑bit result exactly as
+    /// returned by the underlying hasher. No normalization or reinterpretation
+    /// is performed.
+    /// </summary>
     public readonly struct Hash32 {
-        public readonly int Value;
-        public Hash32 ( int value ) => Value = value;
+        /// <summary>
+        /// The raw 32‑bit hash value.
+        /// </summary>
+        public readonly uint Value;
+
+        /// <summary>
+        /// Creates a new 32‑bit hash wrapper.
+        /// </summary>
+        public Hash32 ( uint value ) => Value = value;
     }
 
+    /// <summary>
+    /// Represents a 64‑bit hash value produced by a SystemEx hashing algorithm.
+    /// 
+    /// The struct is immutable and stores the raw 64‑bit result exactly as
+    /// returned by the underlying hasher. No normalization or reinterpretation
+    /// is performed.
+    /// </summary>
     public readonly struct Hash64 {
-        public readonly long Value;
-        public Hash64 ( long value ) => Value = value;
+        /// <summary>
+        /// The raw 64‑bit hash value.
+        /// </summary>
+        public readonly ulong Value;
+
+        /// <summary>
+        /// Creates a new 64‑bit hash wrapper.
+        /// </summary>
+        public Hash64 ( ulong value ) => Value = value;
     }
 
-    // Hasher-Interface (arbeitet mit bytes und Endian)
-    public interface IHasher {
-        Hash32 Compute ( Array<byte> input, Endian endian );
-        Hash64 ComputeLong ( Array<byte> input, Endian endian );
+    /// <summary>
+    /// Interface for SystemEx hashing algorithms.  
+    /// 
+    /// A hasher consumes a byte array (<see cref="Array{byte}"/>) and produces
+    /// either a 32‑bit or 64‑bit hash.  
+    /// 
+    /// Implementations must be endian‑aware and iterator‑driven, following the
+    /// SystemEx data model. They may be instantiated dynamically via
+    /// <see cref="HashAlgorithmAttribute"/>.
+    /// </summary>
+    public interface IHash {
+
+        /// <summary>
+        /// Computes a 32‑bit hash over the given byte array using the specified seed
+        /// and endian mode.
+        /// </summary>
+        Hash32 Compute ( Array<byte> input, uint seed, Endian endian );
+
+        /// <summary>
+        /// Computes a 64‑bit hash over the given byte array using the specified seed
+        /// and endian mode.
+        /// </summary>
+        Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian );
     }
-
-    // Die einfache Basisklasse für hashbare Objekte
-    public abstract class HashableObject {
-        // Muss vom Typ implementiert werden: deterministische Byte-Repräsentation
-        public abstract Array<byte> ToBytes ();
-
-        public override int GetHashCode () {
-            int _hash = 0;
-
-            // Attribut vom konkreten Typ lesen (nicht typeof(HashableObject))
-            var attr = (HashAlgorithmAttribute?)Attribute.GetCustomAttribute(this.GetType(), typeof(HashAlgorithmAttribute));
-            if ( attr == null ) {
-                _hash = base.GetHashCode();
-            } else {
-                // Bytes erzeugen
-                Array<byte> input = ToBytes();
-
-                // Hasher transient erzeugen: zuerst versuchen, Konstruktor mit Endian, sonst parameterlos
-                object? inst = null;
-                try {
-                    inst = Activator.CreateInstance(attr.HasherType, attr.Endian);
-                } catch {
-                    try {
-                        inst = Activator.CreateInstance(attr.HasherType);
-                    } catch {
-                        inst = null;
-                    }
-                }
-
-                if ( inst is IHasher hasher ) {
-                    var h = hasher.Compute(input, attr.Endian);
-                    _hash = h.Value;
-                } else {
-                   _hash = base.GetHashCode(); 
-                }
-            }
-            
-            return _hash;
-        }
-        public virtual long GetHashCodeLong () {
-            long _hash = 0;
-
-            // Attribut vom konkreten Typ lesen (nicht typeof(HashableObject))
-            var attr = (HashAlgorithmAttribute?)Attribute.GetCustomAttribute(this.GetType(), typeof(HashAlgorithmAttribute));
-            if ( attr == null ) {
-                _hash = base.GetHashCode();
-            } else {
-                // Bytes erzeugen
-                Array<byte> input = ToBytes();
-
-                // Hasher transient erzeugen: zuerst versuchen, Konstruktor mit Endian, sonst parameterlos
-                object? inst = null;
-                try {
-                    inst = Activator.CreateInstance(attr.HasherType, attr.Endian);
-                } catch {
-                    try {
-                        inst = Activator.CreateInstance(attr.HasherType);
-                    } catch {
-                        inst = null;
-                    }
-                }
-
-                if ( inst is IHasher hasher ) {
-                    var h = hasher.ComputeLong(input, attr.Endian);
-                    _hash = h.Value;
-                } else {
-                    _hash = base.GetHashCode();
-                }
-            }
-
-            return _hash;
-        }
-    }
+    /// @}
 
 }

@@ -103,6 +103,16 @@ namespace SystemEx.Collections.Generic {
         public void Forward() {
             if ( !IsEnd ) m_ipos++;
         }
+        /// <summary>
+        /// Moves the iterator N step forward
+        /// </summary>
+        public void Forward ( int i ) {
+            var n = i;
+            while ( n > 0 ) {
+                --n;
+                Forward();
+            }
+        }
 
         object IEnumerator.Current => Current!;
 
@@ -251,7 +261,7 @@ namespace SystemEx.Collections.Generic {
         public T this[int adress] {
                 get => m_elements[adress];
                 set => m_elements[adress] = value;
-            }
+         }
 
         public Array( int growSize = 16 ) {
             m_elements = new T[1];

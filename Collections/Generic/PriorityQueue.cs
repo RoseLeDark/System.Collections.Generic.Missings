@@ -80,6 +80,16 @@ namespace SystemEx.Collections.Generic {
 
             m_current = m_queue.Dequeue();
         }
+        /// <summary>
+        /// Moves the iterator N step forward
+        /// </summary>
+        public void Forward ( int i ) {
+            var n = i;
+            while ( n > 0 ) {
+                --n;
+                Forward();
+            }
+        }
     }
     /// <summary>
     /// A priority queue implemented on top of <see cref="SortedMap{T, TU}"/>.  

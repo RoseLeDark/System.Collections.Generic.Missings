@@ -17,10 +17,8 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic.Interfaces {
-    /// \addtogroup collections
-    /// @{
-    /// \addtogroup interfaces
-    /// @{
+    /// \addtogroup STL
+    /// @
     /// <summary>
     /// Defines the base functionality for all iterators.
     /// Provides forward-only movement.
@@ -30,6 +28,11 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// Moves the iterator one step forward.
         /// </summary>
         void Forward();
+        /// <summary>
+        /// Moves the iterator N step forward.
+        /// </summary>
+        /// <param name="i">N</param>
+        void Forward (int i);
     }
 
     /// <summary>
@@ -172,6 +175,108 @@ namespace SystemEx.Collections.Generic.Interfaces {
             }
             return count;
         }
+
+        /// <summary>
+        /// Advances a forward iterator by <paramref name="n"/> steps by repeatedly
+        /// calling <see cref="IIterator{T}.Forward"/>.
+        ///
+        /// The iterator is cloned before advancing.  
+        /// 
+        /// In C# iterators are reference‑based objects; advancing the original
+        /// iterator would mutate the caller's iterator state.  
+        /// 
+        /// Cloning ensures that <c>Advance</c> behaves like the C++ STL version:
+        /// it returns a new iterator positioned <c>n</c> steps ahead, while the
+        /// original iterator remains unchanged.
+        /// </summary>
+        public static IForwardIterator<T> Advance<T> ( IForwardIterator<T> first, int n ) {
+            IForwardIterator<T> it = (IForwardIterator<T>)first.Clone();
+
+            while ( n > 0 ) {
+                --n;
+                it.Forward();
+            }
+
+            return it;
+        }
+        /// <summary>
+        /// Advances a forward iterator by <paramref name="n"/> steps by repeatedly
+        /// calling <see cref="IIterator{T}.Forward()"/>.
+        ///
+        /// The iterator is cloned before advancing.  
+        /// 
+        /// In C# iterators are reference‑based objects; advancing the original
+        /// iterator would mutate the caller's iterator state.  
+        /// 
+        /// Cloning ensures that <c>Advance</c> behaves like the C++ STL version:
+        /// it returns a new iterator positioned <c>n</c> steps ahead, while the
+        /// original iterator remains unchanged.
+        /// </summary>
+        public static IForwardIterator<T> Next<T> ( IForwardIterator<T> first, int n ) => Advance<T>(first, n);
+
+        /// <summary>
+        /// Advances a random‑access iterator by <paramref name="n"/> steps using
+        /// <see cref="IIterator{T}.Forward"/>.
+        ///
+        /// The iterator is cloned before advancing.  
+        /// 
+        /// In C# iterators are objects, not value‑types.  
+        /// Without cloning, advancing would mutate the caller's iterator, breaking
+        /// STL‑style semantics and making algorithms like <c>Distance</c>,
+        /// <c>LowerBound</c>, <c>UpperBound</c> or hashing routines unsafe.
+        /// 
+        /// Cloning preserves the expected C++ behavior:  
+        /// <c>Advance</c> returns a new iterator at <c>first + n</c>, leaving
+        /// <c>first</c> untouched.
+        /// </summary>
+        public static IRandomAccessIterator<T> Advance<T> ( IRandomAccessIterator<T> first, int n ) {
+            IRandomAccessIterator<T> it = (IRandomAccessIterator<T>)first.Clone();
+
+            while ( n > 0 ) {
+                --n;
+                it.Forward();
+            }
+            while ( n < 0 ) {
+                ++n;
+                it.Back();
+            }
+            return it;
+        }
+        /// <summary>
+        /// Returns a new iterator advanced by <paramref name="n"/> steps from <paramref name="itt"/>.
+        /// 
+        /// This is an STL‑style helper that delegates to <see cref="Advance{T}(IRandomAccessIterator{T}, int)"/>.
+        /// The original iterator remains unchanged; the returned iterator represents <c>first + n</c>.
+        /// </summary>
+        public static IRandomAccessIterator<T> Next<T> ( IRandomAccessIterator<T> itt, int n )
+            => Advance<T>(itt, n);
+
+        /// <summary>
+        /// Returns a new iterator moved <paramref name="n"/> positions backward from
+        /// <paramref name="itt"/>.
+        /// 
+        /// This is the STL‑style equivalent of <c>std::prev</c>.  
+        /// Internally delegates to <see cref="Advance{T}(IRandomAccessIterator{T}, int)"/>
+        /// with a negative offset.  
+        /// 
+        /// Because <c>Advance</c> supports both forward and backward stepping,
+        /// this method performs actual backward movement using <see cref="IRandomAccessIterator{T}.Back"/>.
+        /// 
+        /// The original iterator remains unchanged.
+        /// </summary>
+        public static IRandomAccessIterator<T> Prev<T> ( IRandomAccessIterator<T> itt, int n )
+            => Advance<T>(itt, -n);
+
+        /// <summary>
+        /// Determines whether the iterator range [<paramref name="first"/>, <paramref name="last"/>)
+        /// is empty.
+        /// 
+        /// The range is considered empty if <paramref name="first"/> and <paramref name="last"/>
+        /// refer to the same position (i.e. <c>first.Equals(last)</c>).
+        /// </summary>
+        public static bool Empty<T>(IIterator<T> first, IIterator<T> last) {
+            return first.Equals(last);
+        }
         /// <summary>
         /// Searches for the first occurrence of a value in a forward iterator range.
         /// </summary>
@@ -268,7 +373,6 @@ namespace SystemEx.Collections.Generic.Interfaces {
 
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

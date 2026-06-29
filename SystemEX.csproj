@@ -169,9 +169,6 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
   <ItemGroup>
 	  <None Include="Examples\**\*.*" Pack="true" PackagePath="Examples" />
 	</ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Examples\ExampleRamKernelAdd.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Update="CHANGELOG.md">
@@ -200,7 +197,6 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Device\ExampleRamKernelAdd.cs" />
     <None Include="E:\repo\System.Collections.Generic.Extras\.editorconfig" />
   </ItemGroup>
 

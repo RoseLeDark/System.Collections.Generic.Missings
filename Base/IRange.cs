@@ -18,6 +18,8 @@
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx {
+    /// \addtogroup STL
+    /// @
     /// <summary>
     /// Defines the basic contract for a numeric range with a start and end value.
     /// Provides validation, containment checks, range slicing, merging,
@@ -104,4 +106,5 @@ namespace SystemEx {
         public bool Overlaps ( IRange<T> other );
 
     }
+    /// @}
 }

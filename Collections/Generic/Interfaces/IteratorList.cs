@@ -72,7 +72,16 @@ namespace SystemEx.Collections.Generic.Interfaces {
         public void Forward() {
             if ( !IsEnd ) m_index++;
         }
-
+        /// <summary>
+        /// Moves the iterator N step forward
+        /// </summary>
+        public void Forward ( int i ) {
+            var n = i;
+            while ( n > 0 ) {
+                --n;
+                Forward();
+            }
+        }
         /// <summary>
         /// Moves the iterator one step backward unless it is already at the beginning.
         /// </summary>

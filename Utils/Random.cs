@@ -340,13 +340,13 @@ namespace SystemEx {
         /// <summary>
         /// Returns a random <see cref="ulong"/> in the range [min, ulong.MaxValue].
         /// </summary>
-        public static ulong Rand(this ulong a, ulong min, Endian endian)
+        public static ulong Rand(this ulong a, ulong min, Endian endian = Endian.LittleEndian )
             => RandULong(min, ulong.MaxValue, endian);
 
         /// <summary>
         /// Returns a random <see cref="ulong"/> in the inclusive range [min, max].
         /// </summary>
-        public static ulong Rand(this ulong a, ulong min, ulong max, Endian endian)
+        public static ulong Rand(this ulong a, ulong min, ulong max, Endian endian = Endian.LittleEndian)
             => RandULong(min, max, endian);
 
         /// <summary>

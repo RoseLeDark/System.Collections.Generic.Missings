@@ -83,6 +83,17 @@ namespace SystemEx.Collections.Generic {
         public void Forward() {
             m_pCurrent = m_pCurrent.Next;
         }
+
+        /// <summary>
+        /// Moves the iterator N step forward
+        /// </summary>
+        public void Forward ( int i ) {
+            var n = i;
+            while ( n > 0 ) {
+                --n;
+                Forward();
+            }
+        }
         /// <summary>
         /// Moves the iterator one step backward.
         /// </summary>

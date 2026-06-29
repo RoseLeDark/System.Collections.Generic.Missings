@@ -65,6 +65,16 @@ namespace SystemEx {
         }
 
         /// <summary>
+        /// Moves the iterator N step forward
+        /// </summary>
+        public void Forward (int i) {
+            var n = i;
+            while ( n > 0 ) {
+                --n;
+                Forward();
+            }
+        }
+        /// <summary>
         /// Creates a copy of this iterator at its current position.
         /// </summary>
         /// <returns>A new iterator instance positioned identically.</returns>
