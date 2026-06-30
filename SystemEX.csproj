@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>RoseLeDark.Collections.Missings</AssemblyName>
@@ -9,8 +8,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.9.65</AssemblyVersion>
-    <FileVersion>0.9.65</FileVersion>
+    <AssemblyVersion>0.10.12</AssemblyVersion>
+    <FileVersion>0.10.12</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>A foundational low‑level extension to .NET’s collection ecosystem.
 This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIterator, IBidirectionalIterator, IRandomAccessIterator), traversal utilities, generic algorithms (Distance, Find, LowerBound, UpperBound, Reverse, Rotate, ForEach), and deterministic byte‑level data structures. Includes advanced map types, MultiMap, Pair/Tuple structures, fixed‑size arrays and buffers, and a modular cache/RAID architecture. Designed for high‑performance, engine‑oriented, allocation‑controlled applications where .NET’s built‑in collections are insufficient.</Description>
@@ -18,7 +17,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.9.66</Version>
+    <Version>0.10.12</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -33,131 +32,102 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.9.64] 23.06.2026
-### Changed
-- `public int Length { get; }` → `public ulong Length { get; }`
-- `Cache&lt;T&gt;` is now fully ulong‑addressed instead of int‑based
-- Renamed `ITerator` → `IIterator` (updated across all dependent iterator‑based classes)
+    <PackageReleaseNotes>## [0.10.70] 29.06.206
+
+### Very Important
+- **Renamed `RamKernel` → `NativeRAMKernel&lt;TDelegate&gt;`**  
+  New unified kernel base class replacing the old RAM‑only implementation.  
+  See example: `Examples/ExampleRamKernelAdd.cs`.
+
+- **Removed all legacy platform kernel loaders**  
+  (`WindowsKernelLoader`, `LinuxKernelLoader`, `MacKernelLoader`, `NoSupportKernelLoader`)  
+  Replaced by new module‑centric loader architecture.
 
 ### Added
-- Added `Free` and `Used` properties to `Cache&lt;T&gt;` with new internal member `m_maxUsedAddress`  
-- Added `Clear()` implementation to reset cache content and usage state  
-- Added `Range`, `NumberRange` and forward iterator `NumberRangeIterator&lt;T&gt;`  
-- Added `NumberRangeStepper&lt;T&gt;`: cursor‑based stepper over normalized numeric ranges (fixed increments, forward/backward stepping, reset, enumeration)  
-- Added `TypeBuffer&lt;T&gt;` and `ITypeBuffer&lt;T&gt;` to `SystemEx.Collections.Generic` A typed view over a raw &lt;c&gt;Cache&lt;/c&gt; that exposes elements of an unmanaged type &lt;typeparamref name="T"/&gt;
+- Introduced full native module system under `SystemEx.Runtime`:
+  - `Module` (DLL/SO/DYLIB abstraction with handle + function lookup)
+  - `NativeHost` (module cache, unload, delegate binding)
 
-## [0.9.6] 21.06.2026
-## Added
-- Introduced new HWB and NCol color models under `SystemEx.Drawing`:
-  - Added `ColorHWB` with hue/whiteness/blackness representation
-  - Added `ColorNCol` hue‑index color model with percent‑based hue interpolation
-  - Added full conversion pipeline:
-    - `ColorR8G8B8 → ColorHWB`
-    - `ColorHWB → ColorR8G8B8`
-    - `ColorR8G8B8 → ColorNCol`
-    - `ColorNCol → ColorR8G8B8`
-    - `ColorNCol → ColorR16G16B16`
-    - `ColorNCol → ColorR10G10B10`
+- Add platform loader backends under `SystemEx.Runtime.InteropServices.Platform`:
+  - `WindowsProcLoader`
+  - `LinuxProcLoader`
+  - `MacProcLoader`
+  - `NoSupportProcLoader` (simulated backend)
 
-- Added new canvas abstraction:
-  - Introduced `ICanvas&lt;T&gt;` interface
-  - Added support for region copy, fill, clear, resize and color search
+- Add new kernel base class `NativeRAMKernel&lt;TDelegate&gt;`:
+  - Backend‑neutral kernel lifecycle (`Create`, `BeginRun`, `Run`, `EndRun`)
+  - Automatic buffer lock/unlock
+  - Delegate‑based native function invocation
+  - Backend hooks (`OnCreate`, `OnBegin`, `OnRun`, `OnEnd`, `OnAddBuffer`)
 
-- Added new byte‑serialization infrastructure:
-  - Added `ByteSeriablizeProvider`
-  - Added `IByteSerialize`, `IHasByteSchema`
-  - Added `RawByteProvider`
-  - Added `ColorR10G10B10FormatSchema` and serializer implementation
+- Add example kernel:  
+  - `ExampleRamKernelAdd` demonstrating the new API.
+- Add `Bernsteinhash` and `MurmurHash`, murmur with Little and Big Endian Support 
+- Update `Examples\ExampleHasher.cs` 
+- Add to Iterator:
+    - IRandomAccessIterator&lt;T&gt; Advance&lt;T&gt; ( IRandomAccessIterator&lt;T&gt; first, int n )
+    - IRandomAccessIterator&lt;T&gt; Next&lt;T&gt; ( IRandomAccessIterator&lt;T&gt; it, int n )
+    - IRandomAccessIterator&lt;T&gt; Prev&lt;T&gt; ( IRandomAccessIterator&lt;T&gt; it, int n )
+    - IForwardIterator&lt;T&gt; Next&lt;T&gt; ( IForwardIterator&lt;T&gt; first, int n ) 
+    - IForwardIterator&lt;T&gt; Advance&lt;T&gt; ( IForwardIterator&lt;T&gt; first, int n )
+    - public static bool Empty&lt;T&gt;(IIterator&lt;T&gt; first, IIterator&lt;T&gt; last) (Last and end is the same
+    
+### Changed
+- Replaced unmanaged call pipeline:
+  - Old: `KernelLoader.call(...)`
+  - New: delegate binding via `Marshal.GetDelegateForFunctionPointer&lt;T&gt;()`
 
-- Added new constructors to `Cache`:
-  - `Cache(byte[], CacheType)`
-  - `Cache(Array&lt;byte&gt;, CacheType)`
-  - Added `ToArrayEx()` for direct `Array&lt;byte&gt;` access
+- Updated RAM backend to use unified module + loader system.
 
-## Changed
-- Updated `Map` and `IMap`:
-  - Added `Add(key, value)` overload
-  - Added `Remove(key)`
-  - Added `TryGeValue(key, out value)`
-  - Added `Keys` and `Values` collections
-  - Extended `Map&lt;T,TU&gt;` to implement `IReadOnlyMap&lt;T,TU&gt;`
+- Updated namespaces:
+  - `SystemEx.Device.Intertropt` → `SystemEx.Device.Interop`
+  - New runtime loaders under `SystemEx.Runtime.InteropServices.Platform`
 
-- Updated color classes:
-  - Fixed namespace typo in `ColorHSL`
-  - Corrected constructor names in `ColorCMY`
-  - Replaced `Math.Clamp` with `System.Math.Clamp` for consistency
-  - Added float‑based arithmetic helpers to `ColorHSV`
+- Updated buffer lifecycle to match new kernel execution model.
 
-- Updated `ColorConverter`:
-  - Added HWB and NCol conversion logic
-  - Improved sRGB conversion accuracy
-  - Added additional RGB16/RGB10 conversion helpers
+### Improved
+- Unified module loading across Windows/Linux/macOS.
+- Clear separation between:
+  - module loading
+  - function resolution
+  - kernel lifecycle
+  - buffer lifecycle
+- More consistent behavior with future GPU backends.
+- Cleaner example code and documentation.
 
-- Renamed `Utils/Utils.cs` → `Utils/Conversion.cs`
+### Removed
+- `RamKernel`
+- All `KernelLoader` platform variants
+- Old Begin/Run/End RAM kernel implementation
+- Old unmanaged call logic
 
-## Improved**
-- More consistent color conversion pipeline across all color models
-- Unified clamping and normalization behavior in HSV/HSL/CMY models
-- Improved documentation and XML comments across multiple files
-- Cleaner separation between read‑only and mutable map interfaces
-
-## Fixed
-- Fixed incorrect index usage in `ColorCMY(float[] x)`
-- Fixed namespace mismatch in `ColorHSL`
-- Fixed missing `System.` prefix for `Math.Clamp` in HSV operations
-- Fixed minor documentation errors and typos across drawing and collection modules
-- Removed unused `m_currentCache` field from `StrippedCache`
+### Notes
+- This update contains **breaking changes**. All code using `RamKernel` or `KernelLoader` must migrate to `NativeRAMKernel&lt;TDelegate&gt;`.
 </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
-    <NuGetAuditMode>direct</NuGetAuditMode>
+    <NuGetAuditMode>all</NuGetAuditMode>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Platforms>ARM32;AnyCPU</Platforms>
-    <Configurations>Debug;Release;Release_ARM32</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM32'">
-    <IsAotCompatible>True</IsAotCompatible>
-    <Deterministic>False</Deterministic>
-    <WarningsAsErrors />
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM32'">
-    <IsAotCompatible>True</IsAotCompatible>
-    <Deterministic>False</Deterministic>
-    <WarningsAsErrors />
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_ARM32|ARM32'">
-    <IsAotCompatible>True</IsAotCompatible>
-    <Deterministic>False</Deterministic>
-    <WarningsAsErrors />
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_ARM32|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-    <Deterministic>False</Deterministic>
-    <WarningsAsErrors />
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-
+    <Platforms>AnyCPU</Platforms>
+    <Configurations>Debug;Release</Configurations>
+    <OutputType>Library</OutputType>
+    <ApplicationIcon>Logo_256.ico</ApplicationIcon>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <IsAotCompatible>True</IsAotCompatible>
     <Deterministic>False</Deterministic>
-    <WarningsAsErrors />
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <WarningsAsErrors>;NU1605</WarningsAsErrors>
 
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <IsAotCompatible>True</IsAotCompatible>
     <Deterministic>False</Deterministic>
-    <WarningsAsErrors />
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <WarningsAsErrors>;NU1605</WarningsAsErrors>
 
   </PropertyGroup>
 
@@ -167,7 +137,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <None Remove="Collections\Generic\Missings\**" />
   </ItemGroup>
   <ItemGroup>
-	  <None Include="Examples\**\*.*" Pack="true" PackagePath="Examples" />
+	  <None Include="Examples\*.cs" Pack="true" PackagePath="Examples" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -176,6 +146,9 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
       <PackagePath>\</PackagePath>
     </None>
     <None Update="Examples\ExampleHasher.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\ExampleRamKernelAdd.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="README.md">
@@ -193,11 +166,11 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove="E:\repo\System.Collections.Generic.Extras\.editorconfig" />
+    <EditorConfigFiles Remove=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="E:\repo\System.Collections.Generic.Extras\.editorconfig" />
+    <Content Include="Logo_256.ico" />
   </ItemGroup>
 
 </Project>

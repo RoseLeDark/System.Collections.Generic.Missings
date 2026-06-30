@@ -21,21 +21,30 @@
   - `Module` (DLL/SO/DYLIB abstraction with handle + function lookup)
   - `NativeHost` (module cache, unload, delegate binding)
 
-- Added platform loader backends under `SystemEx.Runtime.InteropServices.Platform`:
+- Add platform loader backends under `SystemEx.Runtime.InteropServices.Platform`:
   - `WindowsProcLoader`
   - `LinuxProcLoader`
   - `MacProcLoader`
   - `NoSupportProcLoader` (simulated backend)
 
-- Added new kernel base class `NativeRAMKernel<TDelegate>`:
+- Add new kernel base class `NativeRAMKernel<TDelegate>`:
   - Backend‑neutral kernel lifecycle (`Create`, `BeginRun`, `Run`, `EndRun`)
   - Automatic buffer lock/unlock
   - Delegate‑based native function invocation
   - Backend hooks (`OnCreate`, `OnBegin`, `OnRun`, `OnEnd`, `OnAddBuffer`)
 
-- Added example kernel:  
+- Add example kernel:  
   - `ExampleRamKernelAdd` demonstrating the new API.
-
+- Add `Bernsteinhash` and `MurmurHash`, murmur with Little and Big Endian Support 
+- Update `Examples\ExampleHasher.cs` 
+- Add to Iterator:
+    - IRandomAccessIterator<T> Advance<T> ( IRandomAccessIterator<T> first, int n )
+    - IRandomAccessIterator<T> Next<T> ( IRandomAccessIterator<T> it, int n )
+    - IRandomAccessIterator<T> Prev<T> ( IRandomAccessIterator<T> it, int n )
+    - IForwardIterator<T> Next<T> ( IForwardIterator<T> first, int n ) 
+    - IForwardIterator<T> Advance<T> ( IForwardIterator<T> first, int n )
+    - public static bool Empty<T>(IIterator<T> first, IIterator<T> last) (Last and end is the same
+    
 ### Changed
 - Replaced unmanaged call pipeline:
   - Old: `KernelLoader.call(...)`
