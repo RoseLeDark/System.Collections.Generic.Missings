@@ -76,3 +76,6 @@ dotnet_code_quality_unused_parameters = none
 
 # Disable aggressive analyzer pack - cheak-
 dotnet_analyzer_diagnostic.severity = none
+
+# CA1416: Plattformkompatibilität überprüfen
+dotnet_diagnostic.CA1416.severity = none

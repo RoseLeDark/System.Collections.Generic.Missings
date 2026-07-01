@@ -4,8 +4,59 @@
 - Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
 - Add Locking System 
 - OpenCL Kerneal Call with my  SystemEx.Device System
+---
+## [0.10.15] 30.06.2026
 
-## [0.10.70] 29.06.206
+### Added
+- Added **long‑based iterator navigation**:
+  - `NodeIterrator<T>.Advance(long offset)`
+  - `NodeIterrator<T>.AdvanceRest` (long)
+  - `NodeIterrator<T>(Node<T> current, long index)`
+- Added **long‑based node navigation**:
+  - `Node<T>.GetAt(long index, out long r)`
+  - `Node<T>.At(long index)`
+  - `Node<T>.Offset(long offset)`
+  - `Node<T>.SetAt(long index, T value)`
+- Added **Distance(bool ToEnd)** overload for directional chain length measurement
+
+### Changed
+- Replaced old `m_pChilds` Prev/Next sentinel‑model with **nullable Prev/Next** via:
+  - `FixedArray<Node<T>?> m_pNodex`
+  - `Prev` / `Next` now nullable
+  - `HasPrev` / `HasNext` now check for `null`
+- Updated chain navigation:
+  - `Root()` and `Last()` rewritten to use nullable Prev/Next
+- Updated removal logic:
+  - New `Remove()` implementation with explicit handling of:
+    - isolated node  
+    - head node  
+    - tail node  
+    - middle node  
+  - Optional isolation under `#if TRACE`
+- Updated splice logic:
+  - `Splice(ref first, ref last)` now detaches current node and reinserts `[first..last]`
+  - `this.Prev = null` and `this.Next = null` after splice
+- Updated insertion logic:
+  - `InsertLast(Node<T>)` rewritten to use nullable Prev/Next
+- Updated traversal routines:
+  - `TraversPreorder` / `TraversPostorder` now traverse:
+    - `m_pNodex[PREV]`
+    - `m_pNodex[NEXT]`
+    - all siblings via `foreach`
+
+### Deprecated
+- Marked `InsertRagen(ref Node<T>, ref Node<T>)` as obsolete  
+  → replaced by `InsertRange(ref Node<T>, ref Node<T>)`
+
+### Fixed
+- Correct remainder handling in `GetAt(long index, out long r)`
+- Correct Prev/Next rewiring in `Remove()` for all four structural cases
+- Correct traversal behavior in `TraversListForward` / `TraversListBackward`
+- Correct iterator equality and hash code behavior
+
+---
+
+## [0.10.12] 29.06.206
 
 ### Very Important
 - **Renamed `RamKernel` → `NativeRAMKernel<TDelegate>`**  

@@ -8,8 +8,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.10.12</AssemblyVersion>
-    <FileVersion>0.10.12</FileVersion>
+    <AssemblyVersion>0.10.15</AssemblyVersion>
+    <FileVersion>0.10.15</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>A foundational low‑level extension to .NET’s collection ecosystem.
 This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIterator, IBidirectionalIterator, IRandomAccessIterator), traversal utilities, generic algorithms (Distance, Find, LowerBound, UpperBound, Reverse, Rotate, ForEach), and deterministic byte‑level data structures. Includes advanced map types, MultiMap, Pair/Tuple structures, fixed‑size arrays and buffers, and a modular cache/RAID architecture. Designed for high‑performance, engine‑oriented, allocation‑controlled applications where .NET’s built‑in collections are insufficient.</Description>
@@ -17,12 +17,12 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.10.12</Version>
+    <Version>0.10.15</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
     <PackageId>RoseLeDark.Collections.Missings</PackageId>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <Product>RoseLeDark.Collections.Missings</Product>
@@ -32,77 +32,54 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.10.70] 29.06.206
-
-### Very Important
-- **Renamed `RamKernel` → `NativeRAMKernel&lt;TDelegate&gt;`**  
-  New unified kernel base class replacing the old RAM‑only implementation.  
-  See example: `Examples/ExampleRamKernelAdd.cs`.
-
-- **Removed all legacy platform kernel loaders**  
-  (`WindowsKernelLoader`, `LinuxKernelLoader`, `MacKernelLoader`, `NoSupportKernelLoader`)  
-  Replaced by new module‑centric loader architecture.
+    <PackageReleaseNotes>## [0.10.15] 30.06.2026
 
 ### Added
-- Introduced full native module system under `SystemEx.Runtime`:
-  - `Module` (DLL/SO/DYLIB abstraction with handle + function lookup)
-  - `NativeHost` (module cache, unload, delegate binding)
+- Added **long‑based iterator navigation**:
+  - `NodeIterrator&lt;T&gt;.Advance(long offset)`
+  - `NodeIterrator&lt;T&gt;.AdvanceRest` (long)
+  - `NodeIterrator&lt;T&gt;(Node&lt;T&gt; current, long index)`
+- Added **long‑based node navigation**:
+  - `Node&lt;T&gt;.GetAt(long index, out long r)`
+  - `Node&lt;T&gt;.At(long index)`
+  - `Node&lt;T&gt;.Offset(long offset)`
+  - `Node&lt;T&gt;.SetAt(long index, T value)`
+- Added **Distance(bool ToEnd)** overload for directional chain length measurement
 
-- Add platform loader backends under `SystemEx.Runtime.InteropServices.Platform`:
-  - `WindowsProcLoader`
-  - `LinuxProcLoader`
-  - `MacProcLoader`
-  - `NoSupportProcLoader` (simulated backend)
-
-- Add new kernel base class `NativeRAMKernel&lt;TDelegate&gt;`:
-  - Backend‑neutral kernel lifecycle (`Create`, `BeginRun`, `Run`, `EndRun`)
-  - Automatic buffer lock/unlock
-  - Delegate‑based native function invocation
-  - Backend hooks (`OnCreate`, `OnBegin`, `OnRun`, `OnEnd`, `OnAddBuffer`)
-
-- Add example kernel:  
-  - `ExampleRamKernelAdd` demonstrating the new API.
-- Add `Bernsteinhash` and `MurmurHash`, murmur with Little and Big Endian Support 
-- Update `Examples\ExampleHasher.cs` 
-- Add to Iterator:
-    - IRandomAccessIterator&lt;T&gt; Advance&lt;T&gt; ( IRandomAccessIterator&lt;T&gt; first, int n )
-    - IRandomAccessIterator&lt;T&gt; Next&lt;T&gt; ( IRandomAccessIterator&lt;T&gt; it, int n )
-    - IRandomAccessIterator&lt;T&gt; Prev&lt;T&gt; ( IRandomAccessIterator&lt;T&gt; it, int n )
-    - IForwardIterator&lt;T&gt; Next&lt;T&gt; ( IForwardIterator&lt;T&gt; first, int n ) 
-    - IForwardIterator&lt;T&gt; Advance&lt;T&gt; ( IForwardIterator&lt;T&gt; first, int n )
-    - public static bool Empty&lt;T&gt;(IIterator&lt;T&gt; first, IIterator&lt;T&gt; last) (Last and end is the same
-    
 ### Changed
-- Replaced unmanaged call pipeline:
-  - Old: `KernelLoader.call(...)`
-  - New: delegate binding via `Marshal.GetDelegateForFunctionPointer&lt;T&gt;()`
+- Replaced old `m_pChilds` Prev/Next sentinel‑model with **nullable Prev/Next** via:
+  - `FixedArray&lt;Node&lt;T&gt;?&gt; m_pNodex`
+  - `Prev` / `Next` now nullable
+  - `HasPrev` / `HasNext` now check for `null`
+- Updated chain navigation:
+  - `Root()` and `Last()` rewritten to use nullable Prev/Next
+- Updated removal logic:
+  - New `Remove()` implementation with explicit handling of:
+    - isolated node  
+    - head node  
+    - tail node  
+    - middle node  
+  - Optional isolation under `#if TRACE`
+- Updated splice logic:
+  - `Splice(ref first, ref last)` now detaches current node and reinserts `[first..last]`
+  - `this.Prev = null` and `this.Next = null` after splice
+- Updated insertion logic:
+  - `InsertLast(Node&lt;T&gt;)` rewritten to use nullable Prev/Next
+- Updated traversal routines:
+  - `TraversPreorder` / `TraversPostorder` now traverse:
+    - `m_pNodex[PREV]`
+    - `m_pNodex[NEXT]`
+    - all siblings via `foreach`
 
-- Updated RAM backend to use unified module + loader system.
+### Deprecated
+- Marked `InsertRagen(ref Node&lt;T&gt;, ref Node&lt;T&gt;)` as obsolete  
+  → replaced by `InsertRange(ref Node&lt;T&gt;, ref Node&lt;T&gt;)`
 
-- Updated namespaces:
-  - `SystemEx.Device.Intertropt` → `SystemEx.Device.Interop`
-  - New runtime loaders under `SystemEx.Runtime.InteropServices.Platform`
-
-- Updated buffer lifecycle to match new kernel execution model.
-
-### Improved
-- Unified module loading across Windows/Linux/macOS.
-- Clear separation between:
-  - module loading
-  - function resolution
-  - kernel lifecycle
-  - buffer lifecycle
-- More consistent behavior with future GPU backends.
-- Cleaner example code and documentation.
-
-### Removed
-- `RamKernel`
-- All `KernelLoader` platform variants
-- Old Begin/Run/End RAM kernel implementation
-- Old unmanaged call logic
-
-### Notes
-- This update contains **breaking changes**. All code using `RamKernel` or `KernelLoader` must migrate to `NativeRAMKernel&lt;TDelegate&gt;`.
+### Fixed
+- Correct remainder handling in `GetAt(long index, out long r)`
+- Correct Prev/Next rewiring in `Remove()` for all four structural cases
+- Correct traversal behavior in `TraversListForward` / `TraversListBackward`
+- Correct iterator equality and hash code behavior
 </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
@@ -111,8 +88,7 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
     <Configurations>Debug;Release</Configurations>
     <OutputType>Library</OutputType>
     <ApplicationIcon>Logo_256.ico</ApplicationIcon>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -139,6 +115,9 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
   <ItemGroup>
 	  <None Include="Examples\*.cs" Pack="true" PackagePath="Examples" />
 	</ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Collections\Generic\BasicRope.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="CHANGELOG.md">
@@ -171,6 +150,10 @@ This library introduces STL‑inspired iterator interfaces (ITerator, IForwardIt
 
   <ItemGroup>
     <Content Include="Logo_256.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Collections\Generic\BasicRope.cs" />
   </ItemGroup>
 
 </Project>

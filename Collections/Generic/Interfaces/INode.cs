@@ -23,7 +23,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// <summary>
     /// Defines the basic contract for a node in a multi‑linked structure,
     /// such as a tree, graph, or intrusive node network.
-    /// Provides access to the stored value and metadata about child and sibling counts.
+    /// Provides access to the stored value and metadata about child counts.
     /// </summary>
     /// <typeparam name="T">The type of value stored in the node.</typeparam>
     public interface INode<T> {
@@ -39,11 +39,6 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         int? NChilds { get; }
 
-        /// <summary>
-        /// Gets the number of sibling nodes associated with this node.
-        /// Returns <c>null</c> if the implementation does not support sibling tracking.
-        /// </summary>
-        int? NSiblings { get; }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

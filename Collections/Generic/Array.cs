@@ -71,12 +71,12 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="offset">The number of positions to move forward.</param>
         /// <returns>A new iterator positioned at the computed index.</returns>
-        public IRandomAccessIterator<T> Advance(int offset) {
+        public IRandomAccessIterator<T> Advance( long offset ) {
             var newpos = offset + m_ipos;
             if ( newpos > m_values.Length )
                 newpos = m_values.Length;
 
-            return new ArrayRandomAccessIterator<T>(m_values, newpos);
+            return new ArrayRandomAccessIterator<T>(m_values, (int)newpos);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Moves the iterator N step forward
         /// </summary>
-        public void Forward ( int i ) {
+        public void Forward ( long i ) {
             var n = i;
             while ( n > 0 ) {
                 --n;
@@ -263,18 +263,27 @@ namespace SystemEx.Collections.Generic {
                 set => m_elements[adress] = value;
          }
 
-        public Array( int growSize = 16 ) {
-            m_elements = new T[1];
-            m_index = 0;
-            GrowSize = growSize;
+        public Array( int size = 2 ) {
+            m_elements = new T[size];
+            m_index = size;
+            GrowSize = 16;
+            AutoGrow = true;
         }
         /// <summary>
         /// Creates a new array with the specified initial size.
         /// </summary>
-        public Array(int size, int growSize = 16) {
-            m_elements = Array.Empty<T>();
+        public Array(int size, int growSize) {
+            m_elements = new T[size];
             m_index = 0;
-            GrowSize = growSize;
+
+
+            if ( (growSize > 0) ) {
+                AutoGrow = true;
+                GrowSize = growSize;
+            } else {
+                AutoGrow = false;
+                GrowSize = 16;
+            }
         }
 
         /// <summary>
@@ -283,16 +292,30 @@ namespace SystemEx.Collections.Generic {
         public Array(T[] e, int growSize = 16) {
             m_elements = e;
             m_index = 0;
-            GrowSize = growSize;
+
+            if ( (growSize > 0) ) {
+                AutoGrow = true;
+                GrowSize = growSize;
+            } else {
+                AutoGrow = false;
+                GrowSize = 16;
+            }
         }
 
         /// <summary>
         /// Creates a new array from an enumerable collection.
         /// </summary>
         public Array(IEnumerable<T> e, int growSize = 16) {
-            GrowSize = growSize;
             m_elements = e.ToArray();
             m_index = m_elements.Length - 1;
+
+            if ( (growSize > 0) ) {
+                AutoGrow = true;
+                GrowSize = growSize;
+            } else {
+                AutoGrow = false;
+                GrowSize = 16;
+            }
         }
 
         /// <summary>

@@ -17,6 +17,7 @@
 
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
+using System.Xml.Linq;
 using SystemEx.Collections.Generic.Interfaces;
 
 
@@ -55,9 +56,9 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         private Node<T> m_pCurrent;
         /// <summary>
-        /// Gets the remaining offset after an <see cref="Advance(int)"/> operation.
+        /// Gets the remaining offset after an <see cref="Advance(long)"/> operation.
         /// </summary>
-        public int AdvanceRest { get; private set; }
+        public long AdvanceRest { get; private set; }
         /// <summary>
         /// Gets or sets the value of the current node.
         /// </summary>
@@ -71,6 +72,7 @@ namespace SystemEx.Collections.Generic {
         /// Indicates whether the iterator is positioned at the beginning of the chain.
         /// </summary>
         public bool IsBegin => !m_pCurrent.HasPrev;
+
         /// <summary>
         /// Creates a clone of this iterator referencing the same logical position.
         /// </summary>
@@ -81,13 +83,14 @@ namespace SystemEx.Collections.Generic {
         /// Moves the iterator one step forward.
         /// </summary>
         public void Forward() {
-            m_pCurrent = m_pCurrent.Next;
+            if ( IsEnd ) return;
+            m_pCurrent = m_pCurrent.Next!;
         }
 
         /// <summary>
         /// Moves the iterator N step forward
         /// </summary>
-        public void Forward ( int i ) {
+        public void Forward ( long i ) {
             var n = i;
             while ( n > 0 ) {
                 --n;
@@ -98,7 +101,7 @@ namespace SystemEx.Collections.Generic {
         /// Moves the iterator one step backward.
         /// </summary>
         public void Back() {
-            m_pCurrent = m_pCurrent.Prev;
+            m_pCurrent = m_pCurrent.Prev!;
         }
         /// <summary>
         /// The type of objects to enumerate.
@@ -133,8 +136,8 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="offset">Positive or negative offset.</param>
         /// <returns>The iterator itself.</returns>
-        public IRandomAccessIterator<T> Advance(int offset) {
-            int r = 0;
+        public IRandomAccessIterator<T> Advance( long offset ) {
+            long r = 0;
             m_pCurrent = m_pCurrent.GetAt(offset, out r);
             AdvanceRest = r;
 
@@ -149,8 +152,8 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Creates a new iterator starting at the specified node plus an index offset.
         /// </summary>
-        public NodeIterrator(Node<T> current, int index) {
-            int u = 0;
+        public NodeIterrator(Node<T> current, long index ) {
+            long u = 0;
             var x = current.Clone();
             m_pCurrent = x.GetAt(index, out u);
         }
@@ -183,59 +186,74 @@ namespace SystemEx.Collections.Generic {
 
     }
     /// <summary>
-    /// Represents a doubly linked node with optional child and sibling arrays.
+    /// Represents a doubly linked node with optional child and sibling.
     /// Supports list-style navigation (Prev/Next), tree-style traversal,
     /// splicing, swapping, reversing, and random access movement.
     /// </summary>
     /// <typeparam name="T">The value stored in the node.</typeparam>
-    public class Node<T> : INode<T> {
+    public class Node<T> : INode<T> , IEnumerable<T> {
         const int NEXT = 1;
         const int PREV = 0;
-        /// <summary>
-        /// Minimum size for child and sibling arrays.
-        /// </summary>
-        public  const byte MINSIZE = 2;
 
-        internal  Array<Node<T>> m_pChilds;
-        internal  Array<Node<T>> m_pSiblings;
+        internal  FixedArray<Node<T>?> m_pNodex;
+
         internal  T? m_value;
+
+
+
+        public T? this[ulong index] {
+            get {
+#pragma warning disable CA2201 // Keine reservierten Ausnahmetypen auslösen
+                if ( Distance(true) >= index) return GetAt((long)index).Value;
+                else throw new IndexOutOfRangeException();
+#pragma warning restore CA2201 // Keine reservierten Ausnahmetypen auslösen
+            }
+            set {
+                if ( Distance(true) >= index && value != null) 
+                    SetAt((long)index, value!);
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of child nodes associated with this node.
+        /// Returns <c>null</c> if the implementation does not support child tracking.
+        /// </summary>
+        public virtual int? NChilds => m_pNodex.Count;
+
+        /// <summary>
+        /// Gets the number of child nodes associated with this node.
+        /// </summary>
+        public virtual ulong Lenght => (ulong)m_pNodex.Count;
         /// <summary>
         /// Gets or sets the next node in the linked chain.
         /// </summary>
-        public Node<T> Next {  get => m_pChilds[NEXT];  set => m_pChilds[NEXT] = value; }
+        public Node<T>? Next {  get => m_pNodex[NEXT];  set => m_pNodex[NEXT] = value; }
 
         /// <summary>
         /// Gets or sets the previous node in the linked chain.
         /// </summary>
-        public Node<T> Prev {  get => m_pChilds[PREV];  set => m_pChilds[PREV] = value; }
+        public Node<T>? Prev {  get => m_pNodex[PREV];  set => m_pNodex[PREV] = value; }
         /// <summary>
         /// Gets or sets the value stored in this node.
         /// </summary>
         public T? Value { get => m_value; set => m_value = value; }
 
         /// <summary>
-        /// Number of child entries (may include Prev/Next slots).
-        /// </summary>
-        public int? NChilds => m_pChilds == null ? 0 : m_pChilds.Size;
-
-        /// <summary>
-        /// Number of sibling entries.
-        /// </summary>
-        public int? NSiblings => m_pSiblings == null ? 0 : m_pSiblings.Size;
-        /// <summary>
         /// Indicates whether this node has a next neighbor.
         /// </summary>
-        public bool HasNext => m_pChilds[NEXT] != this;
+        public bool HasNext => m_pNodex[NEXT] != null;
 
         /// <summary>
         /// Indicates whether this node has a previous neighbor.
         /// </summary>
-        public bool HasPrev => m_pChilds[PREV] != this;
+        public bool HasPrev => m_pNodex[PREV] != null;
 
         /// <summary>
-        /// Combined size of child and sibling arrays.
+        /// Combined size of child and sibling arrays. Erstnal 4
         /// </summary>
-        public int? NodeSize => NChilds + NSiblings;
+        public int? NodeSize => NChilds;
+
+        
 
         /// <summary>
         /// Iterator positioned at the first node in the chain.
@@ -250,12 +268,12 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Iterator positioned at the node offset from the last node.
         /// </summary>
-        public NodeIterrator<T> At(int index) => new NodeIterrator<T>(Last(), index);
+        public NodeIterrator<T> At( long index ) => new NodeIterrator<T>(Last(), index);
 
         /// <summary>
         /// Iterator positioned at this node plus an offset.
         /// </summary>
-        public NodeIterrator<T> Offset(int offset) => new NodeIterrator<T>(this, offset);
+        public NodeIterrator<T> Offset(long offset) => new NodeIterrator<T>(this, offset);
         /// <summary>
         /// Reverse Iterator positioned at the last node in the chain.
         /// </summary>
@@ -264,17 +282,20 @@ namespace SystemEx.Collections.Generic {
         /// Reverse Iterator positioned at the first node in the chain.
         /// </summary>
         public NodeIterrator<T> ReversEnd => First;
-
+        /// <summary>
+        /// Get N. Child 
+        /// </summary>
+        public Node<T>? GetChild(int i) { return m_pNodex[i]; }
         /// <summary>
         /// Create a default node
         /// </summary>
-        protected Node() {
+        public Node () {
             m_value = default(T);
 
-            m_pChilds = new Array<Node<T>>(MINSIZE);
-            m_pSiblings = new Array<Node<T>>(MINSIZE);
-
-            m_pChilds[PREV] = m_pChilds[NEXT] = this;
+            m_pNodex = new FixedArray<Node<T>?>(2);
+           
+            m_pNodex[PREV] = null;
+            m_pNodex[NEXT] = null;
         }
         /// <summary>
         /// Creates a node with default child/sibling arrays.
@@ -282,46 +303,39 @@ namespace SystemEx.Collections.Generic {
         public Node(T val ) {
             Value = val;
             
-            m_pChilds = new Array<Node<T>>(MINSIZE);
-            m_pSiblings = new Array<Node<T>>(MINSIZE);
+            m_pNodex = new FixedArray<Node<T>?>(2);
 
-            m_pChilds[PREV] = m_pChilds[NEXT] = this;
-        }
-        /// <summary>
-        /// Creates a node with specified child/sibling array sizes.
-        /// </summary>
-        public Node(int nChilds, int nSiblings, T iValue) {
-            m_pChilds = new Array<Node<T>>(nChilds);
-            m_pSiblings = new Array<Node<T>>(nSiblings);
-            Value = iValue;
-
-            m_pChilds[PREV] = m_pChilds[NEXT] = this;
-        }
-        /// <summary>
-        /// Creates a node using existing child/sibling arrays.
-        /// </summary>
-        public Node(T val, Array<Node<T>> pChilds, Array<Node<T>> pSiblings) {
-            Value = val;
-            m_pChilds = pChilds;
-            m_pSiblings = pSiblings;
+            m_pNodex[PREV] = null;
+            m_pNodex[NEXT] = null;
         }
         /// <summary>
         /// Copy constructor (shallow copy of arrays).
         /// </summary>
         public Node(Node<T> node) {
             Value = node.Value;
-            m_pChilds = node.m_pChilds;
-            m_pSiblings = node.m_pSiblings;
+            m_pNodex = node.m_pNodex;
+        }
+        /// <summary>
+        /// Protected Node ctor see StarNode
+        /// </summary>
+        /// <param name="nChilds"></param>
+        protected Node(int nChilds) {
+            m_value = default(T);
+
+            m_pNodex = new FixedArray<Node<T>?>(nChilds);
+
+            m_pNodex[PREV] = null;
+            m_pNodex[NEXT] = null;
         }
         /// <summary>
         /// Returns the first node in the linked chain.
         /// </summary>
         public Node<T> Root() {
             Node<T> temp =  this;
-
+            
             while(temp.HasPrev) {
 
-                temp = temp.Prev;
+                temp = temp.Prev!;
             } ;
 
             return temp;
@@ -334,7 +348,7 @@ namespace SystemEx.Collections.Generic {
 
             while ( temp.HasNext ) {
 
-                temp = temp.Next;
+                temp = temp.Next!;
             } ;
 
             return temp;
@@ -342,18 +356,18 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Moves forward or backward by the specified index.
         /// </summary>
-        public Node<T> GetAt(int index, out int r) {
+        public Node<T> GetAt( long index, out long r) {
             Node<T> temp = this;
-            int n = index;
+            long n = index;
 
             if ( n > 0 ) {
-                while ( n != 0 && temp.HasNext ) {
-                    temp = temp.Next;
+                while ( n != 0 && temp!.HasNext ) {
+                    temp = temp.Next!;
                     n--;
                 }
             } else if ( n < 0 ) {
-                while ( n != 0 && temp.HasPrev ) {
-                    temp = temp.Prev;
+                while ( n != 0 && temp!.HasPrev ) {
+                    temp = temp.Prev!;
                     n++;
                 }
             }
@@ -361,87 +375,237 @@ namespace SystemEx.Collections.Generic {
             r = n;
             return temp;
         }
-        /// <summary>
-        /// Inserts this node before the specified node.
-        /// </summary>
-        public Node<T> Insert(Node<T> pNext) {
-            // detach this if already linked
-            if ( HasNext || HasPrev )
-                remove();
 
-            // now insert
-            m_pChilds[NEXT] = pNext;
-            m_pChilds[PREV] = pNext.Prev;
-            pNext.Prev.m_pChilds[NEXT] = this;
-            pNext.m_pChilds[PREV] = this;
+        /// <summary>
+        /// Moves forward or backward by the specified index.
+        /// </summary>
+        public Node<T> GetAt ( long n) {
+            Node<T> temp = this;
+
+            if ( n > 0 ) {
+                while ( n != 0 && temp!.HasNext ) {
+                    temp = temp.Next!;
+                }
+            } else if ( n < 0 ) {
+                while ( n != 0 && temp!.HasPrev ) {
+                    temp = temp.Prev!;
+                }
+            }
+
+            return temp;
+        }
+
+        /// <summary>
+        /// Sets the value of the node located <paramref name="index"/> steps away from
+        /// this node in the linked chain. Unlike iterator-based access, this method
+        /// operates directly on the underlying node structure without cloning, ensuring
+        /// that the modification affects the actual chain.
+        /// </summary>
+        /// <param name="index">
+        /// The relative position from this node. Positive values move forward (Next),
+        /// negative values move backward (Prev).
+        /// </param>
+        /// <param name="value">
+        /// The new value to assign to the target node.
+        /// </param>
+        /// <returns>
+        /// The node whose value was updated.
+        /// </returns>
+        public Node<T> SetAt ( long index, T value ) {
+            long rest;
+            Node<T> node = this.GetAt(index, out rest);
+            node.Value = value;
+            return node;
+        }
+        /// <summary>
+        /// Find value 
+        /// </summary>
+        public Node<T>? Find ( T value ) {
+            if ( this.Value!.Equals(value)) return this;
+            Node<T> temp = this;
+            Node<T>? ret = null;
+
+            while (  temp!.HasNext ) {
+                T? valu = temp.Value;
+                if ( valu == null ) continue;
+
+                if(valu.Equals(value)) {
+                    ret = temp;
+                    break;
+                }
+                temp = temp.Next!;
+            }
+
+            if( ret == null) {
+                temp = this;
+
+                while ( temp!.HasPrev ) {
+                    T? valu = temp.Value;
+                    if ( valu == null ) continue;
+
+                    if ( valu.Equals(value) ) {
+                        ret = temp;
+                        break;
+                    }
+                    temp = temp.Prev!;
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Add node to end , insert on pNext
+        /// </summary>
+        public Node<T> InsertLast(Node<T> pNext) {
+
+            if ( m_pNodex[NEXT] == null ) {
+                pNext.Prev = this;
+                this.Next = pNext;
+                
+            } else {
+                Node<T>? _pt = Last();
+
+                pNext.Prev = _pt;
+                _pt.Next = pNext;
+            }
 
             return this;
         }
+     
+    
+
         /// <summary>
         /// Removes this node from the linked chain.
         /// </summary>
-        public void remove() {
-            m_pChilds[NEXT].m_pChilds[PREV] = m_pChilds[PREV];
-            m_pChilds[PREV].m_pChilds[NEXT] = m_pChilds[NEXT];
+        public void Remove () {
+            Node<T>? prev = m_pNodex[PREV];
+            Node<T>? next = m_pNodex[NEXT];
+
+            // Fall 1: Node ist isoliert
+            if ( prev == null && next == null ) {
+                // nichts zu verbinden
+            }
+            // Fall 2: Node ist am Anfang
+            else if ( prev == null ) {
+                next!.m_pNodex[PREV] = null;
+            }
+            // Fall 3: Node ist am Ende
+            else if (  next == null ) {
+                prev!.m_pNodex[NEXT] = null;
+            }
+            // Fall 4: Node ist mittendrin
+            else {
+                prev!.m_pNodex[NEXT] = next;
+                next!.m_pNodex[PREV] = prev;
+            }
 
 #if TRACE
             // optional: isolieren
-            m_pChilds[NEXT] = this;
-            m_pChilds[PREV] = this;
+            m_pNodex[PREV] = null;
+            m_pNodex[NEXT] = null;
 #endif
         }
+
+
+
         /// <summary>
         /// Splices a range of nodes before this node.
         /// </summary>
-        public void Splice(ref Node<T> first, ref Node<T> last) {
-            last.m_pChilds[PREV].m_pChilds[NEXT] = this;
-            first.m_pChilds[PREV].m_pChilds[NEXT] = last;
-            this.m_pChilds[PREV].m_pChilds[NEXT] = first;
+        public void Splice ( ref Node<T> first, ref Node<T> last ) {
+            // 1. Hole die alten Nachbarn
+            Node<T>? before = this.Prev;
+            Node<T>? after  = this.Next;
 
-            Node<T> pTemp = this.m_pChilds[PREV];
-            this.m_pChilds[PREV] = last.m_pChilds[PREV];
-            last.m_pChilds[PREV] = first.m_pChilds[PREV];
-            first.m_pChilds[PREV] = pTemp;
+            // 2. Entferne 'this' aus seiner Position
+            if ( before != null )
+                before.Next = after;
+            if ( after != null )
+                after.Prev = before;
+
+            // 3. Füge [first..last] an die Stelle ein, wo 'this' war
+
+            // Verbinde vor dem Block
+            if ( before != null )
+                before.Next = first;
+            first.Prev = before;
+
+            // Verbinde nach dem Block
+            if ( after != null )
+                after.Prev = last;
+            last.Next = after;
+
+            // 4. 'this' ist jetzt isoliert
+            this.Prev = null;
+            this.Next = null;
         }
+
+
 
         /// <summary>
         /// Reverses the linked chain starting at this node.
         /// </summary>
-        public void Reverse() {
-            Node<T>  pNode = this;
+        public Node<T> Reverse () {
+            Node<T>? current = this;
+            Node<T>? newHead = null;
 
-            do {
-                if ( pNode != null ) {
-                    Node<T> pTemp = pNode.m_pChilds[NEXT];
-                    pNode.m_pChilds[NEXT] = pNode.m_pChilds[PREV];
-                    pNode.m_pChilds[PREV] = pTemp;
-                    pNode = pNode.m_pChilds[PREV];
-                }
-            } while ( pNode != this );
+            while ( current != null ) {
+                // Swap Prev and Next
+                Node<T>? temp = current.m_pNodex[NEXT];
+                current.m_pNodex[NEXT] = current.m_pNodex[PREV];
+                current.m_pNodex[PREV] = temp;
+
+                newHead = current;
+
+                current = current.m_pNodex[PREV];
+            }
+
+            return newHead!;
         }
+
+
+
+        /// \deprecated Use InsertRange(ref Node<T> pFirst, ref Node<T> pFinal).
+        /// This method will be removed in the next build.
         /// <summary>
         /// Inserts a range of nodes before this node.
         /// </summary>
-        public void InsertRagen(ref Node<T> pFirst, ref Node<T> pFinal) {
-            m_pChilds[PREV].m_pChilds[NEXT] = pFirst; pFirst.m_pChilds[PREV] = m_pChilds[PREV];
-            m_pChilds[PREV] = pFinal; pFinal.m_pChilds[NEXT] = this;
+        /// \deprecated Use <see cref="InsertRange(ref Node{T}, ref Node{T})"/> instead.
+        /// This method will be removed in the next build.
+        [Obsolete("Use InsertRange(ref Node<T> pFirst, ref Node<T> pFinal) instead. This method will be removed in the next major release.")]
+        public void InsertRagen ( ref Node<T> pFirst, ref Node<T> pFinal )
+            => InsertRange(ref pFirst, ref  pFinal);
+
+        /// <summary>
+        /// Inserts a range of nodes before this node.
+        /// </summary>
+        public void InsertRange ( ref Node<T> pFirst, ref Node<T> pFinal) {
+
+            Node<T>? prev = m_pNodex[PREV];
+
+            if ( prev != null ) {
+                prev.m_pNodex[NEXT] = pFirst;
+                pFirst.m_pNodex[PREV] = prev;
+            }
+
+            m_pNodex[PREV] = pFinal;
+            pFinal.m_pNodex[NEXT] = this;
         }
         /// <summary>
         /// Swaps this node with another node, preserving neighbor links.
         /// </summary>
-        public void Swap(ref Node<T> other) {
+        public void Swap ( ref Node<T> other ) {
             if ( this == other )
                 return;
 
             // Backup A
-            var aPrev = this.Prev;
-            var aNext = this.Next;
-            var aValue = this.Value;
+            Node<T>? aPrev = this.Prev;
+            Node<T>? aNext = this.Next;
+            T? aValue = this.Value;
 
             // Backup B
-            var bPrev = other.Prev;
-            var bNext = other.Next;
-            var bValue = other.Value;
+            Node<T>? bPrev = other.Prev;
+            Node<T>? bNext = other.Next;
+            T? bValue = other.Value;
 
             // Copy B into A
             this.Prev = bPrev;
@@ -453,26 +617,46 @@ namespace SystemEx.Collections.Generic {
             other.Next = aNext;
             other.Value = aValue;
 
-            // Fix neighbors of A
-            this.Prev.Next = this;
-            this.Next.Prev = this;
+            // Fix neighbors of A (null‑sicher)
+            if ( this.Prev != null )
+                this.Prev.Next = this;
 
-            // Fix neighbors of B
-            other.Prev.Next = other;
-            other.Next.Prev = other;
+            if ( this.Next != null )
+                this.Next.Prev = this;
+
+            // Fix neighbors of B (null‑sicher)
+            if ( other.Prev != null )
+                other.Prev.Next = other;
+
+            if ( other.Next != null )
+                other.Next.Prev = other;
         }
 
-        /// <summary>
-        /// Returns the number of steps to the beginning of the chain.
-        /// </summary>
-        public ulong Distance() {
-            ulong _temp = 0;
-            while(HasPrev) {
-                _temp++;
 
+        /// <summary>
+        /// Returns the number of steps to the beginning or ending of the chain.
+        /// <param name="ToEnd"/>if <c>true</c> then returns the number of steps to the ending of the chain </param>
+        /// </summary>
+        public ulong Distance(bool ToEnd = false) {
+            ulong _temp = 0;
+            Node<T> _node = this;
+
+            if ( ToEnd ) {
+                while ( _node.HasNext ) {
+                    _node = _node.Next!;
+                    _temp++;
+                }
+            } else {
+                while ( HasPrev ) {
+                    _temp++;
+                    _node = _node.Prev!;
+                }
             }
             return _temp;
         }
+
+        
+
         /// <summary>
         /// Performs a traversal using the specified order.
         /// </summary>
@@ -491,13 +675,17 @@ namespace SystemEx.Collections.Generic {
                 break;
 
             case TraversOrder.Inorder:
-                break;
+            TraversInorder(this, action);
+            break;
 
             case TraversOrder.Postorder:
                 TraversPostorder(this, action);
                 break;
             }
         }
+
+        
+
         /// <summary>
         /// Creates a shallow clone of this node.
         /// </summary>
@@ -527,10 +715,28 @@ namespace SystemEx.Collections.Generic {
         public NodeChain<T> AsChain() {
             return new NodeChain<T>().Add(First, End);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public System.Collections.IEnumerator GetEnumerator () {
+            return GetEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator () {
+            Node<T> root = Root();
+
+            do {
+                yield return root.Value!;
+
+                if ( root.HasNext ) root = root.Next!;
+                else break;
+            } while ( root != null );
+        }
 
         private void TraversListForward(Action<Node<T>> action) {
             var temp = this;
-            while ( temp.HasNext ) {
+            while ( temp!.HasNext ) {
                 action(temp);
                 temp = temp.Next;
             }
@@ -539,39 +745,44 @@ namespace SystemEx.Collections.Generic {
 
         private void TraversListBackward(Action<Node<T>> action) {
             var temp = this;
-            while ( temp.HasPrev ) {
+            while ( temp!.HasPrev ) {
                 action(temp);
                 temp = temp.Prev;
             }
             action(temp); // erstes Element
         }
-        private static void TraversPreorder(Node<T> node, Action<Node<T>> action) {
+        private static void TraversPreorder(Node<T>? node, Action<Node<T>> action) {
             if ( node == null ) return;
 
             action(node);
 
             // Childs
-            for ( int i = 2; i < node.m_pChilds.Size; i++ )
-                TraversPreorder(node.m_pChilds[i], action);
+            TraversPreorder(node.m_pNodex[PREV], action);
+            TraversPreorder(node.m_pNodex[NEXT], action);
 
-            // Siblings
-            for ( int i = 0; i < node.m_pSiblings.Size; i++ )
-                TraversPreorder(node.m_pSiblings[i], action);
         }
-        private static void TraversPostorder(Node<T> node, Action<Node<T>> action) {
+        private static void TraversPostorder(Node<T>? node, Action<Node<T>> action) {
             if ( node == null ) return;
 
-            for ( int i = 2; i < node.m_pChilds.Size; i++ )
-                TraversPostorder(node.m_pChilds[i], action);
+            // Childs
+            TraversPostorder(node.m_pNodex[PREV], action);
+            TraversPostorder(node.m_pNodex[NEXT], action);
 
-            for ( int i = 0; i < node.m_pSiblings.Size; i++ )
-                TraversPostorder(node.m_pSiblings[i], action);
-
+           
             action(node);
         }
+        private void TraversInorder ( Node<T> node, Action<Node<T>> action ) {
+            if ( node == null ) return;
 
-        
-        
+            // Childs
+            TraversPostorder(node.m_pNodex[PREV], action);
+            action(node);
+            TraversPostorder(node.m_pNodex[NEXT], action);
+
+          
+        }
+   
+
     }
 
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

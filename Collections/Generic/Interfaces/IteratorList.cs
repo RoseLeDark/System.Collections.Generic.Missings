@@ -75,7 +75,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <summary>
         /// Moves the iterator N step forward
         /// </summary>
-        public void Forward ( int i ) {
+        public void Forward ( long i ) {
             var n = i;
             while ( n > 0 ) {
                 --n;
@@ -94,7 +94,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         /// <param name="offset">The number of positions to move.</param>
         /// <returns>The same iterator instance after movement.</returns>
-        public IRandomAccessIterator<T> Advance(int offset) { m_index += offset; return this; }
+        public IRandomAccessIterator<T> Advance( long offset ) { m_index += (int)offset; return this; }
 
         /// <summary>
         /// Determines whether this iterator is equal to another iterator.

@@ -32,7 +32,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// Moves the iterator N step forward.
         /// </summary>
         /// <param name="i">N</param>
-        void Forward (int i);
+        void Forward ( long i );
     }
 
     /// <summary>
@@ -105,12 +105,12 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         /// <param name="offset">The number of positions to move forward.</param>
         /// <returns>A new iterator positioned at the computed index.</returns>
-        IRandomAccessIterator<T> Advance(int offset);
+        IRandomAccessIterator<T> Advance( long offset );
 
         /// <summary>
         /// Gets the element at the current iterator position.
         /// </summary>
-        T Current { get; }
+        T? Current { get; }
 
         /// <summary>
         /// Indicates whether the iterator has reached the end of the sequence.
@@ -189,7 +189,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// it returns a new iterator positioned <c>n</c> steps ahead, while the
         /// original iterator remains unchanged.
         /// </summary>
-        public static IForwardIterator<T> Advance<T> ( IForwardIterator<T> first, int n ) {
+        public static IForwardIterator<T> Advance<T> ( IForwardIterator<T> first, long n ) {
             IForwardIterator<T> it = (IForwardIterator<T>)first.Clone();
 
             while ( n > 0 ) {
@@ -212,7 +212,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// it returns a new iterator positioned <c>n</c> steps ahead, while the
         /// original iterator remains unchanged.
         /// </summary>
-        public static IForwardIterator<T> Next<T> ( IForwardIterator<T> first, int n ) => Advance<T>(first, n);
+        public static IForwardIterator<T> Next<T> ( IForwardIterator<T> first, long n ) => Advance<T>(first, n);
 
         /// <summary>
         /// Advances a random‑access iterator by <paramref name="n"/> steps using
@@ -229,7 +229,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <c>Advance</c> returns a new iterator at <c>first + n</c>, leaving
         /// <c>first</c> untouched.
         /// </summary>
-        public static IRandomAccessIterator<T> Advance<T> ( IRandomAccessIterator<T> first, int n ) {
+        public static IRandomAccessIterator<T> Advance<T> ( IRandomAccessIterator<T> first, long n ) {
             IRandomAccessIterator<T> it = (IRandomAccessIterator<T>)first.Clone();
 
             while ( n > 0 ) {
@@ -245,10 +245,10 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <summary>
         /// Returns a new iterator advanced by <paramref name="n"/> steps from <paramref name="itt"/>.
         /// 
-        /// This is an STL‑style helper that delegates to <see cref="Advance{T}(IRandomAccessIterator{T}, int)"/>.
+        /// This is an STL‑style helper that delegates to <see cref="Advance{T}(IRandomAccessIterator{T}, long)"/>.
         /// The original iterator remains unchanged; the returned iterator represents <c>first + n</c>.
         /// </summary>
-        public static IRandomAccessIterator<T> Next<T> ( IRandomAccessIterator<T> itt, int n )
+        public static IRandomAccessIterator<T> Next<T> ( IRandomAccessIterator<T> itt, long n )
             => Advance<T>(itt, n);
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <paramref name="itt"/>.
         /// 
         /// This is the STL‑style equivalent of <c>std::prev</c>.  
-        /// Internally delegates to <see cref="Advance{T}(IRandomAccessIterator{T}, int)"/>
+        /// Internally delegates to <see cref="Advance{T}(IRandomAccessIterator{T}, long)"/>
         /// with a negative offset.  
         /// 
         /// Because <c>Advance</c> supports both forward and backward stepping,
@@ -264,7 +264,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// 
         /// The original iterator remains unchanged.
         /// </summary>
-        public static IRandomAccessIterator<T> Prev<T> ( IRandomAccessIterator<T> itt, int n )
+        public static IRandomAccessIterator<T> Prev<T> ( IRandomAccessIterator<T> itt, long n )
             => Advance<T>(itt, -n);
 
         /// <summary>

@@ -8,10 +8,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("KSchattenfeld")]
 [assembly: AssemblyProduct("System.Collections.Generic.Missings")]
 
-// Versionen
-[assembly: AssemblyVersion("0.9.*")]
-[assembly: AssemblyFileVersion("0.9.0")]
-[assembly: AssemblyInformationalVersion("0.9.0")]
 
 // Rechtliches
 [assembly: AssemblyCopyright(
@@ -40,5 +36,3 @@ using System.Runtime.CompilerServices;
 [assembly: System.Reflection.AssemblyMetadata("IsTrimmable", "True")]
 [assembly: System.Reflection.AssemblyMetadata("IsAotCompatible", "True")]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/RoseLeDark/System.Collections.Generic.Missings.git")]
-[assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
-[assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
