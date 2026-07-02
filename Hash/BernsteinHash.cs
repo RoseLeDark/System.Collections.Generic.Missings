@@ -1,4 +1,21 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
+using System;
 using SystemEx.Collections.Generic;
 using System.Text;
 
@@ -22,6 +39,8 @@ namespace SystemEx.Hash {
     /// where M is a constant chosen for diffusion.
     /// </summary>
     public class BernsteinHash : IHash {
+        private const uint Default = 5381; // DJB2‑Seed
+        private const ulong Default64 = 53811835;
         /// <summary>
         /// Computes a simple 32‑bit hash from the given byte sequence.
         ///
@@ -35,13 +54,13 @@ namespace SystemEx.Hash {
             if ( input == null || input.Count == 0 )
                 return new Hash32(0);
 
-            uint hash = seed;
+            uint hash = seed == 0 ? Default : seed;
 
             // Simple deterministic byte loop
             for ( int i = 0 ; i < input.Count ; i++ ) {
-                hash = (hash * 31) ^ input[i];
+                hash = (hash * 33) + input[i];
             }
-
+            hash ^= (hash >> 16);
             return new Hash32(hash);
         }
 
@@ -59,13 +78,13 @@ namespace SystemEx.Hash {
             if ( input == null || input.Count == 0 )
                 return new Hash64(0);
 
-            ulong hash = seed;
+            ulong hash = seed == 0 ? Default64 : seed;
 
             // Larger multiplier for 64‑bit
             for ( int i = 0 ; i < input.Count ; i++ ) {
-                hash = (hash * 1315423911L) ^ input[i];
+                hash = (hash * 1315423911L) + input[i];
             }
-
+            hash ^= (hash >> 32);
             return new Hash64(hash);
         }
     }

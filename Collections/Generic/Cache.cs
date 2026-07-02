@@ -16,6 +16,7 @@
  */
 
 using System.Collections;
+using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
@@ -647,6 +648,35 @@ namespace SystemEx.Collections.Generic{
             if ( m_isLocked ) throw new CacheIsSharedException();
             return m_rawBuffer;
         }
+
+        /// <summary>
+        /// Creates a FlexSpan view over the valid portion of this array.
+        /// The span does not copy data; it directly references the internal buffer.
+        /// </summary>
+        /// <param name="mode">
+        /// The indexing mode of the span (System, Reverse, Ring).
+        /// </param>
+        /// <returns>
+        /// A FlexSpan that views the range [0 .. Ende).
+        /// </returns>
+        public  FlexSpan<byte> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
+            => m_rawBuffer.AsFlexSpan(mode);
+
+
+        /// <summary>
+        /// Creates a FlexSpan view starting at the specified offset.
+        /// The span references the internal buffer directly and does not allocate.
+        /// </summary>
+        public virtual FlexSpan<byte> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System )
+            => m_rawBuffer.AsFlexSpan(start, mode);
+
+        /// <summary>
+        /// Creates a FlexSpan view starting at the specified offset.
+        /// The span references the internal buffer directly and does not allocate.
+        /// </summary>
+        public FlexSpan<byte> AsFlexSpan ( long start, long endi, FlexSpanMode mode = FlexSpanMode.System )
+            => m_rawBuffer.AsFlexSpan(start, endi, mode);
+
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
         /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

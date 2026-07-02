@@ -1,4 +1,4 @@
 <Solution>
   <Project Path="../SystemEx.BlockChain/SystemEx.BlockChain.csproj" Id="8b721988-f958-43e8-bec7-becef02e1d6f" />
-  <Project Path="SystemEX.csproj" />
+  <Project Path="RoseLeDark.Collections.Missings.csproj" />
 </Solution>

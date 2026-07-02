@@ -1,0 +1,179 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>RoseLeDark.Collections.Missings</AssemblyName>
+    <Title>RoseLeDark.Collections.Missings</Title>
+    <Company>Amber-Sophia Schröck</Company>
+    <PackageIcon>SystemEx.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyVersion>0.12.24</AssemblyVersion>
+    <FileVersion>0.12.24</FileVersion>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <Description>RoseLeDark.Collections.Missings — Updated Description
+A lightweight extension library providing additional generic collection types and utility structures missing in .NET.
+Includes Array&lt;T&gt;, FixedArray&lt;T&gt;, SortedArray&lt;T&gt;, Map&lt;TKey,TValue&gt;, SortedMap&lt;TKey,TValue&gt;, MultiMap&lt;TKey,TValue&gt;, Deque&lt;T&gt;, RingBuffer&lt;T&gt;, and tuple‑like helpers such as Pair&lt;T1,T2&gt; and Triple&lt;T1,T2,T3&gt;.
+
+Provides extended numeric and color types including ColorRGB8, ColorRGB10, ColorRGB16, ColorHDR, ColorXYZ, and a unified Colors utility module.
+Adds lightweight hash implementations for non‑cryptographic scenarios, supporting deterministic hashing for engine‑oriented data structures.
+
+Designed as a minimal, allocation‑controlled complement to .NET’s built‑in collections, focusing on predictable behavior, simple APIs, and practical data structures commonly found in other ecosystems.</Description>
+    <PackageTags>collections;generic;map;multimap;cache;buffer;datastructures;lowlevel;cache;pair;nodes;multimap;tuple;triple</PackageTags>
+    <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
+    <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>0.12.24</Version>
+    <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Amber-Sophia Schröck</Authors>
+    <PackageId>RoseLeDark.Collections.Missings</PackageId>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>RoseLeDark.Collections.Missings.snk</AssemblyOriginatorKeyFile>
+    <Product>RoseLeDark.Collections.Missings</Product>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <RootNamespace>SystemEx</RootNamespace>
+    <PackageReleaseNotes>
+## [0.12.24] – 2026‑07‑01
+
+### Added
+`System.FlexSpan&lt;T&gt;` — a unified view type for array‑based memory.**  
+FlexSpan implements three indexing modes:  
+- `SystemSpan` (forward indexing)  
+- `ReverseSpan` (reverse indexing)  
+- `RingSpan` (circular indexing)
+
+FlexSpan operates directly on **raw `T[]` buffers** without allocation and provides ref‑return access to elements.  
+It is now integrated across all **SystemEx.Collections** types that use array‑backed storage (Stack, Array, FixedArray, Cache, StrippedCache).  
+
+Map‑based collections are not yet supported because they use `List&lt;T&gt;` internally.  
+A dedicated **FlexListSpan** type will be added later to enable FlexSpan‑style views over list‑backed containers.
+
+
+Wenn du willst, kann ich dir auch eine **längere Version** für Dokumentation oder eine **ultra‑kurze Version** für Git‑Commit‑Messages erstellen.
+
+- Introduced the new node system under `SystemEx.Model`, intended to replace the legacy node types in `SystemEx.Collections.Generic`.
+  
+
+- Added new sorting algorithms under `SystemEx.Utils.Algorithm`:
+  - `QuickSort` – Hoare‑partition, tail‑recursion‑eliminated variant.  
+  - `HeapSort` – Deterministic down‑heap implementation.  
+  - `InsertionSort` – Optimized for small spans and rope chunks.  
+  - `IsSorted` – Predicate‑based sortedness check.
+  - `GrøstlHash` - Implements the Grøstl-256 and Grøstl-512 hashing functions. This class provides a
+    fully self-contained, allocation-free, deterministic hash engine based
+    on the original Grøstl specification (SHA-3 finalist).
+
+- Added new tree structures under `SystemEx.Model.Tree`:
+  - `RBTree` – Intrusive red‑black tree with rotation and validation hooks.  
+  - `RBTreeNode` – Node type supporting color, parent, and directional links.  
+  - `RBTreeIterator` – Deterministic iterator for intrusive tree traversal.
+  - `GenericNode` – Base node type acting solely as a value holder.  
+  - `GroupedNode` – Non‑intrusive grouped node storing a value and an expandable collection of associated `GenericNode&lt;T&gt;` instances.  
+  - `LinkedNode` – Intrusive doubly‑linked node with forward and backward links.  
+  - `LinkedNodeSlice` – Represents a slice over intrusive node structures.  
+  - `LinkedNodeWithSibling` – Doubly‑linked node supporting sibling relationships.  
+  - `LinkedNodeRange` – Iterator‑based range over intrusive node structures.  
+  - `Node` – Intrusive singly‑linked node storing a value and a single forward link.
+
+- Added new random number generators under `SystemEx.Utils.Random`:
+  - `RandX` – Fast non‑cryptographic generator family.  
+  - `ISAAC` – Full ISAAC implementation with 256‑entry state and golden‑ratio seeding.  
+  - `RandUtils` – Unified API for endian‑aware random generation.
+
+- Added new hash suite under `SystemEx.Utils.Hash`:  
+  - `FNV1aHash` Classic fast hash; excellent for small keys and general‑purpose hashing.
+  - `WeinbergHash` Lightweight integer hash with good avalanche behavior for map/set keys.
+  - `RamakrishnaHash` Simple multiplicative hash; ideal for embedded or deterministic systems. 
+  - `BernsteinHash` Known as DJB2; stable, predictable, widely used in string hashing. 
+  - `AdlerHash`  Fast checksum‑style hash; useful for quick integrity checks.
+  - `FlatscherHash` High‑diffusion integer hash; suited for randomized indexing and table scattering.
+### Planned
+- Poly1305 – lightweight, high‑security MAC/hash based on simple arithmetic operations; easy to implement without external dependencies.
+- HighwayHash – fast keyed hash with strong avalanche behavior; ideal for secure map/set hashing and low‑collision key generation.
+- BLAKE2s – modern cryptographic hash with high performance and simpler structure than BLAKE3; suitable for general crypto hashing without external libraries.
+
+### Fixed
+- Corrected an issue in the array constructor.</PackageReleaseNotes>
+    <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Platforms>AnyCPU</Platforms>
+    <Configurations>Debug;Release</Configurations>
+    <OutputType>Library</OutputType>
+    <ApplicationIcon>Logo_256.ico</ApplicationIcon>
+    <TargetFramework>net10.0</TargetFramework>
+    <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <WarningsAsErrors>;NU1605</WarningsAsErrors>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsAotCompatible>True</IsAotCompatible>
+    <Deterministic>False</Deterministic>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <WarningsAsErrors>;NU1605</WarningsAsErrors>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Collections\Generic\Missings\**" />
+    <EmbeddedResource Remove="Collections\Generic\Missings\**" />
+    <None Remove="Collections\Generic\Missings\**" />
+  </ItemGroup>
+  <ItemGroup>
+	  <None Include="Examples\*.cs" Pack="true" PackagePath="Examples" />
+	</ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Collections\Generic\BasicRope.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CHANGELOG.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="Examples\ExampleHasher.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\ExampleRamKernelAdd.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="SystemEx.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+	<None Update="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Logo_256.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Collections\Generic\BasicRope.cs" />
+  </ItemGroup>
+
+</Project>

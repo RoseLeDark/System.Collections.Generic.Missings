@@ -103,7 +103,7 @@ namespace SystemEx.Collections.Generic {
     /// The priority type, must implement <see cref="INumber{TU}"/> to allow
     /// arithmetic and comparison operations.
     /// </typeparam>
-    public class PriorityQueueEx<T, TU>
+    public class PriorityQueueEx<T, TU> where T : notnull
         where TU : INumber<TU> {
         /// <summary>
         /// Internal sorted map storing all (value, priority) pairs.

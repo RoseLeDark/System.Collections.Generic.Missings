@@ -17,6 +17,7 @@
 
 using System.Text;
 using SystemEx.Collections.Generic;
+using SystemEx.Random;
 
 namespace SystemEx {
     /// <summary>
@@ -42,8 +43,11 @@ namespace SystemEx {
         /// <summary>
         /// Internal pseudo‑random generator used for all random operations.
         /// </summary>
-        static readonly Random r = new Random((int)DateTime.Now.ToBinary());
-
+#if !TEST
+        static readonly Randx r = new Randx(1,2,3);
+#else
+        static readonly System.Random r = new System.Random((int)DateTime.Now.ToBinary());
+#endif
         #region Char
         /// <summary>
         /// Default character set for simple passwords (letters, digits, symbols).
@@ -411,7 +415,11 @@ namespace SystemEx {
             byte[] buffer = new byte[size];
 
             for ( int i = 0; i < size; i++ ) {
+#if !TEST
+                buffer[i] = (byte)r.Next(min, (uint)max + 1);
+#else
                 buffer[i] = (byte)r.Next(min, max + 1);
+#endif
             }
 
             return buffer;

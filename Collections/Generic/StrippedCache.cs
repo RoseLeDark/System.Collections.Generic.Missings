@@ -14,6 +14,7 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -41,11 +42,53 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Additional cache segments beyond the base segment.
         /// </summary>
-        private readonly ICache[] m_caches;
+        private readonly Cache[] m_caches;
         /// <summary>
         /// Gets the total length of the cache in bytes.
         /// </summary>
         public override ulong Length => LongLength;
+
+        /// <summary>
+        /// Creates a <see cref="FlexSpan{T}"/> view into the stripped cache at the
+        /// specified global offset. The stripped cache is composed of multiple
+        /// fixed-size cache segments arranged sequentially. This method resolves
+        /// the global position into the correct segment and returns a span view
+        /// over that segment's internal buffer.
+        /// 
+        /// The returned span does not allocate and directly references the
+        /// underlying segment storage.
+        /// </summary>
+        /// <param name="start">
+        /// Global byte offset within the combined stripped-cache space.
+        /// Must be within the range <c>[0, LongLength)</c>.
+        /// </param>
+        /// <param name="mode">
+        /// Indexing mode used by the returned <see cref="FlexSpan{T}"/>.
+        /// Supports System, Reverse, and Ring indexing.
+        /// </param>
+        /// <returns>
+        /// A <see cref="FlexSpan{T}"/> referencing the correct cache segment
+        /// at the resolved local offset.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when <paramref name="start"/> is outside the valid range.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public override FlexSpan<byte> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System ) {
+            if ( start < 0 || start >= (long)LongLength )
+                throw new ArgumentOutOfRangeException(nameof(start));
+
+            long segmentIndex = start / (long)base.LongLength;
+            long localOffset  = start % (long)base.LongLength;
+
+            if ( segmentIndex == 0 ) {
+                // Base cache
+                return base.AsFlexSpan(localOffset, mode);
+            } else {
+                // Other segments
+                return m_caches[segmentIndex - 1].AsFlexSpan(localOffset, mode);
+            }
+        }
 
         /// <summary>
         /// Creates a new segmented cache with the specified number of segments
@@ -53,9 +96,9 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="cacheCount">The total number of segments.</param>
         /// <param name="cacheSize">The size of each segment in bytes.</param>
-        public StrippedCache(int cacheCount, int cacheSize) : base(cacheSize, CacheType.Both) {
+        public StrippedCache (int cacheCount, int cacheSize) : base(cacheSize, CacheType.Both) {
 
-            m_caches = new ICache[cacheCount-1];
+            m_caches = new Cache[cacheCount-1];
             for ( int i = 0; i < cacheCount-1; i++ )
                 m_caches[i] = new Cache(cacheSize, CacheType.Both);
 

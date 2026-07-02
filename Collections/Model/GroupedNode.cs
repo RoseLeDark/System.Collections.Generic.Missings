@@ -31,22 +31,48 @@ namespace SystemEx.Collections.Model {
     public class GroupedNode<T> : GenericNode<T> {
         private Array<GenericNode<T>> m_grouped;
 
-        public ArrayRandomAccessIterator<GenericNode<T>> GroupBegin() => m_grouped.First;
-        public ArrayRandomAccessIterator<GenericNode<T>> GroupEnd()   => m_grouped.End;
+        /// <summary>
+        /// Returns an iterator positioned at the first grouped node.
+        /// </summary>
+        /// <remarks>
+        /// This provides STL‑style access to the grouped collection without exposing
+        /// the underlying array implementation.
+        /// </remarks>
+        public ArrayRandomAccessIterator<GenericNode<T>> GroupBegin () => m_grouped.First;
 
+        /// <summary>
+        /// Returns an iterator positioned one past the last grouped node.
+        /// </summary>
+        /// <remarks>
+        /// Suitable for range‑based algorithms and STL‑style iteration.
+        /// </remarks>
+        public ArrayRandomAccessIterator<GenericNode<T>> GroupEnd () => m_grouped.End;
+
+        /// <summary>
+        /// Returns an iterator positioned at the specified index within the group.
+        /// </summary>
+        /// <param name="index">Zero‑based index of the grouped node.</param>
         public ArrayRandomAccessIterator<GenericNode<T>> GroupAt ( int index ) => m_grouped.At(index);
 
         /// <summary>
-        /// Gets the total capacity of the array.
+        /// Gets the total capacity of the grouped node array.
         /// </summary>
         public int Size => m_grouped.Size;
+
         /// <summary>
-        /// Gets the first element of the array.
+        /// Gets the first grouped node.
         /// </summary>
+        /// <remarks>
+        /// Throws if the group is empty.
+        /// </remarks>
         public GenericNode<T> Front => m_grouped.Front;
+
         /// <summary>
-        /// Gets the last element of the array.
+        /// Gets the last grouped node.
         /// </summary>
+        /// <remarks>
+        /// Throws if the group is empty.
+        /// </remarks>
         public GenericNode<T> Back => m_grouped.Back;
 
         /// <summary>
@@ -83,4 +109,5 @@ namespace SystemEx.Collections.Model {
             m_grouped.Add(node);
         }
     }
+
 }

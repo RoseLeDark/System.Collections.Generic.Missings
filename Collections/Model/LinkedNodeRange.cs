@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 
-;
 
 namespace SystemEx.Collections.Model {
     /// \addtogroup collections
     /// @{
     /// <summary>
     /// Represents a simple range defined by a begin and end iterator over
-    /// intrusive <see cref="Node{T}"/> structures.  
+    /// intrusive <see cref="LinkedNode{T}"/> structures.  
     /// Conceptually similar to <c>std::ranges::subrange</c>, but designed
     /// specifically for your intrusive node and iterator system.
     /// </summary>

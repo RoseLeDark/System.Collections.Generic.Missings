@@ -17,6 +17,7 @@
 using System.Numerics;
 using SystemEx;
 using SystemEx.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SystemEx.Utils {
     /// <summary>
@@ -255,5 +256,124 @@ namespace SystemEx.Utils {
 
             return a.Length < b.Length;
         }
+        /// <summary>
+        /// Simple Quik Sort
+        /// </summary>
+        public static void QuickSort<T> ( T[] items, CompFunc<T> cmp ) {
+            if ( items.Length <= 1 ) return;
+
+            int low = 0;
+            int high = items.Length - 1;
+
+            while ( true ) {
+                int i = low;
+                int j = high;
+                T pivot = items[(low + high) >> 1];
+
+                do {
+                    while ( cmp(items[i], pivot) == CompareResult.AIsSmallerB ) i++;
+                    while ( cmp(pivot, items[j]) == CompareResult.AIsSmallerB ) j--;
+
+                    if ( i <= j ) {
+                        Algorithm.Swap(ref items[i], ref items[j]);
+                        i++;
+                        j--;
+                    }
+                } while ( i <= j );
+
+                if ( low < j ) {
+                    QuickSortRange(items, low, j, cmp);
+                }
+
+                if ( i < high ) {
+                    low = i;
+                } else break;
+            }
+        }
+
+        private static void QuickSortRange<T> ( T[] items, int low, int high, CompFunc<T> cmp ) {
+            int i = low;
+            int j = high;
+            T pivot = items[(low + high) >> 1];
+
+            while ( true ) {
+                while ( cmp(items[i], pivot) == CompareResult.AIsSmallerB ) i++;
+                while ( cmp(pivot, items[j]) == CompareResult.AIsSmallerB ) j--;
+
+                if ( i <= j ) {
+                    Algorithm.Swap(ref items[i], ref items[j]);
+                    i++;
+                    j--;
+                }
+
+                if ( i > j ) break;
+            }
+
+            if ( low < j ) QuickSortRange(items, low, j, cmp);
+            if ( i < high ) QuickSortRange(items, i, high, cmp);
+        }
+        /// <summary>
+        /// Simple Heap sort
+        /// </summary>
+        public static void HeapSort<T> ( T[] items, CompFunc<T> cmp ) {
+            int n = items.Length;
+
+            for ( int k = n / 2 ; k > 0 ; k-- )
+                DownHeap(items, k, n, cmp);
+
+            while ( n > 1 ) {
+                Algorithm.Swap(ref items[0], ref items[n - 1]);
+                n--;
+                DownHeap(items, 1, n, cmp);
+            }
+        }
+
+        private static void DownHeap<T> ( T[] items, int k, int n, CompFunc<T> cmp ) {
+            T temp = items[k - 1];
+
+            while ( k <= n / 2 ) {
+                int child = 2 * k;
+
+                if ( child < n && cmp(items[child - 1], items[child]) == CompareResult.AIsSmallerB )
+                    child++;
+
+                if ( cmp(temp, items[child - 1]) == CompareResult.AIsSmallerB ) {
+                    items[k - 1] = items[child - 1];
+                    k = child;
+                } else break;
+            }
+
+            items[k - 1] = temp;
+        }
+
+        /// <summary>
+        /// Simple InsertionSort
+        /// </summary>
+        public static void InsertionSort<T> ( T[] items, CompFunc<T> cmp ) {
+            for ( int i = 0 ; i < items.Length ; i++ ) {
+                T t = items[i];
+                int j = i;
+
+                while ( j > 0 && cmp(t, items[j - 1]) == CompareResult.AIsSmallerB ) {
+                    items[j] = items[j - 1];
+                    j--;
+                }
+
+                items[j] = t;
+            }
+        }
+        /// <summary>
+        /// Is Sorted
+        /// </summary>
+        /// <returns>true when items are sorted</returns>
+        public static bool IsSorted<T> ( T[] items, CompFunc<T> cmp ) {
+            for ( int i = 1 ; i < items.Length ; i++ ) {
+                if ( cmp(items[i], items[i - 1]) == CompareResult.AIsSmallerB )
+                    return false;
+            }
+            return true;
+        }
+
+
     }
 }

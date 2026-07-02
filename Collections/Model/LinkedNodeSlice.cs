@@ -21,7 +21,7 @@ namespace SystemEx.Collections.Model {
     /// \addtogroup Node
     /// @{
     /// <summary>
-    /// Represents a slice over intrusive <see cref="Node{T}"/> structures,
+    /// Represents a slice over intrusive <see cref="LinkedNode{T}"/> structures,
     /// defined by a starting iterator and a fixed length.  
     /// Conceptually similar to <c>Span&lt;T&gt;</c>, but operating on your
     /// intrusive node/iterator system instead of contiguous memory.

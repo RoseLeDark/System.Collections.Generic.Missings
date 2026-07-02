@@ -18,6 +18,7 @@
 using System.Collections;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -178,6 +179,7 @@ namespace SystemEx.Collections.Generic {
     /// indexed access, insertion, removal, traversal, and basic search operations.
     /// </summary>
     /// <typeparam name="T">The element type stored in the array.</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710")]
     public class Array<T> : IEnumerable<T>, IDynamicArray<T>, ICollection<T> {
 #pragma warning disable CA1051
         /// <summary>
@@ -225,6 +227,7 @@ namespace SystemEx.Collections.Generic {
             return new ArrayRandomAccessIterator<T>(this.ToArray(), index);
         }
 
+
         /// <summary>
         /// Indicates whether the array is full.
         /// </summary>
@@ -254,6 +257,97 @@ namespace SystemEx.Collections.Generic {
         /// 
         /// </summary>
         public bool IsReadOnly => false;
+
+        /// <summary>
+        /// Creates a FlexSpan view over the valid portion of this array.
+        /// The span does not copy data; it directly references the internal buffer.
+        /// </summary>
+        /// <param name="mode">
+        /// The indexing mode of the span (System, Reverse, Ring).
+        /// </param>
+        /// <returns>
+        /// A FlexSpan that views the range [0 .. m_index).
+        /// </returns>
+        public FlexSpan<T> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
+            => new FlexSpan<T>(ref m_elements!, 0, m_index, mode);
+
+
+        /// <summary>
+        /// Creates a FlexSpan view starting at the specified offset.
+        /// The span references the internal buffer directly and does not allocate.
+        /// </summary>
+        /// <param name="start">
+        /// The starting index inside the internal array.
+        /// </param>
+        /// <param name="mode">
+        /// The indexing mode of the span (System, Reverse, Ring).
+        /// </param>
+        /// <returns>
+        /// A FlexSpan that views the range [start .. m_index).
+        /// </returns>
+        public FlexSpan<T> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System )
+            => new FlexSpan<T>(ref m_elements!, start, m_index, mode);
+
+        /// <summary>
+        /// Creates a FlexSpan view starting at the specified offset.
+        /// The span references the internal buffer directly and does not allocate.
+        /// </summary>
+        /// <param name="start">
+        /// The starting index inside the internal array.
+        /// </param>
+        /// <param name="end">
+        /// The end index inside the internal array.
+        /// </param>
+        /// <param name="mode">
+        /// The indexing mode of the span (System, Reverse, Ring).
+        /// </param>
+        /// <returns>
+        /// A FlexSpan that views the range [start .. end).
+        /// </returns>
+        public FlexSpan<T> AsFlexSpan ( long start, long end, FlexSpanMode mode = FlexSpanMode.System )
+            => new FlexSpan<T>(ref m_elements!, start, end, mode);
+
+        /// <summary>
+        /// Creates a logical segment (sub-array) over the internal buffer.
+        /// The segment shares the same underlying array and does not copy data.
+        /// 
+        /// This is *not* a slicing List-like structure: it behaves as a memory segment
+        /// with its own logical length but without shifting or relocating elements.
+        /// </summary>
+        /// <param name="start">
+        /// The starting index of the segment.
+        /// </param>
+        /// <param name="length">
+        /// The number of elements included in the segment.
+        /// </param>
+        /// <returns>
+        /// A new Array<T> instance that views the range [start .. start+length).
+        /// AutoGrow is disabled to prevent structural changes to the shared buffer.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when start or length are negative, or when the segment exceeds
+        /// the bounds of the internal array.
+        /// </exception>
+        public Array<T> AsSegment ( long start, long length ) {
+            if ( start < 0 || length < 0 )
+                throw new ArgumentOutOfRangeException();
+
+            // Ensure the segment lies fully inside the internal buffer
+            ArgumentOutOfRangeException.ThrowIfLessThan((start + length), m_elements.Length);
+
+            // Create a new Array<T> that shares the same buffer
+            var seg = new Array<T>(m_elements, growSize: 0)
+            {
+                // A segment must not grow, otherwise it would corrupt the shared buffer
+                AutoGrow = false
+            };
+
+            // Logical end of the segment
+            seg.m_index = (int)(start + length);
+
+            return seg;
+        }
+
 
         /// <summary>
         /// Provides indexed access to the array elements.
@@ -438,10 +532,7 @@ namespace SystemEx.Collections.Generic {
                 if ( !Resize(newSize) ) return -1;
             }
 
-            // Platz schaffen: Block nach rechts schieben
-            for ( int i = m_index - 1; i >= pos; i-- )
-                m_elements[i + count] = m_elements[i];
-
+            
             // Elemente einfügen
             int idx = pos;
             int written = 0;
@@ -622,6 +713,8 @@ namespace SystemEx.Collections.Generic {
         public bool Remove(T item) {
             return false;
         }
+        
+
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

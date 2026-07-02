@@ -1,26 +1,92 @@
 # Changelog
 ## Planned to Version 1.0
 ### Add
-- Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to **`SystemEx.Collections.Generic`**.
+- Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to ``SystemEx.Collections.Generic``.
 - Add Locking System 
 - OpenCL Kerneal Call with my  SystemEx.Device System
+
 ---
+
+## [0.12.04] – 2026‑07‑01
+
+### Added
+`System.FlexSpan<T>` — a unified view type for array‑based memory.**  
+FlexSpan implements three indexing modes:  
+- `SystemSpan` (forward indexing)  
+- `ReverseSpan` (reverse indexing)  
+- `RingSpan` (circular indexing)
+
+FlexSpan operates directly on **raw `T[]` buffers** without allocation and provides ref‑return access to elements.  
+It is now integrated across all **SystemEx.Collections** types that use array‑backed storage (Stack, Array, FixedArray, Cache, StrippedCache).  
+
+Map‑based collections are not yet supported because they use `List<T>` internally.  
+A dedicated **FlexListSpan** type will be added later to enable FlexSpan‑style views over list‑backed containers.
+
+
+Wenn du willst, kann ich dir auch eine **längere Version** für Dokumentation oder eine **ultra‑kurze Version** für Git‑Commit‑Messages erstellen.
+
+- Introduced the new node system under `SystemEx.Model`, intended to replace the legacy node types in `SystemEx.Collections.Generic`.
+  
+
+- Added new sorting algorithms under `SystemEx.Utils.Algorithm`:
+  - `QuickSort` – Hoare‑partition, tail‑recursion‑eliminated variant.  
+  - `HeapSort` – Deterministic down‑heap implementation.  
+  - `InsertionSort` – Optimized for small spans and rope chunks.  
+  - `IsSorted` – Predicate‑based sortedness check.
+  - `GrøstlHash` - Implements the Grøstl-256 and Grøstl-512 hashing functions. This class provides a
+    fully self-contained, allocation-free, deterministic hash engine based
+    on the original Grøstl specification (SHA-3 finalist).
+
+- Added new tree structures under `SystemEx.Model.Tree`:
+  - `RBTree` – Intrusive red‑black tree with rotation and validation hooks.  
+  - `RBTreeNode` – Node type supporting color, parent, and directional links.  
+  - `RBTreeIterator` – Deterministic iterator for intrusive tree traversal.
+  - `GenericNode` – Base node type acting solely as a value holder.  
+  - `GroupedNode` – Non‑intrusive grouped node storing a value and an expandable collection of associated `GenericNode<T>` instances.  
+  - `LinkedNode` – Intrusive doubly‑linked node with forward and backward links.  
+  - `LinkedNodeSlice` – Represents a slice over intrusive node structures.  
+  - `LinkedNodeWithSibling` – Doubly‑linked node supporting sibling relationships.  
+  - `LinkedNodeRange` – Iterator‑based range over intrusive node structures.  
+  - `Node` – Intrusive singly‑linked node storing a value and a single forward link.
+
+- Added new random number generators under `SystemEx.Utils.Random`:
+  - `RandX` – Fast non‑cryptographic generator family.  
+  - `ISAAC` – Full ISAAC implementation with 256‑entry state and golden‑ratio seeding.  
+  - `RandUtils` – Unified API for endian‑aware random generation.
+
+- Added new hash suite under `SystemEx.Utils.Hash`:  
+  - `FNV1aHash` Classic fast hash; excellent for small keys and general‑purpose hashing.
+  - `WeinbergHash` Lightweight integer hash with good avalanche behavior for map/set keys.
+  - `RamakrishnaHash` Simple multiplicative hash; ideal for embedded or deterministic systems. 
+  - `BernsteinHash` Known as DJB2; stable, predictable, widely used in string hashing. 
+  - `AdlerHash`  Fast checksum‑style hash; useful for quick integrity checks.
+  - `FlatscherHash` High‑diffusion integer hash; suited for randomized indexing and table scattering.
+### Planned
+- Poly1305 – lightweight, high‑security MAC/hash based on simple arithmetic operations; easy to implement without external dependencies.
+- HighwayHash – fast keyed hash with strong avalanche behavior; ideal for secure map/set hashing and low‑collision key generation.
+- BLAKE2s – modern cryptographic hash with high performance and simpler structure than BLAKE3; suitable for general crypto hashing without external libraries.
+
+### Fixed
+- Corrected an issue in the array constructor.
+
+---
+
 ## [0.10.15] 30.06.2026
 
 ### Added
-- Added **long‑based iterator navigation**:
+- Added `long‑based iterator navigation`:
   - `NodeIterrator<T>.Advance(long offset)`
   - `NodeIterrator<T>.AdvanceRest` (long)
   - `NodeIterrator<T>(Node<T> current, long index)`
-- Added **long‑based node navigation**:
+- Added `long‑based node navigation`:
   - `Node<T>.GetAt(long index, out long r)`
   - `Node<T>.At(long index)`
   - `Node<T>.Offset(long offset)`
   - `Node<T>.SetAt(long index, T value)`
-- Added **Distance(bool ToEnd)** overload for directional chain length measurement
+- Added `Distance(bool ToEnd)` overload for directional chain length measurement
 
 ### Changed
-- Replaced old `m_pChilds` Prev/Next sentinel‑model with **nullable Prev/Next** via:
+- Replaced old `m_pChilds` Prev/Next sentinel‑model with `nullable Prev/Next` via:
   - `FixedArray<Node<T>?> m_pNodex`
   - `Prev` / `Next` now nullable
   - `HasPrev` / `HasNext` now check for `null`
@@ -59,11 +125,11 @@
 ## [0.10.12] 29.06.206
 
 ### Very Important
-- **Renamed `RamKernel` → `NativeRAMKernel<TDelegate>`**  
+- `Renamed `RamKernel` → `NativeRAMKernel<TDelegate>``  
   New unified kernel base class replacing the old RAM‑only implementation.  
   See example: `Examples/ExampleRamKernelAdd.cs`.
 
-- **Removed all legacy platform kernel loaders**  
+- `Removed all legacy platform kernel loaders`  
   (`WindowsKernelLoader`, `LinuxKernelLoader`, `MacKernelLoader`, `NoSupportKernelLoader`)  
   Replaced by new module‑centric loader architecture.
 
@@ -126,7 +192,7 @@
 - Old unmanaged call logic
 
 ### Notes
-- This update contains **breaking changes**. All code using `RamKernel` or `KernelLoader` must migrate to `NativeRAMKernel<TDelegate>`.
+- This update contains `breaking changes`. All code using `RamKernel` or `KernelLoader` must migrate to `NativeRAMKernel<TDelegate>`.
 
 ---
 
@@ -196,7 +262,7 @@
 
 - Renamed `Utils/Utils.cs` → `Utils/Conversion.cs`
 
-### Improved**
+### Improved`
 - More consistent color conversion pipeline across all color models
 - Unified clamping and normalization behavior in HSV/HSL/CMY models
 - Improved documentation and XML comments across multiple files
@@ -228,13 +294,13 @@
 ## [0.8.5] 04.06.2026
 
 ### Very Important
-- **Major namespace restructuring** to reflect the engine architecture and clarify responsibilities across collections, device memory, and interop layers.
-- This release contains **breaking changes**: update all `using`/imports to the new namespaces.
+- `Major namespace restructuring` to reflect the engine architecture and clarify responsibilities across collections, device memory, and interop layers.
+- This release contains `breaking changes`: update all `using`/imports to the new namespaces.
 
 ### Changed
-  - Moved device memory types (`DeviceBuffer`, `DeviceSharedBuffer<TDeviceSharedBackend>`) to **`SystemEx.Device.Memory`**.
-  - Moved native interop and backend implementations (`UnmanagedObject`, `RamSharedBackend`, `IDeviceSharedBackend`, platform kernel loaders) to **`SystemEx.Device.Interop`**.
-  - Kept kernel and execution interfaces (`IKernel<TBackend>`, `RamKernel`, kernel lifecycle orchestration) under **`SystemEx.Device`**.
+  - Moved device memory types (`DeviceBuffer`, `DeviceSharedBuffer<TDeviceSharedBackend>`) to ``SystemEx.Device.Memory``.
+  - Moved native interop and backend implementations (`UnmanagedObject`, `RamSharedBackend`, `IDeviceSharedBackend`, platform kernel loaders) to ``SystemEx.Device.Interop``.
+  - Kept kernel and execution interfaces (`IKernel<TBackend>`, `RamKernel`, kernel lifecycle orchestration) under ``SystemEx.Device``.
 - Removed legacy `SystemEx.Device.Memory.Missings` layout and deprecated `System.Memory.Missings` placements; types have been relocated to the new namespaces above.
 - Updated internal references and XML docs to reflect new namespace locations.
 
@@ -269,7 +335,7 @@
 - Fixed potential overflow in SeekOrigin.Current and SeekOrigin.End when negative offsets were cast to ulong.
 - Fixed incorrect cast from ulong to long in cache index validation.
 ### Notes / Migration
-- **Breaking change:** update all `using` directives and project references to the new namespaces.  
+- `Breaking change:` update all `using` directives and project references to the new namespaces.  
   Example mappings:
   - `using SystemEx.Device.Memory.Missings;` → `using SystemEx.Device.Memory;`
   - `using SystemEx.Collection.Generic;` (old cache location) → `using SystemEx.Collections.Generic;`

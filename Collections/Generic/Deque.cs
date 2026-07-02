@@ -16,6 +16,7 @@
  */
 
 using System.Collections;
+using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -140,6 +141,21 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public void Clear() {
             m_count = 0;
+        }
+
+        /// <summary>
+        /// Creates a FlexSpan view over the current contents of the deque.
+        /// The span directly references the internal array and does not allocate.
+        ///
+        /// </summary>
+        /// <param name="mode">
+        /// The indexing mode of the span. 
+        /// </param>
+        /// <returns>
+        /// A FlexSpan that views the range [0 .. m_count) of the internal buffer.
+        /// </returns>
+        public FlexSpan<T> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System ) {
+            return new FlexSpan<T>(ref m_elements!, 0, m_count, mode);
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

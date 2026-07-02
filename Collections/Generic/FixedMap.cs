@@ -17,6 +17,7 @@
 
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -91,6 +92,15 @@ namespace SystemEx.Collections.Generic {
         /// Always <c>false</c>; the map supports modification.
         /// </summary>
         public bool IsReadOnly => false;
+
+        /// <summary>
+        /// Creates a FlexSpan view over the valid portion of this FixedMap.
+        /// The span directly references the internal Pair{T, TU}[] buffer and does not allocate.
+        /// </summary>
+        public FlexSpan<Pair<T, TU>> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
+            => new FlexSpan<Pair<T, TU>>(ref m_elements!, 0, m_count, mode);
+
+
 
         /// <summary>
         /// Gets the first element in the map.

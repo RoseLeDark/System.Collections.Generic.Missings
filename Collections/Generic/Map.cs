@@ -16,6 +16,7 @@
 
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -54,6 +55,7 @@ namespace SystemEx.Collections.Generic {
             set => m_elements = value;
         }
 
+   
         /// <summary>
         /// Gets the number of stored elements.
         /// </summary>
