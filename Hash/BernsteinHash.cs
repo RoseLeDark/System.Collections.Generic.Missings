@@ -50,8 +50,12 @@ namespace SystemEx.Hash {
         /// Endian does not affect this algorithm directly; it is included for interface
         /// compatibility with other SystemEx hashers.
         /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness of the input data.</param>
+        /// <returns>The computed Bernstein hash as a Hash32 object.</returns>
         public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
-            if ( input == null || input.Count == 0 )
+            if ( input.Count == 0 )
                 return new Hash32(0);
 
             uint hash = seed == 0 ? Default : seed;
@@ -74,6 +78,10 @@ namespace SystemEx.Hash {
         /// Endian does not affect this algorithm directly; it is included for interface
         /// compatibility with other SystemEx hashers.
         /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness of the input data.</param>
+        /// <returns>The computed Bernstein hash as a Hash64 object.</returns>
         public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
             if ( input == null || input.Count == 0 )
                 return new Hash64(0);

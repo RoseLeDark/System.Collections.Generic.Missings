@@ -18,13 +18,22 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
+    /// <summary>
+    /// Implements the FNV-1a hash algorithm.
+    /// </summary> 
     public sealed class Fnv1aHash : IHash {
         private const ulong Offset64 = 14695981039346656037UL;
         private const ulong Prime64  = 1099511628211UL;
 
         private const uint Prime32 = 16777619u;
         private const uint Offset32 = 2166136261u;
-
+        /// <summary>
+        /// Computes the FNV-1a hash of the given input.
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness of the input data.</param>
+        /// <returns>The computed FNV-1a hash as a Hash32 object.</returns>
         public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
             uint hash = seed == 0 ? Offset32 : seed;
 
@@ -36,7 +45,13 @@ namespace SystemEx.Hash {
             hash ^= (hash >> 16);
             return new Hash32(hash);
         }
-
+        /// <summary>
+        /// Computes the FNV-1a hash of the given input.   
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness of the input data.</param>  
+        /// <returns>The computed FNV-1a hash as a Hash64 object.</returns>
         public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
             ulong hash = seed == 0 ? Offset64 : seed;
 

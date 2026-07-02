@@ -18,7 +18,6 @@ using Microsoft.VisualBasic;
 using System.Reflection;
 using SystemEx.Collections.Generic;
 using SystemEx.IO.Provider;
-using SystemEx.SystemEx.Drawing;
 
 namespace SystemEx {
     /// <summary>

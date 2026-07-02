@@ -18,6 +18,8 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Collections.Model {
+    /// \addtogroup model
+    /// @{
     /// <summary>
     /// Intrusive doubly‑linked node extended with an optional sibling link.
     /// </summary>
@@ -100,4 +102,5 @@ namespace SystemEx.Collections.Model {
             Sibling = other.Sibling;
         }
     }
+    /// @}
 }

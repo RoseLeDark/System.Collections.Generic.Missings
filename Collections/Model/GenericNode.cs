@@ -15,13 +15,15 @@
  * changes and the date.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Model {
+    /// \addtogroup model
+    /// @{
+    /// <summary>
+    /// Represents an iterator for traversing a generic node in the collection.
+    /// </summary>
+    /// <typeparam name="T">The type of the values stored in the node.</typeparam>
     public class GenericNodeIterator<T> : IIterator<T>, IEquatable<GenericNodeIterator<T>> {
         private GenericNode<T> m_pNode;
 
@@ -30,54 +32,111 @@ namespace SystemEx.Collections.Model {
             return new GenericNodeIterator<T>(m_pNode);
         }
 
+        /// <inheritdoc/>
+        public T? Value => m_pNode.Value;
+
+        /// <inheritdoc/>
         public void Forward () {
             return;
         }
-
+        /// <summary>
+        /// Moves the iterator forward by the specified number of positions.
+        /// </summary>
+        /// <param name="i">The number of positions to move forward.</param>
         public void Forward ( long i ) {
             return;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericNodeIterator{T}"/> class with the specified node.
+        /// </summary>
+        /// <param name="node">The generic node to iterate over.</param>
         public GenericNodeIterator(GenericNode<T> node) {
             m_pNode = node;
         }
+
+        /// <summary>
+        /// Compares this iterator with another for equality.
+        /// </summary>
+        /// <param name="other">The other iterator to compare with.</param>
+        /// <returns>true if the iterators are equal, false otherwise.</returns>
         public bool Equals ( GenericNodeIterator<T>? other ) {
             if ( other == null ) return false;
             return m_pNode.Equals(other.m_pNode);
         }
-
-        public override bool Equals ( object obj ) {
+        /// <inheritdoc/>
+        public override bool Equals ( object? obj ) {
             return Equals(obj as GenericNodeIterator<T>);
         }
-
+        /// <inheritdoc/>
         public override int GetHashCode () {
             return m_pNode.GetHashCode();
         }
     }
+
+    /// <summary>
+    /// Represents a generic node in the collection.
+    /// </summary>
+    /// <typeparam name="T">The type of the values stored in the node.</typeparam>
     public class GenericNode<T> : IEquatable<GenericNode<T>> {
         protected T? m_tValue;
 
-        public virtual IIterator Begin() => new GenericNodeIterator<T>(this.Clone());
-        public virtual IIterator End () => new GenericNodeIterator<T>(this.Clone());
-
-        public virtual T? Value { get => m_tValue; set => m_tValue = value; }
-
-        public virtual bool HasValue => m_tValue != null;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericNode{T}"/> class.
+        /// </summary>
         public GenericNode() {
             m_tValue = default(T);
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericNode{T}"/> class with the specified value.
+        /// </summary>
+        /// <param name="value">The value to initialize the node with.</param>
         public GenericNode(T? value) {
             m_tValue = value;
         }
 
+        /// <summary>
+        /// Gets an iterator pointing to the beginning of the collection.
+        /// </summary>
+        /// <returns>An iterator pointing to the beginning of the collection.</returns>
+        public virtual IIterator Begin() => new GenericNodeIterator<T>(this.Clone());
+        /// <summary>
+        /// Gets an iterator pointing to the end of the collection.
+        /// </summary>
+        /// <returns>An iterator pointing to the end of the collection.</returns>
+        public virtual IIterator End () => new GenericNodeIterator<T>(this.Clone());
+
+        /// <summary>
+        /// Gets or sets the value of the node.
+        /// </summary>
+        public virtual T? Value { get => m_tValue; set => m_tValue = value; }
+
+        /// <summary>
+        /// Gets a value indicating whether the node has a value.
+        /// </summary>
+        public virtual bool HasValue => m_tValue != null;
+
+     
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericNode{T}"/> class with the specified generic node.
+        /// </summary>
+        /// <param name="other">The generic node to initialize the node with.</param>
         public GenericNode(GenericNode<T> other) {
             m_tValue = other.Value;
         }
-
+        /// <summary>
+        /// Creates a clone of the node.
+        /// </summary>
+        /// <returns>A clone of the node.</returns>
         protected virtual GenericNode<T> Clone() {
             return new GenericNode<T>(m_tValue);
         }
-
+        /// <summary>
+        /// Compares this node with another for equality.
+        /// </summary>
+        /// <param name="other">The other node to compare with.</param>
+        /// <returns>true if the nodes are equal, false otherwise.</returns>
         public virtual bool Equals ( GenericNode<T>? other ) {
             bool _ret = false;
             if ( other != null ) {
@@ -88,14 +147,15 @@ namespace SystemEx.Collections.Model {
             }
             return _ret;
         }
-
+        /// <inheritdoc/>
         public override bool Equals ( object obj ) {
             return Equals(obj as GenericNode<T>);
         }
-
+        /// <inheritdoc/>
         public override int GetHashCode () {
             if ( m_tValue != null) return m_tValue.GetHashCode();
             return base.GetHashCode();
         }
     }
+    /// @}
 }

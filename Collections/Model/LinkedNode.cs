@@ -21,7 +21,7 @@ using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Model {
 
-    /// \addtogroup node
+    /// \addtogroup model
     /// @{
     /// <summary>
     /// Defines the supported traversal orders for <see cref="Node{T}"/> structures.
@@ -1078,4 +1078,5 @@ namespace SystemEx.Collections.Model {
             return new LinkedNode<T>(this);
         }
     }
+    /// @}
 }

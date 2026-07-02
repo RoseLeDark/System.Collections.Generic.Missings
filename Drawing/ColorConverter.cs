@@ -15,14 +15,10 @@
  * changes and the date.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
-using SystemEx.SystemEx.Drawing;
 
 namespace SystemEx.Drawing {
+    /// \addtogroup color
+    /// @{
     /// <summary>
     /// Provides conversion utilities between different color spaces such as
     /// RGB, Linear RGB, XYZ, HSV, HSL, YUV, CMY and HDR.
@@ -191,7 +187,7 @@ namespace SystemEx.Drawing {
         /// Converts an HWB color to sRGB.
         /// </summary>
         public static ColorR8G8B8 ToColorR8G8B8(this ColorHWB color) {
-            float h = Math.FMod(color.Hue, 360.0f) / 60.0f;
+            float h = Math.FMod(color.H, 360.0f) / 60.0f;
             float w = color.Whiteness / 100.0f;
             float bl = color.Blackness / 100.0f;
 
@@ -308,8 +304,8 @@ namespace SystemEx.Drawing {
         public static ColorNCol ToColorNCol(this  ColorR8G8B8 color) {
             var hwb = color.ToColorHWB();
 
-            byte     hueIndex = (byte) ((hwb.Hue / 60) % 6);
-            byte     huePercent = (byte) (Math.FMod(hwb.Hue, 60) / 60 * 100) ;
+            byte     hueIndex = (byte) ((hwb.H / 60) % 6);
+            byte     huePercent = (byte) (Math.FMod(hwb.H, 60) / 60 * 100) ;
 
             char N = ColorNCol.HUENAME[hueIndex];
 
@@ -351,5 +347,6 @@ namespace SystemEx.Drawing {
             return new ColorHSV(color.Gray, color.Gray, color.Gray);
         }
     }
+    /// @}
 
 }

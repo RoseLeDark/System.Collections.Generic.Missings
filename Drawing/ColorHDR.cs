@@ -1,10 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using SystemEx.Drawing;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 
-namespace SystemEx.SystemEx.Drawing {
+namespace SystemEx.Drawing {
+    /// \addtogroup color
+    /// @{
     /// <summary>
     /// Represents a high‑dynamic‑range color in the HSV color space,
     /// where the value component can exceed the normalized range (0–1)
@@ -211,4 +224,5 @@ namespace SystemEx.SystemEx.Drawing {
             return string.Create(null, stackalloc char[256], $"[{m_hue}, {m_saturation}, {m_value}]");
         }
     }
+    /// @}
 }

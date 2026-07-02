@@ -2,6 +2,10 @@
 
 namespace SystemEx.Device.Intertropt {
 
+
+    /// <summary>
+    /// Represents an unmanaged object that can be pinned in memory.
+    /// </summary>
     public struct UnmanagedObject : IDisposable {
         public GCHandle     Handle { get; internal set; }
         public byte[]       Data { get; internal set; }
@@ -23,13 +27,22 @@ namespace SystemEx.Device.Intertropt {
         }
     }
 
+    /// <summary>
+    ///     
+    /// </summary> 
     public class RamSharedBackend : IDeviceSharedBackend {
         private byte[]? m_Buffer;
 
         internal RamSharedBackend() {
             m_Buffer = null;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="hardwareBuffer"></param>
+        /// <returns></returns>
+        /// <exception cref="IOException"></exception>
         public long ReciveFromHardwareBuffer(out byte[] data, ref object hardwareBuffer) {
             if ( m_Buffer == null  ) throw new IOException(nameof(m_Buffer));
 

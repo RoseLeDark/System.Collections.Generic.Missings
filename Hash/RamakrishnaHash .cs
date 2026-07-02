@@ -18,7 +18,17 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
+    /// <summary>
+    /// Implements the Ramakrishna hash algorithm.
+    /// </summary>
     public sealed class RamakrishnaHash : IHash {
+        /// <summary>
+        /// Computes the Ramakrishna hash of the given input.
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness for the hash computation.</param>
+        /// <returns>The computed Ramakrishna hash as a 32-bit value.</returns>
         public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
             uint hash = seed;
 
@@ -30,6 +40,13 @@ namespace SystemEx.Hash {
             return new Hash32(hash);
         }
 
+        /// <summary>
+        /// Computes the Ramakrishna hash of the given input.
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness for the hash computation.</param>
+        /// <returns>The computed Ramakrishna hash as a 64-bit value.</returns>
         public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
             ulong hash = seed;
 

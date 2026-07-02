@@ -8,8 +8,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.12.24</AssemblyVersion>
-    <FileVersion>0.12.24</FileVersion>
+    <AssemblyVersion>0.50.0</AssemblyVersion>
+    <FileVersion>0.50.0</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>RoseLeDark.Collections.Missings — Updated Description
 A lightweight extension library providing additional generic collection types and utility structures missing in .NET.
@@ -23,7 +23,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.12.24</Version>
+    <Version>0.50.0</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -37,68 +37,47 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>
-## [0.12.24] – 2026‑07‑01
+    <PackageReleaseNotes>## [0.50.00] - 03.07.2026 @Lacking
+### Major Documentation Milestone
+A significant version jump was made intentionally.  
+With this release, the entire public API of SystemEx — including the mathematical canvas
+system, layer model, blend modes, hash engines, and all related interfaces — has been fully
+documented and formalized.
+
+This marks the completion of approximately half of the planned major‑release scope.
+The version number reflects this structural maturity rather than incremental feature changes.
 
 ### Added
-`System.FlexSpan&lt;T&gt;` — a unified view type for array‑based memory.**  
-FlexSpan implements three indexing modes:  
-- `SystemSpan` (forward indexing)  
-- `ReverseSpan` (reverse indexing)  
-- `RingSpan` (circular indexing)
+- Full XML documentation for all canvas interfaces (`ICanvas`, `ISubCanvas`, `ICanvasList`)
+- Complete documentation for all hash engines (Groestl, Adler, etc.)
+- Formalized mathematical layer model and blend mode semantics
+- Unified terminology across the entire SystemEx framework
 
-FlexSpan operates directly on **raw `T[]` buffers** without allocation and provides ref‑return access to elements.  
-It is now integrated across all **SystemEx.Collections** types that use array‑backed storage (Stack, Array, FixedArray, Cache, StrippedCache).  
+### Changed
+- API surface stabilized and prepared for 1.0
+- Internal consistency improvements across all canvas and hash components
 
-Map‑based collections are not yet supported because they use `List&lt;T&gt;` internally.  
-A dedicated **FlexListSpan** type will be added later to enable FlexSpan‑style views over list‑backed containers.
+### Notes
+The jump from `0.12.04` to `0.50.00` is intentional and represents reaching the halfway point
+toward the 1.0 major release.
 
+### Codename Update: Ignoring → Lacking
+The codename for the 0.x development cycle has been updated from **Ignoring** to **Lacking**.
 
-Wenn du willst, kann ich dir auch eine **längere Version** für Dokumentation oder eine **ultra‑kurze Version** für Git‑Commit‑Messages erstellen.
+All SystemEx development codenames follow the theme of “Missing”, reflecting the project’s
+purpose of providing features, structures, and utilities that are missing in the .NET ecosystem.
 
-- Introduced the new node system under `SystemEx.Model`, intended to replace the legacy node types in `SystemEx.Collections.Generic`.
-  
+- **Ignoring** represented the early phase where documentation, structure, and formal API
+  descriptions were intentionally ignored while core functionality was being built.
 
-- Added new sorting algorithms under `SystemEx.Utils.Algorithm`:
-  - `QuickSort` – Hoare‑partition, tail‑recursion‑eliminated variant.  
-  - `HeapSort` – Deterministic down‑heap implementation.  
-  - `InsertionSort` – Optimized for small spans and rope chunks.  
-  - `IsSorted` – Predicate‑based sortedness check.
-  - `GrøstlHash` - Implements the Grøstl-256 and Grøstl-512 hashing functions. This class provides a
-    fully self-contained, allocation-free, deterministic hash engine based
-    on the original Grøstl specification (SHA-3 finalist).
+- **Lacking** represents the next phase: the system is functionally complete, but still lacking
+  documentation, clarity, and formal definitions.
 
-- Added new tree structures under `SystemEx.Model.Tree`:
-  - `RBTree` – Intrusive red‑black tree with rotation and validation hooks.  
-  - `RBTreeNode` – Node type supporting color, parent, and directional links.  
-  - `RBTreeIterator` – Deterministic iterator for intrusive tree traversal.
-  - `GenericNode` – Base node type acting solely as a value holder.  
-  - `GroupedNode` – Non‑intrusive grouped node storing a value and an expandable collection of associated `GenericNode&lt;T&gt;` instances.  
-  - `LinkedNode` – Intrusive doubly‑linked node with forward and backward links.  
-  - `LinkedNodeSlice` – Represents a slice over intrusive node structures.  
-  - `LinkedNodeWithSibling` – Doubly‑linked node supporting sibling relationships.  
-  - `LinkedNodeRange` – Iterator‑based range over intrusive node structures.  
-  - `Node` – Intrusive singly‑linked node storing a value and a single forward link.
+With version **0.50.00**, the documentation milestone has been reached, marking the end of the
+“Lacking” phase. All subsequent 0.50.x versions will continue under this codename until the
+remaining missing structural components are completed.
 
-- Added new random number generators under `SystemEx.Utils.Random`:
-  - `RandX` – Fast non‑cryptographic generator family.  
-  - `ISAAC` – Full ISAAC implementation with 256‑entry state and golden‑ratio seeding.  
-  - `RandUtils` – Unified API for endian‑aware random generation.
-
-- Added new hash suite under `SystemEx.Utils.Hash`:  
-  - `FNV1aHash` Classic fast hash; excellent for small keys and general‑purpose hashing.
-  - `WeinbergHash` Lightweight integer hash with good avalanche behavior for map/set keys.
-  - `RamakrishnaHash` Simple multiplicative hash; ideal for embedded or deterministic systems. 
-  - `BernsteinHash` Known as DJB2; stable, predictable, widely used in string hashing. 
-  - `AdlerHash`  Fast checksum‑style hash; useful for quick integrity checks.
-  - `FlatscherHash` High‑diffusion integer hash; suited for randomized indexing and table scattering.
-### Planned
-- Poly1305 – lightweight, high‑security MAC/hash based on simple arithmetic operations; easy to implement without external dependencies.
-- HighwayHash – fast keyed hash with strong avalanche behavior; ideal for secure map/set hashing and low‑collision key generation.
-- BLAKE2s – modern cryptographic hash with high performance and simpler structure than BLAKE3; suitable for general crypto hashing without external libraries.
-
-### Fixed
-- Corrected an issue in the array constructor.</PackageReleaseNotes>
+</PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

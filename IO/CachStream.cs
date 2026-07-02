@@ -23,6 +23,7 @@ using SystemEx.Utils;
 
 
 namespace SystemEx.IO {
+    
     /// <summary>
     /// A <see cref="Stream"/> wrapper around a <see cref="Cache"/> instance.  
     /// Provides sequential read/write access to a cache, including endian‑aware

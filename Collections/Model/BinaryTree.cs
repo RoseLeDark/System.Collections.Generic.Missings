@@ -18,8 +18,12 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Model {
-
-    
+    /// \addtogroup model
+    /// @{
+    /// <summary>
+    /// Represents a binary tree node.
+    /// </summary>
+    /// <typeparam name="T">The type of the value stored in the tree node.</typeparam>
     public class BinaryTree<T> : Tree<T, BinaryTree<T>> {
         const int ILEFT = 2;
         const int IRIGHT = 1;
@@ -27,30 +31,61 @@ namespace SystemEx.Collections.Model {
 
         private CompFunc<T> m_cmp;
 
+        /// <summary>
+        /// Gets or sets the comparison function for the binary tree.
+        /// </summary>
+        /// <value></value>
         public CompFunc<T> CompareFunc {
             protected set => m_cmp = value;
             get => m_cmp;
         }
-
+        /// <summary>
+        /// Gets or sets the parent node of the binary tree node.
+        /// </summary>
         internal BinaryTree<T>? Parent { get => m_pElemtents[IPARENT]; set => m_pElemtents[IPARENT] = value; }
+
+        /// <summary>
+        /// Gets or sets the left child node of the binary tree node.
+        /// </summary>
         public BinaryTree<T>? Left { get => m_pElemtents[ILEFT]; internal set => m_pElemtents[ILEFT] = value; }
 
+        /// <summary>
+        /// Gets or sets the right child node of the binary tree node.
+        /// </summary>
         public BinaryTree<T>? Right { get => m_pElemtents[IRIGHT]; internal set => m_pElemtents[IRIGHT] = value; }
 
+        /// <summary>
+        /// Gets a value indicating whether the binary tree node is empty.
+        /// </summary>
         public bool IsEmpty => Value == null;
 
+        /// <summary>
+        /// Gets the number of nodes in the binary tree.
+        /// </summary>
         public long Count => get_count();
-
+        /// <summary>
+        /// Gets a value indicating whether the binary tree node is a leaf.
+        /// </summary>
         public bool IsLeaf => Left == null && Right == null;
-
+        /// <summary>
+        /// Initializes a new instance of the BinaryTree class.
+        /// </summary>
+        /// <returns></returns>
         private BinaryTree() : base(2, default(T) ) { }
-
+        /// <summary>
+        /// Initializes a new instance of the BinaryTree class.
+        /// </summary>
+        /// <param name="value">The value to store in the tree node.</param>
+        /// <param name="cmp">The comparison function for the binary tree.</param>
         public BinaryTree ( T value, CompFunc<T> cmp )
             : base(2, value) {
             m_pElemtents[IPARENT] = m_pElemtents[IRIGHT] = m_pElemtents[ILEFT] = null;
             m_cmp = cmp;
         }
-
+        /// <summary>
+        /// Initializes a new instance of the BinaryTree class.
+        /// </summary>
+        /// <param name="binaryTree">The binary tree node to copy.</param>
         public BinaryTree ( BinaryTree<T> binaryTree ) : base(2, binaryTree.Value)  {
             Parent = binaryTree.Parent;
             Left = binaryTree.Left;
@@ -58,6 +93,10 @@ namespace SystemEx.Collections.Model {
             Value = binaryTree.Value;
         }
 
+        /// <summary>
+        /// Gets the first node in the binary tree.
+        /// </summary>
+        /// <returns>The first node in the binary tree.</returns>
         public BinaryTree<T> Beginn () {
             BinaryTree<T>? iter = null;
 
@@ -69,7 +108,11 @@ namespace SystemEx.Collections.Model {
             }
             return iter;
         }
-
+        /// <summary>
+        /// Inserts a new node into the binary tree.
+        /// </summary>
+        /// <param name="value">The value to insert.</param>
+        /// <returns>The node that was inserted or found.</returns>
         public BinaryTree<T> Insert ( T value ) {
             BinaryTree<T>? iter = this;
             BinaryTree<T>? parent = null;
@@ -130,6 +173,11 @@ AIsSmallerB	iter < v	Left
 AIsLargerB	iter > v	Right
 Equal	iter == v	Treffer
 */
+        /// <summary>
+        /// Finds a node in the binary tree.
+        /// </summary>
+        /// <param name="v">The value to find.</param>
+        /// <returns>The node that was found or null if not found.</returns>
         public BinaryTree<T>? Find ( T v ) {
             BinaryTree<T>? iter = this;
             BinaryTree<T> ? _ret = null;
@@ -155,6 +203,11 @@ Equal	iter == v	Treffer
             return _ret;       // not found
         }
 
+        /// <summary>
+        /// Finds the next node in the binary tree.
+        /// </summary>
+        /// <param name="n">The node for which to find the next.</param>
+        /// <returns>The next node or null if not found.</returns>
         public BinaryTree<T>? FindNext ( BinaryTree<T>? n ) {
             if ( n == null ) return null;
 
@@ -193,12 +246,22 @@ Equal	iter == v	Treffer
             return _ret;
         }
 
-
+        /// <summary>
+        /// Removes a node from the binary tree.
+        /// </summary>
+        /// <param name="v">The value to remove.</param>
+        /// <returns>true if the node was found and removed, false otherwise.</returns>
         public bool Erase ( T v ) {
             BinaryTree<T>? _toErase = Find(v);
 
             return Erase(_toErase);
         }
+
+        /// <summary>
+        /// Removes a node from the binary tree.
+        /// </summary>
+        /// <param name="node">The node to remove.</param>
+        /// <returns>true if the node was found and removed, false otherwise.</returns>
         public bool Erase ( BinaryTree<T>? node ) {
             if ( node == null ) return false;
 
@@ -243,14 +306,19 @@ Equal	iter == v	Treffer
 
             return true;
         }
-
+        /// <summary>
+        /// Clears the binary tree.
+        /// </summary>
         public void Clear () {
             if ( !IsEmpty ) {
                 FreeNode(Parent, true);
                 Parent = null;
             }
         }
-
+        /// <summary>
+        /// Swaps the contents of this binary tree with another.
+        /// </summary>
+        /// <param name="other">The other binary tree.</param>
         public void Swap ( BinaryTree<T> other ) {
             if ( other == this )
                 return;
@@ -272,7 +340,11 @@ Equal	iter == v	Treffer
         }
 
         
-
+        /// <summary>
+        /// Rotates the binary tree to the left around the given node.
+        /// </summary>
+        /// <param name="n">The node to rotate around.</param>
+        /// <returns>The new root of the rotated subtree.</returns>
         public BinaryTree<T> RotateLeft ( BinaryTree<T> n ) {
 
             BinaryTree<T>? rightChild = n.Right;
@@ -306,6 +378,11 @@ Equal	iter == v	Treffer
             return _ret;
         }
 
+        /// <summary>
+        /// Rotates the binary tree to the right around the given node.
+        /// </summary>
+        /// <param name="n">The node to rotate around.</param>
+        /// <returns>The new root of the rotated subtree.</returns>
         public BinaryTree<T> RotateRight ( BinaryTree<T> n ) {
             BinaryTree<T>? leftChild = n.Left;
             BinaryTree<T> ret = n;
@@ -338,7 +415,12 @@ Equal	iter == v	Treffer
             }
             return ret;
         }
-
+        /// <summary>
+        /// Frees the memory allocated for a node in the binary tree.
+        /// </summary>
+        /// <param name="n">The node to free.</param>
+        /// <param name="recursive">Indicates whether to free the node's children recursively.</param>
+        /// <param name="depth">The maximum depth to traverse when freeing children.</param>
         public void FreeNode ( BinaryTree<T> n, bool recursive, int depth = 10 ) {
             if ( recursive ) {
                 if ( depth == 0 ) return;
@@ -354,7 +436,23 @@ Equal	iter == v	Treffer
             }
         }
 
+        /// <summary>
+        /// A delegate for the function used to traverse the binary tree.
+        /// </summary>
+        /// <param name="n">The current node.</param>
+        /// <param name="left">Indicates whether the current node is a left child.</param>
+        /// <param name="depth">The depth of the current node.</param>
+        /// <returns>True to continue traversal, false to stop.</returns>
         public delegate bool TraverseFunc( BinaryTree<T> n, bool left, long depth ); 
+
+        /// <summary>
+        /// Traverses the binary tree using the specified function.
+        /// </summary>
+        /// <param name="n">The current node.</param>
+        /// <param name="func">The function to call for each node.</param>
+        /// <param name="depth">The depth of the current node.</param>
+        /// <param name="k">The node that caused the traversal to stop.</param>
+        /// <returns>True if the traversal completed successfully, false otherwise.</returns>
         public bool Traverse ( BinaryTree<T> n, TraverseFunc func, long depth, ref BinaryTree<T> k ) {
             bool left = false;
 
@@ -376,12 +474,20 @@ Equal	iter == v	Treffer
             return true;
         }
 
+        /// <summary>
+        /// Traverses the binary tree using the specified function.
+        /// </summary>
+        /// <param name="func">The function to call for each node.</param>
+        /// <returns>The node that caused the traversal to stop, or the root node if the traversal completed successfully.</returns>
         public BinaryTree<T> Traverse ( TraverseFunc func ) {
             BinaryTree<T> n = new BinaryTree<T>();
             Traverse(this, func, 0, ref n);
             return n;
         }
-
+        /// <summary>
+        /// Gets the count of nodes in the binary tree.
+        /// </summary>
+        /// <returns>The number of nodes in the binary tree.</returns>
         private long get_count () {
             long c = 0;
 
@@ -405,4 +511,5 @@ Equal	iter == v	Treffer
             return c;
         }
     }
+    /// @}
 }

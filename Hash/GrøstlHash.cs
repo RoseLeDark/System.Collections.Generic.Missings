@@ -44,6 +44,12 @@ namespace SystemEx.Hash {
             internal byte Last_PaddingBlock;
         };
         #region HELPER
+        /// <summary>
+        /// XORs two arrays of uints in place. The destination array is modified to contain the result of the XOR operation.
+        /// </summary>
+        /// <param name="dest">The destination array.</param>
+        /// <param name="src">The source array.</param>
+        /// <param name="n">The number of elements to XOR.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void MemXor ( uint[] dest, uint[] src, int n ) {
             uint i = 0;
@@ -53,6 +59,15 @@ namespace SystemEx.Hash {
                 i++;
             }
         }
+        /// <summary>
+        /// Sets the message for the Grøstl hash computation.
+        /// </summary>
+        /// <param name="buffer">The buffer to set the message in.</param>
+        /// <param name="input">The input data.</param>
+        /// <param name="s">The padding state.</param>
+        /// <param name="inlen">The length of the input data.</param>
+        /// <param name="STATEBYTES">The number of bytes in each state block.</param>
+        /// <param name="STATECOLS">The number of columns in each state block.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void SetMessage ( uint[] buffer, Array<byte> input, PaddingState s, ulong inlen, uint STATEBYTES, uint STATECOLS ) {
 
@@ -82,7 +97,10 @@ namespace SystemEx.Hash {
                 }
             }
         }
-
+        /// <summary>
+        /// Multiplies a uint by 2 in the Galois field GF(2^8).
+        /// </summary>
+        /// <param name="x">The uint to multiply.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void Mul2 ( ref uint x ) {
             uint t = x & 0x80808080u;   // extract MSBs of each byte
@@ -93,7 +111,12 @@ namespace SystemEx.Hash {
             x ^= t;                     // apply reduction
             x ^= (t << 3);              // final reduction term
         }
-
+            /// <summary>
+            /// Calculates the slice index for a given input and state.
+            /// </summary>
+            /// <param name="input">The input value.</param>
+            /// <param name="state">The state value.</param>
+            /// <returns>The calculated slice index.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint BYTESLICE ( uint input, int state  ) {
             //#define BYTESLICE(i) (((i)%8)*STATECOLS+(i)/8)
@@ -157,6 +180,17 @@ namespace SystemEx.Hash {
 
 
         #region Permutation
+
+        /// <summary>
+        /// Performs the permutation operation for the Grøstl hash computation.
+        /// </summary>
+        /// <param name="x">The input array.</param>
+        /// <param name="q">The padding state.</param>
+        /// <param name="state">The state value.</param>
+        /// <param name="cols">The number of columns in each state block.</param>
+        /// <param name="rR">The number of rounds.</param>
+        /// <param name="shift">The shift values.</param>
+        /// <param name="ColumnConstant">The column constants.</param>
         private static void Permutation ( uint[] x, int q, int state, int cols, int rR, byte[,] shift, uint[] ColumnConstant ) {
             uint[] tmp = new uint[cols];
             uint constant = 0;
@@ -210,6 +244,9 @@ namespace SystemEx.Hash {
 
 
         #region TABLE
+        /// <summary>
+        /// Gets the S-box values for the Grøstl hash computation.
+        /// </summary>
         private static readonly byte[] Ss = {
             0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5,
             0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
@@ -245,6 +282,15 @@ namespace SystemEx.Hash {
             0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
         };
 #endregion
+
+        /// <summary>
+        /// Computes the Grøstl hash of the given input.
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="CRYPTO_BYTES">The number of bytes to use for the hash computation.</param>
+        /// <param name="shift">The shift values for the permutation.</param>
+        /// <param name="ColumnConstant">The column constants for the permutation.</param>
+        /// <returns>The computed Grøstl hash as a byte array.</returns>
         private static byte[] Compute_Hash ( Array<byte> input, uint CRYPTO_BYTES, byte[,] shift, uint[] ColumnConstant ) {
 
             byte ROUNDS     = (byte)(CRYPTO_BYTES <= 32 ? 10 : 14);

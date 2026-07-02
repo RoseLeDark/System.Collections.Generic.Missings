@@ -3,7 +3,7 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Collections.Model {
-    /// \addtogroup Node
+    /// \addtogroup model
     /// @{
 
     /// <summary>

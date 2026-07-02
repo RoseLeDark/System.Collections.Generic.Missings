@@ -250,4 +250,5 @@ namespace SystemEx.Collections.Model {
             return _ptemp;
         }
     }
+    /// @}
 }

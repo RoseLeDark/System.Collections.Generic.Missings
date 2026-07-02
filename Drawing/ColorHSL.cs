@@ -1,4 +1,23 @@
-﻿namespace SystemEx.Drawing {
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
+namespace SystemEx.Drawing {
+    /// \addtogroup color
+    /// @{
     /// <summary>
     /// Represents a color in the HSL (Hue–Saturation–Lightness) color space using
     /// floating‑point components.  
@@ -78,5 +97,6 @@
             return string.Create(null, stackalloc char[256], $"[{m_h}, {m_s}, {m_l}]");
         }
     }
+    /// @}
 }
 

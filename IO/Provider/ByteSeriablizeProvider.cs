@@ -16,33 +16,32 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
-using SystemEx.SystemEx.Drawing;
+using SystemEx.Drawing;
 
 namespace SystemEx.IO.Provider {
     /// <summary>
-    /// 
+    /// Provides a base implementation for serializing objects to and from byte arrays.
     /// </summary>
     public abstract class ByteSeriablizeProvider  {
         private IByteFormatSchema m_schema;
         private Endian m_endian;
         /// <summary>
-        /// 
+        /// Initializes a new instance of the ByteSeriablizeProvider class.
         /// </summary>
-        /// <param name="schema"></param>
-        /// <param name="endian"></param>
+        /// <param name="schema">The byte format schema.</param>
+        /// <param name="endian">The endianness for the serialization.</param>
         public ByteSeriablizeProvider(IByteFormatSchema schema, Endian endian) {
             m_schema = schema;
             m_endian = endian;
         }
         /// <summary>
-        /// 
+        /// Serializes the specified object to a byte array.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">The object to serialize.</param>
+        /// <returns>The byte array containing the serialized data.</returns>
         public Cache? ToBytes<T>(T? obj) {
             if ( obj == null ) return null;
             
@@ -61,11 +60,11 @@ namespace SystemEx.IO.Provider {
             return ret;
         }
        /// <summary>
-       /// 
+       /// Deserializes the specified byte array to an object.
        /// </summary>
-       /// <typeparam name="T"></typeparam>
-       /// <param name="obj"></param>
-       /// <returns></returns>
+       /// <typeparam name="T">The type of the object to deserialize.</typeparam>
+       /// <param name="obj">The byte array containing the serialized data.</param>
+       /// <returns>The deserialized object.</returns>
         public T? FromBytes<T>(Cache obj)  {
  
             var entries = new Map<string, byte[]>();
@@ -84,26 +83,26 @@ namespace SystemEx.IO.Provider {
             return (T)CreateObjectFromEntrys(entries, m_endian)!;
         }
         /// <summary>
-        /// 
+        /// Gets the bytes for the specified entry.
         /// </summary>
         /// <param name="obj">The object</param>
-        /// <param name="name">The entrry</param>
+        /// <param name="name">The entry</param>
         /// <param name="endian">Endian</param>
         /// <returns></returns>
         protected abstract Array<byte> GetBytesForEntry(object obj, string name, Endian endian);
         /// <summary>
-        /// 
+        /// Gets the size of the specified entry.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="name"></param>
-        /// <param name="endian"></param>
+        /// <param name="obj">The object</param>
+        /// <param name="name">The entry</param>
+        /// <param name="endian">Endian</param>
         /// <returns></returns>
         protected abstract long GetEntrySize(Cache obj, string name, Endian endian); // return <= 0 nothing
         /// <summary>
-        /// 
+        /// Creates an object from the specified entries.
         /// </summary>
-        /// <param name="entries"></param>
-        /// <param name="endian"></param>
+        /// <param name="entries">The entries.</param>
+        /// <param name="endian">The endianness.</param>
         /// <returns></returns>
         protected abstract object? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian);
 

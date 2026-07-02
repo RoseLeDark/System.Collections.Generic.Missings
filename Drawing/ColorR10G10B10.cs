@@ -1,41 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection.PortableExecutable;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Xml.Linq;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
-using SystemEx.Drawing;
 using SystemEx.IO.Provider;
 
-namespace SystemEx.SystemEx.Drawing {
-
-    /// <summary>
-    /// 
+namespace SystemEx.Drawing {
+    /// \addtogroup color
+    /// @{
+    ///  <summary>
+    /// A Scbema is used to serialize and deserialize a ColorR10G10B10A2 color to and from a binary representation.
     /// </summary>
     public class ColorR10G10B10FormatSchema : IByteFormatSchema {
         /// <summary>
-        /// /
+        /// The total number of bytes required to represent a ColorR10G10B10A2 color in its packed binary form.
         /// </summary>
         public long TotalSize => 32;
         /// <summary>
-        /// /
+        /// The size of the header portion in bytes. For ColorR10G10B10A2, there is no header, so this is 0.
         /// </summary>
         public long HeaderSize => 0;
         /// <summary>
-        /// /
+        /// The endianness used for all multi‑byte fields. This is specified when creating the schema.
         /// </summary>
         public Endian Endian { get; private set; }
 
         /// <summary>
-        /// /
+        /// A read‑only mapping of field names to their byte offsets. For ColorR10G10B10A2, 
+        /// there is only one field named "DEFAULT" at offset 0.
         /// </summary>
         public IReadOnlyMap<string, long> Offsets { get; private set; }
 
         /// <summary>
-        /// /
+        /// Initializes a new instance of the ColorR10G10B10FormatSchema class with the specified endianness.
         /// </summary>
         /// <param name="endian"></param>
         public ColorR10G10B10FormatSchema(Endian endian)  {
@@ -48,23 +59,25 @@ namespace SystemEx.SystemEx.Drawing {
         }
     }
     /// <summary>
-    /// 
+    /// The ColorR10G10B10FormatSchema class defines the schema for serializing and deserializing a 
+    /// ColorR10G10B10A2 color to and from a binary representation.
+    /// It specifies the total size, header size, endianness, and field offsets for the color data.
     /// </summary>
     public class ColorR10G10B10Serializer : ByteSeriablizeProvider {
         /// <summary>
-        /// 
+        ///  Created a new ColorR10G10B10Serializer with the specified schema and endianness.   
         /// </summary>
-        /// <param name="schema"></param>
-        /// <param name="endian"></param>
+        /// <param name="schema">The format schema for the color data.</param>
+        /// <param name="endian">The endianness for the binary representation.</param>
         public ColorR10G10B10Serializer(IByteFormatSchema schema, Endian endian) : base(schema, endian) { }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="name"></param>
-        /// <param name="endian"></param>
-        /// <returns></returns>
+        /// Gets the byte representation of the specified object for the given field name.
+        /// /// </summary>
+        /// <param name="obj">The object to serialize.</param>
+        /// <param name="name">The name of the field to serialize.</param>
+        /// <param name="endian">The endianness for the binary representation.</param>
+        /// <returns>The byte array representing the serialized field, or null if not found.</returns>
         protected override Array<byte>? GetBytesForEntry(object obj, string name, Endian endian) {
             var objx = obj as ColorR10G10B10A2;
             if ( objx == null ) return null;
@@ -88,19 +101,20 @@ namespace SystemEx.SystemEx.Drawing {
             return null;
         }
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="name"></param>
-        /// <param name="endian"></param>
-        /// <returns></returns>
+        /// Gets the size of the specified entry in the cache.
+        /// /// </summary>
+        /// <param name="obj">The cache object.</param>
+        /// <param name="name">The name of the entry.</param>
+        /// <param name="endian">The endianness for the binary representation.</param>
+        /// <returns>The size of the entry, or -1 if not found.</returns>
+
         protected override long GetEntrySize(Cache obj, string name, Endian endian) => ( name == "COLOR" || name == "DEFAULT" ) ? 4 : -1;
         /// <summary>
-        /// 
+        /// Get the object from the given entries and endianness.
         /// </summary>
-        /// <param name="entries"></param>
-        /// <param name="endian"></param>
-        /// <returns></returns>
+        /// <param name="entries">The map of entries.</param>
+        /// <param name="endian">The endianness for the binary representation.</param>
+        /// <returns>The created object, or null if not found.</returns>
         protected override ColorR10G10B10A2? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian) {
 
             if ( entries.ContainsKey("DEFAULT") ) {
@@ -132,7 +146,7 @@ namespace SystemEx.SystemEx.Drawing {
         private float m_a;
 
         /// <summary>
-        /// 
+        /// Gets the inverse of the color component range.
         /// </summary>
         public const float COLORINV = 1f / 1023f;
 
@@ -149,11 +163,11 @@ namespace SystemEx.SystemEx.Drawing {
         public float A { get => m_a; set => m_a = System.Math.Clamp(value, 0.0f, 1.0f); }
 
         /// <summary>
-        /// 
+        /// Creates a new R10G10B10A2 color from normalized float values (0–1).
         /// </summary>
-        /// <param name="r"></param>
-        /// <param name="g"></param>
-        /// <param name="b"></param>
+        /// <param name="r">The red component (0–1).</param>
+        /// <param name="g">The green component (0–1).</param>
+        /// <param name="b">The blue component (0–1).</param>
         public ColorR10G10B10A2(float r, float g, float b) : this( r, g, b,0f) {  }
         /// <summary>
         /// Initializes a new R10G10B10A2 color from normalized float values (0–1).
@@ -168,6 +182,10 @@ namespace SystemEx.SystemEx.Drawing {
         /// <summary>
         /// Initializes a new R10G10B10A2 color from 10‑bit UNORM components (0–1023).
         /// </summary>
+        /// <param name="r10">The red component (0–1023).</param>
+        /// <param name="g10">The green component (0–1023).</param>
+        /// <param name="b10">The blue component (0–1023).</param>
+        /// <param name="a10">The alpha component (0–3).</param>
         public ColorR10G10B10A2(ushort r10, ushort g10, ushort b10, ushort a10) {
             
             R = r10 / 1023.0f;
@@ -212,5 +230,5 @@ namespace SystemEx.SystemEx.Drawing {
             return string.Create(null, stackalloc char[256], $"[{m_r}, {m_g}, {m_b}, {m_a}]");
         }
     }
-
+    /// @}
 }

@@ -2,7 +2,7 @@
 
 
 namespace SystemEx.Collections.Model {
-    /// \addtogroup collections
+    /// \addtogroup model
     /// @{
     /// <summary>
     /// Represents a simple range defined by a begin and end iterator over

@@ -18,10 +18,24 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
+    /// <summary>
+    /// Implements the Adler hash algorithm.
+    /// </summary>
+    /// <remarks>
+    /// The Adler hash algorithm is a checksum algorithm which was invented by Mark Adler in 1995.
+    ///  It is a modification of the Fletcher checksum, which was invented by John G. Fletcher in 1982.
+    /// </remarks>
     public sealed class AdlerHash : IHash {
         private const uint Mod = 65521;
         private const ulong Mod64 = 4294967291UL; // großer Prim
-        // Adler32
+
+        /// <summary>
+        /// Computes the Adler hash of the given input. 
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness of the input data.</param>
+        /// <returns>The computed Adler hash as a Hash32 object.</returns>
         public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
             uint a = 1;
             uint b = 0;
@@ -35,7 +49,13 @@ namespace SystemEx.Hash {
 
             return new Hash32(ui);
         }
-
+        /// <summary>
+        /// Computes the Adler hash of the given input.
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness of the input data.</param>
+        /// <returns>The computed Adler hash as a Hash64 object.</returns>
         public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
             ulong  a = 1;
             ulong  b = 0;

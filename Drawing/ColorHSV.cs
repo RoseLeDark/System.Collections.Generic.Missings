@@ -16,18 +16,31 @@
  */
 
 namespace SystemEx.Drawing {
+    /// \addtogroup color
+    /// @{
     /// <summary>
     /// Represents a color in the HSV (Hue–Saturation–Value) color space using
     /// floating‑point components.  
     /// Provides hue‑aware interpolation, component manipulation, arithmetic
-    /// operations, and normalization utilities.
+    /// operations, and normalization utilities. 
+    /// <Note> The Main Color in this Libary</Note>
     /// </summary>
     public class ColorHSV : IColor<ColorHSV>, IEquatable<ColorHSV>, IComparable<ColorHSV> {
         internal float m_hue;         // 0–360°
         internal float m_saturation;  // 0–1
         internal float m_value;       // 0–1
 
-        public static ColorHSV Zero => GreyColors.Black.ToColorHSV();
+        /// <summary>
+        /// A static property that returns a ColorHSV instance representing black (H=0, S=0, V=0).
+        /// </summary>
+        /// <returns></returns>
+        public static ColorHSV Zero => new ColorHSV(0f, 0f, 0f);
+
+        /// <summary>
+        /// A static property that returns a ColorHSV instance representing white (H=0, S=0, V=1).
+        /// </summary>
+        /// <returns></returns>
+        public static ColorHSV One => new ColorHSV(0f, 0f, 1f);
 
         /// <summary>
         /// Gets or sets the hue component in degrees (0–360).  
@@ -49,9 +62,9 @@ namespace SystemEx.Drawing {
         /// Initializes a new HSV color with the specified component values.
         /// </summary>
         public ColorHSV(float h, float s, float v) {
-            H = h;
-            S = s;
-            V = v;
+            m_hue = ClampHue(h);
+            m_saturation = System.Math.Clamp(s, 0f, 1f);
+            m_value = System.Math.Clamp(v, 0f, 1f);
         }
 
         /// <summary>
@@ -236,4 +249,5 @@ namespace SystemEx.Drawing {
             return left.GetHashCode() >= right.GetHashCode();
         }
     }
+    /// @}
 }

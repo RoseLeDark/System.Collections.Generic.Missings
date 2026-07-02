@@ -16,9 +16,9 @@
  */
 
 using System.Numerics;
-using SystemEx.Utils;
-using SystemEx.Collections.Generic.Interfaces;
 using System.Runtime.CompilerServices;
+using SystemEx.Collections.Generic.Interfaces;
+using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
@@ -29,7 +29,7 @@ namespace SystemEx.Collections.Generic {
     /// manually or automatically after insert and remove operations.
     /// </summary>
     /// <typeparam name="T">The type of elements stored in the array.</typeparam>
-    public class SportedFixedArray<T> : FixedArray<T> {
+    public class SortedFixedArray<T> : FixedArray<T> {
         /// <summary>
         /// Delegate used to compare two elements when no comparer interface is provided.
         /// </summary>
@@ -74,7 +74,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="size">The number of elements the array can hold.</param>
         /// <param name="sort">The delegate used to compare elements.</param>
-        public SportedFixedArray(int size, SortObjectFunc<T> sort)
+        public SortedFixedArray(int size, SortObjectFunc<T> sort)
             : base(size) {
             m_sort = sort;
         }
@@ -84,7 +84,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="e">The initial element buffer.</param>
         /// <param name="sort">The delegate used to compare elements.</param>
-        public SportedFixedArray(T[] e, SortObjectFunc<T> sort)
+        public SortedFixedArray(T[] e, SortObjectFunc<T> sort)
             : base(e) {
             m_sort = sort;
         }

@@ -6,11 +6,20 @@ using System.Text;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Model {
+    /// \addtogroup model
+    /// @{
+    /// <summary>
+    /// Represents a node in a red-black tree, a self-balancing binary search tree.
+    /// </summary>
     public enum TreeColor {
         Red,
         Black
     }
 
+    /// <summary>
+    /// Represents a node in a red-black tree.
+    /// </summary>
+    /// <typeparam name="T">The type of the value stored in the node.</typeparam>
     public class RBTreeNode<T> : Tree<T, RBTreeNode<T>> {
         const int ILEFT = 2;
         const int IRIGHT = 1;
@@ -18,28 +27,64 @@ namespace SystemEx.Collections.Model {
 
         private CompFunc<T> m_cmp;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the tree should automatically rebalance itself.
+        /// </summary>
         public bool AutoRebalance { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the comparison function used to compare values in the tree.
+        /// </summary>
         public CompFunc<T> CompareFunc {
             protected set => m_cmp = value;
             get => m_cmp;
         }
 
+        /// <summary>
+        /// Gets or sets the parent node of this node.
+        /// </summary>
         internal RBTreeNode<T>? Parent { get => m_pElemtents[IPARENT]; set => m_pElemtents[IPARENT] = value; }
-        public RBTreeNode<T>? Left { get => m_pElemtents[ILEFT]; internal set => m_pElemtents[ILEFT] = value; }
 
+        /// <summary>
+        /// Gets or sets the left child node of this node.
+        /// </summary> 
+        public RBTreeNode<T>? Left { get => m_pElemtents[ILEFT]; internal set => m_pElemtents[ILEFT] = value; }
+        /// <summary>
+        /// Gets or sets the right child node of this node.
+        /// </summary> 
         public RBTreeNode<T>? Right { get => m_pElemtents[IRIGHT]; internal set => m_pElemtents[IRIGHT] = value; }
 
+        /// <summary>
+        /// Gets a value indicating whether the node is empty.
+        /// </summary>
         public bool IsEmpty => Value == null;
 
+        /// <summary>
+        /// Gets the number of nodes in the tree.
+        /// </summary>
         public long Count => get_count();
 
+        /// <summary>
+        /// Gets a value indicating whether the node is a leaf.
+        /// </summary>
         public bool IsLeaf => Left == null && Right == null;
 
+        /// <summary>
+        /// Gets or sets the color of the node.
+        /// </summary>
         public TreeColor Color { get; protected set; }
 
+        /// <summary>
+        /// Initializes a new instance of the RBTreeNode class.
+        /// </summary>
         private RBTreeNode () : base(2, default(T)) { Color = TreeColor.Black;  }
 
+        /// <summary>
+        /// Initializes a new instance of the RBTreeNode class.
+        /// </summary>
+        /// <param name="value">The value of this node</param>
+        /// <param name="cmp">The compare functions, for rebalance.</param>
         public RBTreeNode ( T value, CompFunc<T> cmp )
             : base(2, value) {
             m_pElemtents[IPARENT] = m_pElemtents[IRIGHT] = m_pElemtents[ILEFT] = null;
@@ -47,6 +92,10 @@ namespace SystemEx.Collections.Model {
             Color = TreeColor.Black;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the RBTreeNode class.
+        /// </summary>
+        /// <param name="other"></param>
         public RBTreeNode ( RBTreeNode<T> other ) : base(2, other.Value) {
             Parent = other.Parent;
             Left = other.Left;
@@ -55,6 +104,10 @@ namespace SystemEx.Collections.Model {
             Color = other.Color;
         }
 
+        /// <summary>
+        /// Gets the first node in the tree.
+        /// </summary>
+        /// <returns>The First node</returns>
         public RBTreeNode<T>? Begin () {
             RBTreeNode<T>? iter = null;
 
@@ -67,6 +120,11 @@ namespace SystemEx.Collections.Model {
             return iter;
         }
 
+        /// <summary>
+        /// Inserts a new node into the tree.
+        /// </summary>
+        /// <param name="value">The value to insert</param>
+        /// <returns>The node that was inserted</returns>
         public RBTreeNode<T> Insert ( T value ) {
             RBTreeNode<T>? iter = this;
             RBTreeNode<T>? parent = null;
@@ -130,7 +188,12 @@ namespace SystemEx.Collections.Model {
 AIsSmallerB	iter < v	Left
 AIsLargerB	iter > v	Right
 Equal	iter == v	Treffer
-*/
+*/  
+        /// <summary>
+        /// Finds a node with the specified value in the tree.
+        /// </summary>
+        /// <param name="v">The value to find</param>
+        /// <returns></returns>
         public RBTreeNode<T>? Find ( T v ) {
             RBTreeNode<T>? iter = this;
             RBTreeNode<T> ? _ret = null;
@@ -156,6 +219,11 @@ Equal	iter == v	Treffer
             return _ret;       // not found
         }
 
+        /// <summary>
+        /// Finds the next node in the in-order traversal.
+        /// </summary>
+        /// <param name="n">The node to find the next of</param>
+        /// <returns>The next node, or null if none exists</returns>
         public RBTreeNode<T>? FindNext ( RBTreeNode<T>? n ) {
             if ( n == null ) return null;
 
@@ -188,18 +256,26 @@ Equal	iter == v	Treffer
                     }
                 }
             }
-
-            // Fall 3: n ist Root und hat keinen rechten Teilbaum
-            // → Root hat keinen Next
             return _ret;
         }
 
-
+        /// <summary>
+        /// Removes a node with the specified value from the tree.
+        /// </summary>
+        /// <param name="v">The value to remove</param>
+        /// <returns>true if the node was found and removed, false otherwise</returns>
         public bool Erase ( T v ) {
             RBTreeNode<T>? _toErase = Find(v);
 
             return Erase(_toErase);
         }
+
+        /// <summary>
+        /// Removes a node from the tree.
+        /// </summary>
+        /// <param name="node">The node to remove</param>
+        /// <returns>true if the node was found and removed, false otherwise</returns>
+
         public bool Erase ( RBTreeNode<T>? node ) {
             if ( node == null ) return false;
 
@@ -246,14 +322,23 @@ Equal	iter == v	Treffer
 
             return true;
         }
+       
 
-        public void Clear () {
+       /// <summary>
+       /// Clears the tree, removing all nodes and freeing their resources.
+       /// </summary>
+       /// <param name="depth">The maximum depth to traverse when freeing nodes.</param>
+        public void Clear (int depth = 10) {
             if ( !IsEmpty ) {
-                FreeNode(Parent, true);
+                FreeNode(Parent, true, depth);
                 Parent = null;
             }
         }
 
+        /// <summary>
+        /// Swaps the contents of this tree with another tree.
+        /// </summary>
+        /// <param name="other">The other tree to swap with</param>
         public void Swap ( RBTreeNode<T> other ) {
             if ( other == this )
                 return;
@@ -275,7 +360,11 @@ Equal	iter == v	Treffer
         }
 
 
-
+        /// <summary>
+        /// Performs a left rotation on the given node.
+        /// </summary>
+        /// <param name="n">The node to rotate.</param>
+        /// <returns>The new root of the rotated subtree.</returns>
         public RBTreeNode<T> RotateLeft ( RBTreeNode<T> n ) {
 
             RBTreeNode<T>? rightChild = n.Right;
@@ -309,6 +398,11 @@ Equal	iter == v	Treffer
             return _ret;
         }
 
+        /// <summary>
+        /// Performs a right rotation on the given node.
+        /// </summary>
+        /// <param name="n">The node to rotate.</param>
+        /// <returns>The new root of the rotated subtree.</returns>
         public RBTreeNode<T> RotateRight ( RBTreeNode<T> n ) {
             RBTreeNode<T>? leftChild = n.Left;
             RBTreeNode<T> ret = n;
@@ -342,6 +436,12 @@ Equal	iter == v	Treffer
             return ret;
         }
 
+        /// <summary>
+        /// Frees the resources associated with a node.
+        /// </summary>
+        /// <param name="n">The node to free.</param>
+        /// <param name="recursive">Indicates whether to free the node's children recursively.</param>
+        /// <param name="depth">The maximum depth to traverse when freeing nodes.</param>
         public void FreeNode ( RBTreeNode<T> n, bool recursive, int depth = 10 ) {
             if ( recursive ) {
                 if ( depth == 0 ) return;
@@ -357,7 +457,23 @@ Equal	iter == v	Treffer
             }
         }
 
+        /// <summary>
+        /// A function that can be called for each node during traversal.
+        /// </summary>
+        /// <param name="n">The node to traverse.</param>
+        /// <param name="left">Indicates whether the node is a left child.</param>
+        /// <param name="depth">The current depth in the tree.</param>
+        /// <returns>return false for stopping traversal.</returns>
         public delegate bool TraverseFunc ( RBTreeNode<T> n, bool left, long depth );
+
+        /// <summary>
+        /// Traverses the tree starting from the given node.
+        /// </summary>
+        /// <param name="n">The node to start traversal from.</param>
+        /// <param name="func">The function to call for each node.</param>
+        /// <param name="depth">The current depth in the tree.</param>
+        /// <param name="k">The node that caused traversal to stop - For traversal with multiple tasks. </param>
+        /// <returns>false when user stops traversal.</returns>
         public bool Traverse ( RBTreeNode<T> n, TraverseFunc func, long depth, ref RBTreeNode<T> k ) {
             bool left = false;
 
@@ -379,12 +495,21 @@ Equal	iter == v	Treffer
             return true;
         }
 
+        /// <summary>
+        /// Traverses the tree using the provided function.
+        /// </summary>
+        /// <param name="func">The function to call for each node.</param>
+        /// <returns>The node that caused traversal to stop - For traversal with multiple tasks. </returns>
         public RBTreeNode<T> Traverse ( TraverseFunc func ) {
             RBTreeNode<T> n = new RBTreeNode<T>();
             Traverse(this, func, 0, ref n);
             return n;
         }
 
+        /// <summary>
+        /// Get The count of nodes in the tree.
+        /// </summary>
+        /// <returns>The number of nodes in the tree.</returns>
         private long get_count () {
             long c = 0;
 
@@ -407,11 +532,18 @@ Equal	iter == v	Treffer
 
             return c;
         }
+        /// <summary>
+        /// Validates the red-black tree properties.
+        /// </summary>
         void validate () {
             if(Parent.Color != TreeColor.Black);
                 Validate(Parent);
         }
-
+        /// <summary>
+        /// Validates the red-black tree properties for a given subtree.
+        /// </summary>
+        /// <param name="root">The root of the subtree to validate.</param>
+        /// <returns>True if the subtree is a valid red-black tree, false otherwise.</returns>
         public bool Validate ( RBTreeNode<T> root ) {
             if ( root == null )
                 return true;
@@ -451,7 +583,11 @@ Equal	iter == v	Treffer
 
             return true;
         }
-
+        /// <summary>
+        /// Rebalances the tree after an insertion.
+        /// </summary>
+        /// <param name="newNode">The node that was inserted.</param>
+        /// <returns>True if the tree is valid, false otherwise.</returns>
         private bool Rebalance ( RBTreeNode<T> newNode ) {
             var iter = newNode;
 
@@ -512,7 +648,10 @@ Equal	iter == v	Treffer
             return true;
         }
 
-
+        /// <summary>
+        /// Rearranges the tree after a deletion to maintain red-black properties.
+        /// </summary>
+        /// <param name="n">The node that was deleted.</param>
         private void RebalanceErase ( RBTreeNode<T> n ) {
             RBTreeNode<T> iter = n;
 
@@ -609,4 +748,5 @@ Equal	iter == v	Treffer
             iter.Color = TreeColor.Black;
         }
     }
+    /// @}
 }

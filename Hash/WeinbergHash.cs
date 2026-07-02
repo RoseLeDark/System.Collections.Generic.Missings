@@ -18,7 +18,17 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
+    /// <summary>
+    /// Implements the Weinberg hash algorithm.
+    /// </summary>
     public sealed class WeinbergHash : IHash {
+        /// <summary>
+        /// Computes the Weinberg hash of the given input.
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness for the hash computation.</param>
+        /// <returns>The computed Weinberg hash as a 32-bit value.</returns>
         public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
             uint hash = seed;
             uint g;
@@ -34,7 +44,13 @@ namespace SystemEx.Hash {
             hash ^= (hash >> 16);
             return new Hash32(hash);
         }
-
+        /// <summary>
+        /// Computes the Weinberg hash of the given input.
+        /// </summary>
+        /// <param name="input">The input data to hash.</param>
+        /// <param name="seed">The seed value for the hash computation.</param>
+        /// <param name="endian">The endianness for the hash computation.</param>
+        /// <returns>The computed Weinberg hash as a 64-bit value.</returns>
         public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
             ulong hash = seed;
             ulong g;

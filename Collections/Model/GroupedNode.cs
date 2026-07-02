@@ -4,6 +4,8 @@ using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Model {
+    /// \addtogroup model
+    /// @{
     /// <summary>
     /// Non‑intrusive grouped node storing a value and an expandable collection
     /// of associated <see cref="GenericNode{T}"/> instances.
@@ -109,5 +111,5 @@ namespace SystemEx.Collections.Model {
             m_grouped.Add(node);
         }
     }
-
+/// @}
 }

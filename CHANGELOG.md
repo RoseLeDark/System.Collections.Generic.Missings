@@ -1,13 +1,53 @@
 # Changelog
 ## Planned to Version 1.0
 ### Add
-- Cache and collection primitives ( `CacheRaid`, `CacheRaid4`, etc.) to ``SystemEx.Collections.Generic``.
-- Add Locking System 
-- OpenCL Kerneal Call with my  SystemEx.Device System
+- OpenCL Kerneal Call with my  SystemEx.Device System SystemEx 2.0
+
+---
+## [0.50.00] - 03.07.2026 @Lacking
+### Major Documentation Milestone
+A significant version jump was made intentionally.  
+With this release, the entire public API of SystemEx — including the mathematical canvas
+system, layer model, blend modes, hash engines, and all related interfaces — has been fully
+documented and formalized.
+
+This marks the completion of approximately half of the planned major‑release scope.
+The version number reflects this structural maturity rather than incremental feature changes.
+
+### Added
+- Full XML documentation for all canvas interfaces (`ICanvas`, `ISubCanvas`, `ICanvasList`)
+- Complete documentation for all hash engines (Groestl, Adler, etc.)
+- Formalized mathematical layer model and blend mode semantics
+- Unified terminology across the entire SystemEx framework
+
+### Changed
+- API surface stabilized and prepared for 1.0
+- Internal consistency improvements across all canvas and hash components
+
+### Notes
+The jump from `0.12.04` to `0.50.00` is intentional and represents reaching the halfway point
+toward the 1.0 major release.
+
+### Codename Update: Ignoring → Lacking
+The codename for the 0.x development cycle has been updated from **Ignoring** to **Lacking**.
+
+All SystemEx development codenames follow the theme of “Missing”, reflecting the project’s
+purpose of providing features, structures, and utilities that are missing in the .NET ecosystem.
+
+- **Ignoring** represented the early phase where documentation, structure, and formal API
+  descriptions were intentionally ignored while core functionality was being built.
+
+- **Lacking** represents the next phase: the system is functionally complete, but still lacking
+  documentation, clarity, and formal definitions.
+
+With version **0.50.00**, the documentation milestone has been reached, marking the end of the
+“Lacking” phase. All subsequent 0.50.x versions will continue under this codename until the
+remaining missing structural components are completed.
+
 
 ---
 
-## [0.12.04] – 2026‑07‑01
+## [0.12.04] – 2026‑07‑01 @Ignoring
 
 ### Added
 `System.FlexSpan<T>` — a unified view type for array‑based memory.**  

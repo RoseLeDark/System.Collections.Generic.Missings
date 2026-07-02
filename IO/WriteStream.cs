@@ -12,7 +12,9 @@ namespace SystemEx.IO {
         Warm,
         Hot
     }
-
+    /// <summary>
+    /// Represents an entry in the stream cache policy.
+    /// </summary>
     public struct StreamCachePolicyEntry {
         public int StreamPosition { get; set; }
         public int CachePosition { get; set; }
@@ -22,7 +24,9 @@ namespace SystemEx.IO {
         public int StreamCount { get; set; }
         public int CacheCount { get; set; }
     }
-    
+    /// <summary>
+    /// Represents the stream cache policy.
+    /// </summary>
     public interface IStreamCachePolicy {
         // Write- und Read-Zugriffe melden
         Pair<Triple, StreamCachePolicyEntry> OnWrite(long streamPos, int offset, int count);
@@ -38,7 +42,10 @@ namespace SystemEx.IO {
     }
 
 
-
+    /// <summary>
+    /// Represents a write stream with caching capabilities.
+    /// </summary>
+    /// <typeparam name="TStreamCache">The stream cache policy.</typeparam>
     public class WriteCaheStream<TStreamCache> : Stream 
         where TStreamCache : IStreamCachePolicy {
         private Stream m_stream;
@@ -48,11 +55,11 @@ namespace SystemEx.IO {
         private object m_lock;
 
         /// <summary>
-        /// 
+        /// Represents an action that can be performed on the write stream.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="sender"></param>
-        /// <param name="value"></param>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="sender">The sender.</param>
+        /// <param name="value">The value.</param>
         public delegate void WriteStreamAction<T>( WriteCaheStream<TStreamCache> sender, T value) where T : allows ref struct;
       
 

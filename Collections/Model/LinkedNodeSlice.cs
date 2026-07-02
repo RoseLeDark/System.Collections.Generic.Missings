@@ -18,7 +18,7 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Model {
-    /// \addtogroup Node
+    /// \addtogroup model
     /// @{
     /// <summary>
     /// Represents a slice over intrusive <see cref="LinkedNode{T}"/> structures,
