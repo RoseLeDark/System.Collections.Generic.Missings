@@ -18,6 +18,8 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
+    /// \addtogroup hash
+    /// @{
     /// <summary>
     /// Implements the Ramakrishna hash algorithm.
     /// </summary>
@@ -58,5 +60,5 @@ namespace SystemEx.Hash {
             return new Hash64(hash);
         }
     }
-
+    /// @}
 }

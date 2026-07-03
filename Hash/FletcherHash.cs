@@ -18,6 +18,8 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
+    /// \addtogroup hash
+    /// @{
     /// <summary>
     /// Implements the Fletcher hash algorithm. 
     /// </summary>
@@ -62,5 +64,5 @@ namespace SystemEx.Hash {
             return new Hash64(h32.Value);
         }
     }
-
+    /// @}
 }

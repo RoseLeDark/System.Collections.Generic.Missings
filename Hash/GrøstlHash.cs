@@ -8,6 +8,8 @@ using static System.Reflection.Metadata.BlobBuilder;
 using static SystemEx.Hash.GrøstlHash;
 
 namespace SystemEx.Hash {
+    /// \addtogroup hash
+    /// @{
     /// <summary>
     /// Implements the Grøstl-256 and Grøstl-512 hashing functions as part of
     /// the SystemEx low-level cryptographic subsystem. This class provides a
@@ -448,4 +450,5 @@ namespace SystemEx.Hash {
             return new Hash32(value);
         }
     }
+    /// @}
 }
