@@ -24,14 +24,21 @@ namespace SystemEx.Hash {
     /// Implements the Fletcher hash algorithm. 
     /// </summary>
     public sealed class FletcherHash : IHash {
+        Endian m_endian;
+        /// <summary>
+        /// Craate a new instance
+        /// </summary>
+        /// <param name="endian">The suing endian for creating a hash</param>
+        public FlecherHash ( Endian endian ) {
+            m_endian = endian;
+        }
         /// <summary>
         /// Computes the Fletcher hash of the given input.
         /// </summary>
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
-        /// <param name="endian">The endianness of the input data.</param>
         /// <returns>The computed Fletcher hash as a Hash32 object.</returns>
-        public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
             uint sum1 = 0xffff;
             uint sum2 = 0xffff;
 
@@ -56,11 +63,10 @@ namespace SystemEx.Hash {
         /// </summary>
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
-        /// <param name="endian">The endianness of the input data.</param>
         /// <returns>The computed Fletcher hash as a Hash64 object.</returns>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
             // 64‑Bit Wrapper, da du nur die 32‑Bit‑Variante brauchst
-            var h32 = Compute(input, (uint)seed, endian);
+            var h32 = Compute(input, (uint)seed );
             return new Hash64(h32.Value);
         }
     }

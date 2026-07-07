@@ -24,14 +24,23 @@ namespace SystemEx.Hash {
     /// Implements the Weinberg hash algorithm.
     /// </summary>
     public sealed class WeinbergHash : IHash {
+
+        Endian m_endian;
+        /// <summary>
+        /// Craate a new instance
+        /// </summary>
+        /// <param name="endian">The suing endian for creating a hash</param>
+        public WeinbergHash ( Endian endian ) {
+            m_endian = endian;
+        }
+
         /// <summary>
         /// Computes the Weinberg hash of the given input.
         /// </summary>
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
-        /// <param name="endian">The endianness for the hash computation.</param>
         /// <returns>The computed Weinberg hash as a 32-bit value.</returns>
-        public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
             uint hash = seed;
             uint g;
 
@@ -51,9 +60,8 @@ namespace SystemEx.Hash {
         /// </summary>
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
-        /// <param name="endian">The endianness for the hash computation.</param>
         /// <returns>The computed Weinberg hash as a 64-bit value.</returns>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed) {
             ulong hash = seed;
             ulong g;
 

@@ -32,6 +32,7 @@ namespace SystemEx.Hash {
     /// stable hashing for the lifetime of the object while preventing
     /// predictable hash streams.
     /// </summary>
+    [Obsolete("Hashable is deprecated. Use IHashable<T> with HashFactory instead. See Example: Examples/ExampleHasher.cs")]
     public abstract class Hashable {
         /// <summary>
         /// Per‑instance random seed used for hashing.  
@@ -80,7 +81,7 @@ namespace SystemEx.Hash {
                 }
 
                 if ( inst is IHash hasher ) {
-                    var h = hasher.Compute(input, (uint)m_seed, attr.Endian);
+                    var h = hasher.Compute(input, (uint)m_seed );
                     _hash = (int)h.Value;
                 } else {
                     _hash = base.GetHashCode();
@@ -120,7 +121,7 @@ namespace SystemEx.Hash {
                 }
 
                 if ( inst is IHash hasher ) {
-                    var h = hasher.ComputeLong(input, m_seed ,attr.Endian);
+                    var h = hasher.ComputeLong(input, m_seed );
                     _hash = (long)h.Value;
                 } else {
                     _hash = base.GetHashCode();

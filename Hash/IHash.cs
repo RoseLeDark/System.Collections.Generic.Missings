@@ -15,6 +15,7 @@
  * changes and the date.
  */
 
+using System.Drawing;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
@@ -37,6 +38,11 @@ namespace SystemEx.Hash {
         /// Creates a new 32‑bit hash wrapper.
         /// </summary>
         public Hash32 ( uint value ) => Value = value;
+
+        /// <inheritdoc/>
+        public override string ToString () {
+            return Value.ToString("X4");
+        }
     }
 
     /// <summary>
@@ -56,6 +62,11 @@ namespace SystemEx.Hash {
         /// Creates a new 64‑bit hash wrapper.
         /// </summary>
         public Hash64 ( ulong value ) => Value = value;
+
+        /// <inheritdoc/>
+        public override string ToString () {
+            return Value.ToString("X4");
+        }
     }
 
     /// <summary>
@@ -74,13 +85,13 @@ namespace SystemEx.Hash {
         /// Computes a 32‑bit hash over the given byte array using the specified seed
         /// and endian mode.
         /// </summary>
-        Hash32 Compute ( Array<byte> input, uint seed, Endian endian );
+        Hash32 Compute ( Array<byte> input, uint seed );
 
         /// <summary>
         /// Computes a 64‑bit hash over the given byte array using the specified seed
         /// and endian mode.
         /// </summary>
-        Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian );
+        Hash64 ComputeLong ( Array<byte> input, ulong seed );
     }
     /// @}
 

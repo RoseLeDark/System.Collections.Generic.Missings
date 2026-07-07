@@ -16,6 +16,8 @@
  */
 
 
+using SystemEx.Base;
+
 namespace SystemEx.Drawing {
     /// \addtogroup color
     /// @{

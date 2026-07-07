@@ -28,16 +28,25 @@ namespace SystemEx.Hash {
     /// Both <c>Compute</c> (32‑bit) and <c>ComputeLong</c> (64‑bit) operate on
     /// <see cref="Array{byte}"/> and support endian‑aware block construction.
     /// </summary>
-    internal class Murmur3Hasher : IHash {
+    internal class Murmur3Hash : IHash {
+
+        Endian m_endian;
+        /// <summary>
+        /// Craate a new instance
+        /// </summary>
+        /// <param name="endian">The suing endian for creating a hash</param>
+        public Murmur3Hash ( Endian endian ) {
+            m_endian = endian;
+        }
+
         /// <summary>
         /// Computes the 32‑bit Murmur3 hash over the given byte array using
         /// iterator‑driven 4‑byte block processing.  
         /// 
-        /// The function advances the iterator in 4‑byte steps and constructs
-        /// the block value according to the specified <paramref name="endian"/>.  
+        /// The function advances the iterator in 4‑byte steps and constructs  
         /// Remaining bytes (tail) are processed using the same iterator model.
         /// </summary>
-        public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
+        public Hash32 Compute ( Array<byte> input, uint seed) {
             uint h1 = seed;
 
             // 4‑Byte Blöcke
@@ -46,24 +55,16 @@ namespace SystemEx.Hash {
                 if ( Iterator.Distance(it.Clone(), input.End.Clone()) < 4 )
                     break;
 
-                byte b0 = it.Current;
-                byte b1 = Iterator.Advance<byte>(it, 1).Current;
-                byte b2 = Iterator.Advance<byte>(it, 2).Current;
-                byte b3 = Iterator.Advance<byte>(it, 3).Current;
-
                 uint k1;
 
-                if ( endian == Endian.LittleEndian ) {
-                    k1 = (uint)(b0
-                        | (b1 << 8)
-                        | (b2 << 16)
-                        | (b3 << 24));
-                } else {
-                    k1 = (uint)(b3
-                        | (b2 << 8)
-                        | (b1 << 16)
-                        | (b0 << 24));
-                }
+                byte[] bvalue = new byte[4]  {
+                    it.Current,
+                    Iterator.Advance<byte>(it, 1).Current,
+                    Iterator.Advance<byte>(it, 2).Current,
+                    Iterator.Advance<byte>(it, 3).Current
+                };
+
+                k1 = bvalue.ToUInt(m_endian);
 
                 // Murmur3‑Mixing
                 k1 *= 3432918353U;
@@ -117,13 +118,9 @@ namespace SystemEx.Hash {
 
         /// <summary>
         /// Computes the 64‑bit Murmur3 hash using iterator‑driven 8‑byte block
-        /// processing.  
-        /// 
-        /// The function advances the iterator in 8‑byte steps and constructs
-        /// the 64‑bit block according to <paramref name="endian"/>.  
-        /// and combined into a partial block.
+        /// processing. 
         /// </summary>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
             int length = input.Count;
             ulong h = seed;   
 
@@ -133,36 +130,20 @@ namespace SystemEx.Hash {
                 if ( Iterator.Distance(it, input.End) < 8 )
                     break;
 
-                ulong k;
+                ulong k = 0;
 
-                byte b0 = it.Current;
-                byte b1 = Iterator.Advance<byte>(it, 1).Current;
-                byte b2 = Iterator.Advance<byte>(it, 2).Current;
-                byte b3 = Iterator.Advance<byte>(it, 3).Current;
-                byte b4 = Iterator.Advance<byte>(it, 4).Current;
-                byte b5 = Iterator.Advance<byte>(it, 5).Current;
-                byte b6 = Iterator.Advance<byte>(it, 6).Current;
-                byte b7 = Iterator.Advance<byte>(it, 7).Current;
+                byte[] bvalue = new byte[8]  {
+                    it.Current,
+                    Iterator.Advance<byte>(it, 1).Current,
+                    Iterator.Advance<byte>(it, 2).Current,
+                    Iterator.Advance<byte>(it, 3).Current,
+                    Iterator.Advance<byte>(it, 4).Current,
+                    Iterator.Advance<byte>(it, 5).Current,
+                    Iterator.Advance<byte>(it, 6).Current,
+                    Iterator.Advance<byte>(it, 7).Current
+                };
 
-                if ( endian == Endian.LittleEndian ) {
-                    k = (ulong)b0
-                      | ((ulong)b1 << 8)
-                      | ((ulong)b2 << 16)
-                      | ((ulong)b3 << 24)
-                      | ((ulong)b4 << 32)
-                      | ((ulong)b5 << 40)
-                      | ((ulong)b6 << 48)
-                      | ((ulong)b7 << 56);
-                } else {
-                    k = (ulong)b7
-                      | ((ulong)b6 << 8)
-                      | ((ulong)b5 << 16)
-                      | ((ulong)b4 << 24)
-                      | ((ulong)b3 << 32)
-                      | ((ulong)b2 << 40)
-                      | ((ulong)b1 << 48)
-                      | ((ulong)b0 << 56);
-                }
+                k = bvalue.ToULong(m_endian);
 
                 // Murmur‑like mixing
                 k *= 0x87c37b91114253d5UL;

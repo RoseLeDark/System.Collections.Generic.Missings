@@ -41,6 +41,16 @@ namespace SystemEx.Hash {
     public class BernsteinHash : IHash {
         private const uint Default = 5381; // DJB2‑Seed
         private const ulong Default64 = 53811835;
+
+        Endian m_endian;
+        /// <summary>
+        /// Craate a new instance
+        /// </summary>
+        /// <param name="endian">The suing endian for creating a hash</param>
+        public BernsteinHash ( Endian endian ) {
+            m_endian = endian;
+        }
+
         /// <summary>
         /// Computes a simple 32‑bit hash from the given byte sequence.
         ///
@@ -52,9 +62,8 @@ namespace SystemEx.Hash {
         /// </summary>
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
-        /// <param name="endian">The endianness of the input data.</param>
         /// <returns>The computed Bernstein hash as a Hash32 object.</returns>
-        public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
             if ( input.Count == 0 )
                 return new Hash32(0);
 
@@ -80,9 +89,8 @@ namespace SystemEx.Hash {
         /// </summary>
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
-        /// <param name="endian">The endianness of the input data.</param>
         /// <returns>The computed Bernstein hash as a Hash64 object.</returns>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
             if ( input == null || input.Count == 0 )
                 return new Hash64(0);
 

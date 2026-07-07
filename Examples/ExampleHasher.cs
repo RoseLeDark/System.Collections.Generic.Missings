@@ -14,51 +14,138 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+
+/**
+ * @file SensorData.cs
+ * @brief Beginner-friendly example demonstrating the new struct-based hashing system in SystemEx.
+ *
+ * @details
+ * This file shows how a value type (struct) can participate in the SystemEx hashing pipeline.
+ * Traditionally, hashing in SystemEx was based on the abstract class `Hashable`, which only works
+ * for reference types (classes). Value types cannot inherit from an abstract base class, so a new
+ * mechanism was introduced:
+ *
+ *   - `IHashable<T>`: A minimal interface that requires a deterministic byte representation.
+ *   - `HashFactory`: A new component that reads the `HashAlgorithm` attribute and computes
+ *                    32‑bit or 64‑bit hashes for both classes and structs.
+ *
+ * Together, these two additions allow any type—class or struct—to be hashed using the same
+ * attribute-driven system.
+ *
+ * ## How hashing works (beginner explanation)
+ *
+ * 1. The type is annotated with `HashAlgorithmAttribute`, which selects:
+ *      - The hashing algorithm (e.g., BernsteinHash)
+ *      - The endianness used by the hasher
+ *
+ * 2. The type implements `IHashable<T>` and provides a `ToBytes()` method.
+ *      - This method must return a deterministic byte sequence.
+ *      - Field order, size, and endianness must never change.
+ *
+ * 3. `HashFactory`:
+ *      - Reads the attribute
+ *      - Instantiates the selected hasher
+ *      - Calls `ToBytes()`
+ *      - Computes a 32‑bit or 64‑bit hash
+ *
+ * This example demonstrates all of these steps in a simple, easy-to-understand struct.
+ *
+ * @note
+ * Struct hashing is now fully supported thanks to `HashFactory`. This was not possible with the
+ * old class-based `Hashable` system.
+ *
+ * @see IHashable
+ * @see HashFactory
+ * @see HashAlgorithmAttribute
+ * @see BernsteinHash
+ */
+
 using SystemEx;
 using SystemEx.Hash;
 using SystemEx.Collections.Generic;
 
 namespace Examples {
-    
+
 
     /// <summary>
-    /// Example data class using HashableObject.
-    /// </summary>
-    /// The HashAlgorithm attribute tells HashableObject:
-    ///   - Use BernsteinHash
-    ///   - Use LittleEndian for byte interpretation
+    /// Simple example showing how a struct can participate in the SystemEx
+    /// hashing system using <see cref="IHashable{SensorData}"/>.
     ///
-    /// HashableObject automatically:
-    ///   1. Calls ToBytes()
-    ///   2. Passes the bytes to the selected hasher
-    ///   3. Returns Hash32 / Hash64
-    [HashAlgorithm(typeof(BernsteinHash), Endian.LittleEndian)]
-    public class SensorData : Hashable {
+    /// This demonstrates:
+    ///   - How to attach a hash algorithm using the HashAlgorithm attribute
+    ///   - How to provide a deterministic byte representation via ToBytes()
+    ///   - How HashFactory computes 32‑bit and 64‑bit hashes for structs
+    /// </summary>
+    [HashAlgorithm(typeof(BernsteinHash), Endian.System)]
+    public struct SensorData : IHashable<SensorData> {
+
 
         /// <summary>
-        /// Example fields that participate in hashing.
+        /// Example fields that will be included in the hash.
         /// </summary>
         public int Id;
         public float Value;
-
         /// <summary>
-        /// Returns the deterministic byte representation of this object.
-        ///
-        /// Important:
-        ///   - Fixed order
-        ///   - Fixed endian
-        ///   - Fixed size (8 bytes)
+        /// Initializes the struct with example values.
         /// </summary>
-        public override Array<byte> ToBytes () {
+        public SensorData () {
+            Id = 748;
+            Value = 1.00928f;
+        }
+        /// <summary>
+        /// Converts this struct into a deterministic byte sequence.
+        ///
+        /// Important notes for beginners:
+        ///   - The order of fields must never change.
+        ///   - The endianness must be chosen intentionally.
+        ///   - The size must always stay the same (here: 8 bytes).
+        ///
+        /// HashFactory will use these bytes as input for the selected hash algorithm.
+        /// </summary>
+        public Array<byte> ToBytes () {
             var b = new Array<byte>(8);
 
-            // int → 4 bytes
-            b.InsertRange(0, Id.ToBytes(Endian.LittleEndian));
 
-            // float → 4 bytes
-            b.InsertRange(4, Value.ToBytes(Endian.LittleEndian));
+            // Convert the integer field into 4 bytes.
+            // Endian.System means: use the machine's native endianness.
+            b.InsertRange(0, Id.ToBytes(Endian.System));
+
+            // Convert the float field into 4 bytes.
+            // Here we intentionally use BigEndian to show that each field
+            // can choose its own byte order if needed.
+            b.InsertRange(4, Value.ToBytes(Endian.BigEndian));
 
             return b;
+        }
+        /// <summary>
+        /// Computes a 32‑bit hash for this struct.
+        ///
+        /// How it works:
+        ///   1. HashFactory reads the HashAlgorithm attribute on this struct.
+        ///   2. It creates the specified hasher (BernsteinHash).
+        ///   3. It calls ToBytes() to get the raw data.
+        ///   4. It computes a 32‑bit hash using the given seed.
+        ///
+        /// If the hash result is non‑zero, it is returned.
+        /// Otherwise, the fallback is the default .NET hash code.
+        /// </summary>
+        public override int GetHashCode () {
+            var x =  HashFactory.Hash32(this, RandUtils.RandUInt(uint.MinValue, uint.MaxValue, Endian.System) );
+            if ( x.Value != 0 ) return (int)x.Value;
+
+            return base.GetHashCode();
+        }
+        /// <summary>
+        /// Computes a 64‑bit hash for this struct.
+        ///
+        /// This works exactly like GetHashCode(), but produces a 64‑bit value.
+        /// If the computed hash is zero, the method returns 0 as a fallback.
+        /// </summary>
+        public ulong GetHashCodeLong () {
+            var x =  HashFactory.Hash64(this, RandUtils.RandUInt(uint.MinValue, uint.MaxValue, Endian.System) );
+            if ( x.Value != 0 ) return x.Value;
+
+            return 0;
         }
     }
 

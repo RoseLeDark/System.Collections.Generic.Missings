@@ -45,6 +45,16 @@ namespace SystemEx.Hash {
             internal byte FirstPaddingBlock;
             internal byte Last_PaddingBlock;
         };
+
+        Endian m_endian;
+        /// <summary>
+        /// Craate a new instance
+        /// </summary>
+        /// <param name="endian">The suing endian for creating a hash</param>
+        public GrøstlHash ( Endian endian ) {
+            m_endian = endian;
+        }
+
         #region HELPER
         /// <summary>
         /// XORs two arrays of uints in place. The destination array is modified to contain the result of the XOR operation.
@@ -385,25 +395,18 @@ namespace SystemEx.Hash {
         /// keyed hash variants, or introduce additional application-specific
         /// entropy without altering the core Grøstl-512 computation.
         /// </param>
-        /// <param name="endian">
-        /// Defines how the first 64 bits of the Grøstl-512 digest are interpreted
-        /// when converted to a <see cref="ulong"/>. This controls the byte order
-        /// used by <c>digest.ToULong(endian)</c>, enabling consistent behavior
-        /// across heterogeneous architectures or protocols that require a specific
-        /// endianness.
-        /// </param>
         /// <returns>
         /// A <see cref="Hash64"/> instance containing the 64-bit hash value derived
         /// from the Grøstl-512 digest of <paramref name="input"/>, after endian-aware
         /// extraction and XOR-mixing with <paramref name="seed"/>.
         /// </returns>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed, Endian endian ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
             uint[]  ColumnConstant = { 0x30201000, 0x70605040, 0xb0a09080, 0xf0e0d0c0 };
             byte[,] ShiftValues = { {0, 1, 2, 3, 4, 5, 6, 11}, {1, 3, 5, 11, 0, 2, 4, 6}    };
 
             byte[] digest = Compute_Hash(input, 64, ShiftValues, ColumnConstant); // 64 Bytes (Grøstl-512)
 
-            ulong value = digest.ToULong(endian);
+            ulong value = digest.ToULong(m_endian);
 
             value ^= seed;
             return new Hash64(value);
@@ -425,26 +428,19 @@ namespace SystemEx.Hash {
         /// keyed hash variants, or introduce additional application-specific
         /// entropy without altering the core Grøstl-256 computation.
         /// </param>
-        /// <param name="endian">
-        /// Defines how the first 32 bits of the Grøstl-256 digest are interpreted
-        /// when converted to a <see cref="uint"/>. This controls the byte order
-        /// used by <c>digest.ToULong(endian)</c>, enabling consistent behavior
-        /// across heterogeneous architectures or protocols that require a specific
-        /// endianness.
-        /// </param>
         /// <returns>
         /// A <see cref="Hash32"/> instance containing the 32-bit hash value derived
         /// from the Grøstl-256 digest of <paramref name="input"/>, after endian-aware
         /// extraction and XOR-mixing with <paramref name="seed"/>.
         /// </returns>
-        public Hash32 Compute ( Array<byte> input, uint seed, Endian endian ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
 
             uint[]  ColumnConstant = { 0x30201000u,  0x70605040u };
             byte[,] ShiftValues = { { 0, 1, 2, 3, 4, 5, 6, 7 },  { 1, 3, 5, 7, 0, 2, 4, 6 }    };
 
             byte[] digest = Compute_Hash(input, 32, ShiftValues, ColumnConstant); // 32 Bytes (Grøstl-256)
 
-            uint value = digest.ToUInt(endian);
+            uint value = digest.ToUInt(m_endian);
 
             value ^= seed;
             return new Hash32(value);
