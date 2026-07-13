@@ -1,10 +1,45 @@
 # Changelog
-## Planned to Version 1.0
-### Add
-- OpenCL Kerneal Call with my  SystemEx.Device System SystemEx 2.0
+
+## [0.55.05] - 13.07.2026  -> Lacking
+### CAUTION Very Important
+- Marked all Array<T> types as obsolate !!! and:
+    - Add `Vector<T> : IContainerEx<T>`: A dynamic Vector implementation that supports optional auto-growth, indexed access, insertion, removal, traversal, and basic search operations. see c++ std::vector<T>
+    - Add `ref struct Set<T, TContainer>`:Defines a sorting action used by the Set wrapper.  See c++ std::flat_set
+    - Add `ref struct Find<T, TContainer> where TContainer : IContainerEx<T>`: Provides search operations over a container implementing <see cref="IContainerEx{T}"/>. This struct performs non‑modifying lookups such as first/last occurrence, existence checks and counting matches.
+ for replace and easyble use. See Example: Example\VectorSet.cs and Example\VectorFind.cs
+### Added
+- Added `Half16`, a fully deterministic IEEE‑754 binary16 implementation with complete bit‑level arithmetic.
+- Added `Blake3Hasher` (testing).
+- Added new conversion helpers for all basic primitive types (`ToUInt`, `ToInt`, `ToUShort`, …), including offset‑based variants that allow reading values from a `byte[]` starting at a specific index.
+- Added `IComparableEx<T>`, providing a strongly typed comparison contract compatible with `IComparable<T>` via integer‑backed `CompareResult`.
+- Added `IHashable<T>`, a minimal interface for deterministic byte‑level serialization used by SystemEx hashing algorithms.
+- Added fully documented `HashFactory` with support for attribute‑driven hash algorithm selection (`HashAlgorithmAttribute`) and automatic hasher instantiation via `Activator`.
+- Added namespace `SystemEx.Numeric` containing the following numeric types:
+  - `vec2f`, `vec2d`, `vec2i`
+  - `vec3f`, `vec3d`, `vec3i`
+  - `vec4f`, `vec4d`, `vec4i`
+  - `quadf`, `quadd`
+  - `mat44f`, `mat44d`
+  - `rect`
+  - `plane`
+- Added `GetEndian()` to the `Conversion` utilities to detect the system’s native endianness, allowing conversions to swap endianness only when necessary (e.g., inside `ToBytes(Endian endian)`).
+
+### Changed
+- Removed the `Endian` parameter from `IHash.Compute` and `IHash.ComputeLong`. Endianness is now defined solely by the hash object’s constructor.
+- `RamSharedBackend.ReciveFromHardwareBuffer` now returns a copied buffer instead of the internal backend buffer to improve memory safety and prevent unintended external modifications.
+
+### Deprecated – Hashable (scheduled for removal in version 0.60)
+
+- The abstract base class Hashable has been marked as obsolete and is scheduled for complete removal in SystemEx 0.60.
+- The class‑based hashing system is no longer recommended and has been superseded by the new attribute‑driven hashing architecture based on:
+    - IHashable<T> for deterministic byte serialization
+    - HashFactory for algorithm selection and hash computation
+- The new hashing pipeline supports both classes and structs, avoids inheritance constraints, and provides a cleaner, more modular design.
+- Marked all Array<T> types as obsolate !!! 
 
 ---
-## [0.50.00] - 03.07.2026 @Lacking
+
+## [0.50.00] - 03.07.2026  -> Lacking
 ### Major Documentation Milestone
 A significant version jump was made intentionally.  
 With this release, the entire public API of SystemEx — including the mathematical canvas
@@ -47,7 +82,7 @@ remaining missing structural components are completed.
 
 ---
 
-## [0.12.04] – 2026‑07‑01 @Ignoring
+## [0.12.04] – 2026‑07‑01 -> Ignoring
 
 ### Added
 `System.FlexSpan<T>` — a unified view type for array‑based memory.**  
@@ -61,12 +96,6 @@ It is now integrated across all **SystemEx.Collections** types that use array‑
 
 Map‑based collections are not yet supported because they use `List<T>` internally.  
 A dedicated **FlexListSpan** type will be added later to enable FlexSpan‑style views over list‑backed containers.
-
-
-Wenn du willst, kann ich dir auch eine **längere Version** für Dokumentation oder eine **ultra‑kurze Version** für Git‑Commit‑Messages erstellen.
-
-- Introduced the new node system under `SystemEx.Model`, intended to replace the legacy node types in `SystemEx.Collections.Generic`.
-  
 
 - Added new sorting algorithms under `SystemEx.Utils.Algorithm`:
   - `QuickSort` – Hoare‑partition, tail‑recursion‑eliminated variant.  
@@ -111,7 +140,7 @@ Wenn du willst, kann ich dir auch eine **längere Version** für Dokumentation o
 
 ---
 
-## [0.10.15] 30.06.2026
+## [0.10.15] 30.06.2026 -> Ignoring
 
 ### Added
 - Added `long‑based iterator navigation`:
@@ -162,7 +191,7 @@ Wenn du willst, kann ich dir auch eine **längere Version** für Dokumentation o
 
 ---
 
-## [0.10.12] 29.06.206
+## [0.10.12] 29.06.206 -> Ignoring
 
 ### Very Important
 - `Renamed `RamKernel` → `NativeRAMKernel<TDelegate>``  
@@ -236,7 +265,7 @@ Wenn du willst, kann ich dir auch eine **längere Version** für Dokumentation o
 
 ---
 
-## [0.9.64] 23.06.2026
+## [0.9.64] 23.06.2026 -> Ignoring
 
 ### Changed
 - `public int Length { get; }` → `public ulong Length { get; }`

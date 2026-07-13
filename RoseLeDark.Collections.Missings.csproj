@@ -8,12 +8,12 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.50.0</AssemblyVersion>
-    <FileVersion>0.50.0</FileVersion>
+    <AssemblyVersion>0.55.05</AssemblyVersion>
+    <FileVersion>0.55.05</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>RoseLeDark.Collections.Missings — Updated Description
 A lightweight extension library providing additional generic collection types and utility structures missing in .NET.
-Includes Array&lt;T&gt;, FixedArray&lt;T&gt;, SortedArray&lt;T&gt;, Map&lt;TKey,TValue&gt;, SortedMap&lt;TKey,TValue&gt;, MultiMap&lt;TKey,TValue&gt;, Deque&lt;T&gt;, RingBuffer&lt;T&gt;, and tuple‑like helpers such as Pair&lt;T1,T2&gt; and Triple&lt;T1,T2,T3&gt;.
+Includes Vector&lt;T&gt;, FixedVector&lt;T&gt;, SortedArray&lt;T&gt;, Map&lt;TKey,TValue&gt;, SortedMap&lt;TKey,TValue&gt;, MultiMap&lt;TKey,TValue&gt;, Deque&lt;T&gt;, RingBuffer&lt;T&gt;, and tuple‑like helpers such as Pair&lt;T1,T2&gt; and Triple&lt;T1,T2,T3&gt;.
 
 Provides extended numeric and color types including ColorRGB8, ColorRGB10, ColorRGB16, ColorHDR, ColorXYZ, and a unified Colors utility module.
 Adds lightweight hash implementations for non‑cryptographic scenarios, supporting deterministic hashing for engine‑oriented data structures.
@@ -23,7 +23,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.50.0</Version>
+    <Version>0.55.05</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -37,46 +37,42 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.50.00] - 03.07.2026 @Lacking
-### Major Documentation Milestone
-A significant version jump was made intentionally.  
-With this release, the entire public API of SystemEx — including the mathematical canvas
-system, layer model, blend modes, hash engines, and all related interfaces — has been fully
-documented and formalized.
-
-This marks the completion of approximately half of the planned major‑release scope.
-The version number reflects this structural maturity rather than incremental feature changes.
-
+    <PackageReleaseNotes>## [0.55.05] - 13.07.2026  -&gt; Lacking
+### CAUTION Very Important
+- Marked all Array&lt;T&gt; types as obsolate !!! and:
+    - Add `Vector&lt;T&gt; : IContainerEx&lt;T&gt;`: A dynamic Vector implementation that supports optional auto-growth, indexed access, insertion, removal, traversal, and basic search operations. see c++ std::vector&lt;T&gt;
+    - Add `ref struct Set&lt;T, TContainer&gt;`:Defines a sorting action used by the Set wrapper.  See c++ std::flat_set
+    - Add `ref struct Find&lt;T, TContainer&gt; where TContainer : IContainerEx&lt;T&gt;`: Provides search operations over a container implementing &lt;see cref="IContainerEx{T}"/&gt;. This struct performs non‑modifying lookups such as first/last occurrence, existence checks and counting matches.
+ for replace and easyble use. See Example: Example\VectorSet.cs and Example\VectorFind.cs
 ### Added
-- Full XML documentation for all canvas interfaces (`ICanvas`, `ISubCanvas`, `ICanvasList`)
-- Complete documentation for all hash engines (Groestl, Adler, etc.)
-- Formalized mathematical layer model and blend mode semantics
-- Unified terminology across the entire SystemEx framework
+- Added `Half16`, a fully deterministic IEEE‑754 binary16 implementation with complete bit‑level arithmetic.
+- Added `Blake3Hasher` (testing).
+- Added new conversion helpers for all basic primitive types (`ToUInt`, `ToInt`, `ToUShort`, …), including offset‑based variants that allow reading values from a `byte[]` starting at a specific index.
+- Added `IComparableEx&lt;T&gt;`, providing a strongly typed comparison contract compatible with `IComparable&lt;T&gt;` via integer‑backed `CompareResult`.
+- Added `IHashable&lt;T&gt;`, a minimal interface for deterministic byte‑level serialization used by SystemEx hashing algorithms.
+- Added fully documented `HashFactory` with support for attribute‑driven hash algorithm selection (`HashAlgorithmAttribute`) and automatic hasher instantiation via `Activator`.
+- Added namespace `SystemEx.Numeric` containing the following numeric types:
+  - `vec2f`, `vec2d`, `vec2i`
+  - `vec3f`, `vec3d`, `vec3i`
+  - `vec4f`, `vec4d`, `vec4i`
+  - `quadf`, `quadd`
+  - `mat44f`, `mat44d`
+  - `rect`
+  - `plane`
+- Added `GetEndian()` to the `Conversion` utilities to detect the system’s native endianness, allowing conversions to swap endianness only when necessary (e.g., inside `ToBytes(Endian endian)`).
 
 ### Changed
-- API surface stabilized and prepared for 1.0
-- Internal consistency improvements across all canvas and hash components
+- Removed the `Endian` parameter from `IHash.Compute` and `IHash.ComputeLong`. Endianness is now defined solely by the hash object’s constructor.
+- `RamSharedBackend.ReciveFromHardwareBuffer` now returns a copied buffer instead of the internal backend buffer to improve memory safety and prevent unintended external modifications.
 
-### Notes
-The jump from `0.12.04` to `0.50.00` is intentional and represents reaching the halfway point
-toward the 1.0 major release.
+### Deprecated – Hashable (scheduled for removal in version 0.60)
 
-### Codename Update: Ignoring → Lacking
-The codename for the 0.x development cycle has been updated from **Ignoring** to **Lacking**.
-
-All SystemEx development codenames follow the theme of “Missing”, reflecting the project’s
-purpose of providing features, structures, and utilities that are missing in the .NET ecosystem.
-
-- **Ignoring** represented the early phase where documentation, structure, and formal API
-  descriptions were intentionally ignored while core functionality was being built.
-
-- **Lacking** represents the next phase: the system is functionally complete, but still lacking
-  documentation, clarity, and formal definitions.
-
-With version **0.50.00**, the documentation milestone has been reached, marking the end of the
-“Lacking” phase. All subsequent 0.50.x versions will continue under this codename until the
-remaining missing structural components are completed.
-
+- The abstract base class Hashable has been marked as obsolete and is scheduled for complete removal in SystemEx 0.60.
+- The class‑based hashing system is no longer recommended and has been superseded by the new attribute‑driven hashing architecture based on:
+    - IHashable&lt;T&gt; for deterministic byte serialization
+    - HashFactory for algorithm selection and hash computation
+- The new hashing pipeline supports both classes and structs, avoids inheritance constraints, and provides a cleaner, more modular design.
+- Marked all Array&lt;T&gt; types as obsolate !!! 
 </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
@@ -116,6 +112,8 @@ remaining missing structural components are completed.
 	</ItemGroup>
   <ItemGroup>
     <Compile Remove="Collections\Generic\BasicRope.cs" />
+    <Compile Remove="Examples\VectorFind.cs" />
+    <Compile Remove="Examples\VectorSet.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -127,6 +125,12 @@ remaining missing structural components are completed.
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Examples\ExampleRamKernelAdd.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\VectorFind.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\VectorSet.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="README.md">
@@ -153,6 +157,10 @@ remaining missing structural components are completed.
 
   <ItemGroup>
     <None Include="Collections\Generic\BasicRope.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Math\" />
   </ItemGroup>
 
 </Project>

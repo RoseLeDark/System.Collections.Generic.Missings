@@ -148,7 +148,7 @@ namespace SystemEx.Collections.Model {
             return _ret;
         }
         /// <inheritdoc/>
-        public override bool Equals ( object obj ) {
+        public override bool Equals ( object? obj ) {
             return Equals(obj as GenericNode<T>);
         }
         /// <inheritdoc/>

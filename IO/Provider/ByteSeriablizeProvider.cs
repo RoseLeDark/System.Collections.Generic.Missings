@@ -51,10 +51,10 @@ namespace SystemEx.IO.Provider {
                 var name = entry.First;
                 var offset = entry.Second;
 
-                Array<byte>? curr = GetBytesForEntry(obj, name, m_endian);
-                if ( curr != null ) {
-                    ret.WriteRange((ulong)offset, curr.ToArray());
-                }
+                FixedVector<byte> curr = GetBytesForEntry(obj, name, m_endian);
+                
+                ret.WriteRange((ulong)offset, curr.ToNative());
+                
             }
 
             return ret;
@@ -89,7 +89,7 @@ namespace SystemEx.IO.Provider {
         /// <param name="name">The entry</param>
         /// <param name="endian">Endian</param>
         /// <returns></returns>
-        protected abstract Array<byte> GetBytesForEntry(object obj, string name, Endian endian);
+        protected abstract FixedVector<byte> GetBytesForEntry(object obj, string name, Endian endian);
         /// <summary>
         /// Gets the size of the specified entry.
         /// </summary>

@@ -272,10 +272,12 @@ namespace SystemEx.Numeric {
         /// ensuring consistent hashing across devices and backends.
         /// </para>
         /// </summary>
-        public Array<byte> ToBytes () {
-            Cache m = new Cache(sizeof(int) * 2);
-            m.WriteRange(0, m_x.ToBytes());
-            m.WriteRange(4, m_y.ToBytes());
+        public FixedVector<byte> ToBytes () {
+            Cache m = new Cache(sizeof(int) * Count);
+
+            for ( byte i = 0 ; i < Count ; i++ )
+                m.WriteRange((ulong)(sizeof(int) * i), Get(i).ToBytes());
+
             return m.ToArrayEx();
         }
         /// <summary>

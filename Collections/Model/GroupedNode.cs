@@ -31,7 +31,7 @@ namespace SystemEx.Collections.Model {
     /// </para>
     /// </remarks>
     public class GroupedNode<T> : GenericNode<T> {
-        private Array<GenericNode<T>> m_grouped;
+        private Vector<GenericNode<T>> m_grouped;
 
         /// <summary>
         /// Returns an iterator positioned at the first grouped node.
@@ -40,7 +40,7 @@ namespace SystemEx.Collections.Model {
         /// This provides STL‑style access to the grouped collection without exposing
         /// the underlying array implementation.
         /// </remarks>
-        public ArrayRandomAccessIterator<GenericNode<T>> GroupBegin () => m_grouped.First;
+        //public ArrayRandomAccessIterator<GenericNode<T>> GroupBegin () => m_grouped.First;
 
         /// <summary>
         /// Returns an iterator positioned one past the last grouped node.
@@ -48,18 +48,18 @@ namespace SystemEx.Collections.Model {
         /// <remarks>
         /// Suitable for range‑based algorithms and STL‑style iteration.
         /// </remarks>
-        public ArrayRandomAccessIterator<GenericNode<T>> GroupEnd () => m_grouped.End;
+       // public ArrayRandomAccessIterator<GenericNode<T>> GroupEnd () => m_grouped.End;
 
         /// <summary>
         /// Returns an iterator positioned at the specified index within the group.
         /// </summary>
         /// <param name="index">Zero‑based index of the grouped node.</param>
-        public ArrayRandomAccessIterator<GenericNode<T>> GroupAt ( int index ) => m_grouped.At(index);
+        //public ArrayRandomAccessIterator<GenericNode<T>> GroupAt ( int index ) => m_grouped.At(index);
 
         /// <summary>
         /// Gets the total capacity of the grouped node array.
         /// </summary>
-        public int Size => m_grouped.Size;
+        public long Size => m_grouped.Length;
 
         /// <summary>
         /// Gets the first grouped node.
@@ -81,7 +81,7 @@ namespace SystemEx.Collections.Model {
         /// Initializes an empty grouped node with default value and capacity.
         /// </summary>
         public GroupedNode () : base() {
-            m_grouped = new Array<GenericNode<T>>(8);
+            m_grouped = new Vector<GenericNode<T>>(8);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SystemEx.Collections.Model {
         /// </summary>
         /// <param name="value">The value stored in this node.</param>
         public GroupedNode ( T? value ) : base(value) {
-            m_grouped = new Array<GenericNode<T>>(8);
+            m_grouped = new Vector<GenericNode<T>>(8);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace SystemEx.Collections.Model {
         /// This preserves lightweight clone semantics consistent with SystemEx.
         /// </remarks>
         public GroupedNode ( GroupedNode<T> other ) : base(other) {
-            m_grouped = new Array<GenericNode<T>>(8);
+            m_grouped = new Vector<GenericNode<T>>(8);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace SystemEx.Collections.Model {
         /// </summary>
         /// <param name="node">The node to append.</param>
         public void PushBack ( GenericNode<T> node ) {
-            m_grouped.Add(node);
+            m_grouped.PushBack(node);
         }
     }
 /// @}

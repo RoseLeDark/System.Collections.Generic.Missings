@@ -63,7 +63,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Bernstein hash as a Hash32 object.</returns>
-        public Hash32 Compute ( Array<byte> input, uint seed ) {
+        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
             if ( input.Count == 0 )
                 return new Hash32(0);
 
@@ -90,8 +90,8 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Bernstein hash as a Hash64 object.</returns>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
-            if ( input == null || input.Count == 0 )
+        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed ) {
+            if ( input.Count == 0 )
                 return new Hash64(0);
 
             ulong hash = seed == 0 ? Default64 : seed;

@@ -78,12 +78,13 @@ namespace SystemEx.Drawing {
         /// <param name="name">The name of the field to serialize.</param>
         /// <param name="endian">The endianness for the binary representation.</param>
         /// <returns>The byte array representing the serialized field, or null if not found.</returns>
-        protected override Array<byte>? GetBytesForEntry(object obj, string name, Endian endian) {
+        protected override FixedVector<byte> GetBytesForEntry(object obj, string name, Endian endian) {
             var objx = obj as ColorR10G10B10A2;
-            if ( objx == null ) return null;
+            if ( objx == null ) throw new InvalidCastException();
+
+            Cache _ret = new Cache(4, CacheType.Both);
 
             if ( name == "DEFAULT") {
-                Cache _ret = new Cache(4, CacheType.Both);
                 
                 int red = (int)(objx.R * 1023.0f + 0.5f); // 16
                 int green = (int)(objx.G * 1023.0f + 0.5f);// 16
@@ -96,9 +97,8 @@ namespace SystemEx.Drawing {
 
                 _ret.WriteRange(0, raw);
 
-                return _ret.ToArrayEx();
             }
-            return null;
+            return _ret.ToArrayEx();
         }
         /// <summary>
         /// Gets the size of the specified entry in the cache.

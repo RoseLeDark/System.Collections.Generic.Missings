@@ -29,7 +29,7 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="TT">The key type (non‑null).</typeparam>
     /// <typeparam name="TU">The value type (non‑null).</typeparam>
-    public class MultiMap<TT, TU> : Map<TT, TU> {
+    public class MultiMap<TT, TU> : Map<TT, TU> where TT : notnull {
 
         /// <summary>
         /// Creates an empty multi‑map.

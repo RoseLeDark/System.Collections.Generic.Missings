@@ -33,7 +33,7 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The key type.</typeparam>
     /// <typeparam name="TU">The value type.</typeparam>
-    [Serializable]
+    
     public class SortedMap<T, TU> : Map<T, TU>, ISortedMap<T, TU> where T : notnull
     {
         /// <summary>

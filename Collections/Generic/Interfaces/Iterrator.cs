@@ -17,8 +17,10 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic.Interfaces {
-    /// \addtogroup STL
-    /// @
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines the base functionality for all iterators.
     /// Provides forward-only movement.
@@ -40,12 +42,12 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// allowing iterators to be duplicated without affecting the original.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IIterator<T> : IIterator {
+    public interface IIterator<T> : IIterator where T : allows ref struct {
         /// <summary>
         /// Creates a copy of the iterator at its current position.
         /// </summary>
         /// <returns>A new iterator instance positioned identically.</returns>
-        IIterator<T> Clone();
+        IIterator<T>? Clone();
     }
 
     /// <summary>
@@ -53,7 +55,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// and an end-of-range indicator.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IForwardIterator<T> : IIterator<T> {
+    public interface IForwardIterator<T> : IIterator<T> where T : allows ref struct  {
         /// <summary>
         /// Gets the element at the current iterator position.
         /// </summary>
@@ -70,7 +72,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// Represents an iterator that can move both forward and backward.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IBidirectionalIterator<T> : IIterator<T> {
+    public interface IBidirectionalIterator<T> : IIterator<T> where T : allows ref struct {
 
         /// <summary>
         /// Gets or sets the element at the current iterator position.
@@ -98,7 +100,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// in addition to forward and backward stepping.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IRandomAccessIterator<T> : IIterator<T> {
+    public interface IRandomAccessIterator<T> : IIterator<T> where T : allows ref struct {
 
         /// <summary>
         /// Returns a new iterator advanced by the specified offset.
@@ -128,12 +130,13 @@ namespace SystemEx.Collections.Generic.Interfaces {
         void Back();
     }
 
+
     /// <summary>
     /// Represents a forward iterator over key/value pairs.
     /// </summary>
     /// <typeparam name="T">The key type.</typeparam>
     /// <typeparam name="TU">The value type.</typeparam>
-    public interface IPairForwardIterator<T, TU> : IForwardIterator<Pair<T, TU>> {
+    public interface IPairForwardIterator<T, TU> : IForwardIterator<Pair<T, TU>>  {
 
         /// <summary>
         /// Gets the key of the current pair.
@@ -151,7 +154,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// Combines <see cref="IEnumerable{T}"/> and <see cref="IEnumerator{T}"/>.
     /// </summary>
     /// <typeparam name="T">The element type being iterated.</typeparam>
-    public interface IForeachIterator<T> : IEnumerable<T>, IEnumerator<T> {
+    public interface IForeachIterator<T> : IEnumerable<T>, IEnumerator<T> where T : allows ref struct {
     }
 
     /// <summary>
@@ -372,7 +375,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         }
 
     }
-#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+ #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

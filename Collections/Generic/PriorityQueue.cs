@@ -30,7 +30,7 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The stored value type.</typeparam>
     /// <typeparam name="TU">The priority type (must implement <see cref="INumber{TU}"/>).</typeparam>
-    public class PriorityQueueExIterator<T, TU> : IForwardIterator<T> where TU : INumber<TU> {
+    public class PriorityQueueExIterator<T, TU> : IForwardIterator<T> where TU : INumber<TU> where T : notnull {
         /// <summary>
         /// The queue from which elements are consumed.
         /// </summary>

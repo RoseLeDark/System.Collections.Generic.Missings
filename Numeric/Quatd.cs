@@ -172,6 +172,20 @@ namespace SystemEx.Numeric {
         }
 
         /// <summary>
+        /// Gets a component by index .
+        /// </summary>
+        public double Get ( int index ) {
+            return index switch
+            {
+                0 => S,
+                1 => X,
+                2 => Y,
+                3 => Z,
+                _ => throw new ArgumentOutOfRangeException(nameof(index))
+            };
+        }
+
+        /// <summary>
         /// Computes the normalized rotation axis of this quaternion.
         /// </summary>
         public Vec3d GetRotationAxis () {
@@ -517,13 +531,11 @@ namespace SystemEx.Numeric {
         /// ensuring consistent hashing across devices and backends.
         /// </para>
         /// </summary>
-        public Array<byte> ToBytes () {
+        public FixedVector<byte> ToBytes () {
             Cache m = new Cache(sizeof(double) * 4);
 
-            m.WriteRange(0, m_s.ToBytes());
-            m.WriteRange(8, m_v.X.ToBytes());
-            m.WriteRange(16, m_v.Y.ToBytes());
-            m.WriteRange(24, m_v.Z.ToBytes());
+            for ( byte i = 0 ; i < 4 ; i++ )
+                m.WriteRange((ulong)(sizeof(double) * i), Get(i).ToBytes());
 
             return m.ToArrayEx();
         }

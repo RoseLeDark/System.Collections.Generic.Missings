@@ -29,6 +29,8 @@ namespace SystemEx.Collections.Generic {
     /// manually or automatically after insert and remove operations.
     /// </summary>
     /// <typeparam name="T">The type of elements stored in the array.</typeparam>
+    [Obsolete("Use FixedVector<T>, Set<T, FixedVector<T>> for sorted storage, and Find<T, FixedVector<T>> for lookup.")]
+
     public class SortedFixedArray<T> : FixedArray<T> {
         /// <summary>
         /// Delegate used to compare two elements when no comparer interface is provided.

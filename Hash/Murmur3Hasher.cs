@@ -20,6 +20,7 @@ using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Hash {
+#if TESTING
     /// \addtogroup hash
     /// @{
     /// <summary>
@@ -28,7 +29,7 @@ namespace SystemEx.Hash {
     /// Both <c>Compute</c> (32‑bit) and <c>ComputeLong</c> (64‑bit) operate on
     /// <see cref="Array{byte}"/> and support endian‑aware block construction.
     /// </summary>
-    internal class Murmur3Hash : IHash {
+    internal  sealed class Murmur3Hash : IHash {
 
         Endian m_endian;
         /// <summary>
@@ -46,7 +47,7 @@ namespace SystemEx.Hash {
         /// The function advances the iterator in 4‑byte steps and constructs  
         /// Remaining bytes (tail) are processed using the same iterator model.
         /// </summary>
-        public Hash32 Compute ( Array<byte> input, uint seed) {
+        public Hash32 Compute ( Vector<byte> input, uint seed) {
             uint h1 = seed;
 
             // 4‑Byte Blöcke
@@ -77,7 +78,7 @@ namespace SystemEx.Hash {
             }
 
             // --- TAIL ---
-            int remainder = Iterator.Distance(input.First.Clone(), input.End.Clone()) % 4;
+            int remainder = Iterator.Distance(input.First, input.End) % 4;
 
             if ( remainder > 0 ) {
 
@@ -209,4 +210,5 @@ namespace SystemEx.Hash {
         }
     }
     /// @}
+#endif
 }

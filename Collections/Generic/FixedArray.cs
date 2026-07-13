@@ -27,6 +27,7 @@ namespace SystemEx.Collections.Generic {
     /// traversal, and basic search operations. Unlike dynamic arrays, this
     /// structure never grows and always maintains a constant capacity.
     /// </summary>
+    [Obsolete("Use FixedVector<T>, Set<T, FixedVector<T>> for sorted storage, and Find<T, FixedVector<T>> for lookup.")]
     public class FixedArray<T> : Array<T> {
         /// <summary>
         /// Returns only false, disable Property
@@ -36,18 +37,18 @@ namespace SystemEx.Collections.Generic {
         /// Creates a new fixed-size array with the specified capacity.
         /// </summary>
         /// <param name="size">The number of elements the array can hold.</param>
-        public FixedArray(int size) : base(size, 0) { }
+        public FixedArray ( int size ) : base(size, 0) { }
         /// <summary>
         /// Creates a new fixed-size array using an existing buffer.
         /// </summary>
         /// <param name="e">The initial element buffer.</param>
-        public FixedArray(T[] e) : base(e, 0) { }
+        public FixedArray ( T[] e ) : base(e, 0) { }
 
         /// <summary>
         /// Disable Resize
         /// </summary>
         /// <returns>only false</returns>
-        public override bool Resize(int size) {
+        public override bool Resize ( int size ) {
             return false;
         }
 
@@ -57,7 +58,7 @@ namespace SystemEx.Collections.Generic {
         /// <param name="pos">The position to insert at.</param>
         /// <param name="item">The element to insert.</param>
         /// <returns>The number of elements written (1 or 0).</returns>
-        public override int Insert(int pos, T item) {
+        public override int Insert ( int pos, T item ) {
             if ( pos < 0 ) return 0;
 
             m_elements[pos] = item;
@@ -70,8 +71,8 @@ namespace SystemEx.Collections.Generic {
         /// <param name="pos">The starting index.</param>
         /// <param name="items">The items to insert.</param>
         /// <returns>The number of elements successfully written.</returns>
-        public override int InsertRange(int pos, IEnumerable<T> items) {
-            if ( pos < 0 ) return 0; 
+        public override int InsertRange ( int pos, IEnumerable<T> items ) {
+            if ( pos < 0 ) return 0;
 
             // Materialisieren, damit wir Count kennen
             var list = items as ICollection<T> ?? new List<T>(items);

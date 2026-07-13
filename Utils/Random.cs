@@ -86,15 +86,16 @@ namespace SystemEx {
         /// Characters are selected by repeatedly generating random Unicode values
         /// and filtering them through the allowed set.
         /// </summary>
-        public static string RandPassword(int length, FixedArray<char> allowed, Endian endian) {
+        public static string RandPassword(int length, FixedVector<char> allowed, Endian endian) {
 
             StringBuilder sb = new StringBuilder(length);
+            Find<char,FixedVector<char>>  _find = new Find<char, FixedVector<char>>(ref allowed);
 
             int i = 0, d = 0;
             char c = '\0';
             while(i < length )  {
                 c = RandChar((char)0, (char)short.MaxValue, endian);
-                if ( allowed.TryGet(c, out d) ) {
+                if ( _find.TryGet(c, out d) ) {
                     i++;
                     sb.Append(c);
                 }
@@ -107,12 +108,12 @@ namespace SystemEx {
         /// Generates a random password using a predefined password level.
         /// </summary>
         public static string Rand(this string a, RandPasswordLevel level, Endian endian) {
-            FixedArray<char> allowed;
+            FixedVector<char> allowed;
 
             if ( level == RandPasswordLevel.Simple)
-                allowed = new FixedArray<char>(RandUtils.PasswordChars);
+                allowed = new FixedVector<char>(RandUtils.PasswordChars);
             else
-                allowed = new FixedArray<char>(RandUtils.StrongPasswordChars);
+                allowed = new FixedVector<char>(RandUtils.StrongPasswordChars);
 
             return RandPassword((int)level, allowed, endian);
         }

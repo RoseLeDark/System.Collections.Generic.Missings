@@ -45,7 +45,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed FNV-1a hash as a Hash32 object.</returns>
-        public Hash32 Compute ( Array<byte> input, uint seed ) {
+        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
             uint hash = seed == 0 ? Offset32 : seed;
 
             for ( int i = 0 ; i < input.Count ; i++ ) {
@@ -62,7 +62,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed FNV-1a hash as a Hash64 object.</returns>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
+        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed ) {
             ulong hash = seed == 0 ? Offset64 : seed;
 
             for ( int i = 0 ; i < input.Count ; i++ ) {

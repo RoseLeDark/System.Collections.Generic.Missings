@@ -36,7 +36,7 @@ namespace SystemEx {
     /// A lightweight view over an array supporting System, Reverse, and Ring (circular) indexing.
     /// FlexSpan does not allocate and provides ref-return access to elements.
     /// </summary>
-    public ref struct FlexSpan<T> {
+    public ref struct FlexSpan<T>  {
 
         /// <summary>
         /// Enumerator for FlexSpan. Supports forward, reverse, and ring traversal.
@@ -263,12 +263,11 @@ namespace SystemEx {
         /// <summary>
         /// Copies the view into a new Array<T>.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Collections.Generic.Array<T> ToArray () {
+        public Collections.Generic.Vector<T> ToArray () {
             if ( m_llength == 0 )
-                return new Collections.Generic.Array<T>();
+                return new Collections.Generic.Vector<T>();
 
-            var destination = new Collections.Generic.Array<T>( (int)(m_lEnd - m_lStart) );
+            var destination = new Collections.Generic.Vector<T>( (int)(m_lEnd - m_lStart) );
 
             for ( long i = m_lStart, j = 0 ; i < m_lEnd ; i++, j++ ) {
                 T _e = ElementAt(j);

@@ -9,18 +9,18 @@ namespace SystemEx.Hash {
     /// <summary>
     /// ONLY TEST!!!
     /// </summary>
-    public class Black3Hasher : IHash {
-        Array<byte> m_key;
+    public sealed class Black3Hasher : IHash {
+        Vector<byte> m_key;
         Endian m_endian;
 
         public Black3Hasher (Endian endian, byte[] IV) {
-            m_key = new Array<byte>(IV);
+            m_key = new Vector<byte>(IV);
             m_endian = endian;
         }
-        public Hash32 Compute ( Array<byte> input, uint seed ) {
-            Black3 hash = new Black3(m_key.ToArray());
+        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
+            Black3 hash = new Black3(m_key.ToNative());
 
-            hash.Chunk.Update(input.ToArray());
+            hash.Chunk.Update(input.ToNative());
 
             var output = hash.Chunk.Finalize();
 
@@ -32,10 +32,10 @@ namespace SystemEx.Hash {
             return new Hash32(cv.ToUInt());
         }
 
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
-            Black3 hash = new Black3(m_key.ToArray());
+        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed ) {
+            Black3 hash = new Black3(m_key.ToNative());
 
-            hash.Chunk.Update(input.ToArray());
+            hash.Chunk.Update(input.ToNative());
 
             var output = hash.Chunk.Finalize();
 

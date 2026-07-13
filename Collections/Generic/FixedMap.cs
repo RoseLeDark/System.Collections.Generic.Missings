@@ -332,7 +332,7 @@ namespace SystemEx.Collections.Generic {
         /// Retrieves the value associated with the specified key.
         /// </summary>
         /// <exception cref="KeyNotFoundException">Thrown when the key is not found.</exception>
-        public TU? Get(T Key) {
+        public TU Get(T Key) {
             var p = FindFirst(Key);
             if ( p.HasValue ) return p.Value.Second;
             throw new KeyNotFoundException();

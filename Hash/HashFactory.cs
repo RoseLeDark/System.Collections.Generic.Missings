@@ -38,12 +38,12 @@ namespace SystemEx.Hash {
     /// </para>
     /// <code>
     /// [HashAlgorithm(typeof(Bernstein))]
-    /// public sealed class Foo : IHashable&lt;Foo&gt;
+    /// public class Foo : IHashable&lt;Foo&gt;
     /// {
-    ///     public Array&lt;byte&gt; ToBytes()
+    ///     public FixedVector&lt;byte&gt; ToBytes()
     ///     {
     ///         // Convert internal fields into a deterministic byte array.
-    ///         return new Array&lt;byte&gt;( ... );
+    ///         return new FixedVector&lt;byte&gt;( ... );
     ///     }
     /// }
     /// </code>
@@ -56,7 +56,7 @@ namespace SystemEx.Hash {
         /// Converts this instance into a deterministic byte array.
         /// The returned data is used as input for hashing algorithms.
         /// </summary>
-        Array<byte> ToBytes ();
+        FixedVector<byte> ToBytes ();
     }
 
     /// <summary>
@@ -85,11 +85,11 @@ namespace SystemEx.Hash {
     /// </para>
     /// <code>
     /// [HashAlgorithm(typeof(Bernstein), Endian = Endian.System)]
-    /// public sealed class Foo : IHashable&lt;Foo&gt;
+    /// public class Foo : IHashable&lt;Foo&gt;
     /// {
-    ///     public Array&lt;byte&gt; ToBytes()
+    ///     public FixedVector&lt;byte&gt; ToBytes()
     ///     {
-    ///         return new Array&lt;byte&gt;( ... );
+    ///         return new FixedVector&lt;byte&gt;( ... );
     ///     }
     /// }
     ///
@@ -139,7 +139,7 @@ namespace SystemEx.Hash {
 
             if ( inst is IHash hasher ) {
 
-                Array<byte> input = obj.ToBytes();
+                FixedVector<byte> input = obj.ToBytes();
                 _hash = hasher.Compute(input, seed);
 
             } else {
@@ -190,7 +190,7 @@ namespace SystemEx.Hash {
 
             if ( inst is IHash hasher ) {
 
-                Array<byte> input = obj.ToBytes();
+                FixedVector<byte> input = obj.ToBytes();
                 _hash = hasher.ComputeLong(input, seed );
 
             } else {

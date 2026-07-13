@@ -102,18 +102,18 @@ namespace Examples {
         ///
         /// HashFactory will use these bytes as input for the selected hash algorithm.
         /// </summary>
-        public Array<byte> ToBytes () {
-            var b = new Array<byte>(8);
+        public FixedVector<byte> ToBytes () {
+            var b = new FixedVector<byte>(8);
 
 
             // Convert the integer field into 4 bytes.
             // Endian.System means: use the machine's native endianness.
-            b.InsertRange(0, Id.ToBytes(Endian.System));
+            b.ReplaceRange(0, Id.ToBytes(Endian.System));
 
             // Convert the float field into 4 bytes.
             // Here we intentionally use BigEndian to show that each field
             // can choose its own byte order if needed.
-            b.InsertRange(4, Value.ToBytes(Endian.BigEndian));
+            b.ReplaceRange(4, Value.ToBytes(Endian.BigEndian));
 
             return b;
         }

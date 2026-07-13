@@ -65,7 +65,7 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Internal raw byte buffer.
         /// </summary>
-        private FixedArray<byte> m_rawBuffer;
+        private FixedVector<byte> m_rawBuffer;
         /// <summary>
         /// Current read/write position within the buffer.
         /// </summary>
@@ -89,7 +89,7 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Gets the total buffer length in bytes.
         /// </summary>
-        public virtual ulong Length => (ulong)m_rawBuffer.Size;
+        public virtual ulong Length => (ulong)m_rawBuffer.Length;
         /// <summary>
         /// Gets the total free bytes.
         /// </summary>
@@ -131,16 +131,16 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Initializes a new cache with the specified capacity and type.
         /// </summary>
-        public Cache(int capacity, CacheType type = CacheType.OnlySystem) {
-            m_rawBuffer = new FixedArray<byte>(capacity);
+        public Cache(long capacity, CacheType type = CacheType.OnlySystem) {
+            m_rawBuffer = new FixedVector<byte>(capacity);
             this.Type = type;
-            LongLength = (ulong)m_rawBuffer.Size;
+            LongLength = (ulong)m_rawBuffer.Length;
         }
         /// <summary>
         /// Set Cache to Zero
         /// </summary>
         public void SetZero() {
-            for ( int i = 0; i < m_rawBuffer.Size; i++ )
+            for ( int i = 0; i < m_rawBuffer.Length; i++ )
                 m_rawBuffer[i] = 0;
             m_maxUsedAdress = 0;
         }
@@ -155,9 +155,9 @@ namespace SystemEx.Collections.Generic{
         /// <param name="arr"></param>
         /// <param name="type"></param>
         public Cache(byte[] arr, CacheType type) {
-            m_rawBuffer = new FixedArray<byte>(arr);
+            m_rawBuffer = new FixedVector<byte>(arr);
             this.Type = type;
-            LongLength = (ulong)m_rawBuffer.Size;
+            LongLength = (ulong)m_rawBuffer.Length;
         }
 
         /// <summary>
@@ -165,12 +165,12 @@ namespace SystemEx.Collections.Generic{
         /// </summary>
         /// <param name="arr"></param>
         /// <param name="type"></param>
-        public Cache(Array<byte> arr, CacheType type) {
+        public Cache( FixedVector<byte> arr, CacheType type) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
-            m_rawBuffer = new FixedArray<byte>(arr.ToArray());
+            m_rawBuffer = new FixedVector<byte>(arr.ToNative());
             this.Type = type;
-            LongLength = (ulong)m_rawBuffer.Size;
+            LongLength = (ulong)m_rawBuffer.Length;
         }
         /// <summary>
         /// Create a Copy from stream
@@ -180,7 +180,7 @@ namespace SystemEx.Collections.Generic{
         public Cache(Cache cache) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
-            m_rawBuffer = new FixedArray<byte>(cache.ToArray());
+            m_rawBuffer = new FixedVector<byte>(cache.ToArray());
             this.Type = cache.Type;
             LongLength = cache.LongLength;
         }
@@ -192,7 +192,7 @@ namespace SystemEx.Collections.Generic{
         /// <param name="pos">The offset relative to the origin.</param>
         /// <returns>The new position.</returns>
         public ulong Seek(SeekOrigin org, int pos) {
-            if ( m_rawBuffer.Size == 0 ) return 0;
+            if ( m_rawBuffer.Length == 0 ) return 0;
 
             switch ( org ) {
 
@@ -238,12 +238,12 @@ namespace SystemEx.Collections.Generic{
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
             // Start ungültig?
-            if ( start < 0 || start >= (ulong)m_rawBuffer.Size )
+            if ( start < 0 || start >= (ulong)m_rawBuffer.Length )
                 return 0;
 
             // End über Größe → kappen
-            if ( iend > (ulong)m_rawBuffer.Size )
-                iend = (ulong)m_rawBuffer.Size;
+            if ( iend > (ulong)m_rawBuffer.Length )
+                iend = (ulong)m_rawBuffer.Length;
 
             // Bereich ungültig?
             if ( iend <= start )
@@ -270,7 +270,7 @@ namespace SystemEx.Collections.Generic{
 
             fixed ( T* pValue = &value )
             fixed ( byte* pData = data ) {
-                Buffer.MemoryCopy(pValue, pData, size, size);
+                System.Buffer.MemoryCopy(pValue, pData, size, size);
             }
 
             return data;
@@ -545,11 +545,20 @@ namespace SystemEx.Collections.Generic{
         /// Reads a range of bytes starting at the specified position.
         /// </summary>
         public virtual byte[]? ReadRange(ulong position, uint count) {
+            var readed = ReadRangeEx(position, count);
+
+            return readed.ToNative();
+        }
+
+        /// <summary>
+        /// Reads a range of bytes starting at the specified position.
+        /// </summary>
+        public virtual FixedVector<byte> ReadRangeEx ( ulong position, uint count ) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
-            if ( (int)position + count > m_rawBuffer.Size ) return null;
+            if ( (int)position + count > m_rawBuffer.Length ) throw new IndexOutOfRangeException();
 
-            byte[] result = new byte[count];
+            FixedVector<byte> result = new FixedVector<byte>(count);
             m_rawBuffer.CopyTo((uint)position, result, 0, (uint)count);
             return result;
         }
@@ -569,10 +578,10 @@ namespace SystemEx.Collections.Generic{
             }
 
             // Wenn die Leseposition bereits am oder jenseits des Endes ist: EOF
-            if ( (ulong)m_rawBuffer.Size <= m_position ) return 0;
+            if ( (ulong)m_rawBuffer.Length <= m_position ) return 0;
 
             // Verfügbare Bytes im Rohpuffer ab aktueller Position
-            ulong available = (ulong)m_rawBuffer.Size - m_position;
+            ulong available = (ulong)m_rawBuffer.Length - m_position;
             int toRead = (int)System.Math.Min((ulong)count, available);
 
             if ( toRead <= 0 ) return 0;
@@ -613,10 +622,10 @@ namespace SystemEx.Collections.Generic{
             }
 
             // If write position is already at or beyond end, nothing to write
-            if ( (ulong)m_rawBuffer.Size <= m_position ) return 0;
+            if ( (ulong)m_rawBuffer.Length <= m_position ) return 0;
 
             // How many bytes are available in the raw buffer from current position
-            ulong available = (ulong)m_rawBuffer.Size - m_position;
+            ulong available = (ulong)m_rawBuffer.Length - m_position;
             int toWrite = (int)System.Math.Min((ulong)count, available);
 
             if ( toWrite <= 0 ) return 0;
@@ -637,16 +646,16 @@ namespace SystemEx.Collections.Generic{
         /// </summary>
         public byte[] ToArray() {
             if ( m_isLocked ) throw new CacheIsSharedException();
-            return m_rawBuffer.ToArray();
+            return m_rawBuffer.ToNative();
         }
         /// <summary>
         /// Returns a copy of the internal buffer, as <see cref="Array{T}"/> 
         /// </summary>
         /// <returns></returns>
         /// <exception cref="CacheIsSharedException"></exception>
-        public Array<byte> ToArrayEx() {
+        public FixedVector<byte> ToArrayEx() {
             if ( m_isLocked ) throw new CacheIsSharedException();
-            return m_rawBuffer;
+            return (FixedVector<byte>)m_rawBuffer.Duplicate();
         }
 
         /// <summary>
@@ -659,23 +668,23 @@ namespace SystemEx.Collections.Generic{
         /// <returns>
         /// A FlexSpan that views the range [0 .. Ende).
         /// </returns>
-        public  FlexSpan<byte> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
-            => m_rawBuffer.AsFlexSpan(mode);
+        public virtual ContainerFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
+            => FixedVector<byte>.AsFlexSpan(ref m_rawBuffer, mode);
 
 
         /// <summary>
         /// Creates a FlexSpan view starting at the specified offset.
         /// The span references the internal buffer directly and does not allocate.
         /// </summary>
-        public virtual FlexSpan<byte> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System )
-            => m_rawBuffer.AsFlexSpan(start, mode);
+        public virtual ContainerFlexSpan<byte, FixedVector<byte> > AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System )
+            => FixedVector<byte>.AsFlexSpan(ref m_rawBuffer, start, m_rawBuffer.Length, mode);
 
         /// <summary>
         /// Creates a FlexSpan view starting at the specified offset.
         /// The span references the internal buffer directly and does not allocate.
         /// </summary>
-        public FlexSpan<byte> AsFlexSpan ( long start, long endi, FlexSpanMode mode = FlexSpanMode.System )
-            => m_rawBuffer.AsFlexSpan(start, endi, mode);
+        public virtual ContainerFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( long start, long endi, FlexSpanMode mode = FlexSpanMode.System )
+            => FixedVector<byte>.AsFlexSpan(ref m_rawBuffer, start, endi, mode);
 
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
         /// @}

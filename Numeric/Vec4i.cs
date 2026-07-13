@@ -97,7 +97,7 @@ namespace SystemEx.Numeric {
         /// Initializes a zero vector (0,0).
         /// </summary>
         public Vec4i () {
-            m_x = m_y = m_z = m_w = 0.0f;
+            m_x = m_y = m_z = m_w = 0;
         }
 
         /// <summary>
@@ -299,7 +299,7 @@ namespace SystemEx.Numeric {
         /// ensuring consistent hashing across devices and backends.
         /// </para>
         /// </summary>
-        public Array<byte> ToBytes () {
+        public FixedVector<byte> ToBytes () {
             Cache m = new Cache(sizeof(int) * Count);
 
             for ( byte i = 0 ; i < Count ; i++ )

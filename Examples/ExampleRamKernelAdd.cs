@@ -92,7 +92,7 @@ using SystemEx.Device;
 using SystemEx.Device.Intertropt;
 using SystemEx.Device.Memory;
 
-namespace Examples {
+namespace KernelRamExamples {
     /// \addtogroup Examples
     /// @{
     /// <summary>

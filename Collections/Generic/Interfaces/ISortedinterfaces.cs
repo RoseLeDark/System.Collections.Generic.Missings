@@ -19,7 +19,10 @@ using SystemEx.Utils;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Collections.Generic.Interfaces {
-
+    /// \addtogroup collections
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Delegate used to compare two key/value pairs and return their ordering relation.
     /// </summary>
@@ -88,7 +91,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// </summary>
     /// <typeparam name="T">The key type.</typeparam>
     /// <typeparam name="TU">The value type.</typeparam>
-    public interface ISortedMap<T, TU> : IMap<T, TU> {
+    public interface ISortedMap<T, TU> : IMap<T, TU> where T : notnull {
 
         /// <summary>
         /// Gets or sets the delegate-based sort function used to compare key/value pairs.

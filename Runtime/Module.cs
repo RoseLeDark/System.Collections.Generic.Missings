@@ -16,6 +16,19 @@ using ProcLoader = SystemEx.Runtime.InteropServices.Platform.MacProcLoader;
 using ProcLoader = SystemEx.Runtime.InteropServices.Platform.NoSupportProcLoader;
 #endif
 
+#if DOXYGEN
+
+/// Used on Windows
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.WindowsProcLoader;
+/// Used on Linux
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.LinuxProcLoader;
+/// Used on Mac
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.MacProcLoader;
+/// Used when no PLatform supported
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.NoSupportProcLoader;
+
+#endif
+
 namespace SystemEx.Runtime {
     /// \addtogroup Runtime
     /// @{

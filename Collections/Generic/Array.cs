@@ -29,6 +29,7 @@ namespace SystemEx.Collections.Generic {
     /// Provides forward, backward, and offset-based movement.
     /// </summary>
     /// <typeparam name="T">The element type stored in the underlying array.</typeparam>
+    
     public class ArrayRandomAccessIterator<T> : IRandomAccessIterator<T>, IForeachIterator<T> {
 
         /// <summary>
@@ -180,7 +181,8 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The element type stored in the array.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710")]
-    public class Array<T> : IEnumerable<T>, IDynamicArray<T>, ICollection<T> {
+    [Obsolete("Used Vector<T> and Set<T, Vector<T>> and for find Find<T,  Vector<T>>")]
+    public class Array<T> : IEnumerable<T>, IDynamicArray<T>, ICollection<T>  {
 #pragma warning disable CA1051
         /// <summary>
         /// Internal storage buffer for array elements.
@@ -634,7 +636,7 @@ namespace SystemEx.Collections.Generic {
 
             if ( toCopy <= 0 ) return 0;
 
-            Buffer.BlockCopy(m_elements, src, destination, dst, toCopy);
+            System.Buffer.BlockCopy(m_elements, src, destination, dst, toCopy);
             return toCopy;
         }
 
@@ -675,7 +677,7 @@ namespace SystemEx.Collections.Generic {
                     return 0;
             }
 
-            Buffer.BlockCopy(source, src, m_elements, dst, toCopy);
+            System.Buffer.BlockCopy(source, src, m_elements, dst, toCopy);
             return toCopy;
         }
         /// <summary>

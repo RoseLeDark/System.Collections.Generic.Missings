@@ -28,6 +28,7 @@ namespace SystemEx.Collections.Generic {
     /// or automatically after insert, add, or remove operations.
     /// </summary>
     /// <typeparam name="T">The type of elements stored in the array.</typeparam>
+    [Obsolete("Use Vector<T>, Set<T, Vector<T>> for sorted storage, and Find<T, Vector<T>> for lookup.")]
     public class SortedArray<T> : Array<T>, ISortedArray<T> {
 
         /// <summary>

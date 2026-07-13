@@ -74,13 +74,16 @@ These algorithms behave similarly to STL equivalents, but are implemented in pur
 ## 📚 Collections
 
 ### Core Types
-- `Array<T>`  
-- `FixedArray<T>`  
+- `Vector<T>`  
+- `FixedVector<T>`  
 - `Deque<T>`  
 - `Queue<T>`  
 - `Stack<T>`  
 - `BinQueue<T>`  
-
+- `Set<T>` 
+- `MultiSet<T>` 
+- `UnorderedMultiSet<T>` 
+- `UnorderedSet<T>` 
 ### Map System
 - `Map<TKey, TValue>`  
 - `MultiMap<TKey, TValue>`  
@@ -93,7 +96,7 @@ These algorithms behave similarly to STL equivalents, but are implemented in pur
 - `Pair<T1, T2>` : `ITuple`
 - `Triple<T1, T2, T3>`  : `ITuple`
 - `Quad<T1, T2, T3, T4>`  : `ITuple`
-- `Tuple<T1, T2>`  : `ITuple`
+- `Tuple`  : `ITuple`
 - `TupleList<T>`  where T : `ITuple`
 
 ---
@@ -101,10 +104,8 @@ These algorithms behave similarly to STL equivalents, but are implemented in pur
 ## 🧱 Cache & RAID Subsystem (Future Release)
 
 - `Cache`  
-- `CacheRaid`  
-- `CacheRaidMirror`  
-- `CacheRaidStripe`  
-- `CacheRaid4`  
+- `CacheMirrored`  
+- `CacheStripped`    
 
 These provide deterministic, fixed‑size memory layouts suitable for:
 
@@ -131,55 +132,98 @@ Located under `SystemEx.Utils`:
 
 ```
 SystemEx/
- ├─ Device/
+ ├─ Device/ [ namespace SystemEx.Device ]
  │    ├─ IKernel.cs
  │    ├─ RamKernel.cs
- │    ├─ Interop/
+ │    ├─ Interop/ [ namespace SystemEx.Device.Interop ]
  │    │   ├─ IDeviceSharedBackend.cs
  │    │   ├─ RamKernelLoader.cs
  │    │   └─ RamSharedBackend.cs
  │    └─ Memory/
  │         ├─ DeviceBuffer.cs
  │         └─ DeviceSharedBuffer.cs
+ ├─ Base [ namespace SystemEx ]
+ │    ├─ Buffer.cs
+ │    ├─ FlexSpan.cs
+ │    ├─ IComparableEx.cs
+ │    ├─ IRange.cs
+ │    ├─ Math.cs
+ │    ├─ NumberRange.cs
+ │    ├─ NumberRangeIterrator.cs
+ │    ├─ NumberRangeStepper.cs
+ │    └─Triple.cs
  ├─ Collections/
- │    └─ Generic/
- │         ├─ Array.cs
+ │    └─ Generic/ [ namespace SystemEx.Collections.Generic ]
+ │         ├─ Vector.cs
  │         ├─ BinQueue.cs
  │         ├─ Cache.cs
+ │         ├─ Cluster.cs
+ |         ├─ ContainerFlexSpan.cs
  │         ├─ Deque.cs
- │         ├─ FixedArray.cs
+ │         ├─ Find.cs
+ │         ├─ FixedVector.cs
  │         ├─ FixedMap.cs
  │         ├─ GroupNode.cs
- │         ├─ IArray.cs
- │         ├─ IMap.cs
- │         ├─ INode.cs
- │         ├─ IPair.cs
- │         ├─ ISortedMap.cs
- │         ├─ IteratorList.cs
- │         ├─ Iterator.cs
- │         ├─ ITraverse.cs
- │         ├─ ITuple.cs
  │         ├─ Map.cs
+ │         ├─ MirroredCache.cs
  │         ├─ MultiMap.cs
+ │         ├─ MultiSet.cs
+ │         ├─ MultiTupleMap.cs
  │         ├─ Node.cs
  │         ├─ NodeChain.cs
  │         ├─ NodeRange.cs
  │         ├─ NodeSlice.cs
  │         ├─ Pair.cs
+ │         ├─ PriorityQueue.cs
  │         ├─ Quad.cs
  │         ├─ Queue.cs
+ │         ├─ Set.cs
  │         ├─ SortedMap.cs
+ │         ├─ SortedMultiMap.cs
+ │         ├─ SortedMultiTupleMap.cs
+ │         ├─ SortedTupleList.cs
+ │         ├─ SortedTupleMap.cs
  │         ├─ Stack.cs
  │         ├─ StarNode.cs
+ │         ├─ StrippedCache.cs
  │         ├─ Triple.cs
  │         ├─ Tuple.cs
+ │         ├─ TupleMap.cs
+ │         ├─ TypeBuffer.cs
  │         └─ TupleList.cs
- ├─ Utils/
- │    ├─ BitUtils.cs
- │    ├─ Layout.cs
- │    ├─ Utils.cs
- │    ├─ Random.cs
- │    └─ standart.cs
+ ├─ Drawing/ [ namespace SystemEx.Drawing ]
+ |		├─ Canvas.cs
+ |		├─ ColorHDR.cs
+ |		├─ ColorHSV.cs
+ |		├─ ColorR8G8B8.cs
+ |		├─ ColorR10G10B10.cs
+ |		├─ ColorR16G16B16.cs
+ |		├─ ... CMY, NCol, XYZ, YUV
+ |		├─ Light.cs
+ |		└─ Colors.cs
+ ├─ IO/ [ namespace SystemEx.IO ]
+ |		├─ CachStream.cs
+ |		└─ WriteStream.cs
+ ├─ Random/ [ namespace SystemEx.Random ]
+ |		├─ Isaac32Engine.cs
+ |		└─ Randx.cs
+ ├─ Numeric/ [ namespace SystemEx.Numeric ]
+ |		├─ vec{2,3,4]f.cs
+ |		├─ vec{2,3,4]d.cs
+ |		├─ vec{2,3,4]i.cs
+ |		├─ quadf.cs
+ |		├─ quadd.cs
+ |		├─ m44f.cs
+ |		├─ m44d.cs
+ |		├─ DQuadv.cs
+ |		├─ AxisAngle.cs
+ |		└─ Projection.cs
+ ├─ Utils/ [ namespace SystemEx.Utils ]
+ │		├─ Algorithm.cs
+ │		├─ BitUtils.cs
+ │      ├─ Conversion.cs
+ │      ├─ Layout.cs
+ │      └─ Random.cs
  ├─ LICENSE.md
  ├─ CHANGELOG.md
  ├─ RoseLeDark.Collections.Missings.png

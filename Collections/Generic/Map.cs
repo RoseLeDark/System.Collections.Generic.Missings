@@ -41,7 +41,7 @@ namespace SystemEx.Collections.Generic {
         IEnumerable,
         IMap<T, TU>,
         IReadOnlyMap<T, TU>,
-        ITraverse<Pair<T, TU>> {
+        ITraverse<Pair<T, TU>> where T : notnull {
         /// <summary>
         /// Internal list storing all key/value pairs.
         /// </summary>

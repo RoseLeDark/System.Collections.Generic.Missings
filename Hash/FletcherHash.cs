@@ -29,7 +29,7 @@ namespace SystemEx.Hash {
         /// Craate a new instance
         /// </summary>
         /// <param name="endian">The suing endian for creating a hash</param>
-        public FlecherHash ( Endian endian ) {
+        public FletcherHash ( Endian endian ) {
             m_endian = endian;
         }
         /// <summary>
@@ -38,12 +38,12 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Fletcher hash as a Hash32 object.</returns>
-        public Hash32 Compute ( Array<byte> input, uint seed ) {
+        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
             uint sum1 = 0xffff;
             uint sum2 = 0xffff;
 
             int index = 0;
-            int length = input.Count;
+            int length = (int) input.Count;
 
             while ( length > 0 ) {
                 int tlen = (length > 360 ? 360 : length);
@@ -64,7 +64,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Fletcher hash as a Hash64 object.</returns>
-        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
+        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed ) {
             // 64‑Bit Wrapper, da du nur die 32‑Bit‑Variante brauchst
             var h32 = Compute(input, (uint)seed );
             return new Hash64(h32.Value);

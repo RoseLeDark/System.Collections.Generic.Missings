@@ -72,7 +72,7 @@ namespace SystemEx.Hash {
     /// <summary>
     /// Interface for SystemEx hashing algorithms.  
     /// 
-    /// A hasher consumes a byte array (<see cref="Array{byte}"/>) and produces
+    /// A hasher consumes a byte vector (<see cref="Vector{byte}"/>) and produces
     /// either a 32‑bit or 64‑bit hash.  
     /// 
     /// Implementations must be endian‑aware and iterator‑driven, following the
@@ -82,16 +82,16 @@ namespace SystemEx.Hash {
     public interface IHash {
 
         /// <summary>
-        /// Computes a 32‑bit hash over the given byte array using the specified seed
+        /// Computes a 32‑bit hash over the given byte vector using the specified seed
         /// and endian mode.
         /// </summary>
-        Hash32 Compute ( Array<byte> input, uint seed );
+        Hash32 Compute ( FixedVector<byte> input, uint seed );
 
         /// <summary>
-        /// Computes a 64‑bit hash over the given byte array using the specified seed
+        /// Computes a 64‑bit hash over the given byte vector using the specified seed
         /// and endian mode.
         /// </summary>
-        Hash64 ComputeLong ( Array<byte> input, ulong seed );
+        Hash64 ComputeLong ( FixedVector<byte> input, ulong seed );
     }
     /// @}
 

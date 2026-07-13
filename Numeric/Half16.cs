@@ -735,14 +735,14 @@ namespace SystemEx.Numeric {
         /// 
         /// The returned array contains the raw 16‑bit representation of the
         /// value in the system's native endianness, wrapped in a SystemEx
-        /// <see cref="Array{T}"/>.
+        /// <see cref="FixedVector{T}"/>.
         /// </summary>
         /// <returns>
-        /// A new <see cref="Array{byte}"/> containing the raw bytes of this
+        /// A new <see cref="FixedVector{T}"/> containing the raw bytes of this
         /// <see cref="Half16"/> value.
         /// </returns>
-        public Array<byte> ToBytes () {
-            return new Array<byte>(m_value.ToBytes());
+        public FixedVector<byte> ToBytes () {
+            return new FixedVector<byte>(m_value.ToBytes());
         }
     }
     /// @}

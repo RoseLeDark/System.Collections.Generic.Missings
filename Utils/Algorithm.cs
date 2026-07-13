@@ -23,7 +23,7 @@ namespace SystemEx.Utils {
     /// <summary>
     /// Specifies the result of a comparison between two values.
     /// </summary>
-    public enum CompareResult {
+    public enum CompareResult : sbyte {
         /// <summary>
         /// A is larger as B
         /// </summary>
@@ -31,11 +31,19 @@ namespace SystemEx.Utils {
         /// <summary>
         /// A is smaller  as B
         /// </summary>
-        AIsSmallerB = 2,
+        AIsSmallerB = -1,
         /// <summary>
         /// A is Equal B
         /// </summary>
-        Equal = 3,
+        Equal = 0,
+        /// <summary>
+        /// A is equal greater B
+        /// </summary>
+        AIsEqualLargerB = 2,
+        /// <summary>
+        /// A is equal smaller B
+        /// </summary>
+        AIsEqualSmallerB = 3,
     }
 
     /// <summary>
