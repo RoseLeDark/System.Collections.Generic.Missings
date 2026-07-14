@@ -17,6 +17,7 @@
 
 using SystemEx.Utils;
 using SystemEx.Collections.Generic;
+using SystemEx.Algorithms.Interfaces;
 
 namespace SystemEx.Collections.Generic.Interfaces {
     /// \addtogroup collections

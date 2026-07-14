@@ -17,7 +17,7 @@
 
 using SystemEx.Utils;
 
-namespace SystemEx.Collections.Generic.Interfaces {
+namespace SystemEx.Algorithms.Interfaces {
     /// \addtogroup collections
     /// @{
     /// \addtogroup interfaces
@@ -45,6 +45,8 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </returns>
         CompareResult Compare(T? x, T? y);
     }
+
+
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}
     /// @}

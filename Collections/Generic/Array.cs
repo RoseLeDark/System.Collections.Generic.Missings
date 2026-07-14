@@ -17,301 +17,125 @@
 
 using System.Collections;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
     /// <summary>
-    /// A simple random-access iterator for array-based data structures.
-    /// Provides forward, backward, and offset-based movement.
+    /// A fixed-size array container that provides indexed access, insertion,
+    /// traversal, and basic search operations. Unlike dynamic arrays, this
+    /// structure never grows and always maintains a constant capacity.
     /// </summary>
-    /// <typeparam name="T">The element type stored in the underlying array.</typeparam>
-    
-    public class ArrayRandomAccessIterator<T> : IRandomAccessIterator<T>, IForeachIterator<T> {
+    public struct Array<T> : IContainerEx<T> {
+        /// <summary>
+        /// Internal storage buffer for Vector elements.
+        /// </summary>
+        private T[] m_elements;
+        /// <summary>
+        /// Current number of valid elements stored in the Vector.
+        /// </summary>
+        private long m_index;
 
         /// <summary>
-        /// The underlying array being iterated over.
+        /// The real size
         /// </summary>
-        private readonly T[] m_values;
+        public long Length => m_elements.LongLength;
 
         /// <summary>
-        /// The current index within the array.
-        /// </summary>
-        private int m_ipos;
-
-        /// <summary>
-        /// Gets the element at the current iterator position.
-        /// </summary>
-        public T Current => m_values[m_ipos];
-
-        /// <summary>
-        /// Indicates whether the iterator has reached the end of the array.
-        /// </summary>
-        public bool IsEnd => m_values.Length == m_ipos;
-
-        /// <summary>
-        /// Indicates whether the iterator is positioned at the beginning of the array.
-        /// </summary>
-        public bool IsBegin => m_ipos == 0;
-
-        /// <summary>
-        /// Creates a new iterator for the specified array at the given position.
-        /// </summary>
-        /// <param name="values">The array to iterate over.</param>
-        /// <param name="pos">The initial iterator position.</param>
-        public ArrayRandomAccessIterator(T[] values, int pos) {
-            m_values = values;
-            m_ipos = pos;
-        }
-
-        /// <summary>
-        /// Returns a new iterator advanced by the specified offset.
-        /// The original iterator remains unchanged.
-        /// </summary>
-        /// <param name="offset">The number of positions to move forward.</param>
-        /// <returns>A new iterator positioned at the computed index.</returns>
-        public IRandomAccessIterator<T> Advance( long offset ) {
-            var newpos = offset + m_ipos;
-            if ( newpos > m_values.Length )
-                newpos = m_values.Length;
-
-            return new ArrayRandomAccessIterator<T>(m_values, (int)newpos);
-        }
-
-        /// <summary>
-        /// Moves the iterator one step backward, unless it is already at the beginning.
-        /// </summary>
-        public void Back() {
-            if ( m_ipos > 0 )
-                m_ipos--;
-        }
-
-        /// <summary>
-        /// Creates a deep clone of the iterator, including a copy of the underlying array.
-        /// </summary>
-        /// <returns>A new iterator instance with its own array copy.</returns>
-        public IIterator<T> Clone() {
-            return new ArrayRandomAccessIterator<T>(m_values.ToArray(), m_ipos);
-        }
-
-        
-
-        /// <summary>
-        /// Moves the iterator one step forward, unless it is already at the end.
-        /// </summary>
-        public void Forward() {
-            if ( !IsEnd ) m_ipos++;
-        }
-        /// <summary>
-        /// Moves the iterator N step forward
-        /// </summary>
-        public void Forward ( long i ) {
-            var n = i;
-            while ( n > 0 ) {
-                --n;
-                Forward();
-            }
-        }
-
-        object IEnumerator.Current => Current!;
-
-        /// <summary>
-        /// Returns this iterator as an enumerator.
-        /// </summary>
-        public IEnumerator<T> GetEnumerator() => this;
-        IEnumerator IEnumerable.GetEnumerator() => this;
-
-        /// <summary>
-        /// Moves to the next element for foreach enumeration.
-        /// </summary>
-        /// <returns><c>true</c> if the iterator advanced; otherwise <c>false</c>.</returns>
-        public bool MoveNext() {
-            if ( !IsEnd ) { m_ipos++; return true; }
-            return false;
-        }
-        /// <summary>
-        /// Reset is not supported for this iterator.
-        /// </summary>
-        public void Reset() { }
-        /// <summary>
-        /// Disposes the iterator. No resources are held.
-        /// </summary>
-        public void Dispose() {
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Equality operator for comparing two iterators.
-        /// </summary>
-        public static bool operator ==(ArrayRandomAccessIterator<T>? a, ArrayRandomAccessIterator<T>? b) {
-            if ( ReferenceEquals(a, b) ) return true;
-            if ( a is null || b is null ) return false;
-            return a.Equals(b);
-        }
-
-        /// <summary>
-        /// Inequality operator for comparing two iterators.
-        /// </summary>
-        public static bool operator !=(ArrayRandomAccessIterator<T>? a, ArrayRandomAccessIterator<T>? b) {
-            return !(a == b);
-        }
-        /// <inheritdoc/>
-        public override bool Equals(object? obj) {
-            if ( obj is ListIterator<T> ) {
-                return Equals((ListIterator<T>)obj);
-            }
-            return false;
-        }
-        /// <inheritdoc/>
-        public override int GetHashCode() {
-            unchecked {
-                int h = m_values.GetHashCode();
-                h = (h * 397) ^ m_ipos;
-                return h;
-            }
-        }
-    }
-
-    /// <summary>
-    /// A dynamic array implementation that supports optional auto-growth,
-    /// indexed access, insertion, removal, traversal, and basic search operations.
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the array.</typeparam>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710")]
-    [Obsolete("Used Vector<T> and Set<T, Vector<T>> and for find Find<T,  Vector<T>>")]
-    public class Array<T> : IEnumerable<T>, IDynamicArray<T>, ICollection<T>  {
-#pragma warning disable CA1051
-        /// <summary>
-        /// Internal storage buffer for array elements.
-        /// </summary>
-        protected T[] m_elements;
-        /// <summary>
-        /// Current number of valid elements stored in the array.
-        /// </summary>
-        protected int m_index;
-#pragma warning restore CA1051
-        /// <summary>
-        /// Gets the total capacity of the array.
-        /// </summary>
-        public int Size => m_elements.Length;
-        /// <summary>
-        /// Gets the first element of the array.
+        /// Gets the first element of the Vector.
         /// </summary>
         public T Front => m_elements[0];
         /// <summary>
-        /// Gets the last element of the array.
+        /// Gets the last element of the Vector.
         /// </summary>
-        public T Back => m_elements[m_elements.Length - 1];
+        public T Back => m_elements[Count];
 
         /// <summary>
-        /// Gets a random-access iterator positioned at the beginning of the array.
-        /// The iterator operates on a copy of the current array state.
+        /// Indicates whether the Vector is full.
         /// </summary>
-        public ArrayRandomAccessIterator<T> First
-            => new ArrayRandomAccessIterator<T>(this.ToArray(), 0);
+        public bool IsFull => ( m_index >= Length);
 
         /// <summary>
-        /// Gets a random-access iterator positioned at the logical end of the array.
-        /// The iterator operates on a copy of the current array state.
-        /// </summary>
-        public ArrayRandomAccessIterator<T> End
-            => new ArrayRandomAccessIterator<T>(this.ToArray(), Size-1);
-
-        /// <summary>
-        /// Return a random-access iterator positioned at the specified index.
-        /// The iterator operates on a copy of the current array state.
-        /// </summary>
-        public ArrayRandomAccessIterator<T> At(int index) {
-            if ( index > Size-1 ) index = Size-1;
-            return new ArrayRandomAccessIterator<T>(this.ToArray(), index);
-        }
-
-
-        /// <summary>
-        /// Indicates whether the array is full.
-        /// </summary>
-        public bool IsFull => m_index == Size;
-        /// <summary>
-        /// Indicates whether the array contains no elements.
+        /// Indicates whether the Vector contains no elements.
         /// </summary>
         public bool IsEmpty => m_index == 0;
-        /// <summary>
-        /// Gets or sets the number of elements the array grows by when AutoGrow is enabled.
-        /// </summary>
-        public int GrowSize { get; set; }
-        /// <summary>
-        /// Enables or disables automatic resizing when the array becomes full.
-        /// </summary>
-        public virtual bool AutoGrow { get; set; }
-        /// <summary>
-        /// Indicates whether the array has a fixed size (AutoGrow disabled).
-        /// </summary>
-        public bool IsFixed => AutoGrow == false;
+
 
         /// <summary>
+        /// Gets the number of valid elements currently stored in the vector.
         /// 
+        /// This is the logical element count, not the underlying array length.
+        /// The value corresponds to the next free index (m_index).
         /// </summary>
-        public int Count => m_elements.Length;
+        public long Count => m_index;
+
         /// <summary>
+        /// Gets the element at the current logical position (m_index).
         /// 
+        /// This is primarily useful during manual iteration or when treating the
+        /// vector as a stack-like structure. Accessing Current when the vector is
+        /// empty or m_index is out of range is undefined.
         /// </summary>
-        public bool IsReadOnly => false;
-
-        /// <summary>
-        /// Creates a FlexSpan view over the valid portion of this array.
-        /// The span does not copy data; it directly references the internal buffer.
-        /// </summary>
-        /// <param name="mode">
-        /// The indexing mode of the span (System, Reverse, Ring).
-        /// </param>
-        /// <returns>
-        /// A FlexSpan that views the range [0 .. m_index).
-        /// </returns>
-        public FlexSpan<T> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
-            => new FlexSpan<T>(ref m_elements!, 0, m_index, mode);
+        public T Current => m_elements[m_index];
 
 
         /// <summary>
-        /// Creates a FlexSpan view starting at the specified offset.
-        /// The span references the internal buffer directly and does not allocate.
+        /// Creates a FlexSpan view over the entire vector starting at index 0.
+        /// 
+        /// The view uses the specified indexing mode (System, Reverse, Ring) and
+        /// provides a span-like interface backed directly by this vector.
         /// </summary>
-        /// <param name="start">
-        /// The starting index inside the internal array.
+        /// <param name="vector">
+        /// Reference to the vector. Passed by ref to avoid copying the struct and
+        /// to ensure the FlexSpan reflects the actual container.
         /// </param>
         /// <param name="mode">
-        /// The indexing mode of the span (System, Reverse, Ring).
+        /// Indexing mode for the view:
+        /// System  = forward indexing,
+        /// Reverse = backward indexing,
+        /// Ring    = circular wrap-around indexing.
         /// </param>
         /// <returns>
-        /// A FlexSpan that views the range [start .. m_index).
+        /// A FlexSpan representing the full vector.
         /// </returns>
-        public FlexSpan<T> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System )
-            => new FlexSpan<T>(ref m_elements!, start, m_index, mode);
+        public static ContainerFlexSpan<T, Array<T>> AsFlexSpan ( ref Array<T> vector, FlexSpanMode mode = FlexSpanMode.System )
+            => new ContainerFlexSpan<T, Array<T>>(ref vector, 0, mode);
+
+
 
         /// <summary>
-        /// Creates a FlexSpan view starting at the specified offset.
-        /// The span references the internal buffer directly and does not allocate.
+        /// Creates a FlexSpan view over a specific range of the Array.
+        /// 
+        /// The view covers the range [start .. end) and uses the specified indexing mode.
+        /// No memory is allocated; this is a pure logical slice backed by the vector.
         /// </summary>
+        /// <param name="vector">
+        /// Reference to the vector. Passed by ref so the FlexSpan operates on the
+        /// actual container rather than a copy.
+        /// </param>
         /// <param name="start">
-        /// The starting index inside the internal array.
+        /// Starting index of the view. Must be within the vector's logical bounds.
         /// </param>
         /// <param name="end">
-        /// The end index inside the internal array.
+        /// Exclusive end index of the view. Must be greater than or equal to start
+        /// and within the vector's logical bounds.
         /// </param>
         /// <param name="mode">
-        /// The indexing mode of the span (System, Reverse, Ring).
+        /// Indexing mode for the view:
+        /// System  = forward indexing,
+        /// Reverse = backward indexing,
+        /// Ring    = circular wrap-around indexing.
         /// </param>
         /// <returns>
-        /// A FlexSpan that views the range [start .. end).
+        /// A FlexSpan representing the specified range of the Array.
         /// </returns>
-        public FlexSpan<T> AsFlexSpan ( long start, long end, FlexSpanMode mode = FlexSpanMode.System )
-            => new FlexSpan<T>(ref m_elements!, start, end, mode);
+        public static ContainerFlexSpan<T, Array<T>> AsFlexSpan ( ref Array<T> vector, long start, long end, FlexSpanMode mode = FlexSpanMode.System )
+            => new ContainerFlexSpan<T, Array<T>>(ref vector, start, end, mode);
 
         /// <summary>
-        /// Creates a logical segment (sub-array) over the internal buffer.
-        /// The segment shares the same underlying array and does not copy data.
+        /// Creates a logical segment (sub-Vector) over the internal buffer.
+        /// The segment shares the same underlying Vector and does not copy data.
         /// 
         /// This is *not* a slicing List-like structure: it behaves as a memory segment
         /// with its own logical length but without shifting or relocating elements.
@@ -322,14 +146,6 @@ namespace SystemEx.Collections.Generic {
         /// <param name="length">
         /// The number of elements included in the segment.
         /// </param>
-        /// <returns>
-        /// A new Array<T> instance that views the range [start .. start+length).
-        /// AutoGrow is disabled to prevent structural changes to the shared buffer.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when start or length are negative, or when the segment exceeds
-        /// the bounds of the internal array.
-        /// </exception>
         public Array<T> AsSegment ( long start, long length ) {
             if ( start < 0 || length < 0 )
                 throw new ArgumentOutOfRangeException();
@@ -337,90 +153,68 @@ namespace SystemEx.Collections.Generic {
             // Ensure the segment lies fully inside the internal buffer
             ArgumentOutOfRangeException.ThrowIfLessThan((start + length), m_elements.Length);
 
-            // Create a new Array<T> that shares the same buffer
-            var seg = new Array<T>(m_elements, growSize: 0)
-            {
-                // A segment must not grow, otherwise it would corrupt the shared buffer
-                AutoGrow = false
-            };
-
+            // Create a new Vector<T> that shares the same buffer
+            var seg = new Array<T>(m_elements);
             // Logical end of the segment
             seg.m_index = (int)(start + length);
 
             return seg;
         }
-
-
         /// <summary>
-        /// Provides indexed access to the array elements.
+        /// Get The Type of T
         /// </summary>
-        public T this[int adress] {
-                get => m_elements[adress];
-                set => m_elements[adress] = value;
-         }
-
-        public Array( int size = 2 ) {
-            m_elements = new T[size];
-            m_index = size;
-            GrowSize = 16;
-            AutoGrow = true;
+        /// <returns>The Type of T</returns>
+        public Type GetElementType () {
+            return typeof(T);
         }
         /// <summary>
-        /// Creates a new array with the specified initial size.
+        /// Provides indexed access to the Vector elements.
         /// </summary>
-        public Array(int size, int growSize) {
+        public T this[long index] {
+            get => m_elements[index];
+            set => Insert(index, value);
+        }
+
+        /// <summary>
+        /// Creates a new Array with a specified initial capacity.
+        /// The Array starts empty (Count = 0).
+        /// </summary>
+        /// <param name="size"> Initial capacity of the internal buffer. No elements are considered valid yet. </param>
+        public Array ( long size) {
             m_elements = new T[size];
             m_index = 0;
-
-
-            if ( (growSize > 0) ) {
-                AutoGrow = true;
-                GrowSize = growSize;
-            } else {
-                AutoGrow = false;
-                GrowSize = 16;
-            }
         }
 
         /// <summary>
-        /// Creates a new array using an existing buffer.
+        /// Creates a new Array using an existing buffer.
+        /// The buffer is adopted as-is, and Count is set
+        /// to the last valid index. 
         /// </summary>
-        public Array(T[] e, int growSize = 16) {
+        /// <param name="e">
+        /// Existing array used as the internal storage.
+        /// </param>
+        public Array ( T[] e ) {
             m_elements = e;
-            m_index = 0;
-
-            if ( (growSize > 0) ) {
-                AutoGrow = true;
-                GrowSize = growSize;
-            } else {
-                AutoGrow = false;
-                GrowSize = 16;
-            }
+            m_index = e.LongLength;
         }
 
         /// <summary>
-        /// Creates a new array from an enumerable collection.
+        /// Copy ctor
         /// </summary>
-        public Array(IEnumerable<T> e, int growSize = 16) {
-            m_elements = e.ToArray();
-            m_index = m_elements.Length - 1;
-
-            if ( (growSize > 0) ) {
-                AutoGrow = true;
-                GrowSize = growSize;
-            } else {
-                AutoGrow = false;
-                GrowSize = 16;
-            }
+        public Array ( Array<T> other ) {
+            m_elements = new T[other.Length];
+            Buffer.LongCopy<T>(other.m_elements, 0, m_elements, 0, other.Length);
         }
 
         /// <summary>
-        /// Adds an element to the end of the array.
+        /// Appends an element to the end of the vector.
         /// </summary>
-        public virtual bool Add(T entry) {
-            if ( m_index >= Size ) {
-                if ( AutoGrow )
-                    return Resize(Size + GrowSize);
+        /// <param name="entry">Element to append.</param>
+        /// <returns>
+        /// True if the element was appended; false if the vector was full.
+        /// </returns>
+        public bool PushBack ( T entry ) {
+            if ( m_index >= Length ) {
                 return false;
             }
 
@@ -428,297 +222,378 @@ namespace SystemEx.Collections.Generic {
             m_index++;
             return true;
         }
+
+
         /// <summary>
-        /// Add a range of elements to the end of the array.
+        /// Inserts an element at the specified index, shifting elements to the right.
         /// </summary>
-        /// <param name="entry">The range of elements to add</param>
-        /// <returns></returns>
-        public virtual int AddRange ( T[] entry) {
-            int _ret = 0;
-            for( ; _ret < entry.Length ; _ret++ ) {
-                if ( !Add(entry[_ret]) ) break;
+        /// <param name="index">Insertion index.</param>
+        /// <param name="entry">Element to insert.</param>
+        /// <returns>
+        /// True if insertion succeeded; false if the index was invalid.
+        /// </returns>
+        public bool Insert ( long index, T entry ) {
+            if ( index < 0 ) return false;
+
+            // Grow wie im Indexer
+            if ( index >= m_elements.Length || m_index >= m_elements.Length ) {
+                return false;
+            }
+
+            // Speicher nach rechts verschieben
+            for ( long i = m_index ; i > index ; i-- )
+                m_elements[i] = m_elements[i - 1];
+
+            m_elements[index] = entry;
+            m_index++;
+
+            return true;
+        }
+        /// <summary>
+        /// Fills a range of indices with a single value.
+        /// </summary>
+        /// <param name="start">Start index.</param>
+        /// <param name="end">End index (inclusive).</param>
+        /// <param name="entry">Value to write.</param>
+        /// <returns>
+        /// True if the operation succeeded; false if the range was invalid.
+        /// </returns>
+        public bool Insert ( long start, long end, T entry ) {
+            if ( start < 0 || end < start ) return false;
+
+            bool _ret = true;
+
+            // Prüfen ob wir bis end schreiben können
+            if ( end >= m_elements.Length ) {
+                _ret = false;
+            } else {
+
+                // Bereich füllen
+                for ( long i = start ; i <= end ; i++ )
+                    m_elements[i] = entry;
+
+                // m_index anpassen
+                if ( end + 1 > m_index )
+                    m_index = end + 1;
             }
             return _ret;
         }
+
         /// <summary>
-        /// Retrieves an element at the specified index.
+        /// Inserts a sequence of elements starting at the specified index.
         /// </summary>
-        public bool Get(int index, ref T item) {
-            if ( IsEmpty ) return false;
-            item = m_elements[index];
+        /// <param name="start">Start index.</param>
+        /// <param name="entrys">Elements to insert.</param>
+        /// <returns>
+        /// True if all elements were inserted; false if any insertion failed.
+        /// </returns>
+        public bool InsertRange ( long start, T[] entrys ) {
+            bool _ret = true;
+
+            for ( long i = 0 ; i < entrys.Length ; i++ ) {
+                if ( !Insert(start + i, entrys[i]) ) {
+                    _ret = false;
+                    break;
+                }
+            }
+            return _ret;
+        }
+
+        /// <summary>
+        /// Replaces the element at the specified index.
+        /// Automatically grows the buffer if needed and AutoGrow is enabled.
+        /// </summary>
+        /// <param name="index">Index to replace.</param>
+        /// <param name="entry">New value.</param>
+        /// <returns>
+        /// True if replacement succeeded; false if the index was invalid or growth was not allowed.
+        /// </returns>
+        public bool Replace ( long index, T entry ) {
+            if ( index < 0 ) return false;
+
+            bool _ret = false;
+
+            if ( index < m_elements.Length ) {
+                m_elements[index] = entry;
+                _ret = true;
+            }
+            return _ret;
+        }
+
+        /// <summary>
+        /// Replaces a range of elements with a single value.
+        /// </summary>
+        /// <param name="start">Start index.</param>
+        /// <param name="end">End index (inclusive).</param>
+        /// <param name="entry">Value to write.</param>
+        /// <returns>
+        /// True if replacement succeeded; false if the range was invalid.
+        /// </returns>
+        public bool Replace ( long start, long end, T entry ) {
+            if ( start < 0 || end < start ) return false;
+
+            for ( long i = start ; i <= end ; i++ )
+                m_elements[i] = entry;
+
             return true;
         }
 
         /// <summary>
-        /// Removes the last element from the array.
+        /// Replaces a sequence of elements starting at the specified index.
         /// </summary>
-        public virtual bool Remove() {
+        /// <param name="start">Start index.</param>
+        /// <param name="entrys">Elements to write.</param>
+        /// <returns>
+        /// True if all replacements succeeded; false if any failed.
+        /// </returns>
+        public bool ReplaceRange ( long start, T[] entrys ) {
+            bool _ret = true;
+            for ( long i = 0 ; i < entrys.Length ; i++ ) {
+                if ( !Replace(start + i, entrys[i]) ) {
+                    _ret = false;
+                    break;
+                }
+            }
+            return _ret;
+        }
+
+        /// <summary>
+        /// Removes the last element from the vector.
+        /// </summary>
+        /// <returns>
+        /// True if an element was removed; false if the vector was empty.
+        /// </returns>
+        public bool Erase () {
             if ( IsEmpty ) return false;
             m_index--;
             return true;
         }
-
         /// <summary>
-        /// Resizes the internal buffer to the specified size.
+        /// Erase overloads are API stubs and always return true.
+        /// Actual removal logic is handled by Remove() methods.
         /// </summary>
-        public virtual bool Resize(int size) {
-            if ( size == m_elements.Length ) return false;
-            if ( m_index > size )
-                m_index = size;
-
-            try {
-                Array.Resize(ref m_elements, size);
-            } catch {
-                return false;
-            }
+        public bool Erase ( long index ) {
             return true;
         }
+        /// <summary>
+        /// Erase overloads are API stubs and always return true.
+        /// Actual removal logic is handled by Remove() methods.
+        /// </summary>
+        public bool Erase ( long start, long end ) {
+            return true;
+        }
+        /// <summary>
+        /// Erase overloads are API stubs and always return true.
+        /// Actual removal logic is handled by Remove() methods.
+        /// </summary>
+        public bool Erase ( T value ) {
+            return true;
+        }
+        /// <summary>
+        /// Swaps two elements inside the valid range.
+        /// </summary>
+        /// <param name="i">First index.</param>
+        /// <param name="j">Second index.</param>
+        public void Swap ( long i, long j ) {
+            if ( i < 0 || j < 0 ) return;
+            if ( i >= m_index || j >= m_index ) return;
+
+            T tmp = m_elements[i];
+            m_elements[i] = m_elements[j];
+            m_elements[j] = tmp;
+        }
 
         /// <summary>
-        /// Returns the index of the first occurrence of the specified item.
+        /// Returns the element at the specified index.
         /// </summary>
-        public int IndexOf(T item) {
-            return Array.IndexOf<T>(m_elements, item);
+        /// <param name="index">Index to access.</param>
+        /// <returns>The element at the given index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the vector is empty or the index exceeds the logical length.
+        /// </exception>
+        public T ElementAt ( long index ) {
+            if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
+
+            return m_elements[index];
+        }
+
+        /// <summary>
+        /// Fixed Buffer can not be Grow
+        /// </summary>
+        /// <returns>
+        /// return always false
+        /// </returns>
+        public bool Grow () {
+            return false;
+        }
+
+        /// <summary>
+        /// Clears the vector by resetting the logical index.
+        /// </summary>
+        public void Clear () {
+            m_index = 0;
+            return;
         }
 
 
         /// <summary>
-        /// Returns an enumerator that iterates through the valid elements.
+        /// Enumerates all valid elements in forward order.
         /// </summary>
-        public IEnumerator<T> GetEnumerator() {
-            for(int i=0; i<m_index;i++)
+        public IEnumerator<T> GetEnumerator () {
+            for ( int i = 0 ; i < m_index ; i++ )
                 yield return m_elements[i];
         }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        /// <summary>
+        /// Get the array from the underlayes data
+        /// </summary>
+        /// <returns></returns>
+        public T[] ToNative () => m_elements.ToArray();
 
         /// <summary>
-        /// Inserts an element at the specified position.
+        /// Create a duplicate from this
         /// </summary>
-        public virtual int Insert(int pos, T item) {
-            if ( pos < 0 || pos > m_index )
-                throw new ArgumentOutOfRangeException(nameof(pos));
-
-            if ( m_index >= Size ) {
-                if ( !AutoGrow )
-                    throw new InvalidOperationException("Array is full and AutoGrow is disabled.");
-                Resize(Size + GrowSize);
-            }
-
-            m_elements[pos] = item;
-            return 1;
-        }
-        /// <summary>
-        /// Inserts a range of elements starting at the specified position.
-        /// </summary>
-        public virtual int InsertRange(int pos, IEnumerable<T> items) {
-            if ( pos < 0 || pos > Size ) return 0;
-
-            // Materialisieren, damit wir Count kennen
-            var list = items as ICollection<T> ?? new List<T>(items);
-            int count = list.Count;
-
-            if ( count == 0 )  return 0;
-
-            // Prüfen ob genug Platz ist
-            int required = m_index + count;
-            if ( required > Size ) {
-                if ( !AutoGrow )
-                    return 0;
-
-                // so lange wachsen, bis es passt
-                int newSize = Size;
-                while ( required > newSize )
-                    newSize += GrowSize;
-
-                if ( !Resize(newSize) ) return -1;
-            }
-
-            
-            // Elemente einfügen
-            int idx = pos;
-            int written = 0;
-            foreach ( var item in list ) {
-                m_elements[idx++] = item;
-                written++;
-            }
-            return written;
-        }
-        /// <summary>
-        /// Counts how many elements equal the specified key.
-        /// </summary>
-        public UInt64 NumberOfElements(T Key) {
-            UInt64 _find = 0;
-
-            foreach ( var item in m_elements ) {
-                if ( item == null ) continue;
-                if ( item.Equals(Key) ) _find++;
-            }
-
-            return _find;
+        /// <returns>The new instance from this</returns>
+        public IContainerEx<T> Duplicate () {
+            return new Array<T>(this);
         }
         /// <summary>
         /// Traverses a range of elements in forward or backward order.
         /// </summary>
-        public void Traverse(TraversMode mode, int startIndex, int endIndex, Action<T> func) {
-            int start = System.Math.Max(startIndex, 0);
-            int end = System.Math.Min(endIndex, Size);
+        /// <param name="mode">Traversal direction.</param>
+        /// <param name="startIndex">Start index.</param>
+        /// <param name="endIndex">End index.</param>
+        /// <param name="func">Action applied to each element.</param>
+        public void Traverse ( TraversMode mode, long startIndex, long endIndex, Action<T> func ) {
+            var start = System.Math.Max(startIndex, 0);
+            var end = System.Math.Min(endIndex,  m_index);
 
             if ( mode == TraversMode.Forwards ) {
-                for ( int i = start; i < end; i++ )
+                for ( long i = start ; i < end ; i++ )
                     func(m_elements[i]);
             } else if ( mode == TraversMode.Backwards ) {
-                for ( int i = end; i >= start; i-- )
+                for ( long i = end ; i >= start ; i-- )
                     func(m_elements[i]);
             }
         }
-        /// <summary>
-        /// Determines whether the array contains the specified value.
-        /// </summary>
-        public bool Is(T value) {
-            foreach ( var p in m_elements ) {
-                if ( p != null )
-                    if ( p.Equals(value) ) return true;
-            }
-            return false;
-        }
-        /// <summary>
-        /// Finds the first occurrence of the specified key.
-        /// </summary>
-        public T? FindFirst(T key) {
-            foreach ( var p in m_elements )
-                if ( p != null && p.Equals(key) )
-                    return p;
-            return default;
-        }
-
-        /// <summary>
-        /// Finds the last occurrence of the specified key.
-        /// </summary>
-        public T? FindLast(T key) {
-            for ( int i = m_elements.Length - 1; i >= 0; i-- ) {
-                var p = m_elements[i];
-                if ( p != null && p.Equals(key) )
-                    return p;
-            }
-            return default;
-        }
-
-        /// <summary>
-        /// Attempts to find the index of the specified key.
-        /// </summary>
-        public bool TryGet(T Key, out int index) {
-            for ( int i = 0; i < m_index; i++ ) {
-                var p = m_elements[i];
-                if ( p != null && p.Equals(Key) ) {
-                    index = i;
-                    return true;
-                }
-            }
-            index = -1;
-            return false;
-        }
-
-        /// <summary>
-        /// Copies a range of elements into a T array.
-        /// </summary>
-        public int CopyTo(uint sourceOffset, T[] destination, uint destinationOffset, uint count) {
-            if ( destination == null ) return 0;
-
-            int src = (int)sourceOffset;
-            int dst = (int)destinationOffset;
-
-            if ( src > Size ) src = Size;
-
-            int toCopy = System.Math.Min((int)count,
-            System.Math.Min(System.Math.Max(0, Size - src),
-                     System.Math.Max(0, destination.Length - dst)));
-
-            if ( toCopy <= 0 ) return 0;
-
-            System.Buffer.BlockCopy(m_elements, src, destination, dst, toCopy);
-            return toCopy;
-        }
 
 
         /// <summary>
-        /// Copies data from a T array into this array.
-        /// </summary>
-        public int CopyFrom(T[] source, uint sourceOffset, uint destinationOffset, uint count) {
-            if ( source == null ) return 0;
-
-            int src = (int)sourceOffset;
-            int dst = (int)destinationOffset;
-
-            if ( dst > Size ) dst = Size;
-
-            int toCopy = System.Math.Min((int)count,
-                System.Math.Min(System.Math.Max(0, source.Length - src),
-                    System.Math.Max(0, Size - dst)));
-
-            // Wenn nichts passt → prüfen ob wir wachsen müssen
-            if ( toCopy <= 0 ) {
-                // Prüfen ob AutoGrow aktiv ist
-                if ( !AutoGrow ) return 0;
-
-                // Wir brauchen mindestens count Bytes Platz ab dst
-                int required = dst + (int)count;
-
-                int newSize = Size;
-                while ( required > newSize )
-                    newSize += GrowSize;
-
-                if ( !Resize(newSize) ) return 0;
-
-                // Nach Resize neu berechnen
-                toCopy = System.Math.Min((int)count, System.Math.Min(System.Math.Max(0, source.Length - src), System.Math.Max(0, Size - dst)));
-
-                if ( toCopy <= 0 )
-                    return 0;
-            }
-
-            System.Buffer.BlockCopy(source, src, m_elements, dst, toCopy);
-            return toCopy;
-        }
-        /// <summary>
-        /// Returns a copy of the internal buffer.
-        /// </summary>
-        public T[] ToArray() => m_elements.ToArray();
-
-        void ICollection<T>.Add(T item) => Add(item);
-
-        /// <summary>
+        /// Copies all valid elements of this vector into another vector,
+        /// starting at the specified destination index.
         /// 
+        /// This overload copies from the beginning of this vector (sourceOffset = 0)
+        /// into the destination vector at <paramref name="VectorIndex"/>.
         /// </summary>
-        public void Clear() {
-            return;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Contains(T item) => Is(item);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        public void CopyTo(T[] array, int arrayIndex) {
-            CopyTo(0, array, 0, (uint)arrayIndex);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public bool Remove(T item) {
-            return false;
+        /// <param name="vector">
+        /// Destination vector receiving the copied elements.
+        /// </param>
+        /// <param name="VectorIndex">
+        /// Destination offset inside <paramref name="vector"/> where copying begins.
+        /// </param>
+        public Pair<bool, long> CopyTo ( Array<T> vector, ulong VectorIndex ) {
+            return CopyTo(0, vector, 0, VectorIndex);
         }
         
 
-    }
+        /// <summary>
+        /// Copies a range of elements from this vector into another vector.
+        /// 
+        /// Copying is performed using Buffer.LongCopy(), which supports long offsets.
+        /// No automatic growth occurs in the destination; the caller must ensure
+        /// sufficient capacity.
+        /// </summary>
+        /// <param name="sourceOffset">
+        /// Offset inside this vector where copying begins.
+        /// </param>
+        /// <param name="destination">
+        /// Destination vector receiving the copied elements.
+        /// </param>
+        /// <param name="destinationOffset">
+        /// Offset inside <paramref name="destination"/> where copied data is written.
+        /// </param>
+        /// <param name="count">
+        /// Maximum number of elements to copy.
+        /// The actual number copied may be smaller if either vector does not have
+        /// enough remaining elements.
+        /// </param>
+        /// <returns>
+        /// The number of elements actually copied and the status as <see cref="Pair{Bool, Long}"/> 
+        /// </returns>
+        public Pair<bool, long> CopyTo ( uint sourceOffset, Array<T> destination, ulong destinationOffset, ulong count ) {
 
+            long src = (long)sourceOffset;
+            long dst = (long)destinationOffset;
+
+            if ( src > Length ) src = (long)Length;
+
+            long toCopy = System.Math.Min((long)count,
+            System.Math.Min(System.Math.Max(0, (long)Length - src),
+                     System.Math.Max(0, destination.Length - dst)));
+
+            if ( toCopy <= 0 ) return new Pair<bool, long>(false, 0);
+
+            Buffer.LongCopy<T>(m_elements, src, destination.m_elements, dst, toCopy);
+            return new Pair<bool, long>(true, toCopy);
+        }
+
+
+        /// <summary>
+        /// Copies data from another vector into this vector.
+        /// 
+        /// If the destination range exceeds the current capacity and AutoGrow is enabled,
+        /// the vector automatically expands using Resize(). After copying, the logical
+        /// element count (m_index) is updated if necessary.
+        /// </summary>
+        /// <param name="source">
+        /// Source vector providing the data.
+        /// </param>
+        /// <param name="sourceOffset">
+        /// Offset inside <paramref name="source"/> where copying begins.
+        /// </param>
+        /// <param name="destinationOffset">
+        /// Offset inside this vector where copied data is written.
+        /// </param>
+        /// <param name="count">
+        /// Maximum number of elements to copy.
+        /// The actual number copied may be smaller depending on available space.
+        /// </param>
+        /// <returns>
+        /// TThe number of elements actually copied and the status as <see cref="Pair{Bool, Long}"/> 
+        /// </returns>
+        public Pair<bool, long> CopyFrom ( Array<T> source, ulong sourceOffset, ulong destinationOffset, ulong count ) {
+            long src = (long)sourceOffset;
+            long dst = (long)destinationOffset;
+
+            // Clamp source offset
+            if ( src > source.Length )
+                src = source.Length;
+
+            // Clamp destination offset
+            if ( dst > Length )
+                dst = Length;
+
+            // Compute how much can actually be copied
+            long toCopy = System.Math.Min((long)count,
+                System.Math.Min(
+                    System.Math.Max(0, source.Length - src),
+                    System.Math.Max(0, Length - dst)
+                ));
+
+            // Nothing fits → return (false, 0)
+            if ( toCopy <= 0 )
+                return new Pair<bool, long>(false, 0);
+
+            // Perform the copy
+            Buffer.LongCopy<T>(source.m_elements, src, m_elements, dst, toCopy);
+
+            // Update logical length only if we wrote beyond current end
+            long end = dst + toCopy;
+            if ( end > m_index )
+                m_index = end;
+
+            return new Pair<bool, long>(true, toCopy);
+        }
+    }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

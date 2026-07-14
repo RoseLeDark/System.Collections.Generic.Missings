@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SystemEx.Algorithms.Interfaces;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 

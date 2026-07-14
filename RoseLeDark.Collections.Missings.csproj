@@ -159,8 +159,4 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <None Include="Collections\Generic\BasicRope.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Math\" />
-  </ItemGroup>
-
 </Project>

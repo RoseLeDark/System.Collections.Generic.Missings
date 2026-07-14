@@ -195,7 +195,7 @@ namespace SystemEx.Collections.Generic {
         const int NEXT = 1;
         const int PREV = 0;
 
-        internal  FixedArray<Node<T>?> m_pNodex;
+        internal  Array<Node<T>?> m_pNodex;
 
         internal  T? m_value;
 
@@ -218,7 +218,7 @@ namespace SystemEx.Collections.Generic {
         /// Gets the number of child nodes associated with this node.
         /// Returns <c>null</c> if the implementation does not support child tracking.
         /// </summary>
-        public virtual int? NChilds => m_pNodex.Count;
+        public virtual long? NChilds => m_pNodex.Count;
 
         /// <summary>
         /// Gets the number of child nodes associated with this node.
@@ -251,7 +251,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Combined size of child and sibling arrays. Erstnal 4
         /// </summary>
-        public int? NodeSize => NChilds;
+        public long? NodeSize => NChilds;
 
         
 
@@ -292,7 +292,7 @@ namespace SystemEx.Collections.Generic {
         public Node () {
             m_value = default(T);
 
-            m_pNodex = new FixedArray<Node<T>?>(2);
+            m_pNodex = new Array<Node<T>?>(2);
            
             m_pNodex[PREV] = null;
             m_pNodex[NEXT] = null;
@@ -303,7 +303,7 @@ namespace SystemEx.Collections.Generic {
         public Node(T val ) {
             Value = val;
             
-            m_pNodex = new FixedArray<Node<T>?>(2);
+            m_pNodex = new Array<Node<T>?>(2);
 
             m_pNodex[PREV] = null;
             m_pNodex[NEXT] = null;
@@ -322,7 +322,7 @@ namespace SystemEx.Collections.Generic {
         protected Node(int nChilds) {
             m_value = default(T);
 
-            m_pNodex = new FixedArray<Node<T>?>(nChilds);
+            m_pNodex = new Array<Node<T>?>(nChilds);
 
             m_pNodex[PREV] = null;
             m_pNodex[NEXT] = null;

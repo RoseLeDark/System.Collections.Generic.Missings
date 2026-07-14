@@ -16,6 +16,7 @@
  */
 using System.Collections;
 using System.Runtime.CompilerServices;
+using SystemEx.Algorithms.Interfaces;
 using SystemEx.Algorythmen;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;

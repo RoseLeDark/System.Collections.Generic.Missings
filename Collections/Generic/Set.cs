@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
+using SystemEx.Algorithms.Interfaces;
 using SystemEx.Algorythmen;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;

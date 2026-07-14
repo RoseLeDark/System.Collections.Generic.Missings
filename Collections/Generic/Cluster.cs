@@ -15,6 +15,9 @@
  * changes and the date.
  */
 
+using System.Numerics;
+using System.Reflection;
+
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
@@ -180,8 +183,10 @@ namespace SystemEx.Collections.Generic {
             bool _ret = false;
             // Priority Queue: (current cost, node)
             var pq = new PriorityQueue<ICluster<T>, ulong>();
-            var visited = new Array<ICluster<T>>(128, 16);
+            var visited = new Vector<ICluster<T>>(128, 16);
             var costs = new Map<ICluster<T>, ulong>();
+
+            var finder = Vector<ICluster<T>>.AsFinder(ref visited);
 
             // Start at this node with cost 0
             pq.Enqueue(this, 0);
@@ -191,10 +196,10 @@ namespace SystemEx.Collections.Generic {
                 var current = pq.Dequeue();
 
                 // Skip if already visited
-                if ( visited.Contains(current) )
+                if ( finder.Exists(current) )
                     continue;
 
-                visited.Add(current);
+                visited.PushBack(current);
                 ulong currentCost = costs[current];
 
                 // If current cost exceeds budget, abandon this path
@@ -214,7 +219,7 @@ namespace SystemEx.Collections.Generic {
                     ICluster<T> childNode = childPair.First;
                     uint edgeCost = childPair.Second;
 
-                    if ( visited.Contains(childNode) )
+                    if ( finder.Exists(childNode) )
                         continue;
 
                     ulong newCost = currentCost + (ulong)edgeCost;
@@ -241,9 +246,9 @@ namespace SystemEx.Collections.Generic {
         public bool find(T pradicat, SearchType type, ulong budget, ref Map<ICluster<T>, uint> steps) {
             // PriorityQueue: (cost, node)
             var pq = new PriorityQueueEx<Triple<ICluster<T>, ulong, ulong>, ulong>();
-            var visited = new Array<ICluster<T>>(128, 16);
+            var visited = new Vector<ICluster<T>>(128, 16);
+            var finder = Vector<ICluster<T>>.AsFinder(ref visited);
 
-             
             // Start: energie = budget, cost = 0
             pq.Enqueue( new Triple<ICluster<T>, ulong, ulong>(this, budget, 0), 0);
 
@@ -253,10 +258,10 @@ namespace SystemEx.Collections.Generic {
                 var energie = item.Second;
                 var cost = item.Third;
 
-                if ( visited.Contains(current) )
+                if ( finder.Exists(current) )
                     continue;
 
-                visited.Add(current);
+                visited.PushBack(current);
 
                 // Schritt speichern
                 steps[current] = (uint)energie;
@@ -271,7 +276,7 @@ namespace SystemEx.Collections.Generic {
                     var child = pair.First;
                     ulong gewicht = pair.Second;
 
-                    if ( visited.Contains(child) )
+                    if ( finder.Exists(child) )
                         continue;
 
                     ulong newEnergie = energie;

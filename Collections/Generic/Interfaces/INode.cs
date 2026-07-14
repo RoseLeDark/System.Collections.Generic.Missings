@@ -37,7 +37,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// Gets the number of child nodes associated with this node.
         /// Returns <c>null</c> if the implementation does not support child tracking.
         /// </summary>
-        int? NChilds { get; }
+        long? NChilds { get; }
 
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

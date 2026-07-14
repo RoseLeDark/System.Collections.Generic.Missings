@@ -52,10 +52,6 @@ namespace SystemEx.Collections.Generic {
             m_pNodex[index] = null;
         }
 
-        /// <summary>
-        /// Gets an enumerable sequence of all child nodes stored in this star node.
-        /// </summary>
-        public IEnumerable<Node<T>?> Children => m_pNodex;
 
         private int get_free_index() {
             int _ret = -1;

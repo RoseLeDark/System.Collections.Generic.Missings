@@ -44,6 +44,10 @@ namespace SystemEx.Utils {
         /// A is equal smaller B
         /// </summary>
         AIsEqualSmallerB = 3,
+        /// <summary>
+        /// A or B or A and B are null
+        /// </summary>
+        Null = 10
     }
 
     /// <summary>

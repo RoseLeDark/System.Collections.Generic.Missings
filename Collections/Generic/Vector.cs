@@ -21,6 +21,10 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
+using SystemEx.Algorithms;
+using SystemEx.Algorithms.Interfaces;
+using SystemEx.Algorythmen;
 using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
@@ -30,10 +34,65 @@ namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
     /// <summary>
-    /// A dynamic Vector implementation that supports optional auto-growth,
-    /// indexed access, insertion, removal, traversal, and basic search operations.
+    /// A modern, policy‑driven dynamic Vector container that provides fast indexed access,
+    /// optional auto‑growth, insertion, removal, traversal, and multiple zero‑overhead
+    /// reinterpretation views.
+    ///
+    /// Beyond basic dynamic array functionality, <see cref="Vector{T}"/> supports
+    /// several high‑level transformations such as:
+    /// <list type="bullet">
+    ///   <item>
+    ///     <description>
+    ///     <see cref="AsFlexSpan"/> – a multi‑mode span view supporting forward, reverse, and ring ( circular) traversal.
+    ///     </description>
+    ///   </item>
+    ///   <item>
+    ///     <description>
+    ///     <see cref="AsSet"/> / <see cref="AsMultiSet"/> – sorted views with configurable
+    ///     comparison and sorting policies.
+    ///     </description>
+    ///   </item>
+    ///   <item>
+    ///     <description>
+    ///     <see cref="AsUnorderedSet"/> / <see cref="AsUnorderedMultiSet"/> – unordered
+    ///     unique or multi‑value views without sorting overhead.
+    ///     </description>
+    ///   </item>
+    ///   <item>
+    ///     <description>
+    ///     <see cref="AsSearch"/> – a binary‑search optimized lookup view.
+    ///     </description>
+    ///   </item>
+    ///   <item>
+    ///     <description>
+    ///     <see cref="AsFind"/> – a linear search view for unsorted data.
+    ///     </description>
+    ///   </item>
+    /// </list>
+    ///
+    /// These views allow the same underlying Vector to be interpreted as a span,
+    /// a sorted set, a multiset, an unordered set, or a search helper — without copying
+    /// or allocating additional memory.
+    ///
+    /// <para>
+    /// Beginners:  
+    /// Think of <see cref="Vector{T}"/> as a dynamic array that can instantly transform
+    /// into different “shapes” such as a set, a multiset, or a span, depending on what
+    /// you need.
+    /// </para>
+    ///
+    /// <para>
+    /// Professionals:  
+    /// <see cref="Vector{T}"/> follows a modern C++‑style multi‑view design.
+    /// Ordering is defined by <see cref="ISimpleCompare{T}"/> strategies, sorting is
+    /// controlled by <see cref="SortAction{TCompare, TContainer}"/> policies, and all
+    /// reinterpretations are zero‑overhead wrappers.  
+    /// This enables policy‑based sorting, strategy‑based comparison, and flexible
+    /// container semantics without hidden allocations or implicit behavior.
+    /// </para>
     /// </summary>
     /// <typeparam name="T">The element type stored in the Vector.</typeparam>
+
     public struct Vector<T> : IContainerEx<T>   {
         private long m_growSize;
         private bool m_autoGrow;
@@ -101,6 +160,7 @@ namespace SystemEx.Collections.Generic {
         /// empty or m_index is out of range is undefined.
         /// </summary>
         public T Current => m_elements[m_index];
+
 
         /// <summary>
         /// Creates a FlexSpan view over the entire vector starting at index 0.
@@ -199,6 +259,241 @@ namespace SystemEx.Collections.Generic {
             get => m_elements[index];
             set => Insert(index, value);
         }
+        /// <summary>
+        /// Creates a <see cref="Find{T, TContainer}"/> wrapper for this vector,
+        /// providing direct access to element lookup utilities.
+        /// </summary>
+        /// <param name="vec">
+        /// The vector instance to operate on.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Find{T, TContainer}"/> bound to the given vector.
+        /// </returns>
+        public static Find<T, Vector<T>> AsFinder(ref Vector<T> vec) 
+            => new Find<T, Vector<T>>(ref vec);
+
+
+        /// <summary>
+        /// Creates a <see cref="Set{T, Vector{T}}"/> view over the given vector.
+        /// </summary>
+        /// <typeparam name="T">Element type stored in the vector.</typeparam>
+        /// <param name="vec">
+        /// The vector whose contents should be interpreted as a sorted, unique set.
+        /// </param>
+        /// <param name="comparer">
+        /// Optional comparison strategy used to determine ordering inside the set.
+        /// If <c>null</c>, the default <see cref="Less{T}"/> comparer is used,
+        /// which orders elements in ascending order.
+        /// </param>
+        /// <param name="sorter">
+        /// Optional sorting algorithm used to arrange the vector before constructing the set.
+        /// If <c>null</c>, <see cref="SortActions.ShellSorter"/> is used as the default,
+        /// providing fast, predictable, non‑recursive sorting suitable for general use.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Set{T, Vector{T}}"/> that wraps the provided vector, ensuring
+        /// that elements are sorted according to the chosen comparer and that duplicates
+        /// are handled according to the set's semantics.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method transforms a <see cref="Vector{T}"/> into a logical set by:
+        /// </para>
+        /// <list type="number">
+        ///   <item>
+        ///     <description>
+        ///     Sorting the vector using the provided or default sorting algorithm.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///     Applying the comparison strategy to define the ordering of elements.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///     Constructing a <see cref="Set{T, Vector{T}}"/> wrapper that interprets
+        ///     the sorted vector as a unique, ordered collection.
+        ///     </description>
+        ///   </item>
+        /// </list>
+        /// <para>
+        /// Beginners:  
+        /// Think of this as “turn my vector into a sorted set”, where the library chooses
+        /// sensible defaults if you don’t specify anything.
+        /// </para>
+        /// <para>
+        /// Professionals:  
+        /// This method provides full control over ordering and sorting policies while
+        /// maintaining predictable defaults (<see cref="Less{T}"/> + ShellSort).  
+        /// It allows custom comparers (e.g., reverse order, length‑based, domain‑specific)
+        /// and custom sorting strategies (QuickSort, CombSort, etc.) without forcing
+        /// the user to configure them for common cases.
+        /// </para>
+        /// </remarks>
+        public static Set<T, Vector<T>> AsSet (
+            ref Vector<T> vec,
+            ISimpleCompare<T>? comparer = null,
+            SortAction<ISimpleCompare<T>, Vector<T>>? sorter = null )
+            => new Set<T, Vector<T>>(
+                ref vec,
+                comparer == null ? new Less<T>() : comparer,
+                sorter == null ? SortActions.ShellSorter : sorter
+            );
+
+
+        /// <summary>
+        /// Creates a <see cref="MultiSet{T, Vector{T}}"/> view over the given vector,
+        /// allowing duplicate elements while preserving a defined ordering.
+        /// </summary>
+        /// <typeparam name="T">Element type stored in the vector.</typeparam>
+        /// <param name="vec">
+        /// The vector whose contents should be interpreted as an ordered multiset.
+        /// </param>
+        /// <param name="comparer">
+        /// Optional comparison strategy used to determine ordering inside the multiset.
+        /// If <c>null</c>, the default <see cref="Less{T}"/> comparer is used,
+        /// producing ascending order.
+        /// </param>
+        /// <param name="sorter">
+        /// Optional sorting algorithm used to arrange the vector before constructing
+        /// the multiset.  
+        /// If <c>null</c>, <see cref="SortActions.ShellSorter"/> is used as a safe,
+        /// fast, non‑recursive default.
+        /// </param>
+        /// <returns>
+        /// A <see cref="MultiSet{T, Vector{T}}"/> wrapper that interprets the vector
+        /// as a sorted collection that may contain duplicates.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method transforms the vector into a logical multiset by:
+        /// </para>
+        /// <list type="number">
+        ///   <item>
+        ///     <description>Sorting the vector using the chosen or default sorter.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>Applying the comparer to define element ordering.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///     Constructing a multiset wrapper that allows duplicates while maintaining
+        ///     sorted order.
+        ///     </description>
+        ///   </item>
+        /// </list>
+        /// <para>
+        /// Beginners:  
+        /// Think of this as “turn my vector into a sorted collection that allows duplicates”.
+        /// </para>
+        /// <para>
+        /// Professionals:  
+        /// Provides full control over ordering and sorting policies while maintaining
+        /// predictable defaults (<see cref="Less{T}"/> + ShellSort).  
+        /// Suitable for frequency tables, histograms, and domain‑specific ordering.
+        /// </para>
+        /// </remarks>
+
+        public static MultiSet<T, Vector<T>> AsMultiSet (
+            ref Vector<T> vec,
+            ISimpleCompare<T>? comparer = null,
+            SortAction<ISimpleCompare<T>, Vector<T>>? sorter = null )
+            => new MultiSet<T, Vector<T>>(
+                ref vec,
+                comparer == null ? new Less<T>() : comparer,
+                sorter == null ? SortActions.ShellSorter : sorter
+            );
+
+
+
+        /// <summary>
+        /// Creates an <see cref="UnorderedSet{T, Vector{T}}"/> view over the vector,
+        /// representing a unique collection without any defined ordering.
+        /// </summary>
+        /// <typeparam name="T">Element type stored in the vector.</typeparam>
+        /// <param name="vec">
+        /// The vector whose contents should be interpreted as an unordered set.
+        /// </param>
+        /// <returns>
+        /// An <see cref="UnorderedSet{T, Vector{T}}"/> wrapper that treats the vector
+        /// as a unique, unordered collection.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// Unlike <see cref="Set{T, Vector{T}}"/>, this structure does not sort the vector.
+        /// It simply ensures that elements are treated as unique, ignoring duplicates.
+        /// </para>
+        /// <para>
+        /// Beginners:  
+        /// Think of this as “a set where order does not matter”.
+        /// </para>
+        /// <para>
+        /// Professionals:  
+        /// Useful when ordering is irrelevant or when hashing/bucketing semantics are
+        /// preferred.  
+        /// No sorting or comparison strategy is required.
+        /// </para>
+        /// </remarks>
+
+        public static UnorderedSet<T, Vector<T>> AsUnorderedSet ( ref Vector<T> vec)
+            => new UnorderedSet<T, Vector<T>>(ref vec);
+
+
+        /// <summary>
+        /// Creates an <see cref="UnorderedMultiSet{T, Vector{T}}"/> view over the vector,
+        /// representing a collection that allows duplicates without enforcing any ordering.
+        /// </summary>
+        /// <typeparam name="T">Element type stored in the vector.</typeparam>
+        /// <param name="vec">
+        /// The vector whose contents should be interpreted as an unordered multiset.
+        /// </param>
+        /// <returns>
+        /// An <see cref="UnorderedMultiSet{T, Vector{T}}"/> wrapper that treats the vector
+        /// as an unordered collection where duplicates are allowed.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This structure does not sort or reorder the vector.  
+        /// It simply exposes it as a multiset where element frequency matters,
+        /// but ordering does not.
+        /// </para>
+        /// <para>
+        /// Beginners:  
+        /// Think of this as “a bag of items where duplicates are allowed and order does not matter”.
+        /// </para>
+        /// <para>
+        /// Professionals:  
+        /// Useful for frequency counting, histogram‑like structures, or any domain where
+        /// ordering is irrelevant.  
+        /// No comparer or sorter is required.
+        /// </para>
+        /// </remarks>
+
+        public static UnorderedMultiSet<T, Vector<T>> AsUnorderedMultiSet ( ref Vector<T> vec )
+            => new UnorderedMultiSet<T, Vector<T>>(ref vec);
+
+        /// <summary>
+        /// Creates a <see cref="Search{U, Vector{U}}"/> wrapper for this vector,
+        /// enabling search operations using the specified search provider.
+        /// </summary>
+        /// <typeparam name="U">
+        /// The element type stored in the vector. Must implement <see cref="IComparable{U}"/>
+        /// to support ordered search strategies.
+        /// </typeparam>
+        /// <param name="vec">
+        /// The vector instance to operate on.
+        /// </param>
+        /// <param name="provider">
+        /// The search provider defining the search strategy (linear, binary,
+        /// Fibonacci, etc.).
+        /// </param>
+        /// <returns>
+        /// A <see cref="Search{U, Vector{U}}"/> bound to the given vector.
+        /// </returns>
+        public static Search<U, Vector<U>> AsSearch<U> ( ref Vector<U> vec, ISearchProvider<U, Vector<U>>? provider = null )
+            where U : IComparable<U>
+            => new Search<U, Vector<U>>(ref vec, provider == null ? new LinearSearchProvider<U, Vector<U>>() : provider);
 
 
         /// <summary>

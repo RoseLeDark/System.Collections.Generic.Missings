@@ -16,6 +16,8 @@
  */
 
 using System.Numerics;
+using SystemEx.Algorithms.Interfaces;
+using SystemEx.Algorythmen;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
@@ -233,12 +235,12 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         private Pair<T, TU>? GetClosestToMedian() {
             int n = m_map.Size;
-            if ( n == 0 )
-                return null;
+            if ( n == 0 ) return null;
 
-            SortedArray<TU> prios = new SortedArray<TU>(n, SortByPriorityArray);
-            for ( int i = 0; i < n; i++ )
-                prios.Add(m_map[i].Second);
+            Vector<TU> prios = new Vector<TU>(n);
+
+            var set = Vector<TU>.AsMultiSet(ref prios, new Less<TU>());
+            set.InsertRange(0, m_map.Values.ToArray());
 
             TU median;
             if ( (n & 1) == 1 ) {
@@ -269,11 +271,7 @@ namespace SystemEx.Collections.Generic {
             return value < TU.Zero ? -value : value;
         }
 
-        private static CompareResult SortByPriorityArray(TU a, TU b) {
-            if ( a < b ) return CompareResult.AIsSmallerB;
-            if ( a > b ) return CompareResult.AIsLargerB;
-            return CompareResult.Equal;
-        }
+       
 
         private static CompareResult SortByPriority(Pair<T, TU> a, Pair<T, TU> b) {
             if ( a.Second < b.Second ) return CompareResult.AIsSmallerB;
