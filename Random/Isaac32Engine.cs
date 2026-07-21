@@ -15,8 +15,6 @@
  * changes and the date.
  */
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SystemEx.Random {
     /// <summary>
@@ -26,10 +24,38 @@ namespace SystemEx.Random {
         private const uint GoldenRatio = 0x9e3779b9u; // dein TGoldenRatio für 32 Bit
         private const int Size = 256;
 
-        private uint _cnt;
-        private readonly uint[] _rsl = new uint[Size];
-        private readonly uint[] _mem = new uint[Size];
-        private uint _a, _b, _c;
+        private uint m_cnt;
+        private readonly uint[] m_rsl = new uint[Size];
+        private readonly uint[] m_mem = new uint[Size];
+        private uint m_a, m_b, m_c;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Isaac32Engine"/> class using
+        /// a seed object implementing <see cref="ISeed"/>. The first three values of
+        /// the seed are used as the primary ISAAC seeds (a, b, c). Any additional
+        /// values are forwarded as the optional seed array s in Seed(a, b, c, s) >.
+        /// </summary>
+        /// <param name="seed">
+        /// The seed object used to initialize the engine. If the seed contains more
+        /// than three values, the remaining values are passed as the seed array.
+        /// </param>
+        public Isaac32Engine (ISeed seed) {
+            var arr = seed.GetSeed();
+            int len = arr.Length;
+
+            uint a = len > 0 ? arr[0] : 0;
+            uint b = len > 1 ? arr[1] : 0;
+            uint c = len > 2 ? arr[2] : 0;
+
+            uint[]? s = null;
+
+            if ( len > 3 ) {
+                s = new uint[len - 3];
+                Array.Copy(arr, 3, s, 0, s.Length);
+            }
+
+            Seed(a, b, c, s);
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Isaac32Engine"/> class with the specified seed values.
         /// </summary>
@@ -52,11 +78,11 @@ namespace SystemEx.Random {
 
             // Seed‑Array oder Null → wie bei dir m_rsl
             for ( int i = 0 ; i < Size ; i++ )
-                _rsl[i] = s != null ? s[i] : 0;
+               m_rsl[i] = s != null ? s[i] : 0;
 
-            _a = a;
-            _b = b;
-            _c = c;
+            m_a = a;
+            m_b = b;
+            m_c = c;
 
             Shuffle(ref aa, ref bb, ref cc, ref dd, ref ee, ref ff, ref gg, ref hh);
             Shuffle(ref aa, ref bb, ref cc, ref dd, ref ee, ref ff, ref gg, ref hh);
@@ -64,27 +90,27 @@ namespace SystemEx.Random {
             Shuffle(ref aa, ref bb, ref cc, ref dd, ref ee, ref ff, ref gg, ref hh);
 
             for ( int i = 0 ; i < Size ; i += 8 ) {
-                aa += _rsl[i + 0]; bb += _rsl[i + 1]; cc += _rsl[i + 2]; dd += _rsl[i + 3];
-                ee += _rsl[i + 4]; ff += _rsl[i + 5]; gg += _rsl[i + 6]; hh += _rsl[i + 7];
+                aa +=m_rsl[i + 0]; bb +=m_rsl[i + 1]; cc +=m_rsl[i + 2]; dd +=m_rsl[i + 3];
+                ee +=m_rsl[i + 4]; ff +=m_rsl[i + 5]; gg +=m_rsl[i + 6]; hh +=m_rsl[i + 7];
 
                 Shuffle(ref aa, ref bb, ref cc, ref dd, ref ee, ref ff, ref gg, ref hh);
 
-                _mem[i + 0] = aa; _mem[i + 1] = bb; _mem[i + 2] = cc; _mem[i + 3] = dd;
-                _mem[i + 4] = ee; _mem[i + 5] = ff; _mem[i + 6] = gg; _mem[i + 7] = hh;
+                m_mem[i + 0] = aa; m_mem[i + 1] = bb; m_mem[i + 2] = cc; m_mem[i + 3] = dd;
+                m_mem[i + 4] = ee; m_mem[i + 5] = ff; m_mem[i + 6] = gg; m_mem[i + 7] = hh;
             }
 
             for ( int i = 0 ; i < Size ; i += 8 ) {
-                aa += _mem[i + 0]; bb += _mem[i + 1]; cc += _mem[i + 2]; dd += _mem[i + 3];
-                ee += _mem[i + 4]; ff += _mem[i + 5]; gg += _mem[i + 6]; hh += _mem[i + 7];
+                aa += m_mem[i + 0]; bb += m_mem[i + 1]; cc += m_mem[i + 2]; dd += m_mem[i + 3];
+                ee += m_mem[i + 4]; ff += m_mem[i + 5]; gg += m_mem[i + 6]; hh += m_mem[i + 7];
 
                 Shuffle(ref aa, ref bb, ref cc, ref dd, ref ee, ref ff, ref gg, ref hh);
 
-                _mem[i + 0] = aa; _mem[i + 1] = bb; _mem[i + 2] = cc; _mem[i + 3] = dd;
-                _mem[i + 4] = ee; _mem[i + 5] = ff; _mem[i + 6] = gg; _mem[i + 7] = hh;
+                m_mem[i + 0] = aa; m_mem[i + 1] = bb; m_mem[i + 2] = cc; m_mem[i + 3] = dd;
+                m_mem[i + 4] = ee; m_mem[i + 5] = ff; m_mem[i + 6] = gg; m_mem[i + 7] = hh;
             }
 
-            Isaac();
-            _cnt = Size - 1;
+            setup();
+            m_cnt = Size - 1;
         }
 
         /// <summary>
@@ -92,13 +118,13 @@ namespace SystemEx.Random {
         /// </summary>
         /// <returns>The next random number.</returns>  
         public uint Next () {
-            if ( _cnt == 0 ) {
-                Isaac();
-                _cnt = Size - 1;
-                return _rsl[_cnt];
+            if ( m_cnt == 0 ) {
+                setup();
+                m_cnt = Size - 1;
+                return m_rsl[m_cnt];
             }
 
-            return _rsl[_cnt--];
+            return m_rsl[m_cnt--];
         }
         /// <summary>
         /// Shuffles the specified values.
@@ -129,7 +155,6 @@ namespace SystemEx.Random {
         /// <param name="x">The index.</param>
         /// <returns>The indexed value.</returns>
         private static uint Ind ( uint[] mm, uint x ) {
-            // 32‑Bit: Index = (x & (255 << 2)) / 4
             int idx = (int)((x & (255u << 2)) >> 2);
             return mm[idx];
         }
@@ -155,17 +180,16 @@ namespace SystemEx.Random {
             r[rIdx++] = b = Ind(mm, y >> 8) + x;
             m++;
         }
-
         /// <summary>
         /// Generates a sequence of random numbers using the ISAAC algorithm.
         /// </summary>
-        private void Isaac () {
+        private void setup () {
             uint x = 0, y = 0;
-            uint[] mm = _mem;
-            uint[] r = _rsl;
+            uint[] mm = m_mem;
+            uint[] r =m_rsl;
 
-            uint a = _a;
-            uint b = _b + (++_c);
+            uint a = m_a;
+            uint b = m_b + (++m_c);
 
             int m = 0;
             int m2 = 128;
@@ -186,8 +210,8 @@ namespace SystemEx.Random {
                 RngStep(a >> 16, ref a, ref b, mm, ref m, ref m2, r, ref rIdx, ref x, ref y);
             }
 
-            _b = b;
-            _a = a;
+            m_b = b;
+            m_a = a;
         }
     }
 
