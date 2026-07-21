@@ -17,7 +17,12 @@ namespace SystemEx.Algorithms {
     /// All algorithms use <see cref="ISimpleCompare{T}"/> as their comparison strategy.
     /// </summary>
     public static class SortActions {
-       
+
+        public static void HeapSort<T, C> ( ref C container, ISimpleCompare<T> cmp )
+            where C : IContainerEx<T> {
+
+        }
+
         /// <summary>
         /// Performs a BubbleSort on the container.
         /// </summary>

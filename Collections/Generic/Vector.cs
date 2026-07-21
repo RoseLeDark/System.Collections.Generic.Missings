@@ -344,6 +344,12 @@ namespace SystemEx.Collections.Generic {
             );
 
 
+        public RandomAccessIterator<T, Vector<T>> Begin => new RandomAccessIterator<T, Vector<T>>(this, 0);
+        public RandomAccessIterator<T, Vector<T>> End => new RandomAccessIterator<T, Vector<T>>(this, Count);
+
+
+        public RandomAccessIterator<T, Vector<T>> ReverseBegin => End;
+        public RandomAccessIterator<T, Vector<T>> ReverseEnd => Begin;
         /// <summary>
         /// Creates a <see cref="MultiSet{T, Vector{T}}"/> view over the given vector,
         /// allowing duplicate elements while preserving a defined ordering.

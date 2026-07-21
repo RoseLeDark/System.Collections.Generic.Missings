@@ -1,6 +1,27 @@
 # Changelog
+## [0.6x.xxx] xx.07.2026 -> Lacking
+### Added
+- Added `SafeCounter` with operator suite (++, --, +, -, ==, !=) with full atomic semantics.
+- Added new Interrfaces `ISpinlock<T>`, `ILock<T>` and `ILock` : unified locking abstraction for atomic and OS‑level synchronization.
+- Added new Light atomic based Locks based on `ILock<T>` and SafeCounter: 
+  - `LightCountingSpinlock<T>`: atomic multi‑capacity spinlock with deterministic decrement/increment semantics.
+  - `LightMutex<T>` based on `LightCountingSpinlock<T>`: binary spinlock with strict owner‑tracking built on top of LightCountingSpinlock<T>.
+- Added `MutexLock` OS‑level blocking mutex wrapper; kernel‑managed, not interchangeable with atomic spinlock‑based locks.
+- Added `Spinlock` thin wrapper around System.Threading.SpinLock exposing a busy‑wait mutual exclusion primitive via  `ISpinlock<T>`.
 
-## [0.60.xx] DD.MM.YYYY -> Lacking
+- Added new Iterrator System for IContainerEx System, the old in SystemEx.Collections.Generic.Interfaces are Obsolete and remove in version 1.0
+    -  Added a `RandomAccessIterator<T, Array<T>> Begin`, `RandomAccessIterator<T, Array<T>> End`, `RandomAccessIterator<T, Array<T>> ReverseBegin` and `RandomAccessIterator<T, Array<T>> ReverseEnd` to `Array<T>` and `Vector<T>` Objects 
+
+- Added to `SortActions ` helper: simple heap‑based min/max sort placing minimum at the start and maximum at the end.
+### Changed
+- Renamed `SimpleThread` → `LightThread` for naming consistency.
+- Renamed `SimpleConditionVariable` → `LightConditionVariable`.
+- `Dequeue<T>` is now auto‑growable and includes new utility functions.
+
+
+Improved internal consistency across all concurrency primitives and clarified usage guidelines in XML comments.
+---
+## [0.59.164] 21.07.2026 -> Lacking
 ### Remove
 - 13.07.2026 Remove Array<T> old, FixedArray, SortedArray and Hashable 
 ### Changed
@@ -8,7 +29,7 @@
 - 15.07.2026 Rename FastVector to Array and add AsSet, AsMultiSet, AsUnorderedSet, AsUnorderedMultiSetSet, As AsFind and AsSearch as static functions, easer to use
 - 21.07.2026 <b>FexedVector<T></b> renamed to <b>Array<T></b> and Update in all other objects
 - 
-## Added
+### Added
 - 15.07.2026 Add Fast_Types (Fast_Interger, Fast_Short, Fast_Byte, Fast_Float) 
 - 21.07.2026 Add Seed Pipeline for SystemEx.Random System `ISeed`, `TimedBasedSeed`, `ValueBasedSeed` and SeedMixer for mixing multiple Seeds
 - 21.07.2026 Add Slices View with SubSlices for JobQueueue in the Future with Worker Threads

@@ -8,8 +8,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.55.05</AssemblyVersion>
-    <FileVersion>0.55.05</FileVersion>
+    <AssemblyVersion>0.59.164</AssemblyVersion>
+    <FileVersion>0.59.164</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>RoseLeDark.Collections.Missings — Updated Description
 A lightweight extension library providing additional generic collection types and utility structures missing in .NET.
@@ -23,7 +23,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.55.05</Version>
+    <Version>0.59.164</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -34,45 +34,21 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
-    <AnalysisLevel>latest-recommended</AnalysisLevel>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.55.05] - 13.07.2026  -&gt; Lacking
-### CAUTION Very Important
-- Marked all Array&lt;T&gt; types as obsolate !!! and:
-    - Add `Vector&lt;T&gt; : IContainerEx&lt;T&gt;`: A dynamic Vector implementation that supports optional auto-growth, indexed access, insertion, removal, traversal, and basic search operations. see c++ std::vector&lt;T&gt;
-    - Add `ref struct Set&lt;T, TContainer&gt;`:Defines a sorting action used by the Set wrapper.  See c++ std::flat_set
-    - Add `ref struct Find&lt;T, TContainer&gt; where TContainer : IContainerEx&lt;T&gt;`: Provides search operations over a container implementing &lt;see cref="IContainerEx{T}"/&gt;. This struct performs non‑modifying lookups such as first/last occurrence, existence checks and counting matches.
- for replace and easyble use. See Example: Example\VectorSet.cs and Example\VectorFind.cs
-### Added
-- Added `Half16`, a fully deterministic IEEE‑754 binary16 implementation with complete bit‑level arithmetic.
-- Added `Blake3Hasher` (testing).
-- Added new conversion helpers for all basic primitive types (`ToUInt`, `ToInt`, `ToUShort`, …), including offset‑based variants that allow reading values from a `byte[]` starting at a specific index.
-- Added `IComparableEx&lt;T&gt;`, providing a strongly typed comparison contract compatible with `IComparable&lt;T&gt;` via integer‑backed `CompareResult`.
-- Added `IHashable&lt;T&gt;`, a minimal interface for deterministic byte‑level serialization used by SystemEx hashing algorithms.
-- Added fully documented `HashFactory` with support for attribute‑driven hash algorithm selection (`HashAlgorithmAttribute`) and automatic hasher instantiation via `Activator`.
-- Added namespace `SystemEx.Numeric` containing the following numeric types:
-  - `vec2f`, `vec2d`, `vec2i`
-  - `vec3f`, `vec3d`, `vec3i`
-  - `vec4f`, `vec4d`, `vec4i`
-  - `quadf`, `quadd`
-  - `mat44f`, `mat44d`
-  - `rect`
-  - `plane`
-- Added `GetEndian()` to the `Conversion` utilities to detect the system’s native endianness, allowing conversions to swap endianness only when necessary (e.g., inside `ToBytes(Endian endian)`).
-
+    <PackageReleaseNotes>## [0.59.164] 21.07.2026 -&gt; Lacking
+### Remove
+- 13.07.2026 Remove Array&lt;T&gt; old, FixedArray, SortedArray and Hashable 
 ### Changed
-- Removed the `Endian` parameter from `IHash.Compute` and `IHash.ComputeLong`. Endianness is now defined solely by the hash object’s constructor.
-- `RamSharedBackend.ReciveFromHardwareBuffer` now returns a copied buffer instead of the internal backend buffer to improve memory safety and prevent unintended external modifications.
-
-### Deprecated – Hashable (scheduled for removal in version 0.60)
-
-- The abstract base class Hashable has been marked as obsolete and is scheduled for complete removal in SystemEx 0.60.
-- The class‑based hashing system is no longer recommended and has been superseded by the new attribute‑driven hashing architecture based on:
-    - IHashable&lt;T&gt; for deterministic byte serialization
-    - HashFactory for algorithm selection and hash computation
-- The new hashing pipeline supports both classes and structs, avoids inheritance constraints, and provides a cleaner, more modular design.
-- Marked all Array&lt;T&gt; types as obsolate !!! 
+- 14.07.2026 Add to Vector&lt;T&gt; AsSet, AsMultiSet, AsUnorderedSet, AsUnorderedMultiSetSet, As AsFind and AsSearch as static functions, easer to use
+- 15.07.2026 Rename FastVector to Array and add AsSet, AsMultiSet, AsUnorderedSet, AsUnorderedMultiSetSet, As AsFind and AsSearch as static functions, easer to use
+- 21.07.2026 &lt;b&gt;FexedVector&lt;T&gt;&lt;/b&gt; renamed to &lt;b&gt;Array&lt;T&gt;&lt;/b&gt; and Update in all other objects
+- 
+## Added
+- 15.07.2026 Add Fast_Types (Fast_Interger, Fast_Short, Fast_Byte, Fast_Float) 
+- 21.07.2026 Add Seed Pipeline for SystemEx.Random System `ISeed`, `TimedBasedSeed`, `ValueBasedSeed` and SeedMixer for mixing multiple Seeds
+- 21.07.2026 Add Slices View with SubSlices for JobQueueue in the Future with Worker Threads
+- 21.07.2026 Add ` SubSlice` and `Slices` Provides a deterministic multi-thread slicing model over a container. A slice represents a continuous range of elements inside the container. Each slice can be exclusively owned by exactly one thread.
 </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
@@ -125,7 +101,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Examples\ExampleRamKernelAdd.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Examples\VectorFind.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

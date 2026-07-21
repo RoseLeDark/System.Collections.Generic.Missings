@@ -24,17 +24,17 @@ namespace SystemEx.Threading {
     /// <summary>
     /// A lightweight and minimal condition variable designed for simple thread
     /// synchronization scenarios. Unlike the heavy and business‑oriented primitives
-    /// in .NET, <see cref="SimpleConditionVariable"/> provides a straightforward
+    /// in .NET, <see cref="LightConditionVariable"/> provides a straightforward
     /// FIFO wait‑list and wake‑up mechanism suitable for most everyday use cases.
     /// <para>
-    /// Threads can register themselves using <see cref="Add(SimpleThread)"/> and
+    /// Threads can register themselves using <see cref="Add(LightThread)"/> and
     /// will be resumed explicitly through <see cref="Signal"/> or
     /// <see cref="Broadcast"/>. No complex monitor logic or advanced runtime
     /// scheduling is involved.
     /// </para>
     /// </summary>
-    public struct SimpleConditionVariable {
-        private Deque<SimpleThread> m_waits;
+    public struct LightConditionVariable {
+        private Deque<LightThread> m_waits;
         private readonly LightLock m_lockable;
         private string m_strName;
 
@@ -90,8 +90,8 @@ namespace SystemEx.Threading {
         /// FIFO wait‑list. The structure is intentionally minimal and avoids
         /// the overhead of traditional .NET synchronization constructs.
         /// </summary>
-        public SimpleConditionVariable (string strName) {
-            m_waits = new Deque<SimpleThread>(8, 4);
+        public LightConditionVariable (string strName) {
+            m_waits = new Deque<LightThread>(8, 4);
             m_lockable = new LightLock();
             m_strName = strName;
 
@@ -112,7 +112,7 @@ namespace SystemEx.Threading {
 
             if ( m_waits.IsEmpty ) return;
 
-            SimpleThread? _th;
+            LightThread? _th;
 
             if ( m_waits.PopFront(out _th) ) {
                 if ( _th != null ) _th.Signal(false);
@@ -132,7 +132,7 @@ namespace SystemEx.Threading {
             m_lockable.Lock();
 
             while ( !m_waits.IsEmpty ) {
-                SimpleThread? _th;
+                LightThread? _th;
 
                 if ( m_waits.PopFront(out _th) ) {
                     if ( _th != null ) _th.Signal(true);
@@ -174,12 +174,12 @@ namespace SystemEx.Threading {
 
         /// <summary>
         /// Adds a thread to the internal FIFO wait‑list. This method is used by
-        /// <see cref="SimpleThread"/> during its wait operation. The thread will
+        /// <see cref="LightThread"/> during its wait operation. The thread will
         /// remain blocked until <see cref="Signal"/> or <see cref="Broadcast"/>
         /// is invoked.
         /// </summary>
         /// <param name="task">The thread to add to the wait‑list.</param>
-        internal void Add ( SimpleThread task ) {
+        internal void Add ( LightThread task ) {
             m_lockable.Lock();
             m_waits.PushBack(task);
 #if DEBUG

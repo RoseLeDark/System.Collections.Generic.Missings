@@ -357,6 +357,13 @@ namespace SystemEx.Collections.Generic {
             set => Insert(index, value);
         }
 
+        public RandomAccessIterator<T, Array<T>> Begin => new RandomAccessIterator<T, Array<T>>(this, 0);
+        public RandomAccessIterator<T, Array<T>> End => new RandomAccessIterator<T, Array<T>>(this, Count);
+
+
+        public RandomAccessIterator<T, Array<T>> ReverseBegin => End;
+        public RandomAccessIterator<T, Array<T>> ReverseEnd => Begin;
+
         /// <summary>
         /// Creates a new Array with a specified initial capacity.
         /// The Array starts empty (Count = 0).

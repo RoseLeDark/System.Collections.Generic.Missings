@@ -21,60 +21,104 @@ namespace SystemEx.Threading {
     /// mutual exclusion. <see cref="LightLock"/> is intended for short, low‑overhead
     /// critical sections where a full synchronization primitive would be unnecessary.
     /// </summary>
-    public struct LightLock {
+    public struct LightLock : ILock<object> {
         private readonly object m_lock;
+        private string m_strName;
+        private bool m_bLocked;
+
+        /// <summary>
+        /// Gets the underlying lock handle used by <see cref="Monitor"/>.
+        /// </summary>
+        public object Handle => m_lock;
+        /// <summary>
+        /// Gets the descriptive name assigned to this lock instance.
+        /// </summary>
+        public string Name => m_strName;
+        /// <summary>
+        /// Indicates whether the lock is currently held by the calling thread.
+        /// This flag is updated whenever <see cref="Lock(TimeSpan)"/> or
+        /// <see cref="TryLock(TimeSpan)"/> succeeds or when <see cref="Unlock"/> is invoked.
+        /// </summary>
+        public bool IsLocked => m_bLocked;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LightLock"/> struct.
         /// A dedicated lock object is created for use with <see cref="Monitor"/>.
         /// </summary>
-        public LightLock () {
+        /// <param name="strName">
+        /// Optional human‑readable name used for diagnostics or debugging.
+        /// </param>
+        public LightLock (string strName = "LightLock" ) {
             m_lock = new object();
+            m_strName = strName;
+            m_bLocked = false;
         }
 
         /// <summary>
         /// Attempts to enter the critical section by acquiring the internal lock.
-        /// This method uses <see cref="Monitor.Enter(object, ref bool)"/> and returns
-        /// a boolean indicating whether the lock was successfully taken.
+        /// This overload accepts a <see cref="TimeSpan"/> timeout and uses
+        /// <see cref="Monitor.TryEnter(object, TimeSpan, ref bool)"/> to determine
+        /// whether the lock was successfully taken.
         /// </summary>
+        /// <param name="span">The maximum duration to wait for the lock.</param>
         /// <returns>
-        /// <c>true</c> if the lock was successfully acquired; otherwise <c>false</c>.
+        /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
         /// </returns>
-        public bool Lock () {
-            bool lockTaken = false;
-            Monitor.Enter(m_lock, ref lockTaken);
+        public bool Lock (TimeSpan span) {
+            Monitor.TryEnter(m_lock, span, ref m_bLocked);
 
-            return lockTaken;
+            return m_bLocked;
         }
 
         /// <summary>
-        /// Exits the critical section by releasing the internal lock. The caller
-        /// must ensure that every successful call to <see cref="Lock"/> is paired
-        /// with a corresponding call to <see cref="Unlock"/>.
+        /// Attempts to acquire the lock using a millisecond timeout. A negative value
+        /// indicates an immediate, non‑blocking attempt. Positive values are forwarded
+        /// to <see cref="Monitor.TryEnter(object, int, ref bool)"/>.
         /// </summary>
-        public void Unlock () {
-            Monitor.Exit(m_lock);
+        /// <param name="ms">Timeout in milliseconds, or <c>-1</c> for immediate attempt.</param>
+        /// <returns>
+        /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
+        /// </returns>
+        public bool Lock ( int ms = -1) {
+
+            if ( ms > 0 ) Monitor.TryEnter(m_lock, ms, ref m_bLocked);
+            else Monitor.TryEnter(m_lock, ref m_bLocked);
+
+            return m_bLocked;
+
         }
         /// <summary>
-        /// Suspends the current thread while releasing the internal lock, waiting for
-        /// a pulse notification or until the specified timeout expires. This method
-        /// wraps <see cref="Monitor.Wait(object, TimeSpan, bool)"/> and returns a
-        /// boolean indicating whether the wait completed successfully.
+        /// Releases the internal lock. Every successful call to <see cref="Lock(TimeSpan)"/>
+        /// or <see cref="Lock(int)"/> must be paired with a corresponding call to
+        /// <see cref="Unlock"/> to avoid deadlocks.
         /// </summary>
-        /// <param name="span">
-        /// The maximum amount of time to wait for a pulse signal.
-        /// </param>
-        /// <param name="exitContext">
-        /// Indicates whether the synchronization context should be exited before the
-        /// wait begins. This parameter is forwarded directly to
+        public void Unlock () => Monitor.Exit(m_lock);
+
+        /// <summary>
+        /// Temporarily releases the lock and suspends the current thread until a pulse
+        /// notification is received or the specified timeout expires. Upon completion,
+        /// the lock is automatically reacquired. This method wraps
         /// <see cref="Monitor.Wait(object, TimeSpan, bool)"/>.
+        /// </summary>
+        /// <param name="span">Maximum time to wait for a pulse.</param>
+        /// <param name="exitContext">
+        /// Indicates whether the synchronization context should be exited before waiting.
         /// </param>
         /// <returns>
-        /// <c>true</c> if the thread was notified before the timeout elapsed;
-        /// otherwise <c>false</c>.
+        /// <c>true</c> if the wait completed due to a pulse; otherwise <c>false</c>.
         /// </returns>
-        public bool Wait ( TimeSpan span, bool exitContext ) {
-            return Monitor.Wait(m_lock, span, exitContext);
-        }
+        public bool Wait ( TimeSpan span, bool exitContext ) => Monitor.Wait(m_lock, span, exitContext);
+
+        /// <summary>
+        /// Attempts to acquire the lock using a <see cref="TimeSpan"/> timeout.
+        /// This method is functionally identical to <see cref="Lock(TimeSpan)"/> but
+        /// semantically expresses a non‑blocking intent.
+        /// </summary>
+        /// <param name="span">Maximum duration to wait for the lock.</param>
+        /// <returns>
+        /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
+        /// </returns>
+        public bool TryLock ( TimeSpan span ) => (m_bLocked = Monitor.TryEnter(m_lock, span));
+
     }
 }

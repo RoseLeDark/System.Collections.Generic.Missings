@@ -9,7 +9,7 @@ namespace SystemEx.Threading {
     /// <summary>
     /// A lightweight and minimal thread implementation designed for simple and common
     /// synchronization scenarios. Unlike the complex and business-oriented threading
-    /// abstractions in .NET, <see cref="SimpleThread"/> provides a straightforward
+    /// abstractions in .NET, <see cref="LightThread"/> provides a straightforward
     /// wait-and-wake mechanism suitable for 90% of everyday use cases.
     /// <para>
     /// The thread can enter a controlled wait state and be resumed explicitly through
@@ -17,7 +17,7 @@ namespace SystemEx.Threading {
     /// heavy runtime features are involved.
     /// </para>
     /// </summary>
-    public class SimpleThread : ThreadEx {
+    public class LightThread : ThreadEx {
         private readonly LightLock m_waitState;
         private readonly AutoResetEvent m_block;
 
@@ -25,7 +25,7 @@ namespace SystemEx.Threading {
         /// Optional callback invoked when the thread is signaled. The boolean parameter
         /// indicates whether the signal originated from a broadcast operation.
         /// </summary>
-        public Action<SimpleThread, bool>? OnSignal { get; set; }
+        public Action<LightThread, bool>? OnSignal { get; set; }
 
         /// <summary>
         /// Creates a new lightweight thread with the specified priority and optional stack size.
@@ -38,7 +38,7 @@ namespace SystemEx.Threading {
         /// <param name="strName">the name </param>
         /// <param name="prio">The priority of the underlying thread.</param>
         /// <param name="stackSize">Optional stack size for the thread.</param>
-        public SimpleThread (string strName, ThreadPriority prio, int stackSize = 0 ) 
+        public LightThread (string strName, ThreadPriority prio, int stackSize = 0 ) 
             : base (strName,prio, stackSize) {
             // Begin in a locked logical wait state
             m_waitState = new LightLock();
@@ -70,7 +70,7 @@ namespace SystemEx.Threading {
             UnlockRunning();
         }
         /// <summary>
-        /// Blocks the thread until the associated <see cref="SimpleConditionVariable"/>
+        /// Blocks the thread until the associated <see cref="LightConditionVariable"/>
         /// signals it. The thread is added to the condition variable's wait queue and
         /// temporarily releases the provided lock during the wait period.
         /// <para>
@@ -88,7 +88,7 @@ namespace SystemEx.Threading {
         /// <c>true</c> if the logical wait state was successfully reacquired;
         /// otherwise <c>false</c>.
         /// </returns>
-        public bool Wait ( ref SimpleConditionVariable cv, ref LightLock cvl, int timeoutMs = -1) {
+        public bool Wait ( ref LightConditionVariable cv, ref LightLock cvl, int timeoutMs = -1) {
             LockRunning();
 
             cv.Add(this);
