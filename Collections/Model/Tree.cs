@@ -39,7 +39,7 @@ namespace SystemEx.Collections.Model {
         /// <summary>
         /// Gets the array of child nodes in the tree.
         /// </summary>
-        protected FixedVector<TRE?> m_pElemtents;
+        protected Array<TRE?> m_pElemtents;
         /// <summary>
         /// Gets the number of child nodes in the tree.
         /// </summary>
@@ -51,7 +51,7 @@ namespace SystemEx.Collections.Model {
         /// <param name="value">The value stored in the tree node.</param>
         protected Tree (int childs, T? value) 
             : base(value) {
-            m_pElemtents = new FixedVector<TRE?>(childs);
+            m_pElemtents = new Array<TRE?>(childs);
         }
     }
     /// @}

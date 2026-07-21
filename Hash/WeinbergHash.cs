@@ -40,7 +40,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Weinberg hash as a 32-bit value.</returns>
-        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
             uint hash = seed;
             uint g;
 
@@ -61,7 +61,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Weinberg hash as a 64-bit value.</returns>
-        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed) {
             ulong hash = seed;
             ulong g;
 

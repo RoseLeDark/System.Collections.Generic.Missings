@@ -38,7 +38,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Fletcher hash as a Hash32 object.</returns>
-        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
             uint sum1 = 0xffff;
             uint sum2 = 0xffff;
 
@@ -64,7 +64,7 @@ namespace SystemEx.Hash {
         /// <param name="input">The input data to hash.</param>
         /// <param name="seed">The seed value for the hash computation.</param>
         /// <returns>The computed Fletcher hash as a Hash64 object.</returns>
-        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
             // 64‑Bit Wrapper, da du nur die 32‑Bit‑Variante brauchst
             var h32 = Compute(input, (uint)seed );
             return new Hash64(h32.Value);

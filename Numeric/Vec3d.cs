@@ -285,7 +285,7 @@ namespace SystemEx.Numeric {
         /// ensuring consistent hashing across devices and backends.
         /// </para>
         /// </summary>
-        public FixedVector<byte> ToBytes () {
+        public Array<byte> ToBytes () {
             Cache m = new Cache(sizeof(double) * Count);
 
             for ( byte i = 0 ; i < Count ; i++ )

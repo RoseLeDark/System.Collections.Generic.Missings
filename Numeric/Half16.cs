@@ -741,8 +741,8 @@ namespace SystemEx.Numeric {
         /// A new <see cref="FixedVector{T}"/> containing the raw bytes of this
         /// <see cref="Half16"/> value.
         /// </returns>
-        public FixedVector<byte> ToBytes () {
-            return new FixedVector<byte>(m_value.ToBytes());
+        public Array<byte> ToBytes () {
+            return new Array<byte>(m_value.ToBytes());
         }
     }
     /// @}

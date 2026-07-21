@@ -83,7 +83,7 @@ namespace SystemEx.Algorithms.Interfaces {
         /// <param name="container">The container to search.</param>
         /// <param name="func">Predicate used to test each element.</param>
         /// <returns>
-        /// A <see cref="Vector{Pair{long, T}}"/> containing all matching elements.
+        /// A <see cref="Vector{T}"/> containing all matching elements.
         /// Each pair stores:
         /// <list type="bullet">
         /// <item><description>The index of the element in the container</description></item>

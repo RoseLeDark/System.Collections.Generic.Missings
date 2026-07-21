@@ -549,7 +549,7 @@ namespace SystemEx.Numeric {
         /// ensuring consistent hashing across devices and backends.
         /// </para>
         /// </summary>
-        public FixedVector<byte> ToBytes () {
+        public Array<byte> ToBytes () {
             Cache m = new Cache(sizeof(float) * 4);
 
             for ( byte i = 0 ; i < 4 ; i++ )

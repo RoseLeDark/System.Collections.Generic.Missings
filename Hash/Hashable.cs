@@ -44,7 +44,7 @@ namespace SystemEx.Hash {
         /// Converts the object into a byte array representation used by hashers.
         /// Implementations must return a deterministic and stable encoding.
         /// </summary>
-        public abstract FixedVector<byte> ToBytes ();
+        public abstract Array<byte> ToBytes ();
         /// <summary>
         /// Gets the random seed assigned to this instance.
         /// </summary>
@@ -66,7 +66,7 @@ namespace SystemEx.Hash {
                 _hash = base.GetHashCode();
             } else {
                 // Bytes erzeugen
-                FixedVector<byte> input = ToBytes();
+                Array<byte> input = ToBytes();
 
                 // Hasher transient erzeugen: zuerst versuchen, Konstruktor mit Endian, sonst parameterlos
                 object? inst = null;
@@ -106,7 +106,7 @@ namespace SystemEx.Hash {
                 _hash = base.GetHashCode();
             } else {
                 // Bytes erzeugen
-                FixedVector<byte> input = ToBytes();
+                Array<byte> input = ToBytes();
 
                 // Hasher transient erzeugen: zuerst versuchen, Konstruktor mit Endian, sonst parameterlos
                 object? inst = null;

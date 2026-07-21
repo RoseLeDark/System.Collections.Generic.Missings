@@ -17,7 +17,7 @@ namespace SystemEx.Hash {
             m_key = new Vector<byte>(IV);
             m_endian = endian;
         }
-        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
             Black3 hash = new Black3(m_key.ToNative());
 
             hash.Chunk.Update(input.ToNative());
@@ -32,7 +32,7 @@ namespace SystemEx.Hash {
             return new Hash32(cv.ToUInt());
         }
 
-        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
             Black3 hash = new Black3(m_key.ToNative());
 
             hash.Chunk.Update(input.ToNative());

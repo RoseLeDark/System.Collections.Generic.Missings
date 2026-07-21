@@ -85,13 +85,13 @@ namespace SystemEx.Hash {
         /// Computes a 32‑bit hash over the given byte vector using the specified seed
         /// and endian mode.
         /// </summary>
-        Hash32 Compute ( FixedVector<byte> input, uint seed );
+        Hash32 Compute ( Array<byte> input, uint seed );
 
         /// <summary>
         /// Computes a 64‑bit hash over the given byte vector using the specified seed
         /// and endian mode.
         /// </summary>
-        Hash64 ComputeLong ( FixedVector<byte> input, ulong seed );
+        Hash64 ComputeLong ( Array<byte> input, ulong seed );
     }
     /// @}
 

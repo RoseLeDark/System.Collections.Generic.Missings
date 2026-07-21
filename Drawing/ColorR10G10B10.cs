@@ -78,7 +78,7 @@ namespace SystemEx.Drawing {
         /// <param name="name">The name of the field to serialize.</param>
         /// <param name="endian">The endianness for the binary representation.</param>
         /// <returns>The byte array representing the serialized field, or null if not found.</returns>
-        protected override FixedVector<byte> GetBytesForEntry(object obj, string name, Endian endian) {
+        protected override Array<byte> GetBytesForEntry(object obj, string name, Endian endian) {
             var objx = obj as ColorR10G10B10A2;
             if ( objx == null ) throw new InvalidCastException();
 

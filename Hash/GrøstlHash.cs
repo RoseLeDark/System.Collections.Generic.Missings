@@ -81,7 +81,7 @@ namespace SystemEx.Hash {
         /// <param name="STATEBYTES">The number of bytes in each state block.</param>
         /// <param name="STATECOLS">The number of columns in each state block.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void SetMessage ( uint[] buffer, FixedVector<byte> input, PaddingState s, ulong inlen, uint STATEBYTES, uint STATECOLS ) {
+        private static void SetMessage ( uint[] buffer, Array<byte> input, PaddingState s, ulong inlen, uint STATEBYTES, uint STATECOLS ) {
 
             uint i = 0;
             for ( i = 0 ; i < s.BytesInBlock ; i++ )
@@ -303,7 +303,7 @@ namespace SystemEx.Hash {
         /// <param name="shift">The shift values for the permutation.</param>
         /// <param name="ColumnConstant">The column constants for the permutation.</param>
         /// <returns>The computed Grøstl hash as a byte array.</returns>
-        private static byte[] Compute_Hash ( FixedVector<byte> input, uint CRYPTO_BYTES, byte[,] shift, uint[] ColumnConstant ) {
+        private static byte[] Compute_Hash ( Array<byte> input, uint CRYPTO_BYTES, byte[,] shift, uint[] ColumnConstant ) {
 
             byte ROUNDS     = (byte)(CRYPTO_BYTES <= 32 ? 10 : 14);
             byte STATEBYTES = (byte)(CRYPTO_BYTES <= 32 ? 64 : 128);
@@ -400,7 +400,7 @@ namespace SystemEx.Hash {
         /// from the Grøstl-512 digest of <paramref name="input"/>, after endian-aware
         /// extraction and XOR-mixing with <paramref name="seed"/>.
         /// </returns>
-        public Hash64 ComputeLong ( FixedVector<byte> input, ulong seed ) {
+        public Hash64 ComputeLong ( Array<byte> input, ulong seed ) {
             uint[]  ColumnConstant = { 0x30201000, 0x70605040, 0xb0a09080, 0xf0e0d0c0 };
             byte[,] ShiftValues = { {0, 1, 2, 3, 4, 5, 6, 11}, {1, 3, 5, 11, 0, 2, 4, 6}    };
 
@@ -433,7 +433,7 @@ namespace SystemEx.Hash {
         /// from the Grøstl-256 digest of <paramref name="input"/>, after endian-aware
         /// extraction and XOR-mixing with <paramref name="seed"/>.
         /// </returns>
-        public Hash32 Compute ( FixedVector<byte> input, uint seed ) {
+        public Hash32 Compute ( Array<byte> input, uint seed ) {
 
             uint[]  ColumnConstant = { 0x30201000u,  0x70605040u };
             byte[,] ShiftValues = { { 0, 1, 2, 3, 4, 5, 6, 7 },  { 1, 3, 5, 7, 0, 2, 4, 6 }    };

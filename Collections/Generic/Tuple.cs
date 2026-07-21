@@ -35,7 +35,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Gets the number of elements stored in the tuple.
         /// </summary>
-        public int Count => m_elements.Count;
+        public int Count => (int)m_elements.Count;
 
         /// <summary>
         /// Gets or sets the element at the specified index.
