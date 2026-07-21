@@ -17,6 +17,9 @@
 
 using System.Collections;
 using System.Drawing;
+using SystemEx.Algorithms;
+using SystemEx.Algorithms.Interfaces;
+using SystemEx.Algorythmen;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -79,15 +82,194 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public T Current => m_elements[m_index];
 
+        /// <summary>
+        /// Creates a <see cref="Find{T, TContainer}"/> wrapper for this vector,
+        /// providing direct access to element lookup utilities.
+        /// </summary>
+        /// <param name="vec">
+        /// The vector instance to operate on.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Find{T, TContainer}"/> bound to the given vector.
+        /// </returns>
+        public static Find<T, Vector<T>> AsFinder ( ref Vector<T> vec )
+            => new Find<T, Vector<T>>(ref vec);
+
 
         /// <summary>
-        /// Creates a FlexSpan view over the entire vector starting at index 0.
+        /// Creates a <see cref="Set{T, Vector{T}}"/> view over the given vector.
+        /// </summary>
+        /// <typeparam name="T">Element type stored in the vector.</typeparam>
+        /// <param name="vec">
+        /// The vector whose contents should be interpreted as a sorted, unique set.
+        /// </param>
+        /// <param name="comparer">
+        /// Optional comparison strategy used to determine ordering inside the set.
+        /// If <c>null</c>, the default <see cref="Less{T}"/> comparer is used,
+        /// which orders elements in ascending order.
+        /// </param>
+        /// <param name="sorter">
+        /// Optional sorting algorithm used to arrange the vector before constructing the set.
+        /// If <c>null</c>, <see cref="SortActions.ShellSorter"/> is used as the default,
+        /// providing fast, predictable, non‑recursive sorting suitable for general use.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Set{T, Vector{T}}"/> that wraps the provided vector, ensuring
+        /// that elements are sorted according to the chosen comparer and that duplicates
+        /// are handled according to the set's semantics.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method transforms a <see cref="Vector{T}"/> into a logical set by:
+        /// </para>
+        /// <list type="number">
+        ///   <item>
+        ///     <description>
+        ///     Sorting the vector using the provided or default sorting algorithm.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///     Applying the comparison strategy to define the ordering of elements.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///     Constructing a <see cref="Set{T, Vector{T}}"/> wrapper that interprets
+        ///     the sorted vector as a unique, ordered collection.
+        ///     </description>
+        ///   </item>
+        /// </list>
+        /// <para>
+        /// Beginners:  
+        /// Think of this as “turn my vector into a sorted set”, where the library chooses
+        /// sensible defaults if you don’t specify anything.
+        /// </para>
+        /// <para>
+        /// Professionals:  
+        /// This method provides full control over ordering and sorting policies while
+        /// maintaining predictable defaults (<see cref="Less{T}"/> + ShellSort).  
+        /// It allows custom comparers (e.g., reverse order, length‑based, domain‑specific)
+        /// and custom sorting strategies (QuickSort, CombSort, etc.) without forcing
+        /// the user to configure them for common cases.
+        /// </para>
+        /// </remarks>
+        public static Set<T, Vector<T>> AsSet (
+            ref Vector<T> vec,
+            ISimpleCompare<T>? comparer = null,
+            SortAction<ISimpleCompare<T>, Vector<T>>? sorter = null )
+            => new Set<T, Vector<T>>(
+                ref vec,
+                comparer == null ? new Less<T>() : comparer,
+                sorter == null ? SortActions.ShellSorter : sorter
+            );
+
+
+        /// <summary>
+        /// Creates a <see cref="MultiSet{T, Vector{T}}"/> view over the given vector,
+        /// allowing duplicate elements while preserving a defined ordering.
+        /// </summary>
+        /// <typeparam name="T">Element type stored in the vector.</typeparam>
+        /// <param name="vec">
+        /// The vector whose contents should be interpreted as an ordered multiset.
+        /// </param>
+        /// <param name="comparer">
+        /// Optional comparison strategy used to determine ordering inside the multiset.
+        /// If <c>null</c>, the default <see cref="Less{T}"/> comparer is used,
+        /// producing ascending order.
+        /// </param>
+        /// <param name="sorter">
+        /// Optional sorting algorithm used to arrange the vector before constructing
+        /// the multiset.  
+        /// If <c>null</c>, <see cref="SortActions.ShellSorter"/> is used as a safe,
+        /// fast, non‑recursive default.
+        /// </param>
+        /// <returns>
+        /// A <see cref="MultiSet{T, Vector{T}}"/> wrapper that interprets the vector
+        /// as a sorted collection that may contain duplicates.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method transforms the vector into a logical multiset by:
+        /// </para>
+        /// <list type="number">
+        ///   <item>
+        ///     <description>Sorting the vector using the chosen or default sorter.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>Applying the comparer to define element ordering.</description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///     Constructing a multiset wrapper that allows duplicates while maintaining
+        ///     sorted order.
+        ///     </description>
+        ///   </item>
+        /// </list>
+        /// <para>
+        /// Beginners:  
+        /// Think of this as “turn my vector into a sorted collection that allows duplicates”.
+        /// </para>
+        /// <para>
+        /// Professionals:  
+        /// Provides full control over ordering and sorting policies while maintaining
+        /// predictable defaults (<see cref="Less{T}"/> + ShellSort).  
+        /// Suitable for frequency tables, histograms, and domain‑specific ordering.
+        /// </para>
+        /// </remarks>
+
+        public static MultiSet<T, Array<T>> AsMultiSet (
+            ref Array<T> vec,
+            ISimpleCompare<T>? comparer = null,
+            SortAction<ISimpleCompare<T>, Array<T>>? sorter = null )
+            => new MultiSet<T, Array<T>>(
+                ref vec,
+                comparer == null ? new Less<T>() : comparer,
+                sorter == null ? SortActions.ShellSorter : sorter
+            );
+
+
+
+        /// <summary>
+        /// Creates an <see cref="UnorderedSet{T, Array{T}}"/> view over the Array,
+        /// representing a unique collection without any defined ordering.
+        /// </summary>
+        /// <typeparam name="T">Element type stored in the Array.</typeparam>
+        /// <param name="vec">
+        /// The Array whose contents should be interpreted as an unordered set.
+        /// </param>
+        /// <returns>
+        /// An <see cref="UnorderedSet{T, Array{T}}"/> wrapper that treats the Array
+        /// as a unique, unordered collection.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// Unlike <see cref="Set{T, Array{T}}"/>, this structure does not sort the Array.
+        /// It simply ensures that elements are treated as unique, ignoring duplicates.
+        /// </para>
+        /// <para>
+        /// Beginners:  
+        /// Think of this as “a set where order does not matter”.
+        /// </para>
+        /// <para>
+        /// Professionals:  
+        /// Useful when ordering is irrelevant or when hashing/bucketing semantics are
+        /// preferred.  
+        /// No sorting or comparison strategy is required.
+        /// </para>
+        /// </remarks>
+
+        public static UnorderedSet<T, Array<T>> AsUnorderedSet ( ref Array<T> vec )
+            => new UnorderedSet<T, Array<T>>(ref vec);
+
+        /// <summary>
+        /// Creates a FlexSpan view over the entire Array starting at index 0.
         /// 
         /// The view uses the specified indexing mode (System, Reverse, Ring) and
-        /// provides a span-like interface backed directly by this vector.
+        /// provides a span-like interface backed directly by this Array.
         /// </summary>
-        /// <param name="vector">
-        /// Reference to the vector. Passed by ref to avoid copying the struct and
+        /// <param name="Array">
+        /// Reference to the Array. Passed by ref to avoid copying the struct and
         /// to ensure the FlexSpan reflects the actual container.
         /// </param>
         /// <param name="mode">
@@ -97,29 +279,29 @@ namespace SystemEx.Collections.Generic {
         /// Ring    = circular wrap-around indexing.
         /// </param>
         /// <returns>
-        /// A FlexSpan representing the full vector.
+        /// A FlexSpan representing the full Array.
         /// </returns>
         public static ContainerFlexSpan<T, Array<T>> AsFlexSpan ( ref Array<T> vector, FlexSpanMode mode = FlexSpanMode.System )
             => new ContainerFlexSpan<T, Array<T>>(ref vector, 0, mode);
 
-
+            
 
         /// <summary>
         /// Creates a FlexSpan view over a specific range of the Array.
         /// 
         /// The view covers the range [start .. end) and uses the specified indexing mode.
-        /// No memory is allocated; this is a pure logical slice backed by the vector.
+        /// No memory is allocated; this is a pure logical slice backed by the Array.
         /// </summary>
-        /// <param name="vector">
-        /// Reference to the vector. Passed by ref so the FlexSpan operates on the
+        /// <param name="Array">
+        /// Reference to the Array. Passed by ref so the FlexSpan operates on the
         /// actual container rather than a copy.
         /// </param>
         /// <param name="start">
-        /// Starting index of the view. Must be within the vector's logical bounds.
+        /// Starting index of the view. Must be within the Array's logical bounds.
         /// </param>
         /// <param name="end">
         /// Exclusive end index of the view. Must be greater than or equal to start
-        /// and within the vector's logical bounds.
+        /// and within the Array's logical bounds.
         /// </param>
         /// <param name="mode">
         /// Indexing mode for the view:
@@ -134,8 +316,8 @@ namespace SystemEx.Collections.Generic {
             => new ContainerFlexSpan<T, Array<T>>(ref vector, start, end, mode);
 
         /// <summary>
-        /// Creates a logical segment (sub-Vector) over the internal buffer.
-        /// The segment shares the same underlying Vector and does not copy data.
+        /// Creates a logical segment (sub-Array) over the internal buffer.
+        /// The segment shares the same underlying Array and does not copy data.
         /// 
         /// This is *not* a slicing List-like structure: it behaves as a memory segment
         /// with its own logical length but without shifting or relocating elements.
@@ -153,7 +335,7 @@ namespace SystemEx.Collections.Generic {
             // Ensure the segment lies fully inside the internal buffer
             ArgumentOutOfRangeException.ThrowIfLessThan((start + length), m_elements.Length);
 
-            // Create a new Vector<T> that shares the same buffer
+            // Create a new Array<T> that shares the same buffer
             var seg = new Array<T>(m_elements);
             // Logical end of the segment
             seg.m_index = (int)(start + length);
@@ -168,7 +350,7 @@ namespace SystemEx.Collections.Generic {
             return typeof(T);
         }
         /// <summary>
-        /// Provides indexed access to the Vector elements.
+        /// Provides indexed access to the Array elements.
         /// </summary>
         public T this[long index] {
             get => m_elements[index];
@@ -207,11 +389,11 @@ namespace SystemEx.Collections.Generic {
         }
 
         /// <summary>
-        /// Appends an element to the end of the vector.
+        /// Appends an element to the end of the Array.
         /// </summary>
         /// <param name="entry">Element to append.</param>
         /// <returns>
-        /// True if the element was appended; false if the vector was full.
+        /// True if the element was appended; false if the Array was full.
         /// </returns>
         public bool PushBack ( T entry ) {
             if ( m_index >= Length ) {
@@ -358,10 +540,10 @@ namespace SystemEx.Collections.Generic {
         }
 
         /// <summary>
-        /// Removes the last element from the vector.
+        /// Removes the last element from the Array.
         /// </summary>
         /// <returns>
-        /// True if an element was removed; false if the vector was empty.
+        /// True if an element was removed; false if the Array was empty.
         /// </returns>
         public bool Erase () {
             if ( IsEmpty ) return false;
@@ -409,7 +591,7 @@ namespace SystemEx.Collections.Generic {
         /// <param name="index">Index to access.</param>
         /// <returns>The element at the given index.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if the vector is empty or the index exceeds the logical length.
+        /// Thrown if the Array is empty or the index exceeds the logical length.
         /// </exception>
         public T ElementAt ( long index ) {
             if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
@@ -428,7 +610,7 @@ namespace SystemEx.Collections.Generic {
         }
 
         /// <summary>
-        /// Clears the vector by resetting the logical index.
+        /// Clears the Array by resetting the logical index.
         /// </summary>
         public void Clear () {
             m_index = 0;
@@ -478,10 +660,10 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Copies all valid elements of this vector into another vector,
+        /// Copies all valid elements of this Array into another Array,
         /// starting at the specified destination index.
         /// 
-        /// This overload copies from the beginning of this vector (sourceOffset = 0)
+        /// This overload copies from the beginning of this Array (sourceOffset = 0)
         /// into the destination vector at <paramref name="VectorIndex"/>.
         /// </summary>
         /// <param name="vector">
@@ -497,8 +679,7 @@ namespace SystemEx.Collections.Generic {
 
         /// <summary>
         /// Copies a range of elements from this vector into another vector.
-        /// 
-        /// Copying is performed using Buffer.LongCopy(), which supports long offsets.
+        /// cccccccccccccccccccccccccccccccccccccccccccCopying is performed using Buffer.LongCopy(), which supports long offsets.
         /// No automatic growth occurs in the destination; the caller must ensure
         /// sufficient capacity.
         /// </summary>
