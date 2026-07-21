@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.60.xx] DD.MM.YYYY -> Lacking
+### Remove
+- 13.07.2026 Remove Array<T> old, FixedArray, SortedArray and Hashable 
+### Changed
+- 14.07.2026 Add to Vector<T> AsSet, AsMultiSet, AsUnorderedSet, AsUnorderedMultiSetSet, As AsFind and AsSearch as static functions, easer to use
+- 15.07.2026 Rename FastVector to Array and add AsSet, AsMultiSet, AsUnorderedSet, AsUnorderedMultiSetSet, As AsFind and AsSearch as static functions, easer to use
+- 21.07.2026 <b>FexedVector<T></b> renamed to <b>Array<T></b> and Update in all other objects
+- 
+## Added
+- 15.07.2026 Add Fast_Types (Fast_Interger, Fast_Short, Fast_Byte, Fast_Float) 
+- 21.07.2026 Add Seed Pipeline for SystemEx.Random System `ISeed`, `TimedBasedSeed`, `ValueBasedSeed` and SeedMixer for mixing multiple Seeds
+- 21.07.2026 Add Slices View with SubSlices for JobQueueue in the Future with Worker Threads
+- 21.07.2026 Add ` SubSlice` and `Slices` Provides a deterministic multi-thread slicing model over a container. A slice represents a continuous range of elements inside the container. Each slice can be exclusively owned by exactly one thread.
+
 ## [0.55.05] - 13.07.2026  -> Lacking
 ### CAUTION Very Important
 - Marked all Array<T> types as obsolate !!! and:
@@ -19,9 +33,9 @@
   - `vec3f`, `vec3d`, `vec3i`
   - `vec4f`, `vec4d`, `vec4i`
   - `quadf`, `quadd`
-  - `mat44f`, `mat44d`
-  - `rect`
-  - `plane`
+ // - `mat44f`, `mat44d`
+ // - `rect`
+ // - `plane`
 - Added `GetEndian()` to the `Conversion` utilities to detect the system’s native endianness, allowing conversions to swap endianness only when necessary (e.g., inside `ToBytes(Endian endian)`).
 
 ### Changed
