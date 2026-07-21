@@ -185,7 +185,9 @@ namespace SystemEx.Collections.Generic {
             => new ContainerFlexSpan<T, Vector<T>>(ref vector, 0, mode);
 
 
-
+        public static Slices<T, Vector<T> > AsMultiSlices ( ref Vector<T> vector , int devider) {
+            return new Slices<T, Vector<T>>(ref vector, (int)(vector.Count / devider));
+        }
         /// <summary>
         /// Creates a FlexSpan view over a specific range of the vector.
         /// 
