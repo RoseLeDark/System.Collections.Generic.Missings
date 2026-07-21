@@ -29,7 +29,10 @@ namespace SystemEx.Collections.Generic {
     /// inserting or removing at the front.
     /// </summary>
     /// <typeparam name="T">The type of elements stored in the deque.</typeparam>
-    public class Deque<T> {
+    public class Deque<T>  {
+        private long m_growSize;
+        private bool m_autoGrow;
+
         /// <summary>
         /// Internal storage buffer for the deque elements.
         /// </summary>
@@ -44,6 +47,22 @@ namespace SystemEx.Collections.Generic {
         /// Gets the number of elements currently stored in the deque.
         /// </summary>
         public int Count => m_count;
+
+        /// <summary>
+        /// Gets or sets the number of elements the Vector grows by when AutoGrow is enabled.
+        /// </summary>
+        public long GrowSize {
+            get => (m_autoGrow ? m_growSize : 0);
+            set {
+                m_growSize = value;
+                m_autoGrow = (m_growSize > 0);
+            }
+        }
+        /// <summary>
+        /// Enables or disables automatic resizing when the Vector becomes full.
+        /// </summary>
+        public bool AutoGrow { get => (m_growSize == 0 ? false : m_autoGrow); set => m_autoGrow = value; }
+
 
 
         /// <summary>
@@ -75,18 +94,43 @@ namespace SystemEx.Collections.Generic {
         /// Creates a new deque with the specified capacity.
         /// </summary>
         /// <param name="size">The maximum number of elements the deque can hold.</param>
-        public Deque(int size) {
+        /// <param name="growSize">Number of elements to add when automatic growth occurs.</param>
+        public Deque (int size, int growSize) {
             m_elements = new T[size];
             m_count = 0;
+            GrowSize = growSize;
+        }
+
+        /// <summary>
+        /// Creates a new Dequeue using an existing buffer.
+        /// The buffer is adopted as-is, and Count is set
+        /// to the last valid index. 
+        /// </summary>
+        /// <param name="e">
+        /// Existing array used as the internal storage.
+        /// </param>
+        /// <param name="growSize">
+        /// Number of elements to add when automatic growth occurs.
+        /// </param>
+        public Deque ( T[] e, int growSize = 16 ) {
+            m_elements = e;
+            m_count = e.Length;
+
+            GrowSize = growSize;
         }
 
         /// <summary>
         /// Adds an element to the back of the deque if space is available.
         /// </summary>
         /// <param name="value">The element to add.</param>
-        public void PushBack(T value) {
-            if ( IsFull ) return;
-            m_elements[m_count++] = value;
+        public bool PushBack(T value) {
+            if ( IsFull ) {
+                if ( AutoGrow ) Grow();
+                return false;
+            }
+            m_elements[m_count] = value;
+            m_count++;
+            return true;
         }
 
         /// <summary>
@@ -106,8 +150,11 @@ namespace SystemEx.Collections.Generic {
         /// Existing elements are shifted one position to the right.
         /// </summary>
         /// <param name="value">The element to add.</param>
-        public void PushFront(T value) {
-            if ( IsFull ) return;
+        public bool PushFront (T value) {
+            if ( IsFull ) {
+                if ( AutoGrow ) Grow();
+                return false;
+            }
 
             // Shift all elements to the right
             for ( int i = m_count; i > 0; i-- )
@@ -115,6 +162,7 @@ namespace SystemEx.Collections.Generic {
 
             m_elements[0] = value;
             m_count++;
+            return true;
         }
 
         /// <summary>
@@ -123,8 +171,11 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="value">Receives the removed element.</param>
         /// <returns><c>true</c> if an element was removed; otherwise <c>false</c>.</returns>
-        public bool PopFront(ref T value) {
-            if ( IsEmpty ) return false;
+        public bool PopFront(out T? value) {
+            if ( IsEmpty ) {
+                value = default(T);
+                return false;
+            }
 
             value = m_elements[0];
 
@@ -157,6 +208,37 @@ namespace SystemEx.Collections.Generic {
         public FlexSpan<T> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System ) {
             return new FlexSpan<T>(ref m_elements!, 0, m_count, mode);
         }
+        /// <summary>
+        /// Grows the internal buffer by GrowSize if AutoGrow is enabled.
+        /// </summary>
+        /// <returns>
+        /// True if growth succeeded; false if AutoGrow was disabled.
+        /// </returns>
+        public bool Grow () {
+            if ( !AutoGrow ) return false;
+            return Resize(Count + (int)GrowSize);
+        }
+        /// <summary>
+        /// Resizes the internal buffer to the specified size.
+        /// Adjusts the logical index if it exceeds the new size.
+        /// </summary>
+        /// <param name="size">New buffer size.</param>
+        /// <returns>
+        /// True if resizing succeeded; false if resizing was unnecessary or failed.
+        /// </returns>
+        private bool Resize ( int size ) {
+            if ( size == Count ) return false;
+            if ( m_count > size )
+                m_count = size;
+
+            try {
+                Array.Resize(ref m_elements, (int)size);
+            } catch {
+                return false;
+            }
+            return true;
+        }
+
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

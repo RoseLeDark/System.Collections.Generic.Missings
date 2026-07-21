@@ -72,7 +72,7 @@ namespace SystemEx.Collections.Generic {
         /// with a fixed capacity of two elements.
         /// </summary>
         public BinQueue() {
-            m_deque = new Deque<T>(2);
+            m_deque = new Deque<T>(2, 0);
         }
 
         /// <summary>
@@ -82,8 +82,8 @@ namespace SystemEx.Collections.Generic {
         /// <param name="value">The value to enqueue.</param>
         public void Enqueue(T value) {
             if ( IsFull ) {
-                T dummy = default!;
-                m_deque.PopFront(ref dummy);
+                T? dummy = default!;
+                m_deque.PopFront(out dummy);
             }
             m_deque.PushBack(value);
         }
@@ -95,7 +95,7 @@ namespace SystemEx.Collections.Generic {
         /// <returns>
         /// <c>true</c> if an element was removed; otherwise <c>false</c>.
         /// </returns>
-        public bool Dequeue(ref T value) => m_deque.PopFront(ref value);
+        public bool Dequeue( out T? value) => m_deque.PopFront(out value);
 
         /// <summary>
         /// Removes all elements from the queue.

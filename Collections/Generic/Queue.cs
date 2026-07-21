@@ -62,7 +62,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="size">The maximum number of elements the queue can hold.</param>
         public Queue(int size) {
-            m_deque = new Deque<T>(size);
+            m_deque = new Deque<T>(size, 16);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="value">Receives the removed element.</param>
         /// <returns><c>true</c> if an element was removed; otherwise <c>false</c>.</returns>
-        public bool Dequeue(ref T value) => m_deque.PopFront(ref value);
+        public bool Dequeue(out T? value) => m_deque.PopFront(out value);
 
         /// <summary>
         /// Removes all elements from the queue.
