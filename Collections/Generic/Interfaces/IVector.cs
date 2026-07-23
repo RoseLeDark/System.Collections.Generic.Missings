@@ -9,13 +9,13 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// \addtogroup interfaces
     /// @{
     /// <summary>
-    /// Defines the minimal functionality required for a generic container
+    /// Defines the minimal functionality required for a generic vextzu
     /// used by the SystemEx collection framework. Implementations provide
     /// indexed access, insertion, replacement, removal, and structural
     /// duplication of stored elements.
     /// </summary>
     /// <typeparam name="T">The element type stored in the container.</typeparam>
-    public interface IContainerEx<T> {
+    public interface IVector<T> {
         /// <summary>
         /// Gets a value indicating whether the container cannot accept
         /// additional elements without growing.
@@ -167,7 +167,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         /// <param name="index">The index of the element.</param>
         /// <returns>The element at the specified index.</returns>
-        T ElementAt ( long index );
+        T? ElementAt ( long index );
 
         /// <summary>
         /// Removes all elements from the container, resetting its logical size.
@@ -193,10 +193,10 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// not reference the original storage.
         /// </summary>
         /// <returns>
-        /// A new <see cref="IContainerEx{T}"/> instance containing the same
+        /// A new <see cref="IVector{T}"/> instance containing the same
         /// elements as the original container.
         /// </returns>
-        IContainerEx<T> Duplicate ();
+        IVector<T> Duplicate ();
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

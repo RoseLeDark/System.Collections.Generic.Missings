@@ -28,7 +28,7 @@ namespace SystemEx.Collections.Generic {
     /// <typeparam name="T">The type of the first element (key).</typeparam>
     /// <typeparam name="TU">The type of the second element (value).</typeparam>
     [Serializable]
-    public struct Pair<T, TU> : IPair<T, TU> {
+    public struct Pair<T, TU> : IPair<T, TU>, IComparable<Pair<T, TU> > {
 
         /// <summary>
         /// Backing field for the first element (key).
@@ -131,7 +131,10 @@ namespace SystemEx.Collections.Generic {
 
             return false;
         }
-        
+
+        public int CompareTo ( Pair<T, TU> other ) {
+            return Comparer<T>.Default.Compare(First, other.First);
+        }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

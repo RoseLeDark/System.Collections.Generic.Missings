@@ -33,8 +33,8 @@ namespace SystemEx.Collections.Generic {
     /// The container type that stores the elements. 
     /// Must implement IContainerEx for the same element type.
     /// </typeparam>
-    public ref struct UnorderedMultiSet<T, TContainer> : IEquatable<UnorderedMultiSet<T, TContainer>>
-        where TContainer : IContainerEx<T> {
+    public ref struct VectorUnorderedSet<T, TContainer> : IEquatable<VectorUnorderedSet<T, TContainer>>
+        where TContainer : IVector<T> {
 
         private ref TContainer m_pKeys;
         private Find<T, TContainer> m_finder;
@@ -43,7 +43,7 @@ namespace SystemEx.Collections.Generic {
         ///  Creates a new unsorted view over the given container.
         /// </summary>
         /// <param name="keys">Reference to the underlying container.</param>
-        public UnorderedMultiSet ( ref TContainer keys ) {
+        public VectorUnorderedSet ( ref TContainer keys ) {
             m_pKeys = ref keys;
             m_finder = new Find<T, TContainer>(ref keys);
 
@@ -118,7 +118,8 @@ namespace SystemEx.Collections.Generic {
         public bool Insert ( T value ) {
             bool _ret = false;
 
-            _ret = m_pKeys.PushBack(value);
+            if ( m_finder.First(value) == -1 )
+                _ret = m_pKeys.PushBack(value);
 
             return _ret;
         }
@@ -131,7 +132,8 @@ namespace SystemEx.Collections.Generic {
         public bool Insert ( long index, T value ) {
             bool _ret = false;
 
-            _ret = m_pKeys.Insert(index, value);
+            if ( m_finder.First(value) == -1 )
+                _ret = m_pKeys.Insert(index, value);
 
             return _ret;
         }
@@ -145,7 +147,8 @@ namespace SystemEx.Collections.Generic {
         public bool Insert ( long start, long end, T value ) {
             bool _ret = false;
 
-            _ret = m_pKeys.Insert(start, end, value);
+            if ( m_finder.First(value) == -1 )
+                _ret = m_pKeys.Insert(start, end, value);
 
             return _ret;
         }
@@ -159,6 +162,9 @@ namespace SystemEx.Collections.Generic {
             bool insertedAny = false;
 
             foreach ( var item in values ) {
+                // Element existiert bereits → abbrechen
+                if ( m_finder.First(item) != -1 )
+                    continue;
 
                 // Einfügen fehlgeschlagen → abbrechen
                 if ( !m_pKeys.PushBack(item) )
@@ -185,7 +191,7 @@ namespace SystemEx.Collections.Generic {
         /// <param name="index">The index of the element to remove.</param>
         public bool Erase ( long index ) {
             bool _ret = m_pKeys.Erase(index);
-
+            
             return _ret;
         }
         /// <summary>
@@ -200,11 +206,11 @@ namespace SystemEx.Collections.Generic {
         /// </returns>
         public bool Erase ( long first, long last ) {
             bool _ret = m_pKeys.Erase(first, last);
-
+            
             return _ret;
         }
         /// <summary>
-        /// Removes the first occurrence of the specified value from the UnorderedMultiSet.
+        /// Removes the first occurrence of the specified value from the UnorderedSet.
         /// The element is located using the internal finder. If the element
         /// exists, it is removed from the underlying container. 
         /// </summary>
@@ -219,23 +225,23 @@ namespace SystemEx.Collections.Generic {
             if ( index != -1 ) {
                 _ret = m_pKeys.Erase(index);
             }
-
+            
 
             return _ret;
         }
 
-
+       
         /// <summary>
-        /// Moves all elements from this UnorderedMultiSet into the specified target UnorderedMultiSet.
+        /// Moves all elements from this UnorderedSet into the specified target UnorderedSet.
         /// The elements are copied into a temporary array, removed from the
-        /// underlying container of this UnorderedMultiSet, and then inserted into the
-        /// target UnorderedMultiSet. This UnorderedMultiSet becomes empty after the
+        /// underlying container of this UnorderedSet, and then inserted into the
+        /// target UnorderedSet. This UnorderedSet becomes empty after the
         /// operation.
         /// </summary>
         /// <param name="other">
-        /// The target UnorderedMultiSet that receives all elements from this UnorderedMultiSet.
+        /// The target UnorderedSet that receives all elements from this UnorderedSet.
         /// </param>
-        public void SwapIn ( UnorderedMultiSet<T, TContainer> other ) {
+        public void SwapIn ( VectorUnorderedSet<T, TContainer> other ) {
 
             if ( m_pKeys.Count > 0 ) {
                 // copy all elements into a temporary array
@@ -244,24 +250,60 @@ namespace SystemEx.Collections.Generic {
                 // clear myself
                 m_pKeys.Clear();
 
-                // insert all elements into the other UnorderedMultiSet
+                // insert all elements into the other UnorderedSet
                 other.m_pKeys.InsertRange(0, tmp);
 
             }
         }
 
         /// <summary>
-        /// Compares this UnorderedMultiSet with another UnorderedMultiSet for structural equality.
-        /// Both UnorderedMultiSets must contain the same number of elements and each
+        /// Merges all unique elements from the specified source set into this set.
+        /// Each element in <paramref name="source"/> is checked using the internal
+        /// finder. If this set does not contain the element, it is extracted from
+        /// the source and inserted into this set. Elements already present in this
+        /// set remain in the source. No elements are duplicated.
+        /// </summary>
+        /// <param name="source">
+        /// The set from which elements are merged into this set.
+        /// </param>
+        public void Merge ( VectorUnorderedSet<T, TContainer> source ) {
+            long count = source.m_pKeys.Count;
+
+            for ( long i = 0 ; i < count ; i++ ) {
+                T? value = source.m_pKeys.ElementAt(i);
+                if ( value == null )
+                    continue;
+
+                // check if this set already contains the value
+                long idx = m_finder.First(value);
+
+                if ( idx == -1 ) {
+                    // extract from source
+                    T[] extracted = source.Extract(i);
+
+                    // insert into this set
+                    m_pKeys.InsertRange(m_pKeys.Count, extracted);
+
+                    // adjust loop because source shrinks
+                    count--;
+                    i--;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Compares this UnorderedSet with another UnorderedSet for structural equality.
+        /// Both UnorderedSets must contain the same number of elements and each
         /// element at the same position must be equal. The comparison
         /// assumes both containers are sorted and aligned.
         /// </summary>
-        /// <param name="other">The UnorderedMultiSet to compare with.</param>
+        /// <param name="other">The UnorderedSet to compare with.</param>
         /// <returns>
-        /// True if both UnorderedMultiSets contain the same elements in the same order;
+        /// True if both UnorderedSets contain the same elements in the same order;
         /// otherwise false.
         /// </returns>
-        public bool Equals ( UnorderedMultiSet<T, TContainer> other ) {
+        public bool Equals ( VectorUnorderedSet<T, TContainer> other ) {
             bool _ret = true;
 
             if ( m_pKeys.Count != other.m_pKeys.Count ) {
@@ -296,8 +338,8 @@ namespace SystemEx.Collections.Generic {
 
             return a.Equals(b);
         }
-#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-        /// @}
-#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

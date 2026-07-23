@@ -241,7 +241,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <exception cref="KeyNotFoundException">
         /// Thrown if the key does not exist in the map.
         /// </exception>
-        TU this[T key] { get; }
+        Optional<TU> this[T key] { get; }
 
         /// <summary>
         /// Gets an enumerable collection of all keys contained in the map.

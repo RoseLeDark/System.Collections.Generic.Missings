@@ -207,7 +207,7 @@ namespace SystemEx.Threading {
                     }
 
                     // Atomar dekrementieren
-                    m_counter--
+                    m_counter--;
                     long newValue = m_counter.Value;
 
                     // Erfolg: nicht unter minCapacity gerutscht

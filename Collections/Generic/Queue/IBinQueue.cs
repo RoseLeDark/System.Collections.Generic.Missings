@@ -1,6 +1,4 @@
-﻿// SPDX-License-Identifier: EUPL-1.2
-
-/* 
+﻿/* 
  * SPDX-License-Identifier: EUPL-1.2
  *
  * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
@@ -17,30 +15,27 @@
  * changes and the date.
  */
 
-using System.Collections;
-using SystemEx.Collections.Generic.Interfaces;
-
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
     /// <summary>
-    /// A tuple map that allows multiple entries with identical tuple keys.  
-    /// Unlike <see cref="TupleMap"/>, which prevents duplicate tuples,
+    /// A fixed-size queue that stores up to two elements. When full, the oldest
+    /// element is automatically removed to make room for a new one.
     /// </summary>
-    public class MultiTupleMap : TupleMap {
-        /// <summary>
-        /// Creates a empty  multi‑tuple map.
+    /// <typeparam name="T">The type of elements stored in the queue.</typeparam>
+    public interface IBinQueue<T> : IDeque {
+        // <summary>
+        /// Adds a new element to the queue. If the queue is full, the oldest
+        /// element is removed automatically before inserting the new one.
         /// </summary>
-        public MultiTupleMap() : base() {  }
+        /// <param name="value">The value to enqueue.</param>
+        void Enqueue ( T value );
+
         /// <summary>
-        /// Creates a multi‑tuple map initialized with the specified elements.
+        /// Removes the element at the front of the queue.
         /// </summary>
-        public MultiTupleMap(IEnumerable<ITuple> elements) : base(elements) { }
-        /// <summary>
-        /// Adds a tuple to the map without performing duplicate checks.  
-        /// </summary>
-        /// <param name="item">The tuple to add.</param>
-        public override void Add(ITuple item) { m_elements.Add(item); }
+        Optional<T> Dequeue ( );
+
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

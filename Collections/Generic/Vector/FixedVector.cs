@@ -16,87 +16,21 @@
  */
 
 using System.Collections;
-using System.ComponentModel;
 using System.Drawing;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Xml.Linq;
 using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
 using SystemEx.Algorythmen;
-using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
-
-
     /// \addtogroup collections
     /// @{
     /// <summary>
-    /// A modern, policy‑driven dynamic Vector container that provides fast indexed access,
-    /// optional auto‑growth, insertion, removal, traversal, and multiple zero‑overhead
-    /// reinterpretation views.
-    ///
-    /// Beyond basic dynamic array functionality, <see cref="Vector{T}"/> supports
-    /// several high‑level transformations such as:
-    /// <list type="bullet">
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsFlexSpan"/> – a multi‑mode span view supporting forward, reverse, and ring ( circular) traversal.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsSet"/> / <see cref="AsMultiSet"/> – sorted views with configurable
-    ///     comparison and sorting policies.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsUnorderedSet"/> / <see cref="AsUnorderedMultiSet"/> – unordered
-    ///     unique or multi‑value views without sorting overhead.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsSearch"/> – a binary‑search optimized lookup view.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsFind"/> – a linear search view for unsorted data.
-    ///     </description>
-    ///   </item>
-    /// </list>
-    ///
-    /// These views allow the same underlying Vector to be interpreted as a span,
-    /// a sorted set, a multiset, an unordered set, or a search helper — without copying
-    /// or allocating additional memory.
-    ///
-    /// <para>
-    /// Beginners:  
-    /// Think of <see cref="Vector{T}"/> as a dynamic array that can instantly transform
-    /// into different “shapes” such as a set, a multiset, or a span, depending on what
-    /// you need.
-    /// </para>
-    ///
-    /// <para>
-    /// Professionals:  
-    /// <see cref="Vector{T}"/> follows a modern C++‑style multi‑view design.
-    /// Ordering is defined by <see cref="ISimpleCompare{T}"/> strategies, sorting is
-    /// controlled by <see cref="SortAction{TCompare, TContainer}"/> policies, and all
-    /// reinterpretations are zero‑overhead wrappers.  
-    /// This enables policy‑based sorting, strategy‑based comparison, and flexible
-    /// container semantics without hidden allocations or implicit behavior.
-    /// </para>
+    /// A fixed-size array container that provides indexed access, insertion,
+    /// traversal, and basic search operations. Unlike dynamic arrays, this
+    /// structure never grows and always maintains a constant capacity.
     /// </summary>
-    /// <typeparam name="T">The element type stored in the Vector.</typeparam>
-
-    public struct Vector<T> : IContainerEx<T>   {
-        private long m_growSize;
-        private bool m_autoGrow;
-        
+    public struct FixedVector<T> : IVector<T> {
         /// <summary>
         /// Internal storage buffer for Vector elements.
         /// </summary>
@@ -123,25 +57,12 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Indicates whether the Vector is full.
         /// </summary>
-        public bool IsFull => (AutoGrow ? false : m_index >= Length); 
+        public bool IsFull => ( m_index >= Length);
 
         /// <summary>
         /// Indicates whether the Vector contains no elements.
         /// </summary>
         public bool IsEmpty => m_index == 0;
-        /// <summary>
-        /// Gets or sets the number of elements the Vector grows by when AutoGrow is enabled.
-        /// </summary>
-        public long GrowSize { get => (m_autoGrow ? m_growSize : 0);
-            set {
-                m_growSize = value;
-                m_autoGrow = (m_growSize > 0);
-            }
-        }
-        /// <summary>
-        /// Enables or disables automatic resizing when the Vector becomes full.
-        /// </summary>
-        public  bool AutoGrow { get => (m_growSize == 0 ? false : m_autoGrow); set => m_autoGrow = value; }
 
 
         /// <summary>
@@ -161,106 +82,6 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public T Current => m_elements[m_index];
 
-
-        /// <summary>
-        /// Creates a FlexSpan view over the entire vector starting at index 0.
-        /// 
-        /// The view uses the specified indexing mode (System, Reverse, Ring) and
-        /// provides a span-like interface backed directly by this vector.
-        /// </summary>
-        /// <param name="vector">
-        /// Reference to the vector. Passed by ref to avoid copying the struct and
-        /// to ensure the FlexSpan reflects the actual container.
-        /// </param>
-        /// <param name="mode">
-        /// Indexing mode for the view:
-        /// System  = forward indexing,
-        /// Reverse = backward indexing,
-        /// Ring    = circular wrap-around indexing.
-        /// </param>
-        /// <returns>
-        /// A FlexSpan representing the full vector.
-        /// </returns>
-        public static ContainerFlexSpan<T, Vector<T> > AsFlexSpan (ref Vector<T> vector, FlexSpanMode mode = FlexSpanMode.System )
-            => new ContainerFlexSpan<T, Vector<T>>(ref vector, 0, mode);
-
-
-        public static Slices<T, Vector<T> > AsMultiSlices ( ref Vector<T> vector , int devider) {
-            return new Slices<T, Vector<T>>(ref vector, (int)(vector.Count / devider));
-        }
-        /// <summary>
-        /// Creates a FlexSpan view over a specific range of the vector.
-        /// 
-        /// The view covers the range [start .. end) and uses the specified indexing mode.
-        /// No memory is allocated; this is a pure logical slice backed by the vector.
-        /// </summary>
-        /// <param name="vector">
-        /// Reference to the vector. Passed by ref so the FlexSpan operates on the
-        /// actual container rather than a copy.
-        /// </param>
-        /// <param name="start">
-        /// Starting index of the view. Must be within the vector's logical bounds.
-        /// </param>
-        /// <param name="end">
-        /// Exclusive end index of the view. Must be greater than or equal to start
-        /// and within the vector's logical bounds.
-        /// </param>
-        /// <param name="mode">
-        /// Indexing mode for the view:
-        /// System  = forward indexing,
-        /// Reverse = backward indexing,
-        /// Ring    = circular wrap-around indexing.
-        /// </param>
-        /// <returns>
-        /// A FlexSpan representing the specified range of the vector.
-        /// </returns>
-        public static ContainerFlexSpan<T, Vector<T>> AsFlexSpan ( ref Vector<T> vector, long start, long end, FlexSpanMode mode = FlexSpanMode.System )
-            => new ContainerFlexSpan<T, Vector<T>>(ref vector, start, end, mode);
-     
-
-
-        /// <summary>
-        /// Creates a logical segment (sub-Vector) over the internal buffer.
-        /// The segment shares the same underlying Vector and does not copy data.
-        /// 
-        /// This is *not* a slicing List-like structure: it behaves as a memory segment
-        /// with its own logical length but without shifting or relocating elements.
-        /// </summary>
-        /// <param name="start">
-        /// The starting index of the segment.
-        /// </param>
-        /// <param name="length">
-        /// The number of elements included in the segment.
-        /// </param>
-        public Vector<T> AsSegment ( long start, long length ) {
-            if ( start < 0 || length < 0 )
-                throw new ArgumentOutOfRangeException();
-
-            // Ensure the segment lies fully inside the internal buffer
-            ArgumentOutOfRangeException.ThrowIfLessThan((start + length), m_elements.Length);
-
-            // Create a new Vector<T> that shares the same buffer
-            // A segment must not grow, otherwise it would corrupt the shared buffer
-            var seg = new Vector<T>(m_elements, 0);
-            // Logical end of the segment
-            seg.m_index = (int)(start + length);
-
-            return seg;
-        }
-        /// <summary>
-        /// Get The Type of T
-        /// </summary>
-        /// <returns>The Type of T</returns>
-        public Type GetElementType () {
-            return typeof(T);
-        }
-        /// <summary>
-        /// Provides indexed access to the Vector elements.
-        /// </summary>
-        public T this[long index] {
-            get => m_elements[index];
-            set => Insert(index, value);
-        }
         /// <summary>
         /// Creates a <see cref="Find{T, TContainer}"/> wrapper for this vector,
         /// providing direct access to element lookup utilities.
@@ -271,12 +92,12 @@ namespace SystemEx.Collections.Generic {
         /// <returns>
         /// A <see cref="Find{T, TContainer}"/> bound to the given vector.
         /// </returns>
-        public static Find<T, Vector<T>> AsFinder(ref Vector<T> vec) 
+        public static Find<T, Vector<T>> AsFinder ( ref Vector<T> vec )
             => new Find<T, Vector<T>>(ref vec);
 
 
         /// <summary>
-        /// Creates a <see cref="Set{T, Vector{T}}"/> view over the given vector.
+        /// Creates a <see cref="VectorSet{T, Vector{T}}"/> view over the given vector.
         /// </summary>
         /// <typeparam name="T">Element type stored in the vector.</typeparam>
         /// <param name="vec">
@@ -293,7 +114,7 @@ namespace SystemEx.Collections.Generic {
         /// providing fast, predictable, non‑recursive sorting suitable for general use.
         /// </param>
         /// <returns>
-        /// A <see cref="Set{T, Vector{T}}"/> that wraps the provided vector, ensuring
+        /// A <see cref="VectorSet{T, Vector{T}}"/> that wraps the provided vector, ensuring
         /// that elements are sorted according to the chosen comparer and that duplicates
         /// are handled according to the set's semantics.
         /// </returns>
@@ -314,7 +135,7 @@ namespace SystemEx.Collections.Generic {
         ///   </item>
         ///   <item>
         ///     <description>
-        ///     Constructing a <see cref="Set{T, Vector{T}}"/> wrapper that interprets
+        ///     Constructing a <see cref="VectorSet{T, Vector{T}}"/> wrapper that interprets
         ///     the sorted vector as a unique, ordered collection.
         ///     </description>
         ///   </item>
@@ -333,25 +154,19 @@ namespace SystemEx.Collections.Generic {
         /// the user to configure them for common cases.
         /// </para>
         /// </remarks>
-        public static Set<T, Vector<T>> AsSet (
+        public static VectorSet<T, Vector<T>> AsSet (
             ref Vector<T> vec,
             ISimpleCompare<T>? comparer = null,
             SortAction<ISimpleCompare<T>, Vector<T>>? sorter = null )
-            => new Set<T, Vector<T>>(
+            => new VectorSet<T, Vector<T>>(
                 ref vec,
                 comparer == null ? new Less<T>() : comparer,
                 sorter == null ? SortActions.ShellSorter : sorter
             );
 
 
-        public RandomAccessIterator<T, Vector<T>> Begin => new RandomAccessIterator<T, Vector<T>>(this, 0);
-        public RandomAccessIterator<T, Vector<T>> End => new RandomAccessIterator<T, Vector<T>>(this, Count);
-
-
-        public RandomAccessIterator<T, Vector<T>> ReverseBegin => End;
-        public RandomAccessIterator<T, Vector<T>> ReverseEnd => Begin;
         /// <summary>
-        /// Creates a <see cref="MultiSet{T, Vector{T}}"/> view over the given vector,
+        /// Creates a <see cref="VectorMultiSet{T, Vector{T}}"/> view over the given vector,
         /// allowing duplicate elements while preserving a defined ordering.
         /// </summary>
         /// <typeparam name="T">Element type stored in the vector.</typeparam>
@@ -370,7 +185,7 @@ namespace SystemEx.Collections.Generic {
         /// fast, non‑recursive default.
         /// </param>
         /// <returns>
-        /// A <see cref="MultiSet{T, Vector{T}}"/> wrapper that interprets the vector
+        /// A <see cref="VectorMultiSet{T, Vector{T}}"/> wrapper that interprets the vector
         /// as a sorted collection that may contain duplicates.
         /// </returns>
         /// <remarks>
@@ -403,11 +218,11 @@ namespace SystemEx.Collections.Generic {
         /// </para>
         /// </remarks>
 
-        public static MultiSet<T, Vector<T>> AsMultiSet (
-            ref Vector<T> vec,
+        public static VectorMultiSet<T, FixedVector<T>> AsMultiSet (
+            ref FixedVector<T> vec,
             ISimpleCompare<T>? comparer = null,
-            SortAction<ISimpleCompare<T>, Vector<T>>? sorter = null )
-            => new MultiSet<T, Vector<T>>(
+            SortAction<ISimpleCompare<T>, FixedVector<T>>? sorter = null )
+            => new VectorMultiSet<T, FixedVector<T>>(
                 ref vec,
                 comparer == null ? new Less<T>() : comparer,
                 sorter == null ? SortActions.ShellSorter : sorter
@@ -416,20 +231,20 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Creates an <see cref="UnorderedSet{T, Vector{T}}"/> view over the vector,
+        /// Creates an <see cref="VectorUnorderedSet{T, FixedVector{T}}"/> view over the Array,
         /// representing a unique collection without any defined ordering.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
+        /// <typeparam name="T">Element type stored in the Array.</typeparam>
         /// <param name="vec">
-        /// The vector whose contents should be interpreted as an unordered set.
+        /// The Array whose contents should be interpreted as an unordered set.
         /// </param>
         /// <returns>
-        /// An <see cref="UnorderedSet{T, Vector{T}}"/> wrapper that treats the vector
+        /// An <see cref="VectorUnorderedSet{T, FixedVector{T}}"/> wrapper that treats the Array
         /// as a unique, unordered collection.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// Unlike <see cref="Set{T, Vector{T}}"/>, this structure does not sort the vector.
+        /// Unlike <see cref="VectorSet{T, FixedVector{T}}"/>, this structure does not sort the Array.
         /// It simply ensures that elements are treated as unique, ignoring duplicates.
         /// </para>
         /// <para>
@@ -444,138 +259,151 @@ namespace SystemEx.Collections.Generic {
         /// </para>
         /// </remarks>
 
-        public static UnorderedSet<T, Vector<T>> AsUnorderedSet ( ref Vector<T> vec)
-            => new UnorderedSet<T, Vector<T>>(ref vec);
-
+        public static VectorUnorderedSet<T, FixedVector<T>> AsUnorderedSet ( ref FixedVector<T> vec )
+            => new VectorUnorderedSet<T, FixedVector<T>>(ref vec);
 
         /// <summary>
-        /// Creates an <see cref="UnorderedMultiSet{T, Vector{T}}"/> view over the vector,
-        /// representing a collection that allows duplicates without enforcing any ordering.
+        /// Creates a FlexSpan view over the entire Array starting at index 0.
+        /// 
+        /// The view uses the specified indexing mode (System, Reverse, Ring) and
+        /// provides a span-like interface backed directly by this Array.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
-        /// <param name="vec">
-        /// The vector whose contents should be interpreted as an unordered multiset.
+        /// <param name="Array">
+        /// Reference to the Array. Passed by ref to avoid copying the struct and
+        /// to ensure the FlexSpan reflects the actual container.
+        /// </param>
+        /// <param name="mode">
+        /// Indexing mode for the view:
+        /// System  = forward indexing,
+        /// Reverse = backward indexing,
+        /// Ring    = circular wrap-around indexing.
         /// </param>
         /// <returns>
-        /// An <see cref="UnorderedMultiSet{T, Vector{T}}"/> wrapper that treats the vector
-        /// as an unordered collection where duplicates are allowed.
+        /// A FlexSpan representing the full Array.
         /// </returns>
-        /// <remarks>
-        /// <para>
-        /// This structure does not sort or reorder the vector.  
-        /// It simply exposes it as a multiset where element frequency matters,
-        /// but ordering does not.
-        /// </para>
-        /// <para>
-        /// Beginners:  
-        /// Think of this as “a bag of items where duplicates are allowed and order does not matter”.
-        /// </para>
-        /// <para>
-        /// Professionals:  
-        /// Useful for frequency counting, histogram‑like structures, or any domain where
-        /// ordering is irrelevant.  
-        /// No comparer or sorter is required.
-        /// </para>
-        /// </remarks>
+        public static VectorFlexSpan<T, FixedVector<T>> AsFlexSpan ( ref FixedVector<T> vector, FlexSpanMode mode = FlexSpanMode.System )
+            => new VectorFlexSpan<T, FixedVector<T>>(ref vector, 0, mode);
 
-        public static UnorderedMultiSet<T, Vector<T>> AsUnorderedMultiSet ( ref Vector<T> vec )
-            => new UnorderedMultiSet<T, Vector<T>>(ref vec);
+            
 
         /// <summary>
-        /// Creates a <see cref="Search{U, Vector{U}}"/> wrapper for this vector,
-        /// enabling search operations using the specified search provider.
+        /// Creates a FlexSpan view over a specific range of the Array.
+        /// 
+        /// The view covers the range [start .. end) and uses the specified indexing mode.
+        /// No memory is allocated; this is a pure logical slice backed by the Array.
         /// </summary>
-        /// <typeparam name="U">
-        /// The element type stored in the vector. Must implement <see cref="IComparable{U}"/>
-        /// to support ordered search strategies.
-        /// </typeparam>
-        /// <param name="vec">
-        /// The vector instance to operate on.
+        /// <param name="Array">
+        /// Reference to the Array. Passed by ref so the FlexSpan operates on the
+        /// actual container rather than a copy.
         /// </param>
-        /// <param name="provider">
-        /// The search provider defining the search strategy (linear, binary,
-        /// Fibonacci, etc.).
+        /// <param name="start">
+        /// Starting index of the view. Must be within the Array's logical bounds.
+        /// </param>
+        /// <param name="end">
+        /// Exclusive end index of the view. Must be greater than or equal to start
+        /// and within the Array's logical bounds.
+        /// </param>
+        /// <param name="mode">
+        /// Indexing mode for the view:
+        /// System  = forward indexing,
+        /// Reverse = backward indexing,
+        /// Ring    = circular wrap-around indexing.
         /// </param>
         /// <returns>
-        /// A <see cref="Search{U, Vector{U}}"/> bound to the given vector.
+        /// A FlexSpan representing the specified range of the Array.
         /// </returns>
-        public static Search<U, Vector<U>> AsSearch<U> ( ref Vector<U> vec, ISearchProvider<U, Vector<U>>? provider = null )
-            where U : IComparable<U>
-            => new Search<U, Vector<U>>(ref vec, provider == null ? new LinearSearchProvider<U, Vector<U>>() : provider);
-
+        public static VectorFlexSpan<T, FixedVector<T>> AsFlexSpan ( ref FixedVector<T> vector, long start, long end, FlexSpanMode mode = FlexSpanMode.System )
+            => new VectorFlexSpan<T, FixedVector<T>>(ref vector, start, end, mode);
 
         /// <summary>
-        /// Creates a new Vector with a specified initial capacity.
-        /// The vector starts empty (Count = 0) and grows according to GrowSize.
+        /// Creates a logical segment (sub-Array) over the internal buffer.
+        /// The segment shares the same underlying Array and does not copy data.
+        /// 
+        /// This is *not* a slicing List-like structure: it behaves as a memory segment
+        /// with its own logical length but without shifting or relocating elements.
+        /// </summary>
+        /// <param name="start">
+        /// The starting index of the segment.
+        /// </param>
+        /// <param name="length">
+        /// The number of elements included in the segment.
+        /// </param>
+        public FixedVector<T> AsSegment ( long start, long length ) {
+            if ( start < 0 || length < 0 )
+                throw new ArgumentOutOfRangeException();
+
+            // Ensure the segment lies fully inside the internal buffer
+            ArgumentOutOfRangeException.ThrowIfLessThan((start + length), m_elements.Length);
+
+            // Create a new Array<T> that shares the same buffer
+            var seg = new FixedVector<T>(m_elements);
+            // Logical end of the segment
+            seg.m_index = (int)(start + length);
+
+            return seg;
+        }
+        /// <summary>
+        /// Get The Type of T
+        /// </summary>
+        /// <returns>The Type of T</returns>
+        public Type GetElementType () {
+            return typeof(T);
+        }
+        /// <summary>
+        /// Provides indexed access to the Array elements.
+        /// </summary>
+        public T this[long index] {
+            get => m_elements[index];
+            set => Insert(index, value);
+        }
+
+        public RandomAccessIterator<T, FixedVector<T>> Begin => new RandomAccessIterator<T, FixedVector<T>>(this, 0);
+        public RandomAccessIterator<T, FixedVector<T>> End => new RandomAccessIterator<T, FixedVector<T>>(this, Count);
+
+
+        public RandomAccessIterator<T, FixedVector<T>> ReverseBegin => End;
+        public RandomAccessIterator<T, FixedVector<T>> ReverseEnd => Begin;
+
+        /// <summary>
+        /// Creates a new Array with a specified initial capacity.
+        /// The Array starts empty (Count = 0).
         /// </summary>
         /// <param name="size"> Initial capacity of the internal buffer. No elements are considered valid yet. </param>
-        /// <param name="growSize"> Number of elements to add when automatic growth occurs.</param>
-        public Vector ( long size, int growSize  = 16 ) {
+        public FixedVector ( long size) {
             m_elements = new T[size];
             m_index = 0;
-
-
-            GrowSize = growSize;
         }
 
         /// <summary>
-        /// Creates a new Vector using an existing buffer.
+        /// Creates a new Array using an existing buffer.
         /// The buffer is adopted as-is, and Count is set
         /// to the last valid index. 
         /// </summary>
         /// <param name="e">
         /// Existing array used as the internal storage.
         /// </param>
-        /// <param name="growSize">
-        /// Number of elements to add when automatic growth occurs.
-        /// </param>
-        public Vector ( T[] e, int growSize = 16 ) {
+        public FixedVector ( T[] e ) {
             m_elements = e;
             m_index = e.LongLength;
-
-            GrowSize = growSize;
         }
-
-        /// <summary>
-        /// Creates a new Vector from an enumerable collection.
-        /// The internal buffer is created from the collection, and Count is set
-        /// to the last valid index.
-        /// </summary>
-        /// <param name="e">
-        /// Source collection used to populate the vector.
-        /// </param>
-        /// <param name="growSize">
-        /// Number of elements to add when automatic growth occurs.
-        /// </param>
-        public Vector ( IEnumerable<T> e, int growSize = 16 ) {
-            m_elements = e.ToArray();
-            m_index = m_elements.Length - 1;
-
-            GrowSize = growSize;
-        }
-
 
         /// <summary>
         /// Copy ctor
         /// </summary>
-        public Vector ( Vector<T> other )  {
+        public FixedVector ( FixedVector<T> other ) {
             m_elements = new T[other.Length];
             Buffer.LongCopy<T>(other.m_elements, 0, m_elements, 0, other.Length);
-
-            m_index = other.m_index;
-            GrowSize = other.GrowSize;
         }
+
         /// <summary>
-        /// Appends an element to the end of the vector.
-        /// Automatically grows the buffer if AutoGrow is enabled.
+        /// Appends an element to the end of the Array.
         /// </summary>
         /// <param name="entry">Element to append.</param>
         /// <returns>
-        /// True if the element was appended; false if the vector was full and AutoGrow was disabled.
+        /// True if the element was appended; false if the Array was full.
         /// </returns>
         public bool PushBack ( T entry ) {
             if ( m_index >= Length ) {
-                if ( AutoGrow ) Grow();
                 return false;
             }
 
@@ -583,26 +411,22 @@ namespace SystemEx.Collections.Generic {
             m_index++;
             return true;
         }
+
+
         /// <summary>
         /// Inserts an element at the specified index, shifting elements to the right.
-        /// Automatically grows the buffer if needed and AutoGrow is enabled.
         /// </summary>
         /// <param name="index">Insertion index.</param>
         /// <param name="entry">Element to insert.</param>
         /// <returns>
-        /// True if insertion succeeded; false if the index was invalid or growth was not allowed.
+        /// True if insertion succeeded; false if the index was invalid.
         /// </returns>
         public bool Insert ( long index, T entry ) {
             if ( index < 0 ) return false;
 
             // Grow wie im Indexer
             if ( index >= m_elements.Length || m_index >= m_elements.Length ) {
-                if ( AutoGrow ) {
-                    if ( !Resize(m_elements.Length + GrowSize) )
-                        return false;
-                } else {
-                    return false;
-                }
+                return false;
             }
 
             // Speicher nach rechts verschieben
@@ -616,36 +440,32 @@ namespace SystemEx.Collections.Generic {
         }
         /// <summary>
         /// Fills a range of indices with a single value.
-        /// Automatically grows the buffer if needed and AutoGrow is enabled.
         /// </summary>
         /// <param name="start">Start index.</param>
         /// <param name="end">End index (inclusive).</param>
         /// <param name="entry">Value to write.</param>
         /// <returns>
-        /// True if the operation succeeded; false if the range was invalid or growth was not allowed.
+        /// True if the operation succeeded; false if the range was invalid.
         /// </returns>
         public bool Insert ( long start, long end, T entry ) {
             if ( start < 0 || end < start ) return false;
 
+            bool _ret = true;
+
             // Prüfen ob wir bis end schreiben können
             if ( end >= m_elements.Length ) {
-                if ( AutoGrow ) {
-                    if ( !Resize(end + GrowSize) )
-                        return false;
-                } else {
-                    return false;
-                }
+                _ret = false;
+            } else {
+
+                // Bereich füllen
+                for ( long i = start ; i <= end ; i++ )
+                    m_elements[i] = entry;
+
+                // m_index anpassen
+                if ( end + 1 > m_index )
+                    m_index = end + 1;
             }
-
-            // Bereich füllen
-            for ( long i = start ; i <= end ; i++ )
-                m_elements[i] = entry;
-
-            // m_index anpassen
-            if ( end + 1 > m_index )
-                m_index = end + 1;
-
-            return true;
+            return _ret;
         }
 
         /// <summary>
@@ -657,11 +477,15 @@ namespace SystemEx.Collections.Generic {
         /// True if all elements were inserted; false if any insertion failed.
         /// </returns>
         public bool InsertRange ( long start, T[] entrys ) {
+            bool _ret = true;
+
             for ( long i = 0 ; i < entrys.Length ; i++ ) {
-                if ( !Insert(start + i, entrys[i]) )
-                    return false;
+                if ( !Insert(start + i, entrys[i]) ) {
+                    _ret = false;
+                    break;
+                }
             }
-            return true;
+            return _ret;
         }
 
         /// <summary>
@@ -676,19 +500,13 @@ namespace SystemEx.Collections.Generic {
         public bool Replace ( long index, T entry ) {
             if ( index < 0 ) return false;
 
-            if( m_index >= m_elements.Length ) Grow();
-            
-            if ( index >= m_elements.Length ) {
-                if ( AutoGrow ) {
-                    if ( !Resize(m_elements.Length + GrowSize) )
-                        return false;
-                } else {
-                    return false;
-                }
-            }
+            bool _ret = false;
 
-            m_elements[index] = entry;
-            return true;
+            if ( index < m_elements.Length ) {
+                m_elements[index] = entry;
+                _ret = true;
+            }
+            return _ret;
         }
 
         /// <summary>
@@ -702,7 +520,6 @@ namespace SystemEx.Collections.Generic {
         /// </returns>
         public bool Replace ( long start, long end, T entry ) {
             if ( start < 0 || end < start ) return false;
-            if ( m_index >= m_elements.Length ) Grow();
 
             for ( long i = start ; i <= end ; i++ )
                 m_elements[i] = entry;
@@ -719,20 +536,23 @@ namespace SystemEx.Collections.Generic {
         /// True if all replacements succeeded; false if any failed.
         /// </returns>
         public bool ReplaceRange ( long start, T[] entrys ) {
+            bool _ret = true;
             for ( long i = 0 ; i < entrys.Length ; i++ ) {
-                if ( !Replace(start + i, entrys[i]) )
-                    return false;
+                if ( !Replace(start + i, entrys[i]) ) {
+                    _ret = false;
+                    break;
+                }
             }
-            return true;
+            return _ret;
         }
 
         /// <summary>
-        /// Removes the last element from the vector.
+        /// Removes the last element from the Array.
         /// </summary>
         /// <returns>
-        /// True if an element was removed; false if the vector was empty.
+        /// True if an element was removed; false if the Array was empty.
         /// </returns>
-        public bool Erase() {
+        public bool Erase () {
             if ( IsEmpty ) return false;
             m_index--;
             return true;
@@ -778,27 +598,26 @@ namespace SystemEx.Collections.Generic {
         /// <param name="index">Index to access.</param>
         /// <returns>The element at the given index.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if the vector is empty or the index exceeds the logical length.
+        /// Thrown if the Array is empty or the index exceeds the logical length.
         /// </exception>
         public T ElementAt ( long index ) {
             if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
 
             return m_elements[index];
         }
+
         /// <summary>
-        /// Grows the internal buffer by GrowSize if AutoGrow is enabled.
+        /// Fixed Buffer can not be Grow
         /// </summary>
         /// <returns>
-        /// True if growth succeeded; false if AutoGrow was disabled.
+        /// return always false
         /// </returns>
         public bool Grow () {
-            if ( !AutoGrow ) return false;
-            return Resize(Length + GrowSize);
+            return false;
         }
 
-
         /// <summary>
-        /// Clears the vector by resetting the logical index.
+        /// Clears the Array by resetting the logical index.
         /// </summary>
         public void Clear () {
             m_index = 0;
@@ -813,7 +632,19 @@ namespace SystemEx.Collections.Generic {
             for ( int i = 0 ; i < m_index ; i++ )
                 yield return m_elements[i];
         }
+        /// <summary>
+        /// Get the array from the underlayes data
+        /// </summary>
+        /// <returns></returns>
+        public T[] ToNative () => m_elements.ToArray();
 
+        /// <summary>
+        /// Create a duplicate from this
+        /// </summary>
+        /// <returns>The new instance from this</returns>
+        public IVector<T> Duplicate () {
+            return new FixedVector<T>(this);
+        }
         /// <summary>
         /// Traverses a range of elements in forward or backward order.
         /// </summary>
@@ -836,10 +667,10 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Copies all valid elements of this vector into another vector,
+        /// Copies all valid elements of this Array into another Array,
         /// starting at the specified destination index.
         /// 
-        /// This overload copies from the beginning of this vector (sourceOffset = 0)
+        /// This overload copies from the beginning of this Array (sourceOffset = 0)
         /// into the destination vector at <paramref name="VectorIndex"/>.
         /// </summary>
         /// <param name="vector">
@@ -848,14 +679,13 @@ namespace SystemEx.Collections.Generic {
         /// <param name="VectorIndex">
         /// Destination offset inside <paramref name="vector"/> where copying begins.
         /// </param>
-        public Pair<bool, long> CopyTo ( Vector<T> vector, ulong VectorIndex ) {
+        public Pair<bool, long> CopyTo ( FixedVector<T> vector, ulong VectorIndex ) {
             return CopyTo(0, vector, 0, VectorIndex);
         }
-
+        
 
         /// <summary>
         /// Copies a range of elements from this vector into another vector.
-        /// 
         /// Copying is performed using Buffer.LongCopy(), which supports long offsets.
         /// No automatic growth occurs in the destination; the caller must ensure
         /// sufficient capacity.
@@ -875,14 +705,14 @@ namespace SystemEx.Collections.Generic {
         /// enough remaining elements.
         /// </param>
         /// <returns>
-        /// The number of elements actually copied and the status.
+        /// The number of elements actually copied and the status as <see cref="Pair{Bool, Long}"/> 
         /// </returns>
-        public Pair<bool, long> CopyTo ( uint sourceOffset, Vector<T> destination, ulong destinationOffset, ulong count ) {
+        public Pair<bool, long> CopyTo ( uint sourceOffset, FixedVector<T> destination, ulong destinationOffset, ulong count ) {
 
             long src = (long)sourceOffset;
             long dst = (long)destinationOffset;
 
-            if( src > Length ) src = (long)Length;
+            if ( src > Length ) src = (long)Length;
 
             long toCopy = System.Math.Min((long)count,
             System.Math.Min(System.Math.Max(0, (long)Length - src),
@@ -893,7 +723,6 @@ namespace SystemEx.Collections.Generic {
             Buffer.LongCopy<T>(m_elements, src, destination.m_elements, dst, toCopy);
             return new Pair<bool, long>(true, toCopy);
         }
-
 
 
         /// <summary>
@@ -917,89 +746,42 @@ namespace SystemEx.Collections.Generic {
         /// The actual number copied may be smaller depending on available space.
         /// </param>
         /// <returns>
-        /// The number of elements actually copied and the status
+        /// TThe number of elements actually copied and the status as <see cref="Pair{Bool, Long}"/> 
         /// </returns>
-        public Pair<bool, long> CopyFrom ( Vector<T> source, ulong sourceOffset, ulong destinationOffset, ulong count ) {
+        public Pair<bool, long> CopyFrom ( FixedVector<T> source, ulong sourceOffset, ulong destinationOffset, ulong count ) {
             long src = (long)sourceOffset;
             long dst = (long)destinationOffset;
 
+            // Clamp source offset
+            if ( src > source.Length )
+                src = source.Length;
+
+            // Clamp destination offset
             if ( dst > Length )
                 dst = Length;
 
-            long toCopy = System.Math.Min((long)count,  
-                System.Math.Min(System.Math.Max(0, source.Length - src),
-                System.Math.Max(0, Length - dst)));
+            // Compute how much can actually be copied
+            long toCopy = System.Math.Min((long)count,
+                System.Math.Min(
+                    System.Math.Max(0, source.Length - src),
+                    System.Math.Max(0, Length - dst)
+                ));
 
-            // Wenn nichts passt → prüfen ob wir wachsen müssen
-            if ( toCopy <= 0 ) {
-                if ( !AutoGrow )
-                    return new Pair<bool, long>(false, 0);
+            // Nothing fits → return (false, 0)
+            if ( toCopy <= 0 )
+                return new Pair<bool, long>(false, 0);
 
-                long required = dst + (long)count;
-
-                long newSize = Length;
-                while ( required > newSize )
-                    newSize += GrowSize;
-
-                if ( !Resize(newSize) )
-                    return new Pair<bool, long>(false, 0);
-
-                // Nach Resize neu berechnen
-                toCopy = System.Math.Min((long)count,
-                    System.Math.Min(System.Math.Max(0, source.Length - src),
-                        System.Math.Max(0, (long)Length - dst)));
-
-                if ( toCopy <= 0 )
-                    return new Pair<bool, long>(false, 0);
-            }
-
+            // Perform the copy
             Buffer.LongCopy<T>(source.m_elements, src, m_elements, dst, toCopy);
 
-            // m_index anpassen, falls wir weiter hinten geschrieben haben
+            // Update logical length only if we wrote beyond current end
             long end = dst + toCopy;
             if ( end > m_index )
                 m_index = end;
 
-            return new Pair<bool, long>(true, toCopy); 
+            return new Pair<bool, long>(true, toCopy);
         }
-
-        /// <summary>
-        /// Returns a copy of the internal buffer.
-        /// </summary>
-        public T[] ToNative () => m_elements.ToArray();
-
-        /// <summary>
-        /// Create a duplicate from this
-        /// </summary>
-        /// <returns>The new instance from this</returns>
-        public IContainerEx<T> Duplicate () {
-            return new Vector<T>(this);
-        }
-
-        /// <summary>
-        /// Resizes the internal buffer to the specified size.
-        /// Adjusts the logical index if it exceeds the new size.
-        /// </summary>
-        /// <param name="size">New buffer size.</param>
-        /// <returns>
-        /// True if resizing succeeded; false if resizing was unnecessary or failed.
-        /// </returns>
-        private bool Resize ( long size ) {
-            if ( size == Length ) return false;
-            if ( m_index > size )
-                m_index = size;
-
-            try {
-                Array.Resize(ref m_elements, (int)size);
-            } catch {
-                return false;
-            }
-            return true;
-        }
-
-        
     }
-
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

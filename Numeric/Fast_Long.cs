@@ -19,6 +19,7 @@
 using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
 
+
 namespace SystemEx.Numeric {
 
     /// <summary>
@@ -210,10 +211,10 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Returns all bit positions where the bit is set to 1.
         /// </summary>
-        public Array<byte> Where () {
+        public FixedVector<byte> Where () {
             var _size = IsIt();
 
-            Array<byte> _set = new Array<byte>();
+            FixedVector<byte> _set = new FixedVector<byte>();
 
             if ( _size != 0 ) {
 
@@ -227,10 +228,10 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Returns all bit positions where the bit is set to 0.
         /// </summary>
-        public Array<byte> WhereNot () {
+        public FixedVector<byte> WhereNot () {
             var _size = IsItNot();
 
-            Array<byte> _set = new Array<byte>();
+            FixedVector<byte> _set = new FixedVector<byte>();
 
             if ( _size != 0 ) {
 

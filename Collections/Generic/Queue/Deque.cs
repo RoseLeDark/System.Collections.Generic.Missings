@@ -17,9 +17,12 @@
 
 using System.Collections;
 using SystemEx.Base;
-using SystemEx.Collections.Generic.Interfaces;
+using SystemEx.Collections.Generic;
 
 namespace SystemEx.Collections.Generic {
+    
+
+
     /// \addtogroup collections
     /// @{
     /// <summary>
@@ -29,7 +32,7 @@ namespace SystemEx.Collections.Generic {
     /// inserting or removing at the front.
     /// </summary>
     /// <typeparam name="T">The type of elements stored in the deque.</typeparam>
-    public class Deque<T>  {
+    public struct Deque<T> : IDeque<T>, IAutoGrowe {
         private long m_growSize;
         private bool m_autoGrow;
 
@@ -199,14 +202,9 @@ namespace SystemEx.Collections.Generic {
         /// The span directly references the internal array and does not allocate.
         ///
         /// </summary>
-        /// <param name="mode">
-        /// The indexing mode of the span. 
-        /// </param>
-        /// <returns>
-        /// A FlexSpan that views the range [0 .. m_count) of the internal buffer.
-        /// </returns>
-        public FlexSpan<T> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System ) {
-            return new FlexSpan<T>(ref m_elements!, 0, m_count, mode);
+
+        public static FlexSpan<T> AsFlexSpan ( ref Deque<T> que, FlexSpanMode mode = FlexSpanMode.System ) {
+            return new FlexSpan<T>(ref que.m_elements, 0, que.m_count, mode);
         }
         /// <summary>
         /// Grows the internal buffer by GrowSize if AutoGrow is enabled.

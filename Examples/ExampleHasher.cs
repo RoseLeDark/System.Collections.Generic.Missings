@@ -61,8 +61,9 @@
  */
 
 using SystemEx;
-using SystemEx.Hash;
 using SystemEx.Collections.Generic;
+using SystemEx.Hash;
+
 
 namespace Examples {
 
@@ -102,8 +103,8 @@ namespace Examples {
         ///
         /// HashFactory will use these bytes as input for the selected hash algorithm.
         /// </summary>
-        public Array<byte> ToBytes () {
-            var b = new Array<byte>(8);
+        public FixedVector<byte> ToBytes () {
+            var b = new FixedVector<byte>(8);
 
 
             // Convert the integer field into 4 bytes.

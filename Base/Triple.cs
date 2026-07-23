@@ -17,14 +17,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace SystemEx {
-    /// <summary>
-    /// Represents a three-valued logic type with True, False, and Nin (neither true nor false) states.
-    /// </summary>
-    public enum triple : sbyte {
-        True = 1,
-        False = 0,
-        Nin = -1
-    }
+    
     /// <summary>
     /// Represents a three-valued logic value.
     /// </summary>
@@ -202,5 +195,204 @@ namespace SystemEx {
         public static bool operator != ( bool left, Triple right ) {
             return !(right.Equals(left));
         }
+
+        /// <summary>
+        /// Defines the logical <c>true</c> state for control‑flow usage.
+        /// This operator does <b>not</b> implement three‑valued logic.
+        /// It exists solely so that <see cref="Triple"/> can be used in C#
+        /// conditional statements such as <c>if</c>, <c>while</c>, and logical operators.
+        /// 
+        /// A <see cref="Triple"/> evaluates to <c>true</c> only when its underlying
+        /// value is <see cref="triple.True"/>.
+        /// </summary>
+        public static bool operator true ( Triple opt ) {
+            return opt.m_value == triple.True;
+        }
+
+        /// <summary>
+        /// Defines the logical <c>false</c> state for control‑flow usage.
+        /// This operator does <b>not</b> implement three‑valued logic.
+        /// It exists solely so that <see cref="Triple"/> can be used in C#
+        /// conditional statements such as <c>if</c>, <c>while</c>, and logical operators.
+        /// 
+        /// A <see cref="Triple"/> evaluates to <c>false</c> when its underlying value
+        /// is <see cref="triple.False"/> or <see cref="triple.Nin"/>.
+        /// </summary>
+        public static bool operator false ( Triple opt ) {
+            return opt.m_value == triple.False || opt.m_value == triple.Nin;
+        }
+        /// <summary>
+        /// Implicitly converts a boolean value to a <see cref="Triple"/>.
+        /// <c>true</c> becomes <see cref="triple.True"/>, <c>false</c> becomes <see cref="triple.False"/>.
+        /// </summary>
+        public static implicit operator Triple ( bool value ) {
+            return new Triple(value);
+        }
+
+        /// <summary>
+        /// Implicitly converts a <see cref="triple"/> enum value to a <see cref="Triple"/>.
+        /// </summary>
+        public static implicit operator Triple ( triple value ) {
+            return new Triple(value);
+        }
+
+        /// <summary>
+        /// Implicitly converts a <see cref="Triple"/> to a boolean value.
+        /// Only <see cref="triple.True"/> maps to <c>true</c>; all other states map to <c>false</c>.
+        /// </summary>
+        public static implicit operator bool ( Triple value ) {
+            return value.ToBoolean();
+        }
+
+        /// <summary>
+        /// Kleene three-valued logical AND.
+        /// Truth table:
+        /// T & T = T
+        /// T & F = F
+        /// T & N = N
+        /// F & X = F
+        /// N & T = N
+        /// N & F = F
+        /// N & N = N
+        /// </summary>
+        public static Triple operator & ( Triple a, Triple b ) {
+            // False dominates AND
+            if ( a.m_value == triple.False || b.m_value == triple.False )
+                return triple.False;
+
+            // True only if both are True
+            if ( a.m_value == triple.True && b.m_value == triple.True )
+                return triple.True;
+
+            // Otherwise Nin
+            return triple.Nin;
+        }
+
+        /// <summary>
+        /// Kleene three-valued logical OR.
+        /// Truth table:
+        /// T | X = T
+        /// F | F = F
+        /// F | N = N
+        /// N | T = T
+        /// N | F = N
+        /// N | N = N
+        /// </summary>
+        public static Triple operator | ( Triple a, Triple b ) {
+            // True dominates OR
+            if ( a.m_value == triple.True || b.m_value == triple.True )
+                return triple.True;
+
+            // False only if both are False
+            if ( a.m_value == triple.False && b.m_value == triple.False )
+                return triple.False;
+
+            // Otherwise Nin
+            return triple.Nin;
+        }
+
+        /// <summary>
+        /// Kleene three-valued logical NOT.
+        /// Truth table:
+        /// !T = F
+        /// !F = T
+        /// !N = N
+        /// </summary>
+        public static Triple operator ! ( Triple a ) {
+            if ( a.m_value == triple.True )
+                return triple.False;
+
+            if ( a.m_value == triple.False )
+                return triple.True;
+
+            return triple.Nin;
+        }
+
+        /// <summary>
+        /// Kleene three-valued IMPLIES (A → B).
+        /// Truth table:
+        /// T→T = T
+        /// T→F = F
+        /// T→N = N
+        /// F→X = T
+        /// N→T = T
+        /// N→F = N
+        /// N→N = N
+        /// </summary>
+        public static Triple IMPLIES ( Triple a, Triple b ) {
+            var A = V(a);
+            var B = V(b);
+
+            if ( A == triple.True && B == triple.False ) return triple.False;
+            if ( A == triple.False ) return triple.True;
+            if ( A == triple.True && B == triple.True ) return triple.True;
+            if ( A == triple.True && B == triple.Nin ) return triple.Nin;
+            if ( A == triple.Nin && B == triple.True ) return triple.True;
+            if ( A == triple.Nin && B == triple.False ) return triple.Nin;
+
+            return triple.Nin;
+        }
+
+        /// <summary>
+        /// Kleene three-valued equivalence (A ↔ B).
+        /// Truth table:
+        /// T↔T = T
+        /// F↔F = T
+        /// T↔F = F
+        /// F↔T = F
+        /// Any combination with N = N
+        /// </summary>
+        public static Triple EQUIV ( Triple a, Triple b ) {
+            var A = V(a);
+            var B = V(b);
+
+            if ( A == triple.True && B == triple.True ) return triple.True;
+            if ( A == triple.False && B == triple.False ) return triple.True;
+            if ( A == triple.True && B == triple.False ) return triple.False;
+            if ( A == triple.False && B == triple.True ) return triple.False;
+
+            return triple.Nin;
+        }
+        /// <summary>
+        /// Kleene three-valued XOR.
+        /// Truth table:
+        /// T⊕T = F
+        /// F⊕F = F
+        /// T⊕F = T
+        /// F⊕T = T
+        /// Any combination with N = N
+        /// </summary>
+        public static Triple XOR ( Triple a, Triple b ) {
+            var A = V(a);
+            var B = V(b);
+
+            if ( A == triple.Nin || B == triple.Nin ) return triple.Nin;
+
+            if ( A != B ) return triple.True;
+
+            return triple.False;
+        }
+        /// <summary>
+        /// Kleene three-valued NAND.
+        /// Defined as: !(A & B)
+        /// </summary>
+        public static Triple NAND ( Triple a, Triple b ) {
+            return !( a & b);
+        }
+        /// <summary>
+        /// Kleene three-valued NOR.
+        /// Defined as: !(A | B)
+        /// </summary>
+        public static Triple NOR ( Triple a, Triple b ) {
+            return !( a | b);
+        }
+
+        /// <summary>
+        /// Converts a <see cref="Triple"/> into its Kleene value:
+        /// True, False, or Nin.
+        /// </summary>
+        private static triple V ( Triple t ) => t.Equals(triple.True) ? triple.True :
+                                        t.Equals(triple.False) ? triple.False :
+                                        triple.Nin;
     }
 }

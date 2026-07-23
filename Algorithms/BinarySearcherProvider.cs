@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using SystemEx.Algorithms.Interfaces;
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
@@ -8,7 +6,8 @@ using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
 
-
+    /// \addtogroup Algorithms
+    /// @{
     /// <summary>
     /// A specialized search provider implementing binary-search-based probing.
     /// 
@@ -51,11 +50,11 @@ namespace SystemEx.Algorithms {
     /// </summary>
     /// <typeparam name="T">Element type stored in the container.</typeparam>
     /// <typeparam name="TContainer">
-    /// Container type implementing <see cref="IContainerEx{T}"/>.
+    /// Container type implementing <see cref="IVector{T}"/>.
     /// Must provide indexed access and a stable element order.
     /// </typeparam>
     public struct BinarySearcherProvider< T, TContainer> : ISearchProvider<T, TContainer>
-        where TContainer : IContainerEx<T> {
+        where TContainer : IVector<T> {
 
         /// <inheritdoc />
         public long Find ( ref TContainer container, ICompared<T> comp, T value ) {
@@ -68,7 +67,8 @@ namespace SystemEx.Algorithms {
             // Try to locate ANY match using midpoint probing
             while ( left <= right ) {
                 long mid = (left + right) >> 1;
-                T item = container.ElementAt(mid);
+                T? item = container.ElementAt(mid);
+                if ( item == null ) continue;
 
                 if ( comp.Compare(item, value) == Utils.CompareResult.Equal  ) {
                     // Found one → expand to count all
@@ -110,9 +110,10 @@ namespace SystemEx.Algorithms {
             // Try to locate ANY match using midpoint probing
             while ( left <= right ) {
                 long mid = (left + right) >> 1;
-                T item = container.ElementAt(mid);
+                T? item = container.ElementAt(mid);
+                if ( item == null ) continue;
 
-                if ( func(item) == CompareResult.Equal ) {
+                if ( func(item!) == CompareResult.Equal ) {
                      _ret++;
 
                     // expand left
@@ -143,8 +144,8 @@ namespace SystemEx.Algorithms {
 
 
         /// <inheritdoc />
-        public Vector<Pair<long, T>> Where ( ref TContainer container, Func<T, CompareResult> func ) {
-            Vector<Pair<long, T>> result = new Vector<Pair<long, T>>();
+        public Vector<Pair<long, T >> Where ( ref TContainer container, Func<T, CompareResult> func ) {
+            Vector<Pair<long, T >> result = new Vector<Pair<long, T >>();
 
             long left = 0;
             long right = container.Count - 1;
@@ -152,7 +153,9 @@ namespace SystemEx.Algorithms {
             // Try to locate ANY match using midpoint probing
             while ( left <= right ) {
                 long mid = (left + right) >> 1;
-                T item = container.ElementAt(mid);
+                T? item = container.ElementAt(mid);
+                if ( item == null ) continue;
+
 
                 if ( func(item) == Utils.CompareResult.Equal ) {
                     // Found one → expand to count all
@@ -162,7 +165,7 @@ namespace SystemEx.Algorithms {
                     // expand left
                     for ( var i = mid - 1 ; i >= 0 ; i-- ) {
                         if ( func(container.ElementAt(i)) == Utils.CompareResult.Equal )
-                            result.PushBack(new Pair<long, T>(i, container.ElementAt(i)));
+                            result.PushBack(new Pair<long, T>(i, container.ElementAt(i) ));
                         else
                             break;
                     }
@@ -185,4 +188,5 @@ namespace SystemEx.Algorithms {
             return result;
         }
     }
+    /// @}
 }

@@ -43,7 +43,7 @@ namespace SystemEx.Drawing {
         /// A read‑only mapping of field names to their byte offsets. For ColorR10G10B10A2, 
         /// there is only one field named "DEFAULT" at offset 0.
         /// </summary>
-        public IReadOnlyMap<string, long> Offsets { get; private set; }
+        public Map<string, long> Offsets { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the ColorR10G10B10FormatSchema class with the specified endianness.
@@ -55,7 +55,7 @@ namespace SystemEx.Drawing {
             var x = new Pair<string, long>("DEFAULT", 0);
 
             // Define offsets
-            Offsets = new Map<string, long>(new Pair<string, long>[] { x });
+            Offsets = new Map<string, long>(new Pair<string, long>[] { x }, 0);
         }
     }
     /// <summary>
@@ -78,7 +78,7 @@ namespace SystemEx.Drawing {
         /// <param name="name">The name of the field to serialize.</param>
         /// <param name="endian">The endianness for the binary representation.</param>
         /// <returns>The byte array representing the serialized field, or null if not found.</returns>
-        protected override Array<byte> GetBytesForEntry(object obj, string name, Endian endian) {
+        protected override FixedVector<byte> GetBytesForEntry(object obj, string name, Endian endian) {
             var objx = obj as ColorR10G10B10A2;
             if ( objx == null ) throw new InvalidCastException();
 
@@ -118,7 +118,7 @@ namespace SystemEx.Drawing {
         protected override ColorR10G10B10A2? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian) {
 
             if ( entries.ContainsKey("DEFAULT") ) {
-                byte[] raw = entries["DEFAULT"];
+                byte[] raw = entries["DEFAULT"].Value!;
                 uint packed = raw.ToUInt(endian);
 
                 uint ri = packed & 0x3ff;

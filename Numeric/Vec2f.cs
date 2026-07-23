@@ -18,6 +18,7 @@
 using System;
 using System.Runtime.InteropServices;
 using SystemEx.Collections.Generic;
+
 using SystemEx.Hash;
 using SystemEx.Utils;
 
@@ -283,7 +284,7 @@ namespace SystemEx.Numeric {
         /// ensuring consistent hashing across devices and backends.
         /// </para>
         /// </summary>
-        public Array<byte> ToBytes () {
+        public FixedVector<byte> ToBytes () {
             Cache m = new Cache(sizeof(float) * Count);
 
             for ( byte i = 0 ; i < Count ; i++ )

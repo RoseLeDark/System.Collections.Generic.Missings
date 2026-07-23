@@ -16,7 +16,7 @@ namespace SystemEx.Collections.Generic {
         T Current { get; set; }
     }
     public struct ForwardIterrator<T, TCollection>: Iterrator<T>
-        where TCollection : IContainerEx<T> {
+        where TCollection : IVector<T> {
 
         private  TCollection m_collection;
         private long m_index;
@@ -57,7 +57,7 @@ namespace SystemEx.Collections.Generic {
     }
 
     public  struct BidirectionalIterator<T, TCollection> : Iterrator<T>
-       where TCollection : IContainerEx<T> {
+       where TCollection : IVector<T> {
 
         private  TCollection m_collection;
         private long m_index;
@@ -107,7 +107,7 @@ namespace SystemEx.Collections.Generic {
 
 
     public  struct RandomAccessIterator<T, TCollection> : Iterrator<T>
-       where TCollection : IContainerEx<T> {
+       where TCollection : IVector<T> {
 
         private  TCollection m_collection;
         private long m_index;
@@ -185,7 +185,7 @@ namespace SystemEx.Collections.Generic {
         /// Searches for the first occurrence of a value in a forward iterator range.
         /// </summary>
         public static ForwardIterrator<T, TCollection>? Find<T, TCollection> ( ForwardIterrator<T, TCollection> xfirst,
-            ForwardIterrator<T, TCollection> end, T value, ISimpleCompare<T> cmp ) where TCollection : IContainerEx<T> {
+            ForwardIterrator<T, TCollection> end, T value, ISimpleCompare<T> cmp ) where TCollection : IVector<T> {
             long indx = xfirst.Index;
             ForwardIterrator<T, TCollection>? _end = null;
 
@@ -207,7 +207,7 @@ namespace SystemEx.Collections.Generic {
         /// Finds the first iterator position where <paramref name="value"/> could be inserted
         /// without violating ordering (lower bound).
         /// </summary>
-        public static IRandomAccessIterator<T> LowerBound<T> ( IRandomAccessIterator<T> first, IRandomAccessIterator<T> last, T value, CompFunc<T> cmp ) where TCollection : IContainerEx<T> {
+        public static IRandomAccessIterator<T> LowerBound<T> ( IRandomAccessIterator<T> first, IRandomAccessIterator<T> last, T value, CompFunc<T> cmp ) where TCollection : IVector<T> {
             int count = Distance(first.Clone(), last.Clone());
             IRandomAccessIterator<T> it = (IRandomAccessIterator<T>)first.Clone();
 
@@ -231,7 +231,7 @@ namespace SystemEx.Collections.Generic {
         /// Finds the first iterator position where <paramref name="value"/> would appear
         /// after all equivalent elements (upper bound).
         /// </summary>
-        public static IRandomAccessIterator<T> UpperBound<T> ( IRandomAccessIterator<T> first, IRandomAccessIterator<T> last, T value, CompFunc<T> cmp ) where TCollection : IContainerEx<T> {
+        public static IRandomAccessIterator<T> UpperBound<T> ( IRandomAccessIterator<T> first, IRandomAccessIterator<T> last, T value, CompFunc<T> cmp ) where TCollection : IVector<T> {
             int count = Distance(first.Clone(), last.Clone());
             var it = first.Clone();
 
@@ -254,7 +254,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Reverses the elements in the iterator range [first, last).
         /// </summary>
-        public static void Reverse<T> ( IBidirectionalIterator<T> first, IBidirectionalIterator<T> last ) where TCollection : IContainerEx<T> {
+        public static void Reverse<T> ( IBidirectionalIterator<T> first, IBidirectionalIterator<T> last ) where TCollection : IVector<T> {
             last.Back();
 
             while ( !first.Equals(last) && !first.IsEnd && !last.IsBegin ) {

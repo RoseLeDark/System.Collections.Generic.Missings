@@ -16,6 +16,8 @@
  */
 
 
+
+
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
@@ -56,7 +58,7 @@ namespace SystemEx.Hash {
         /// Converts this instance into a deterministic byte array.
         /// The returned data is used as input for hashing algorithms.
         /// </summary>
-        Array<byte> ToBytes ();
+        FixedVector<byte> ToBytes ();
     }
 
     /// <summary>
@@ -139,7 +141,7 @@ namespace SystemEx.Hash {
 
             if ( inst is IHash hasher ) {
 
-                Array<byte> input = obj.ToBytes();
+                FixedVector<byte> input = obj.ToBytes();
                 _hash = hasher.Compute(input, seed);
 
             } else {
@@ -190,7 +192,7 @@ namespace SystemEx.Hash {
 
             if ( inst is IHash hasher ) {
 
-                Array<byte> input = obj.ToBytes();
+                FixedVector<byte> input = obj.ToBytes();
                 _hash = hasher.ComputeLong(input, seed );
 
             } else {

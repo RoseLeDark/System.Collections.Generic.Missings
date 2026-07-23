@@ -16,6 +16,7 @@
  */
 using SystemEx.Base;
 using SystemEx.Collections.Generic.Interfaces;
+using SystemEx.Collections.Generic;
 
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
@@ -30,14 +31,14 @@ namespace SystemEx.Collections.Generic {
     /// This class supports large continuous write operations by automatically
     /// determining the correct segment and offset for each write.  
     /// Writes may span multiple segments, and data is written chunk-by-chunk
-    /// using a temporary <see cref="FixedArray{T}"/> buffer.
+    /// using a temporary <see cref="FixedVector{T}"/> buffer.
     /// </remarks>
     public class StrippedCache : Cache {
         /// <summary>
         /// Temporary buffer used for chunked writes when data does not align
         /// perfectly with segment boundaries.
         /// </summary>
-        private readonly Array<byte> m_segmentTemp;
+        private readonly FixedVector<byte> m_segmentTemp;
 
         /// <summary>
         /// Additional cache segments beyond the base segment.
@@ -74,7 +75,7 @@ namespace SystemEx.Collections.Generic {
         /// Thrown when <paramref name="start"/> is outside the valid range.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public override ContainerFlexSpan<byte, Array<byte>> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System ) {
+        public override VectorFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System ) {
             if ( start < 0 || start >= (long)LongLength )
                 throw new ArgumentOutOfRangeException(nameof(start));
 
@@ -106,7 +107,7 @@ namespace SystemEx.Collections.Generic {
            // m_currentCache = 0;
             SetSavePosition(0);
 
-            m_segmentTemp = new Array<byte>(cacheSize);
+            m_segmentTemp = new FixedVector<byte>(cacheSize);
         }
 
 
@@ -166,7 +167,7 @@ namespace SystemEx.Collections.Generic {
 
                 } else {
 
-                    m_segmentTemp.CopyFrom(new Array<byte>(data), (uint)dataOffset, 0, chunkLen);
+                    m_segmentTemp.CopyFrom(new FixedVector<byte>(data), (uint)dataOffset, 0, chunkLen);
                     // Hole internen Buffer (ToArray liefert m_elements)
                     byte[] internalBuf = m_segmentTemp.ToNative();
 

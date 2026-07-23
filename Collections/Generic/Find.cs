@@ -26,7 +26,7 @@ namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
     /// <summary>
-    /// Provides search operations over a container implementing <see cref="IContainerEx{T}"/>.
+    /// Provides search operations over a container implementing <see cref="IVector{T}"/>.
     /// This struct performs non‑modifying lookups such as first/last occurrence,
     /// existence checks and counting matches.
     /// 
@@ -50,9 +50,9 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The element type stored inside the container.</typeparam>
     /// <typeparam name="TContainer">
-    /// The container type implementing <see cref="IContainerEx{T}"/> used as the search target.
+    /// The container type implementing <see cref="IVector{T}"/> used as the search target.
     /// </typeparam>
-    public ref struct Find<T, TContainer> where TContainer : IContainerEx<T> {
+    public ref struct Find<T, TContainer> where TContainer : IVector<T> {
 
         private ref TContainer m_container;
 

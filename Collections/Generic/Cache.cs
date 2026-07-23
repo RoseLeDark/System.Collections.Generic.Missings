@@ -65,7 +65,7 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Internal raw byte buffer.
         /// </summary>
-        private Array<byte> m_rawBuffer;
+        private FixedVector<byte> m_rawBuffer;
         /// <summary>
         /// Current read/write position within the buffer.
         /// </summary>
@@ -132,7 +132,7 @@ namespace SystemEx.Collections.Generic{
         /// Initializes a new cache with the specified capacity and type.
         /// </summary>
         public Cache(long capacity, CacheType type = CacheType.OnlySystem) {
-            m_rawBuffer = new Array<byte>(capacity);
+            m_rawBuffer = new FixedVector<byte>(capacity);
             this.Type = type;
             LongLength = (ulong)m_rawBuffer.Length;
         }
@@ -155,7 +155,7 @@ namespace SystemEx.Collections.Generic{
         /// <param name="arr"></param>
         /// <param name="type"></param>
         public Cache(byte[] arr, CacheType type) {
-            m_rawBuffer = new Array<byte>(arr);
+            m_rawBuffer = new FixedVector<byte>(arr);
             this.Type = type;
             LongLength = (ulong)m_rawBuffer.Length;
         }
@@ -165,10 +165,10 @@ namespace SystemEx.Collections.Generic{
         /// </summary>
         /// <param name="arr"></param>
         /// <param name="type"></param>
-        public Cache( Array<byte> arr, CacheType type) {
+        public Cache( FixedVector<byte> arr, CacheType type) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
-            m_rawBuffer = new Array<byte>(arr.ToNative());
+            m_rawBuffer = new FixedVector<byte>(arr.ToNative());
             this.Type = type;
             LongLength = (ulong)m_rawBuffer.Length;
         }
@@ -180,7 +180,7 @@ namespace SystemEx.Collections.Generic{
         public Cache(Cache cache) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
-            m_rawBuffer = new Array<byte>(cache.ToArray());
+            m_rawBuffer = new FixedVector<byte>(cache.ToArray());
             this.Type = cache.Type;
             LongLength = cache.LongLength;
         }
@@ -553,12 +553,12 @@ namespace SystemEx.Collections.Generic{
         /// <summary>
         /// Reads a range of bytes starting at the specified position.
         /// </summary>
-        public virtual Array<byte> ReadRangeEx ( ulong position, uint count ) {
+        public virtual FixedVector<byte> ReadRangeEx ( ulong position, uint count ) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
             if ( (int)position + count > m_rawBuffer.Length ) throw new IndexOutOfRangeException();
 
-            Array<byte> result = new Array<byte>(count);
+            FixedVector<byte> result = new FixedVector<byte>(count);
             m_rawBuffer.CopyTo((uint)position, result, 0, (uint)count);
             return result;
         }
@@ -649,13 +649,13 @@ namespace SystemEx.Collections.Generic{
             return m_rawBuffer.ToNative();
         }
         /// <summary>
-        /// Returns a copy of the internal buffer, as <see cref="Array{T}"/> 
+        /// Returns a copy of the internal buffer, as <see cref="FixedVector{T}"/> 
         /// </summary>
         /// <returns></returns>
         /// <exception cref="CacheIsSharedException"></exception>
-        public Array<byte> ToArrayEx() {
+        public FixedVector<byte> ToArrayEx() {
             if ( m_isLocked ) throw new CacheIsSharedException();
-            return (Array<byte>)m_rawBuffer.Duplicate();
+            return (FixedVector<byte>)m_rawBuffer.Duplicate();
         }
 
         /// <summary>
@@ -668,23 +668,23 @@ namespace SystemEx.Collections.Generic{
         /// <returns>
         /// A FlexSpan that views the range [0 .. Ende).
         /// </returns>
-        public virtual ContainerFlexSpan<byte, Array<byte>> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
-            => Array<byte>.AsFlexSpan(ref m_rawBuffer, mode);
+        public virtual VectorFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( FlexSpanMode mode = FlexSpanMode.System )
+            => FixedVector<byte>.AsFlexSpan(ref m_rawBuffer, mode);
 
 
         /// <summary>
         /// Creates a FlexSpan view starting at the specified offset.
         /// The span references the internal buffer directly and does not allocate.
         /// </summary>
-        public virtual ContainerFlexSpan<byte, Array<byte> > AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System )
-            => Array<byte>.AsFlexSpan(ref m_rawBuffer, start, m_rawBuffer.Length, mode);
+        public virtual VectorFlexSpan<byte, FixedVector<byte> > AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System )
+            => FixedVector<byte>.AsFlexSpan(ref m_rawBuffer, start, m_rawBuffer.Length, mode);
 
         /// <summary>
         /// Creates a FlexSpan view starting at the specified offset.
         /// The span references the internal buffer directly and does not allocate.
         /// </summary>
-        public virtual ContainerFlexSpan<byte, Array<byte>> AsFlexSpan ( long start, long endi, FlexSpanMode mode = FlexSpanMode.System )
-            => Array<byte>.AsFlexSpan(ref m_rawBuffer, start, endi, mode);
+        public virtual VectorFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( long start, long endi, FlexSpanMode mode = FlexSpanMode.System )
+            => FixedVector<byte>.AsFlexSpan(ref m_rawBuffer, start, endi, mode);
 
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
         /// @}

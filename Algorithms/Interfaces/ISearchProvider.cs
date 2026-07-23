@@ -20,6 +20,10 @@ using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms.Interfaces {
+    /// \addtogroup Algorithms
+    /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
     /// Defines a pluggable search strategy for use with the <c>Search</c> object.
     /// 
@@ -31,13 +35,13 @@ namespace SystemEx.Algorithms.Interfaces {
     /// access without copying. It never modifies the container.
     /// </summary>
     /// <typeparam name="TContainer">
-    /// The container type implementing <see cref="IContainerEx{T}"/>.
+    /// The container type implementing <see cref="IVector{T}"/>.
     /// </typeparam>
     /// <typeparam name="T">
     /// The element type stored in the container.
     /// </typeparam>
     public interface ISearchProvider<T, TContainer>
-        where TContainer : IContainerEx<T> {
+        where TContainer : IVector<T> {
         /// <summary>
         /// Searches the container for the specified value using the provider's
         /// lookup strategy.
@@ -65,7 +69,7 @@ namespace SystemEx.Algorithms.Interfaces {
         /// The index of the first element for which the callback indicates a
         /// match, or -1 if no element satisfies the predicate.
         /// </returns>
-        long Find ( ref TContainer container, Func<T, CompareResult> func );
+        long Find ( ref TContainer container, Func<T?, CompareResult> func );
 
 
         /// <summary>
@@ -91,7 +95,10 @@ namespace SystemEx.Algorithms.Interfaces {
         /// </list>
         /// </returns>
 
-        Vector< Pair<long, T> > Where ( ref TContainer container, Func<T, CompareResult> func );
+        Vector< Pair<long, T> > Where ( ref TContainer container, Func<T?, CompareResult> func );
     }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

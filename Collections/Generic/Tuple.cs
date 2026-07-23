@@ -16,6 +16,7 @@
  */
 using SystemEx.Collections.Generic.Interfaces;
 
+
 namespace SystemEx.Collections.Generic {
 
     /// \addtogroup collections
@@ -30,7 +31,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Internal storage for tuple elements.
         /// </summary>
-        private Array<object> m_elements;
+        private FixedVector<object> m_elements;
 
         /// <summary>
         /// Gets the number of elements stored in the tuple.
@@ -53,7 +54,7 @@ namespace SystemEx.Collections.Generic {
         /// Creates a tuple with a default capacity of 5 elements.
         /// </summary>
         public Tuple() {
-            m_elements = new Array<object>(5);
+            m_elements = new FixedVector<object>(5);
         }
 
         /// <summary>
@@ -61,14 +62,14 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="N">The number of elements the tuple can hold.</param>
         public Tuple(int N) {
-            m_elements = new Array<object>(N);
+            m_elements = new FixedVector<object>(N);
         }
 
         /// <summary>
-        /// Creates a tuple using an existing <see cref="Array{T}"/> as storage.
+        /// Creates a tuple using an existing <see cref="FixedVector{T}"/> as storage.
         /// </summary>
         /// <param name="elements">The array used as the underlying element buffer.</param>
-        public Tuple(Array<object> elements) {
+        public Tuple(FixedVector<object> elements) {
             m_elements = elements;
         }
 

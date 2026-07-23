@@ -19,6 +19,7 @@ using System;
 using System.Text;
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
+
 using SystemEx.Drawing;
 
 namespace SystemEx.IO.Provider {
@@ -51,7 +52,7 @@ namespace SystemEx.IO.Provider {
                 var name = entry.First;
                 var offset = entry.Second;
 
-                Array<byte> curr = GetBytesForEntry(obj, name, m_endian);
+                FixedVector<byte> curr = GetBytesForEntry(obj, name, m_endian);
                 
                 ret.WriteRange((ulong)offset, curr.ToNative());
                 
@@ -78,7 +79,7 @@ namespace SystemEx.IO.Provider {
 
                 byte[] raw = obj.ReadRange((ulong)offset, (uint)size)!;
 
-                entries.Add(name, raw);
+                entries.Add(new Pair<string, byte[]>(name, raw) );
             }
             return (T)CreateObjectFromEntrys(entries, m_endian)!;
         }
@@ -89,7 +90,7 @@ namespace SystemEx.IO.Provider {
         /// <param name="name">The entry</param>
         /// <param name="endian">Endian</param>
         /// <returns></returns>
-        protected abstract Array<byte> GetBytesForEntry(object obj, string name, Endian endian);
+        protected abstract FixedVector<byte> GetBytesForEntry(object obj, string name, Endian endian);
         /// <summary>
         /// Gets the size of the specified entry.
         /// </summary>

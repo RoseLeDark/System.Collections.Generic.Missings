@@ -1,18 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
+
 using System.Numerics;
-using System.Text;
 using SystemEx.Algorithms.Interfaces;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-
+    /// \addtogroup Algorithms
+    /// @{
     /// <summary>
-    /// Provides a standard comparison implementation for types that implement
-    /// <see cref="IComparable{T}"/>. This comparer defines a strict total ordering
-    /// based on <see cref="IComparable{T}.CompareTo(T)"/> and includes explicit
-    /// handling for <c>null</c> values.
+    /// Provides a standard comparison implementation for values wrapped in
+    /// <see cref="Optional{T}"/> where <typeparamref name="T"/> implements
+    /// <see cref="IComparable{T}"/>.
+    /// 
+    /// The comparison delegates to <see cref="Optional{T}.CompareTo(Optional{T})"/>,
+    /// which defines ordering semantics for present and non‑present values.
     /// </summary>
     /// <typeparam name="T">
     /// The value type being compared. Must implement <see cref="IComparable{T}"/>.
@@ -34,25 +52,21 @@ namespace SystemEx.Algorithms {
         /// <item><description><see cref="CompareResult.Null"/> if both values are <c>null</c>.</description></item>
         /// </list>
         /// </returns>
-        public CompareResult Compare ( T? x, T? y ) {
-            if ( x == null && y != null ) return CompareResult.AIsSmallerB;
-            if ( x != null && y == null ) return CompareResult.AIsLargerB;
-            if ( x == null && y == null ) return CompareResult.Null;
+        public CompareResult Compare( Optional<T> x, Optional<T> y ){
 
-            int cmp = x!.CompareTo(y);
+            var cmp = x.CompareTo(y);
 
-            if ( cmp < 0 ) return CompareResult.AIsSmallerB;
-            if ( cmp > 0 ) return CompareResult.AIsLargerB;
-
-            return CompareResult.Equal;
+            return cmp;
         }
     }
 
     /// <summary>
-    /// Provides a numeric comparison implementation for types implementing
-    /// <see cref="INumber{T}"/>. This comparer supports extended relational
-    /// semantics such as <c>&lt;=</c> and <c>&gt;=</c>, allowing finer-grained
-    /// comparison results beyond strict ordering.
+    /// Provides a numeric comparison implementation for values wrapped in
+    /// <see cref="Optional{T}"/> where <typeparamref name="T"/> implements
+    /// <see cref="INumber{T}"/>.
+    /// 
+    /// This comparer supports both strict and non‑strict relational operators,
+    /// enabling finer‑grained comparison results for numeric types.
     /// </summary>
     /// <typeparam name="T">
     /// The numeric type being compared. Must implement <see cref="INumber{T}"/>.
@@ -68,28 +82,29 @@ namespace SystemEx.Algorithms {
         /// <returns>
         /// A <see cref="CompareResult"/> describing the relation:
         /// <list type="bullet">
-        /// <item><description><see cref="CompareResult.AIsEqualSmallerB"/> if <c>x &lt;= y</c>.</description></item>
-        /// <item><description><see cref="CompareResult.AIsEqualLargerB"/> if <c>x &gt;= y</c>.</description></item>
-        /// <item><description><see cref="CompareResult.AIsSmallerB"/> if <c>x &lt; y</c>.</description></item>
-        /// <item><description><see cref="CompareResult.AIsLargerB"/> if <c>x &gt; y</c>.</description></item>
+        /// <item><description><see cref="CompareResult.EqualLess"/> if <c>x &lt;= y</c>.</description></item>
+        /// <item><description><see cref="CompareResult.EqualGreater"/> if <c>x &gt;= y</c>.</description></item>
+        /// <item><description><see cref="CompareResult.Less"/> if <c>x &lt; y</c>.</description></item>
+        /// <item><description><see cref="CompareResult.Greater"/> if <c>x &gt; y</c>.</description></item>
         /// <item><description><see cref="CompareResult.Equal"/> if both values are numerically equal.</description></item>
         /// <item><description><see cref="CompareResult.Null"/> if both values are <c>null</c>.</description></item>
         /// </list>
         /// </returns>
-        public CompareResult Compare ( T? x, T? y ) {
-            if ( x == null && y != null ) return CompareResult.AIsSmallerB;
-            if ( x != null && y == null ) return CompareResult.AIsLargerB;
-            if ( x == null && y == null ) return CompareResult.Null;
+        public CompareResult Compare( Optional<T> x, Optional<T> y ){
+            if ( x.IsNull && y.IsSome ) return CompareResult.Less;
+            if ( x.IsSome && y.IsNull ) return CompareResult.Greater;
+            if ( x.IsNull && y.IsNull ) return CompareResult.Null;
 
-            T A = x!;
-            T B = y!;
+            T A = (T)x;
+            T B = (T)y;
 
-            if ( A <= B ) return CompareResult.AIsEqualSmallerB;
-            if ( A >= B ) return CompareResult.AIsEqualLargerB;
-            if ( A < B ) return CompareResult.AIsSmallerB;
-            if ( A > B ) return CompareResult.AIsLargerB;
+            if ( A <= B ) return CompareResult.EqualLess;
+            if ( A >= B ) return CompareResult.EqualGreater;
+            if ( A < B ) return CompareResult.Less;
+            if ( A > B ) return CompareResult.Greater;
 
             return CompareResult.Equal;
         }
     }
+    /// @}
 }

@@ -19,14 +19,14 @@ using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
     /// <summary>
-    /// A container-backed span-like view over any <see cref="IContainerEx{T}"/> .
+    /// A container-backed span-like view over any <see cref="IVector{T}"/> .
     /// Unlike System.Span, this type provides mode-based indexing
     /// (System, Reverse, Ring) and supports mutable access through Replace().
     /// 
     /// This is a ref struct because it holds a ref to the underlying container.
     /// No copying, no heap allocation, no ownership.
     /// </summary>
-    public ref struct ContainerFlexSpan<T, TContainer> where TContainer : IContainerEx<T> {
+    public ref struct VectorFlexSpan<T, TContainer> where TContainer : IVector<T> {
 
         /// <summary>
         /// Enumerator for ContainerExFlexSpan.
@@ -38,7 +38,7 @@ namespace SystemEx.Collections.Generic {
             /// The span being enumerated.
             /// Stored by value; underlying container is referenced via ref.
             /// </summary>
-            private readonly ContainerFlexSpan<T, TContainer>  m_span;
+            private readonly VectorFlexSpan<T, TContainer>  m_span;
 
             /// <summary>
             /// The next index to yield.
@@ -64,7 +64,7 @@ namespace SystemEx.Collections.Generic {
             /// <summary>
             /// Initializes the enumerator.
             /// </summary>
-            internal Enumerator ( ContainerFlexSpan<T, TContainer> span ) {
+            internal Enumerator ( VectorFlexSpan<T, TContainer> span ) {
                 m_span = span;
                 m_index = -1;
             }
@@ -164,7 +164,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// A Empty Object
         /// </summary>
-        public static ContainerFlexSpan<T, TContainer> Empty => default;
+        public static VectorFlexSpan<T, TContainer> Empty => default;
 
         /// <summary>
         /// Creates a FlexSpan view starting at <paramref name="start"/> and extending
@@ -186,7 +186,7 @@ namespace SystemEx.Collections.Generic {
         /// Reverse = backward indexing,
         /// Ring    = circular wrap-around indexing.
         /// </param>
-        public ContainerFlexSpan ( ref TContainer pVector, long start, FlexSpanMode mode ) {
+        public VectorFlexSpan ( ref TContainer pVector, long start, FlexSpanMode mode ) {
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(start, pVector.Length);
 
             m_pReference = ref pVector;
@@ -220,7 +220,7 @@ namespace SystemEx.Collections.Generic {
         /// Reverse = backward indexing,
         /// Ring    = circular wrap-around indexing.
         /// </param>
-        public ContainerFlexSpan ( ref TContainer vector, long start, long length, FlexSpanMode mode ) {
+        public VectorFlexSpan ( ref TContainer vector, long start, long length, FlexSpanMode mode ) {
 
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((ulong)length, (ulong)(vector.Count - start));
             ArgumentOutOfRangeException.ThrowIfGreaterThan((ulong)start, (ulong)vector.Count);
@@ -246,7 +246,7 @@ namespace SystemEx.Collections.Generic {
         /// The target FlexSpan receiving the copied elements. Must have a ViewLength
         /// greater than or equal to this span's ViewLength.
         /// </param>
-        public void CopyTo ( ContainerFlexSpan<T, TContainer> destination ) {
+        public void CopyTo ( VectorFlexSpan<T, TContainer> destination ) {
             if ( destination.ViewLength < this.ViewLength )
                 throw new ArgumentException("Destination FlexSpan is too small.");
 
@@ -270,7 +270,7 @@ namespace SystemEx.Collections.Generic {
         /// The element mapped to the underlying container according to the active mode.
         /// </returns>
 
-        public T ElementAt ( long index ) {
+        public T? ElementAt ( long index ) {
 
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, ViewLength);
 

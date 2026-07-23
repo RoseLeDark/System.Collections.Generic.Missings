@@ -3,6 +3,7 @@ using System.Text;
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
 
+
 namespace SystemEx.Collections.Model {
     /// \addtogroup model
     /// @{

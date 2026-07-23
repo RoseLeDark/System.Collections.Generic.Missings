@@ -160,6 +160,4 @@ namespace SystemEx.Threading {
             return this == other;
         }
     }
-
-}
 }

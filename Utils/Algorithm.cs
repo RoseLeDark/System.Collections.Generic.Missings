@@ -25,6 +25,22 @@ namespace SystemEx.Utils {
     /// </summary>
     public enum CompareResult : sbyte {
         /// <summary>
+        /// <see cref="CompareResult.AIsSmallerB"/>
+        /// </summary>
+        Less = AIsSmallerB,
+        /// <summary>
+        /// <see cref="CompareResult.AIsLargerB"/>
+        /// </summary>
+        Greater = 1,
+        /// <summary>
+        /// <see cref="CompareResult.AIsEqualSmallerB"/>
+        /// </summary>
+        EqualLess = AIsEqualSmallerB,
+        /// <summary>
+        /// <see cref="CompareResult.AIsEqualLargerB"/>
+        /// </summary>
+        EqualGreater = AIsEqualLargerB,
+        /// <summary>
         /// A is larger as B
         /// </summary>
         AIsLargerB = 1,

@@ -14,10 +14,9 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using SystemEx.Collections.Generic;
+
 
 namespace SystemEx.Collections.Model {
     /// <summary>
@@ -39,7 +38,7 @@ namespace SystemEx.Collections.Model {
         /// <summary>
         /// Gets the array of child nodes in the tree.
         /// </summary>
-        protected Array<TRE?> m_pElemtents;
+        protected FixedVector<TRE?> m_pElemtents;
         /// <summary>
         /// Gets the number of child nodes in the tree.
         /// </summary>
@@ -51,7 +50,7 @@ namespace SystemEx.Collections.Model {
         /// <param name="value">The value stored in the tree node.</param>
         protected Tree (int childs, T? value) 
             : base(value) {
-            m_pElemtents = new Array<TRE?>(childs);
+            m_pElemtents = new FixedVector<TRE?>(childs);
         }
     }
     /// @}

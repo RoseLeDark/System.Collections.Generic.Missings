@@ -112,7 +112,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <summary>
         /// Gets the element at the current iterator position.
         /// </summary>
-        T Current { get; set; }
+        T Current { get;  }
 
         /// <summary>
         /// Indicates whether the iterator has reached the end of the sequence.

@@ -14,36 +14,19 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
-using System.Text;
 using SystemEx.Algorithms.Interfaces;
 using SystemEx.Algorythmen;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines a sorting action used by the Set wrapper. 
-    /// The delegate receives the underlying container and its comparer and performs 
-    /// a complete sort operation on the container's elements.
-    /// </summary>
-    /// <typeparam name="TCompare">Comparer type used to compare two elements.</typeparam>
-    /// <typeparam name="TContainer">Container type implementing IContainerEx for T.</typeparam>
-    /// <param name="container">Reference to the container whose elements should be sorted.</param>
-    /// <param name="comparer">Comparer used to determine the ordering of elements.</param>
-    public delegate void SortAction<TCompare, TContainer> ( ref TContainer container, TCompare comparer ) ;
+
 
     /// <summary>
-    /// Equivalent to a std::flat_set, but implemented as an open, non-owning sorted view 
-    /// over any IContainerEx instance. The Set struct does not store elements itself; 
+    /// Equivalent to a std::flat_multiset, but implemented as an open, non-owning sorted view 
+    /// over any IContainerEx instance. The MultiSet struct does not store elements itself; 
     /// it maintains ordering by sorting the referenced container using either a 
     /// user-provided sorting delegate or a built-in BubbleSort fallback when no 
     /// delegate is supplied.
@@ -53,57 +36,15 @@ namespace SystemEx.Collections.Generic {
     /// The container type that stores the elements. 
     /// Must implement IContainerEx for the same element type.
     /// </typeparam>
-    public ref struct Set<T, TContainer> : IEquatable<Set<T, TContainer>>
-        where TContainer : IContainerEx<T> {
+    public ref struct VectorMultiSet<T, TContainer> : IEquatable<VectorMultiSet<T, TContainer>>
+        where TContainer : IVector<T>
+         {
 
         private ref TContainer m_pKeys;
-        private ISimpleCompare<T> m_compare;
+        private ISimpleCompare<T>  m_compare;
         private SortAction<ISimpleCompare<T>, TContainer>? m_sorter;
         private Find<T, TContainer> m_finder;
 
-
-    
-
-        /// <summary>
-        /// Gets or sets the delegate-based sort function.
-        /// </summary>
-        public SortAction<ISimpleCompare<T>, TContainer> SortFunctions {
-            get => m_sorter!;
-            set {
-                m_sorter = value;
-            }
-        }
-
-        /// <summary>
-        ///  Creates a new sorted view over the given container.
-        /// The container reference is stored and immediately sorted using the comparer and with an optional  sort delegate
-        /// </summary>
-        /// <param name="keys">Reference to the underlying container.</param>
-        /// <param name="sorter">Sort delegate, when null use bubble sort</param>
-        public Set ( ref TContainer keys, SortAction<ISimpleCompare<T>, TContainer>? sorter = null ) {
-            m_pKeys = ref keys;
-            m_compare = new Less<T>();
-            m_sorter = sorter;
-            m_finder = new Find<T, TContainer>(ref keys);
-
-            Sort();
-        }
-
-        /// <summary>
-        ///  Creates a new sorted view over the given container.
-        /// The container reference is stored and immediately sorted using the comparer and with an optional  sort delegate
-        /// </summary>
-        /// <param name="keys">Reference to the underlying container.</param>
-        /// <param name="comparer">Comparer used to order the elements.</param>
-        /// <param name="sorter">Sort delegate, when null use bubble sort</param>
-        public Set ( ref TContainer keys, ISimpleCompare<T> comparer, SortAction<ISimpleCompare<T>, TContainer>? sorter = null ) {
-            m_pKeys = ref keys;
-            m_compare = comparer;
-            m_sorter = sorter;
-            m_finder = new Find<T, TContainer>(ref keys);
-
-            Sort();
-        }
 
         /// <summary>
         /// Indicates whether the underlying container is full.
@@ -118,7 +59,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Returns the current element of the underlying container.
         /// </summary>
-        public T Current => m_pKeys.Current;
+        public Optional<T> Current => m_pKeys.Current;
 
         /// <summary>
         /// Returns the number of elements stored in the container.
@@ -130,7 +71,36 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public long Length => m_pKeys.Length;
 
+        /// <summary>
+        ///  Creates a new sorted view over the given container.
+        /// The container reference is stored and immediately sorted using the comparer and with an optional  sort delegate
+        /// </summary>
+        /// <param name="keys">Reference to the underlying container.</param>
+        /// <param name="sorter">Sort delegate, when null use bubble sort</param>
+        public VectorMultiSet ( ref TContainer keys,  SortAction<ISimpleCompare<T>, TContainer>? sorter = null ) {
+            m_pKeys = ref keys;
+            m_compare = new Less<T>();
+            m_sorter = sorter;
+            m_finder = new Find<T, TContainer>(ref m_pKeys);
 
+            Sort();
+        }
+
+        /// <summary>
+        ///  Creates a new sorted view over the given container.
+        /// The container reference is stored and immediately sorted using the comparer and with an optional  sort delegate
+        /// </summary>
+        /// <param name="keys">Reference to the underlying container.</param>
+        /// <param name="comparer">Comparer used to order the elements.</param>
+        /// <param name="sorter">Sort delegate, when null use bubble sort</param>
+        public VectorMultiSet ( ref TContainer keys, ISimpleCompare<T> comparer, SortAction<ISimpleCompare<T>, TContainer>? sorter = null ) {
+            m_pKeys = ref keys;
+            m_compare = comparer;
+            m_sorter = sorter;
+            m_finder = new Find<T, TContainer>(ref m_pKeys);
+
+            Sort();
+        }
         /// <summary>
         /// Extracts all elements starting at the given index. The extracted
         /// elements are removed from the underlying container and returned
@@ -153,8 +123,8 @@ namespace SystemEx.Collections.Generic {
                 // copy extracted elements
                 for ( long i = 0 ; i < extractCount ; i++ ) {
                     var itm = m_pKeys.ElementAt(index + i);
-                    if(itm != null) {
-                        _ret[i] = itm;
+                     {
+                        _ret[i] = itm!;
                     }
                 }
 
@@ -166,16 +136,14 @@ namespace SystemEx.Collections.Generic {
 
             return _ret;
         }
-
         /// <summary>
         /// Inserts a value into the container and re-sorts the elements.
         /// </summary>
         /// <param name="value">The value to insert.</param>
-        public bool Insert(T value) {
+        public bool Insert ( T value ) {
             bool _ret = false;
 
-            if( m_finder.First(value) == -1 )
-                _ret = m_pKeys.PushBack(value);
+            _ret = m_pKeys.PushBack(value);
 
             if ( _ret ) Sort();
             return _ret;
@@ -189,8 +157,7 @@ namespace SystemEx.Collections.Generic {
         public bool Insert ( long index, T value ) {
             bool _ret = false;
 
-            if ( m_finder.First(value) == -1 )
-                _ret = m_pKeys.Insert(index, value);
+            _ret = m_pKeys.Insert(index, value);
 
             if ( _ret ) Sort();
             return _ret;
@@ -205,8 +172,7 @@ namespace SystemEx.Collections.Generic {
         public bool Insert ( long start, long end, T value ) {
             bool _ret = false;
 
-            if ( m_finder.First(value) == -1 )
-                _ret = m_pKeys.Insert(start, end, value);
+            _ret = m_pKeys.Insert(start, end, value);
 
             if ( _ret ) Sort();
             return _ret;
@@ -221,9 +187,6 @@ namespace SystemEx.Collections.Generic {
             bool insertedAny = false;
 
             foreach ( var item in values ) {
-                // Element existiert bereits → abbrechen
-                if ( m_finder.First(item) != -1 )
-                    continue;
 
                 // Einfügen fehlgeschlagen → abbrechen
                 if ( !m_pKeys.PushBack(item) )
@@ -232,16 +195,16 @@ namespace SystemEx.Collections.Generic {
                 insertedAny = true;
             }
 
-            if( insertedAny) Sort();
+            if ( insertedAny ) Sort();
             return insertedAny;
         }
 
         /// <summary>
         /// Validates the internal ordering of the set. The container must
-        /// be sorted according to the comparison function. 
+        /// be sorted according to the comparison function.
         /// </summary>
         /// <returns>
-        /// True if the container is sorted and contains no duplicates;
+        /// True if the container is sorted;
         /// otherwise false.
         /// </returns>
         public bool Validate () {
@@ -249,15 +212,15 @@ namespace SystemEx.Collections.Generic {
 
             if ( m_pKeys.Count > 1 ) {
                 for ( int i = 1 ; i < m_pKeys.Count ; i++ ) {
-                    var prev = m_pKeys.ElementAt(i - 1);
-                    var curr = m_pKeys.ElementAt(i);
+                    var prev = m_pKeys.ElementAt(i - 1); // T?
+                    var curr = m_pKeys.ElementAt(i);     // T?
 
-                    if ( prev == null || curr == null ) {
+                    if ( prev != null || curr != null ) {
                         _ret = false;
                         break;
                     }
 
-                    if ( !m_compare.Compare(prev, curr)  ) {
+                    if (  !this.m_compare.Compare(prev, curr)  ) {
                         _ret = false;
                         break;
                     }
@@ -266,7 +229,6 @@ namespace SystemEx.Collections.Generic {
 
             return _ret;
         }
-
 
 
         /// <summary>
@@ -289,7 +251,7 @@ namespace SystemEx.Collections.Generic {
         /// <returns>
         /// True if the specified range was removed; otherwise false.
         /// </returns>
-        public bool Erase( long first, long last ) {
+        public bool Erase ( long first, long last ) {
             bool _ret = m_pKeys.Erase(first, last);
             if ( _ret ) Sort();
             return _ret;
@@ -308,10 +270,43 @@ namespace SystemEx.Collections.Generic {
             bool _ret = false;
             long index = m_finder.First(value);
 
-            if(index != -1) {
+            if ( index != -1 ) {
                 _ret = m_pKeys.Erase(index);
             }
             if ( _ret ) Sort();
+
+            return _ret;
+        }
+
+        /// <summary>
+        /// Returns the index of the first element not less than key.
+        /// If no such element exists, returns -1.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long LowerBound ( T key ) {
+            long _ret = -1;
+
+            long lo = 0;
+            long hi = m_pKeys.Count;
+
+            while ( lo < hi ) {
+                long mid = (lo + hi) >> 1;
+                T? val = m_pKeys.ElementAt(mid);
+
+                if ( val == null ) {
+                    lo = mid + 1;
+                    continue;
+                }
+
+                // val < key → move right
+                if ( !m_compare.Compare(val, key) ) {
+                    lo = mid + 1;
+                } else {
+                    _ret = mid;
+                    hi = mid;
+                }
+            }
 
             return _ret;
         }
@@ -326,7 +321,7 @@ namespace SystemEx.Collections.Generic {
         /// <param name="other">
         /// The target set that receives all elements from this set.
         /// </param>
-        public void SwapIn ( Set<T, TContainer> other ) {
+        public void SwapIn ( VectorMultiSet<T, TContainer> other ) {
 
             if ( m_pKeys.Count > 0 ) {
                 // copy all elements into a temporary array
@@ -343,6 +338,41 @@ namespace SystemEx.Collections.Generic {
             }
         }
 
+
+
+        /// <summary>
+        /// Returns the index of the first element greater than key. 
+        /// If no such element exists, returns -1.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long UpperBound ( T key ) {
+            long _ret = -1;
+
+            long lo = 0;
+            long hi = m_pKeys.Count;
+
+            while ( lo < hi ) {
+                long mid = (lo + hi) >> 1;
+                Optional<T> val = m_pKeys.ElementAt(mid);
+
+                if ( val.IsNull) {
+                    lo = mid + 1;
+                    continue;
+                }
+
+                // val <= key → move right
+                if ( !m_compare.Compare(val, key)  ) {
+                    lo = mid + 1;
+                } else {
+                    _ret = mid;
+                    hi = mid;
+                }
+            }
+
+            return _ret;
+        }
+
         /// <summary>
         /// Compares this set with another set for structural equality.
         /// Both sets must contain the same number of elements and each
@@ -354,7 +384,7 @@ namespace SystemEx.Collections.Generic {
         /// True if both sets contain the same elements in the same order;
         /// otherwise false.
         /// </returns>
-        public bool Equals ( Set<T, TContainer> other ) {
+        public bool Equals ( VectorMultiSet<T, TContainer> other ) {
             bool _ret = true;
 
             if ( m_pKeys.Count != other.m_pKeys.Count ) {
@@ -383,64 +413,13 @@ namespace SystemEx.Collections.Generic {
         /// True if both keys are non-null and equal; otherwise false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool EqualsKey( T? a, T? b) {
-            if ( a == null ) return false;
-            if ( b == null ) return false;
+        private bool EqualsKey ( Optional<T> a, Optional<T> b ) {
+            if ( a.IsNull ) return false;
+            if ( b.IsNull ) return false;
 
             return a.Equals(b);
         }
 
-        /// <summary>
-        /// Merges all unique elements from the specified source set into this set.
-        /// Each element in <paramref name="source"/> is checked using the internal
-        /// finder. If this set does not contain the element, it is extracted from
-        /// the source and inserted into this set. Elements already present in this
-        /// set remain in the source. No elements are duplicated.
-        /// </summary>
-        /// <param name="source">
-        /// The set from which elements are merged into this set.
-        /// </param>
-        public void Merge ( Set<T, TContainer> source ) {
-            long count = source.m_pKeys.Count;
-
-            for ( long i = 0 ; i < count ; i++ ) {
-                T? value = source.m_pKeys.ElementAt(i);
-                if ( value == null )
-                    continue;
-
-                // check if this set already contains the value
-                long idx = m_finder.First(value);
-
-                if ( idx == -1 ) {
-                    // extract from source
-                    T[] extracted = source.Extract(i);
-
-                    // insert into this set
-                    m_pKeys.InsertRange(m_pKeys.Count, extracted);
-
-                    // adjust loop because source shrinks
-                    count--;
-                    i--;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns a sorted value copy of the underlying container.
-        /// 
-        /// The Set container maintains its elements in sorted order at all times.
-        /// This method therefore does not perform any additional sorting.
-        /// Instead, it returns a structural duplicate of the internal container
-        /// using its copy constructor, ensuring that the returned instance is
-        /// independent and does not reference the original storage.
-        /// </summary>
-        /// <returns>
-        /// A new <see cref="IContainerEx{T}"/> instance containing the same
-        /// elements as the underlying container, already sorted.
-        /// </returns>
-        public IContainerEx<T> GetSorted () {
-            return  m_pKeys.Duplicate();
-        }
 
         /// <summary>
         /// Sorts the underlying container using the provided comparer.
@@ -454,9 +433,9 @@ namespace SystemEx.Collections.Generic {
                 // Fallback
                 for ( int i = 0 ; i < m_pKeys.Count - 1 ; i++ ) {
                     for ( int j = i + 1 ; j < m_pKeys.Count ; j++ ) {
-                        bool cmp = m_compare.Compare( m_pKeys.ElementAt(i), m_pKeys.ElementAt(j) );
+                        var cmp = m_compare.Compare( m_pKeys.ElementAt(i), m_pKeys.ElementAt(j) );
 
-                        if (!cmp  ) {
+                        if ( cmp ) {
                             Swap(i, j);
                         }
                     }
@@ -472,8 +451,6 @@ namespace SystemEx.Collections.Generic {
         private void Swap ( long i, long j ) {
             m_pKeys.Swap(i, j);
         }
-#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-        /// @}
-#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+
     }
 }

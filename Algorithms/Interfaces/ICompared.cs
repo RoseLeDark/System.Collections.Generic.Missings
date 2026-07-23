@@ -18,7 +18,7 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms.Interfaces {
-    /// \addtogroup collections
+    /// \addtogroup Algorithms
     /// @{
     /// \addtogroup interfaces
     /// @{
@@ -31,7 +31,7 @@ namespace SystemEx.Algorithms.Interfaces {
     /// The type being compared. The constraint allows <c>ref struct</c> types,
     /// enabling high‑performance stack‑only comparisons.
     /// </typeparam>
-    public interface ICompared<in T> where T : allows ref struct {
+    public interface ICompared<T> {
 
         /// <summary>
         /// Compares two values and returns a <see cref="CompareResult"/> indicating
@@ -43,7 +43,7 @@ namespace SystemEx.Algorithms.Interfaces {
         /// A <see cref="CompareResult"/> describing the ordering relationship
         /// between the two values.
         /// </returns>
-        CompareResult Compare(T? x, T? y);
+        CompareResult Compare( Optional<T> x, Optional<T> y );
     }
 
 

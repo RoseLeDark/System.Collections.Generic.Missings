@@ -18,6 +18,7 @@
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
 
+
 namespace SystemEx.Drawing {
     /// \addtogroup color
     /// @{
@@ -291,10 +292,10 @@ namespace SystemEx.Drawing {
         /// the base canvas.
         /// </param>
         /// <returns>
-        /// An <see cref="Array{T}"/> containing the composed pixel data for the
+        /// An <see cref="FixedVector{T}"/> containing the composed pixel data for the
         /// requested layer range.
         /// </returns>
-        Array<T> GetPixels(int layer); 
+        FixedVector<T> GetPixels(int layer); 
 
         /// <summary>
         /// Swaps the mathematically composed region of this canvas into another

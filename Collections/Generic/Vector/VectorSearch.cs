@@ -46,8 +46,8 @@ namespace SystemEx.Collections.Generic {
     /// not defined.
     /// </para>
     /// </summary>
-    public ref struct Search<T, TContainer>
-        where TContainer : IContainerEx<T>
+    public ref struct VectorSearch<T, TContainer>
+        where TContainer : IVector<T>
         where T : IComparable<T> {
 
         private ref TContainer m_container;
@@ -61,7 +61,7 @@ namespace SystemEx.Collections.Generic {
         /// <param name="provider">
         /// The search provider implementing the lookup strategy.
         /// </param>
-        public Search ( ref TContainer container, ISearchProvider<T, TContainer> provider ) {
+        public VectorSearch ( ref TContainer container, ISearchProvider<T, TContainer> provider ) {
             m_container = ref container;
             m_provider = provider;
         }
@@ -89,11 +89,11 @@ namespace SystemEx.Collections.Generic {
         /// The index of the first element for which the predicate indicates
         /// a match, or -1 if no element satisfies the condition.
         /// </returns>
-        public long FindEx(Func<T, CompareResult> func ) {
+        public long FindEx(Func<T?, CompareResult> func ) {
             return m_provider.Find(ref m_container, func);
         }
 
-        public Vector<Pair<long, T>> Where (Func<T, CompareResult> func ) {
+        public Vector<Pair<long, T>> Where (Func<T?, CompareResult> func ) {
             return m_provider.Where(ref m_container, func);
         }
 
@@ -111,14 +111,14 @@ namespace SystemEx.Collections.Generic {
         /// Checks whether the search object contains the specified value.
         /// Equivalent to <see cref="Exists(T)"/>.
         /// </summary>
-        public static bool operator == ( Search<T, TContainer> a, T value) {
+        public static bool operator == ( VectorSearch<T, TContainer> a, T value) {
             return a.Exists(value, new SimpleComparer<T>() );
         }
         /// <summary>
         /// Checks whether the search object does not contain the specified value.
         /// Equivalent to <c>!Exists(value)</c>.
         /// </summary>
-        public static bool operator != ( Search<T, TContainer> a, T value ) {
+        public static bool operator != ( VectorSearch<T, TContainer> a, T value ) {
             return !a.Exists(value, new SimpleComparer<T>() );
         }
         /// <summary>

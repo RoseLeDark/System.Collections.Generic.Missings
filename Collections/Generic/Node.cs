@@ -21,6 +21,7 @@ using System.Xml.Linq;
 using SystemEx.Collections.Generic.Interfaces;
 
 
+
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
@@ -195,7 +196,7 @@ namespace SystemEx.Collections.Generic {
         const int NEXT = 1;
         const int PREV = 0;
 
-        internal  Array<Node<T>?> m_pNodex;
+        internal  FixedVector<Node<T>?> m_pNodex;
 
         internal  T? m_value;
 
@@ -292,7 +293,7 @@ namespace SystemEx.Collections.Generic {
         public Node () {
             m_value = default(T);
 
-            m_pNodex = new Array<Node<T>?>(2);
+            m_pNodex = new FixedVector<Node<T>?>(2);
            
             m_pNodex[PREV] = null;
             m_pNodex[NEXT] = null;
@@ -303,7 +304,7 @@ namespace SystemEx.Collections.Generic {
         public Node(T val ) {
             Value = val;
             
-            m_pNodex = new Array<Node<T>?>(2);
+            m_pNodex = new FixedVector<Node<T>?>(2);
 
             m_pNodex[PREV] = null;
             m_pNodex[NEXT] = null;
@@ -322,7 +323,7 @@ namespace SystemEx.Collections.Generic {
         protected Node(int nChilds) {
             m_value = default(T);
 
-            m_pNodex = new Array<Node<T>?>(nChilds);
+            m_pNodex = new FixedVector<Node<T>?>(nChilds);
 
             m_pNodex[PREV] = null;
             m_pNodex[NEXT] = null;

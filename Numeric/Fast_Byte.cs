@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using SystemEx.Collections.Generic;
 
+
 namespace SystemEx.Numeric {
 
     /// <summary>
@@ -162,8 +163,8 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Returns all bit positions where the bit is set to 1.
         /// </summary>
-        public Array<byte> Where () {
-            Array<byte> _set = new Array<byte>(IsIt());
+        public FixedVector<byte> Where () {
+            FixedVector<byte> _set = new FixedVector<byte>(IsIt());
 
             for ( byte i = 0 ; i < 8 ; i++ ) {
                 if(Is(i) == 1) { _set.PushBack(i);  }
@@ -174,8 +175,8 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Returns all bit positions where the bit is set to 0.
         /// </summary>
-        public Array<byte> WhereNot () {
-            Array<byte> _set = new Array<byte>(IsItNot());
+        public FixedVector<byte> WhereNot () {
+            FixedVector<byte> _set = new FixedVector<byte>(IsItNot());
 
             for ( byte i = 0 ; i < 8 ; i++ ) {
                 if ( Is(i) == 0 ) { _set.PushBack(i); }

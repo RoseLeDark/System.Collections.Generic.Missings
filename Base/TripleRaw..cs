@@ -15,10 +15,25 @@
  * changes and the date.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+namespace SystemEx {
+    /// <summary>
+    /// Represents a three-valued logic type with True, False, and Nin (neither true nor false) states.
+    /// </summary>
+#pragma warning disable CS8981 
+    public enum triple : sbyte {
 
-namespace SystemEx.Collections.Generic {
-    
+        /// <summary>
+        /// The state representing true.
+        /// </summary>
+        True = 1,
+        /// <summary>
+        /// The state representing false.
+        /// </summary>
+        False = 0,
+        /// <summary>
+        /// The state representing neither true nor false.
+        /// </summary>
+        Nin = -1
+    }
+#pragma warning restore CS8981 
 }

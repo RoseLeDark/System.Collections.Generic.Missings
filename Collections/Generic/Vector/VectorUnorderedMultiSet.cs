@@ -14,36 +14,40 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using System.Collections;
+
 using System.Runtime.CompilerServices;
-using SystemEx.Algorithms.Interfaces;
-using SystemEx.Algorythmen;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-
+    /// \addtogroup collections
+    /// @{
     /// <summary>
-    /// Equivalent to a std::flat_multiset, but implemented as an open, non-owning sorted view 
-    /// over any IContainerEx instance. The MultiSet struct does not store elements itself; 
-    /// it maintains ordering by sorting the referenced container using either a 
-    /// user-provided sorting delegate or a built-in BubbleSort fallback when no 
-    /// delegate is supplied.
+    /// Represents an unordered set view over an underlying container.
+    /// Elements are not sorted and no ordering guarantees are provided.
+    /// Duplicate values are not allowed. All operations work directly on
+    /// the underlying container without applying any sorting logic.
     /// </summary>
     /// <typeparam name="T">The element type stored in the container.</typeparam>
     /// <typeparam name="TContainer">
     /// The container type that stores the elements. 
     /// Must implement IContainerEx for the same element type.
     /// </typeparam>
-    public ref struct MultiSet<T, TContainer> : IEquatable<MultiSet<T, TContainer>>
-        where TContainer : IContainerEx<T>
-         {
+    public ref struct VectorUnorderedMultiSet<T, TContainer> : IEquatable<VectorUnorderedMultiSet<T, TContainer>>
+        where TContainer : IVector<T> {
 
         private ref TContainer m_pKeys;
-        private ISimpleCompare<T>  m_compare;
-        private SortAction<ISimpleCompare<T>, TContainer>? m_sorter;
         private Find<T, TContainer> m_finder;
 
+        /// <summary>
+        ///  Creates a new unsorted view over the given container.
+        /// </summary>
+        /// <param name="keys">Reference to the underlying container.</param>
+        public VectorUnorderedMultiSet ( ref TContainer keys ) {
+            m_pKeys = ref keys;
+            m_finder = new Find<T, TContainer>(ref keys);
+
+        }
 
         /// <summary>
         /// Indicates whether the underlying container is full.
@@ -70,36 +74,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public long Length => m_pKeys.Length;
 
-        /// <summary>
-        ///  Creates a new sorted view over the given container.
-        /// The container reference is stored and immediately sorted using the comparer and with an optional  sort delegate
-        /// </summary>
-        /// <param name="keys">Reference to the underlying container.</param>
-        /// <param name="sorter">Sort delegate, when null use bubble sort</param>
-        public MultiSet ( ref TContainer keys,  SortAction<ISimpleCompare<T>, TContainer>? sorter = null ) {
-            m_pKeys = ref keys;
-            m_compare = new Less<T>();
-            m_sorter = sorter;
-            m_finder = new Find<T, TContainer>(ref m_pKeys);
 
-            Sort();
-        }
-
-        /// <summary>
-        ///  Creates a new sorted view over the given container.
-        /// The container reference is stored and immediately sorted using the comparer and with an optional  sort delegate
-        /// </summary>
-        /// <param name="keys">Reference to the underlying container.</param>
-        /// <param name="comparer">Comparer used to order the elements.</param>
-        /// <param name="sorter">Sort delegate, when null use bubble sort</param>
-        public MultiSet ( ref TContainer keys, ISimpleCompare<T> comparer, SortAction<ISimpleCompare<T>, TContainer>? sorter = null ) {
-            m_pKeys = ref keys;
-            m_compare = comparer;
-            m_sorter = sorter;
-            m_finder = new Find<T, TContainer>(ref m_pKeys);
-
-            Sort();
-        }
         /// <summary>
         /// Extracts all elements starting at the given index. The extracted
         /// elements are removed from the underlying container and returned
@@ -135,8 +110,9 @@ namespace SystemEx.Collections.Generic {
 
             return _ret;
         }
+
         /// <summary>
-        /// Inserts a value into the container and re-sorts the elements.
+        /// Inserts a value into the container.
         /// </summary>
         /// <param name="value">The value to insert.</param>
         public bool Insert ( T value ) {
@@ -144,12 +120,11 @@ namespace SystemEx.Collections.Generic {
 
             _ret = m_pKeys.PushBack(value);
 
-            if ( _ret ) Sort();
             return _ret;
         }
 
         /// <summary>
-        /// Inserts a value at the specified index and re-sorts the elements.
+        /// Inserts a value at the specified index.
         /// </summary>
         /// <param name="index">The index at which the value is inserted.</param>
         /// <param name="value">The value to insert.</param>
@@ -158,12 +133,11 @@ namespace SystemEx.Collections.Generic {
 
             _ret = m_pKeys.Insert(index, value);
 
-            if ( _ret ) Sort();
             return _ret;
         }
 
         /// <summary>
-        /// Inserts a value into a range and re-sorts the elements.
+        /// Inserts a value into a range.
         /// </summary>
         /// <param name="start">Start index of the range.</param>
         /// <param name="end">End index of the range.</param>
@@ -173,12 +147,11 @@ namespace SystemEx.Collections.Generic {
 
             _ret = m_pKeys.Insert(start, end, value);
 
-            if ( _ret ) Sort();
             return _ret;
         }
 
         /// <summary>
-        /// Inserts multiple values starting at the specified index and re-sorts the elements.
+        /// Inserts multiple values starting at the specified index.
         /// </summary>
         /// <param name="start">The index at which the range begins.</param>
         /// <param name="values">Array of values to insert.</param>
@@ -194,56 +167,31 @@ namespace SystemEx.Collections.Generic {
                 insertedAny = true;
             }
 
-            if ( insertedAny ) Sort();
             return insertedAny;
         }
 
         /// <summary>
-        /// Validates the internal ordering of the set. The container must
-        /// be sorted according to the comparison function.
+        /// tests is this view validated return only true
         /// </summary>
-        /// <returns>
-        /// True if the container is sorted;
-        /// otherwise false.
-        /// </returns>
         public bool Validate () {
-            bool _ret = true;
-
-            if ( m_pKeys.Count > 1 ) {
-                for ( int i = 1 ; i < m_pKeys.Count ; i++ ) {
-                    var prev = m_pKeys.ElementAt(i - 1); // T?
-                    var curr = m_pKeys.ElementAt(i);     // T?
-
-                    if ( prev == null || curr == null ) {
-                        _ret = false;
-                        break;
-                    }
-
-                    if (  !this.m_compare.Compare(prev, curr)  ) {
-                        _ret = false;
-                        break;
-                    }
-                }
-            }
-
-            return _ret;
+            return true;
         }
 
 
+
         /// <summary>
-        /// Removes the element at the specified index and re-sorts the remaining elements.
+        /// Removes the element at the specified index.
         /// </summary>
         /// <param name="index">The index of the element to remove.</param>
         public bool Erase ( long index ) {
             bool _ret = m_pKeys.Erase(index);
-            if ( _ret ) Sort();
+
             return _ret;
         }
         /// <summary>
         /// Removes a continuous range of elements from the underlying container.
         /// The range is defined by the start index <paramref name="first"/> and
-        /// the end index <paramref name="last"/>. If the removal succeeds, the
-        /// set is re-sorted to maintain ordering guarantees.
+        /// the end index <paramref name="last"/>. 
         /// </summary>
         /// <param name="first">The starting index of the range to erase.</param>
         /// <param name="last">The ending index of the range to erase.</param>
@@ -252,14 +200,13 @@ namespace SystemEx.Collections.Generic {
         /// </returns>
         public bool Erase ( long first, long last ) {
             bool _ret = m_pKeys.Erase(first, last);
-            if ( _ret ) Sort();
+
             return _ret;
         }
         /// <summary>
-        /// Removes the first occurrence of the specified value from the set.
+        /// Removes the first occurrence of the specified value from the UnorderedMultiSet.
         /// The element is located using the internal finder. If the element
-        /// exists, it is removed from the underlying container. After removal,
-        /// the set is re-sorted to preserve ordering guarantees.
+        /// exists, it is removed from the underlying container. 
         /// </summary>
         /// <param name="value">The value to erase.</param>
         /// <returns>
@@ -272,55 +219,23 @@ namespace SystemEx.Collections.Generic {
             if ( index != -1 ) {
                 _ret = m_pKeys.Erase(index);
             }
-            if ( _ret ) Sort();
+
 
             return _ret;
         }
 
+
         /// <summary>
-        /// Returns the index of the first element not less than key.
-        /// If no such element exists, returns -1.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public long LowerBound ( T key ) {
-            long _ret = -1;
-
-            long lo = 0;
-            long hi = m_pKeys.Count;
-
-            while ( lo < hi ) {
-                long mid = (lo + hi) >> 1;
-                T? val = m_pKeys.ElementAt(mid);
-
-                if ( val == null ) {
-                    lo = mid + 1;
-                    continue;
-                }
-
-                // val < key → move right
-                if ( !m_compare.Compare(val, key) ) {
-                    lo = mid + 1;
-                } else {
-                    _ret = mid;
-                    hi = mid;
-                }
-            }
-
-            return _ret;
-        }
-        /// <summary>
-        /// Moves all elements from this set into the specified target set.
+        /// Moves all elements from this UnorderedMultiSet into the specified target UnorderedMultiSet.
         /// The elements are copied into a temporary array, removed from the
-        /// underlying container of this set, and then inserted into the
-        /// target set. After insertion, the target set is re-sorted to
-        /// maintain ordering guarantees. This set becomes empty after the
+        /// underlying container of this UnorderedMultiSet, and then inserted into the
+        /// target UnorderedMultiSet. This UnorderedMultiSet becomes empty after the
         /// operation.
         /// </summary>
         /// <param name="other">
-        /// The target set that receives all elements from this set.
+        /// The target UnorderedMultiSet that receives all elements from this UnorderedMultiSet.
         /// </param>
-        public void SwapIn ( MultiSet<T, TContainer> other ) {
+        public void SwapIn ( VectorUnorderedMultiSet<T, TContainer> other ) {
 
             if ( m_pKeys.Count > 0 ) {
                 // copy all elements into a temporary array
@@ -329,61 +244,24 @@ namespace SystemEx.Collections.Generic {
                 // clear myself
                 m_pKeys.Clear();
 
-                // insert all elements into the other set
+                // insert all elements into the other UnorderedMultiSet
                 other.m_pKeys.InsertRange(0, tmp);
 
-                // sort the other set (flat_set semantics)
-                other.Sort();
             }
         }
 
-
-
         /// <summary>
-        /// Returns the index of the first element greater than key. 
-        /// If no such element exists, returns -1.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public long UpperBound ( T key ) {
-            long _ret = -1;
-
-            long lo = 0;
-            long hi = m_pKeys.Count;
-
-            while ( lo < hi ) {
-                long mid = (lo + hi) >> 1;
-                T? val = m_pKeys.ElementAt(mid);
-
-                if ( val == null ) {
-                    lo = mid + 1;
-                    continue;
-                }
-
-                // val <= key → move right
-                if ( !m_compare.Compare(val, key)  ) {
-                    lo = mid + 1;
-                } else {
-                    _ret = mid;
-                    hi = mid;
-                }
-            }
-
-            return _ret;
-        }
-
-        /// <summary>
-        /// Compares this set with another set for structural equality.
-        /// Both sets must contain the same number of elements and each
+        /// Compares this UnorderedMultiSet with another UnorderedMultiSet for structural equality.
+        /// Both UnorderedMultiSets must contain the same number of elements and each
         /// element at the same position must be equal. The comparison
         /// assumes both containers are sorted and aligned.
         /// </summary>
-        /// <param name="other">The set to compare with.</param>
+        /// <param name="other">The UnorderedMultiSet to compare with.</param>
         /// <returns>
-        /// True if both sets contain the same elements in the same order;
+        /// True if both UnorderedMultiSets contain the same elements in the same order;
         /// otherwise false.
         /// </returns>
-        public bool Equals ( MultiSet<T, TContainer> other ) {
+        public bool Equals ( VectorUnorderedMultiSet<T, TContainer> other ) {
             bool _ret = true;
 
             if ( m_pKeys.Count != other.m_pKeys.Count ) {
@@ -418,38 +296,8 @@ namespace SystemEx.Collections.Generic {
 
             return a.Equals(b);
         }
-
-
-        /// <summary>
-        /// Sorts the underlying container using the provided comparer.
-        /// A simple comparison-based sorting algorithm is used to ensure
-        /// that the container remains ordered after modifications.
-        /// </summary>
-        private void Sort () {
-            if ( m_sorter != null ) {
-                m_sorter(ref m_pKeys, m_compare);
-            } else {
-                // Fallback
-                for ( int i = 0 ; i < m_pKeys.Count - 1 ; i++ ) {
-                    for ( int j = i + 1 ; j < m_pKeys.Count ; j++ ) {
-                        var cmp = m_compare.Compare( m_pKeys.ElementAt(i), m_pKeys.ElementAt(j) );
-
-                        if ( cmp ) {
-                            Swap(i, j);
-                        }
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Swaps two elements inside the underlying container.
-        /// Used internally by the sorting routine to reorder elements.
-        /// </summary>
-        /// <param name="i">Index of the first element.</param>
-        /// <param name="j">Index of the second element.</param>
-        private void Swap ( long i, long j ) {
-            m_pKeys.Swap(i, j);
-        }
-
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+        /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     }
 }

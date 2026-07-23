@@ -17,6 +17,7 @@
 
 using System.Collections;
 using System.Runtime.CompilerServices;
+using SystemEx.Collections.Generic;
 
 namespace SystemEx {
 
@@ -180,11 +181,11 @@ namespace SystemEx {
         /// Creates a FlexSpan over an array starting at a given index.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FlexSpan ( ref T[]? reference, long start, FlexSpanMode mode ) {
+        public FlexSpan ( ref T[] reference, long start, FlexSpanMode mode ) {
             if ( reference == null ) throw new NullReferenceException();
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(start, reference.Length);
 
-            m_pReference = ref reference!;
+            m_pReference = ref reference;
             m_llength = reference.Length;
             m_eMode = mode;
 
@@ -197,13 +198,13 @@ namespace SystemEx {
         /// Creates a FlexSpan over an array with a defined view length.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public FlexSpan ( ref T[]? array, long start, long length, FlexSpanMode mode ) {
+        public FlexSpan ( ref T[] array, long start, long length, FlexSpanMode mode ) {
             if ( array == null ) throw new NullReferenceException();
 
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((ulong)length, (ulong)(array.Length - start));
             ArgumentOutOfRangeException.ThrowIfGreaterThan((ulong)start, (ulong)array.Length);
 
-            m_pReference = ref array!;
+            m_pReference = ref array;
             m_llength = array.Length;
             m_eMode = mode;
 
@@ -224,14 +225,14 @@ namespace SystemEx {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public FlexSpan<T> Slice ( int start, FlexSpanMode? mode = null )
-            => new FlexSpan<T>(ref m_pReference!, m_lStart + start, m_llength - start, mode ?? m_eMode);
+            => new FlexSpan<T>(ref m_pReference, m_lStart + start, m_llength - start, mode ?? m_eMode);
 
         /// <summary>
         /// Creates a new FlexSpan with a given offset and length.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public FlexSpan<T> Slice ( int start, int length, FlexSpanMode? mode = null )
-            => new FlexSpan<T>(ref m_pReference!, m_lStart + start, length, mode ?? m_eMode);
+            => new FlexSpan<T>(ref m_pReference, m_lStart + start, length, mode ?? m_eMode);
 
         /// <summary>
         /// Structural equality comparison.
@@ -261,13 +262,13 @@ namespace SystemEx {
 
 
         /// <summary>
-        /// Copies the view into a new Array<T>.
+        /// Copies the view into a new Array{T}.
         /// </summary>
-        public Collections.Generic.Vector<T> ToArray () {
+        public Vector<T> ToArray () {
             if ( m_llength == 0 )
-                return new Collections.Generic.Vector<T>();
+                return new Vector<T>();
 
-            var destination = new Collections.Generic.Vector<T>( (int)(m_lEnd - m_lStart) );
+            var destination = new Vector<T>( (int)(m_lEnd - m_lStart) );
 
             for ( long i = m_lStart, j = 0 ; i < m_lEnd ; i++, j++ ) {
                 T _e = ElementAt(j);
