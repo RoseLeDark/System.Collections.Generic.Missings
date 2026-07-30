@@ -17,10 +17,6 @@
 
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
-using SystemEx.Algorythmen;
-using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
     
@@ -34,12 +30,7 @@ namespace SystemEx.Collections.Generic {
         private bool m_autoGrow;
 
         public long Size => Int64.MaxValue;
-  
-        public Optional<TU> this[T key] {
-            get  {
-                return Get(key);
-            }
-        }
+ 
 
         /// <summary>
         /// Internal storage buffer for Map elements.
@@ -107,8 +98,9 @@ namespace SystemEx.Collections.Generic {
         /// vector as a stack-like structure. Accessing Current when the vector is
         /// empty or m_index is out of range is undefined.
         /// </summary>
-        public Pair<T, TU>? Current => m_elements[m_index];
-    #if REPLAYE
+        public Pair<T, TU>? Current => (m_index > 0 ? m_elements[m_index - 1] : null);
+
+#if REPLAYE
 
         /// <summary>
         /// Creates a FlexSpan view over the entire map starting at index 0.
@@ -185,7 +177,15 @@ namespace SystemEx.Collections.Generic {
             get {
                 if ( m_elements.Length == 0 )
                     throw new InvalidOperationException("Map is empty");
-                return m_elements[0];
+
+                long index = -1;
+                for(long i = 0 ; i < Count ; i++  ) { 
+                    if(m_state[i] == 1 ) {
+                        index = i; break;
+                    }
+                }
+                if ( index == -1 ) throw new Exception("No Elements in the list");
+                return m_elements[index];
             }
         }
 
@@ -193,14 +193,34 @@ namespace SystemEx.Collections.Generic {
             get {
                 if ( m_elements.Length == 0 )
                     throw new InvalidOperationException("Map is empty");
-                return m_elements[m_elements.Length - 1];
+
+                long index = -1;
+                for (long i = Count - 1 ; i >= 0 ; i ++ ) {
+                    if ( m_state[i] == 1 ) {
+                        index = i; break;
+                    }
+                }
+                if ( index == -1 ) throw new Exception("No Elements in the list");
+                return m_elements[index];
             }
         }
 
-        int ICollection<Pair<T, TU>>.Count => throw new NotImplementedException();
+        int ICollection<Pair<T, TU>>.Count => (int)this.Count;
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly => false;
 
+        public Optional<TU> this[T key] {
+            get {
+                return Get(key);
+            } 
+            set {
+                if ( value.IsNull ) return;
+
+                if ( !Replace(key, value) ) {
+                    PushBack(new Pair<T, TU>(key, value.Value!));
+                }
+            }
+        }
         public Map ( long size, int growSize = 16 ) {
             m_elements = new Pair<T, TU>[size];
 
@@ -261,7 +281,9 @@ namespace SystemEx.Collections.Generic {
 
             return seg;
         }
-
+        public bool PushBack ( T key, TU value ) {
+            return PushBack(new Pair<T, TU>(key, value));
+        }
         public bool PushBack ( Pair<T,TU> entry ) {
             if ( ContainsKey(entry.First) ) return false;
 
@@ -271,10 +293,13 @@ namespace SystemEx.Collections.Generic {
             }
 
             m_elements[m_index] = entry;
+            m_state[m_index] = 1;
             m_index++;
             return true;
         }
-
+        public bool PushFront ( T key, TU value ) {
+            return PushFront(new Pair<T, TU>(key, value));
+        }
         public bool PushFront ( Pair<T, TU> entry ) {
             if( ContainsKey(entry.First) ) return false;
 
@@ -290,11 +315,14 @@ namespace SystemEx.Collections.Generic {
 
             // Shift all valid elements one slot to the right
             // m_index is the last valid index, so we shift [0 .. m_index]
-            for ( long i = m_index ; i >= 0 ; i-- )
+            for ( long i = m_index ; i >= 0 ; i-- ) {
                 m_elements[i + 1] = m_elements[i];
+                m_state[i + 1] = m_state[i];
+            }
 
             // Insert new element at the front
             m_elements[0] = entry;
+            m_state[0] = 1;
 
             // Increase logical count
             m_index++;
@@ -317,21 +345,25 @@ namespace SystemEx.Collections.Generic {
             }
 
             // Speicher nach rechts verschieben
-            for ( long i = m_index ; i > index ; i-- )
+            for ( long i = m_index ; i > index ; i-- ) {
                 m_elements[i] = m_elements[i - 1];
+                m_state[i] = m_state[i - 1];
+            }
 
             m_elements[index] = entry;
+            m_state[index] = 1;
 
-            m_index++;
+            if ( index >= m_index )
+                m_index = index + 1;
 
             return true;
         }
 
         public IEnumerable<Pair<T, TU>> Find ( T Key ) {
-            foreach ( var item in m_elements ) {
+            for(long i = 0 ; i < m_elements.LongLength ; i++) {
                 
-                if(item.First.Equals(Key) ) {
-                    yield return item;
+                if(m_elements[i].First.Equals(Key) && m_state[i] == 1 ) {
+                    yield return m_elements[i];
                 }
             }
         }
@@ -355,7 +387,22 @@ namespace SystemEx.Collections.Generic {
             }
             return true;
         }
+        public bool Replace ( T key, Optional<TU> value ) {
+            if ( value.IsNull ) return false;
+            bool _ret = false;
 
+            if ( ContainsKey(key) ) {
+                for ( long i = 0 ; i < Count ; i++ ) {
+                    if ( m_elements[i].EqualFirst(key) ) {
+                        m_elements[i].Second = value.Value!;
+                        m_state[i] = 1;
+                        _ret = true;
+                        break;
+                    }
+                }
+            }
+            return _ret;
+        }
 
         public bool Replace ( long index, Pair<T, TU> entry ) {
             if ( index < 0 ) return false;
@@ -372,6 +419,11 @@ namespace SystemEx.Collections.Generic {
             }
 
             m_elements[index] = entry;
+            m_state[index] = 1;
+
+            if ( index >= m_index )
+                m_index = index + 1;
+
             return true;
         }
 
@@ -380,8 +432,13 @@ namespace SystemEx.Collections.Generic {
             if ( start < 0 || end < start ) return false;
             if ( m_index >= m_elements.Length ) Grow();
 
-            for ( long i = start ; i <= end ; i++ )
+            for ( long i = start ; i <= end ; i++ ) {
                 m_elements[i] = entry;
+                m_state[i] = 1;
+            }
+
+            if ( end >= m_index )
+                m_index = end + 1;
 
             return true;
         }
@@ -398,8 +455,9 @@ namespace SystemEx.Collections.Generic {
       
         public bool Erase () {
             if ( IsEmpty ) return false;
-
+            m_state[m_index - 1] = 0;
             m_index--;
+
 
 
             return true;
@@ -409,7 +467,7 @@ namespace SystemEx.Collections.Generic {
             if ( IsEmpty ) return false;
             if ( index >= Length ) return false;
 
-            
+            m_state[index] = 0;
 
             return true;
         }
@@ -420,7 +478,9 @@ namespace SystemEx.Collections.Generic {
 
             var _real_end = System.Math.Min(end, Length);
 
-            
+            for(long i = start ; i < _real_end ; i++ ) {
+                Erase(i);
+            }
 
 
             return true;
@@ -431,10 +491,9 @@ namespace SystemEx.Collections.Generic {
 
             for ( long i = 0 ; i < Count ; i++ ) {
 
-                var _item = m_elements[i];
-
-                if ( _item.Equals(value) ) {
-                   
+                if ( m_elements[i].Equals(value) ) {
+                    m_state[i] = 0;
+                    _ret = true;
                 }
             }
 
@@ -448,12 +507,16 @@ namespace SystemEx.Collections.Generic {
             Pair<T, TU> tmp = m_elements[i];
             m_elements[i] = m_elements[j];
             m_elements[j] = tmp;
+
+            byte tmps = m_state[i];
+            m_state[i] = m_state[j];
+            m_state[j] = tmps;
         }
 
  
         public Pair<T, TU> ElementAt ( long index ) {
             if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
-
+            if ( m_state[index] == 0 ) throw new Exception("No element on this position");
             return m_elements[index];
         }
 
@@ -466,11 +529,13 @@ namespace SystemEx.Collections.Generic {
             m_index = 0;
             var len = Length;
             m_elements = new Pair<T, TU>[len];
+            m_state = new byte[len];
         }
 
         public IEnumerator<Pair<T, TU>> GetEnumerator () {
             for ( int i = 0 ; i < m_index ; i++ )
-                yield return m_elements[i];
+                if(m_state[i] == 1 )
+                    yield return m_elements[i];
         }
 
         public void Traverse ( TraversMode mode, long startIndex, long endIndex, Action<Pair<T, TU>> func ) {
@@ -478,14 +543,17 @@ namespace SystemEx.Collections.Generic {
             var end = System.Math.Min(endIndex,  m_index);
 
             if ( mode == TraversMode.Forwards ) {
-                for ( long i = start ; i < end ; i++ )
-                    func(m_elements[i]);
+                for ( long i = start ; i < end ; i++ ) {
+                    if ( m_state[i] == 1 )
+                        func(m_elements[i]);
+                }
             } else if ( mode == TraversMode.Backwards ) {
-                for ( long i = end ; i >= start ; i-- )
-                    func(m_elements[i]);
+                for ( long i = end ; i >= start ; i-- ) {
+                    if ( m_state[i] == 1 )
+                        func(m_elements[i]);
+                }
             }
         }
-
 
         public Pair<bool, long> CopyTo ( Map<T, TU> vector, ulong VectorIndex ) {
             return CopyTo(0, vector, 0, VectorIndex);
@@ -506,6 +574,12 @@ namespace SystemEx.Collections.Generic {
             if ( toCopy <= 0 ) return new Pair<bool, long>(false, 0);
 
             Buffer.LongCopy<Pair<T, TU>>(m_elements, src, destination.m_elements, dst, toCopy);
+            Buffer.LongCopy<byte>(m_state, src, destination.m_state, dst, toCopy);
+
+            long end = dst + toCopy;
+            if ( end > destination.m_index )
+                destination.m_index = end;
+
             return new Pair<bool, long>(true, toCopy);
         }
 
@@ -546,6 +620,7 @@ namespace SystemEx.Collections.Generic {
             }
 
             Buffer.LongCopy<Pair<T, TU>>(source.m_elements, src, m_elements, dst, toCopy);
+            Buffer.LongCopy<byte>(source.m_state, src, m_state, dst, toCopy);
 
             // m_index anpassen, falls wir weiter hinten geschrieben haben
             long end = dst + toCopy;
@@ -558,7 +633,15 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Returns a copy of the internal buffer.
         /// </summary>
-        public Pair<T, TU>[] ToNative () => m_elements.ToArray();
+        public Pair<T, TU>[] ToNative () {
+            Pair<T, TU>[] vec  = new Pair<T, TU>[m_index];
+
+            for(long i = 0 ; i < m_index ; i++  ) {
+                if(m_state[i] == 1 )
+                    vec[i] = new Pair<T, TU>(m_elements[i].First, m_elements[i].Second);
+            }
+            return vec;
+        }
 
         
         private bool Resize ( long size ) {
@@ -568,6 +651,7 @@ namespace SystemEx.Collections.Generic {
 
             try {
                 Array.Resize(ref m_elements, (int)size);
+                Array.Resize(ref m_state, (int)size);
             } catch {
                 return false;
             }
@@ -580,9 +664,9 @@ namespace SystemEx.Collections.Generic {
 
         public bool ContainsKey ( T Key ) {
             bool _ret = false;
-            foreach ( var p in m_elements ) {
+            for ( long i = 0 ; i < Count ; i++ ) {
                
-                if(p.EqualFirst(Key)) {
+                if(m_elements[i].EqualFirst(Key) && m_state[i] == 1 ) {
                     _ret = true;
                     break;
                 }
@@ -595,9 +679,9 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public bool ContainsValue ( TU value ) {
             bool _ret = false;
-            foreach ( var p in m_elements ) {
+            for ( long i = 0 ; i < Count ; i++ ) {
                 
-                if ( p.EqualSecond(value) ) {
+                if ( m_elements[i].EqualSecond(value) && m_state[i] == 1 ) {
                     _ret = true;
                     break;
                 }
@@ -609,11 +693,11 @@ namespace SystemEx.Collections.Generic {
 
              Optional<TU> _ret = Optional<TU>.NONE;
 
-            foreach ( var p in m_elements ) {
+            for ( long i = 0 ; i < Count ; i++ ) {
                 //if ( p.IsNull ) continue;
 
-                if ( p.EqualFirst(Key) ) {
-                    _ret = p.Second;
+                if ( m_elements[i].EqualFirst(Key) && m_state[i] == 1 ) {
+                    _ret = m_elements[i].Second;
                     break;
                 }
             }
@@ -627,35 +711,32 @@ namespace SystemEx.Collections.Generic {
 
         public bool Remove (  Pair<T, TU>  item ) => Erase(item);
 
-        public bool Contains ( Pair<T, TU> item ) {
-            return m_elements.Contains(item);
-        }
+        public bool Remove ( T key ) {
+            bool _ret = false;
 
-        IEnumerator<Pair<T, TU>> IEnumerable<Pair<T, TU>>.GetEnumerator () {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator () {
-            return GetEnumerator();
-        }
-
-        public void Traverse ( TraversMode mode, int startIndex, int endIndex, Action<Pair<T, TU>> func ) {
-            int start = System.Math.Max(startIndex, 0);
-            int end =   System.Math.Min(endIndex, m_elements.Length);
-
-            if ( mode == TraversMode.Forwards ) {
-                for ( int i = start ; i < end ; i++ ) {
-                   
-                    func(m_elements[i]);
-                }
-                   
-            } else if ( mode == TraversMode.Backwards ) {
-                for ( int i = end ; i >= start ; i-- ) {
-                 
-                    func(m_elements[i]);
+            for ( long i = 0 ; i < Count ; i++ ) {
+                if ( m_state[i] == 1 && m_elements[i].EqualFirst(key) ) {
+                    m_state[i] = 0;
+                    _ret = true;
+                    break;
                 }
             }
+            return _ret;
         }
+
+        public bool Contains ( Pair<T, TU> item ) {
+            bool _ret = false;
+            for ( long i = 0 ; i < Length ; i++ ) {
+
+                if ( m_elements[i].Equals(item) && m_state[i] == 1 ) {
+                    _ret = true;
+                    break;
+                }
+            }
+            return _ret;
+        }
+
+        
 
 
         public void CopyTo ( Pair<T, TU>[] array, int arrayIndex ) {
@@ -664,11 +745,11 @@ namespace SystemEx.Collections.Generic {
 
         public bool TryGeValue ( T key, [MaybeNullWhen(false)] out TU value ) {
 
-            foreach ( var p in m_elements ) {
+            for(long i = 0 ; i < Count ; i++) {
                 //if ( p.IsNull ) continue;
 
-                if ( p.EqualFirst(key) ) {
-                    value = p.Second;
+                if ( m_elements[i].EqualFirst(key) && m_state[i] == 1 ) {
+                    value = m_elements[i].Second;
                     return true;
                 }
             }
@@ -676,8 +757,40 @@ namespace SystemEx.Collections.Generic {
             return false;
         }
 
-        public IVector<Pair<T, TU>> Duplicate () {
+        public bool TryGetValue ( T key, out TU? value ) {
+            bool _ret = false;
+            Optional<TU> _get = Get(key);
+
+            if ( _get.IsSome ) {
+                value = _get.Value!;
+                _ret = true;
+            } else {
+                value = default(TU);
+            }
+            return _ret;
+        }
+
+        
+
+        public void Set ( T v, TU value ) {
             throw new NotImplementedException();
+        }
+
+        public void PushBack ( Map<T, TU> other ) {
+            for ( long i = 0 ; i < other.Count ; i++ ) {
+                if ( other.m_state[i] == 1)
+                    this.PushBack(other.m_elements[i]);
+            }
+        }
+
+        public TU GetOrDefault ( T key, TU v2 ) {
+            Optional<TU> _get = Get(key);
+
+            return (_get.IsSome ? _get.Value! : v2);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator () {
+            return GetEnumerator();
         }
     }
 }

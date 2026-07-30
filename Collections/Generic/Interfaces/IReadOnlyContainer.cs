@@ -1,6 +1,8 @@
 ﻿using System;
 
-namespace SystemEx.Collections.Generic.Interfaces {
+namespace SystemEx.Collections.Generic {
+    /// \addtogroup collections
+    /// @{
     /// <summary>
     /// Defines the minimal read‑only functionality required for a generic
     /// container used by the SystemEx collection framework. Implementations
@@ -8,7 +10,19 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// modification of stored elements.
     /// </summary>
     /// <typeparam name="T">The element type stored in the container.</typeparam>
-    public interface IReadOnlyContainer<T> {
+    public interface IReadOnlyContainer<T>  {
+
+        /// <summary>
+        /// Gets the first element of the container.
+        /// </summary>
+        public T Front { get; }
+
+
+        /// <summary>
+        /// Indicates whether the container is full.
+        /// </summary>
+        public bool IsFull { get; }
+
         /// <summary>
         /// Gets a value indicating whether the container contains no elements.
         /// </summary>
@@ -38,18 +52,14 @@ namespace SystemEx.Collections.Generic.Interfaces {
         Optional<T> ElementAt ( long index );
 
         /// <summary>
-        /// Returns the underlying storage as a native array. The returned array
-        /// may reflect the container's internal representation.
-        /// </summary>
-        /// <returns>A native array containing the stored elements.</returns>
-        Optional<T>[] ToNative ();
-
-        /// <summary>
         /// Returns the runtime type of the stored elements.
         /// </summary>
         /// <returns>The element type.</returns>
         Type GetElementType ();
 
-       
+        
     }
+#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+    /// @}
+#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

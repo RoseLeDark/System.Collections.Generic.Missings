@@ -1,44 +1,18 @@
-﻿/* 
- * SPDX-License-Identifier: EUPL-1.2
- *
- * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
- *
- * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
- * You can obtain a copy of the licence at:
- *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
- *
- * Unless required by applicable law or agreed to in writing, software distributed
- * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied.
- *
- * If you modify this file, retain this notice and add a short description of your
- * changes and the date.
- */
+﻿using System;
 using System.Collections;
-using SystemEx.Collections.Generic.Interfaces;
+using System.Collections.Generic;
+using System.Text;
 
 namespace SystemEx.Collections.Generic {
-    /// <summary>
-    /// A container-backed span-like view over any <see cref="IVector{T}"/> .
-    /// Unlike System.Span, this type provides mode-based indexing
-    /// (System, Reverse, Ring) and supports mutable access through Replace().
-    /// 
-    /// This is a ref struct because it holds a ref to the underlying container.
-    /// No copying, no heap allocation, no ownership.
-    /// </summary>
-    public ref struct VectorFlexSpan<T, TContainer> where TContainer : IVector<T> {
 
-        /// <summary>
-        /// Enumerator for ContainerExFlexSpan.
-        /// Supports System, Reverse, and Ring modes.
-        /// Ring mode produces infinite iteration (wrap-around).
-        /// </summary>
+
+    public ref struct QueueFlexSpan<T> {
         public ref struct Enumerator : IEnumerator<T> {
             /// <summary>
             /// The span being enumerated.
             /// Stored by value; underlying container is referenced via ref.
             /// </summary>
-            private readonly VectorFlexSpan<T, TContainer>  m_span;
+            private readonly QueueFlexSpan<T> m_span;
 
             /// <summary>
             /// The next index to yield.
@@ -64,7 +38,7 @@ namespace SystemEx.Collections.Generic {
             /// <summary>
             /// Initializes the enumerator.
             /// </summary>
-            internal Enumerator ( VectorFlexSpan<T, TContainer> span ) {
+            internal Enumerator ( QueueFlexSpan<T> span ) {
                 m_span = span;
                 m_index = -1;
             }
@@ -115,7 +89,7 @@ namespace SystemEx.Collections.Generic {
         /// Reference to the underlying container.
         /// ref ensures no container copy occurs.
         /// </summary>
-        private readonly ref TContainer m_pReference;
+        private readonly ref Queue<T> m_pReference;
         /// <summary>
         /// Total length of the underlying array.
         /// </summary>
@@ -164,7 +138,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// A Empty Object
         /// </summary>
-        public static VectorFlexSpan<T, TContainer> Empty => default;
+        public static QueueFlexSpan<T> Empty => default;
 
         /// <summary>
         /// Creates a FlexSpan view starting at <paramref name="start"/> and extending
@@ -173,7 +147,7 @@ namespace SystemEx.Collections.Generic {
         /// This constructor does not allocate memory. It simply creates a logical view
         /// over the container using the specified indexing mode.
         /// </summary>
-        /// <param name="pVector">
+        /// <param name="pqueue">
         /// Reference to the underlying container. Passed by ref to avoid copying the
         /// container struct and to ensure the view always reflects the actual container.
         /// </param>
@@ -186,11 +160,11 @@ namespace SystemEx.Collections.Generic {
         /// Reverse = backward indexing,
         /// Ring    = circular wrap-around indexing.
         /// </param>
-        public VectorFlexSpan ( ref TContainer pVector, long start, FlexSpanMode mode ) {
-            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(start, pVector.Length);
+        public QueueFlexSpan ( ref Queue<T> pqueue, long start, FlexSpanMode mode ) {
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(start, pqueue.Size);
 
-            m_pReference = ref pVector;
-            m_llength = pVector.Count;
+            m_pReference = ref pqueue;
+            m_llength = pqueue.Size;
             m_eMode = mode;
 
             // View 
@@ -203,7 +177,7 @@ namespace SystemEx.Collections.Generic {
         /// The view covers the range [start .. start + length), using the specified
         /// indexing mode. No memory is allocated; this is a pure logical slice.
         /// </summary>
-        /// <param name="vector">
+        /// <param name="queue">
         /// Reference to the underlying container. Passed by ref so the FlexSpan
         /// reflects the actual container rather than a copy.
         /// </param>
@@ -220,13 +194,13 @@ namespace SystemEx.Collections.Generic {
         /// Reverse = backward indexing,
         /// Ring    = circular wrap-around indexing.
         /// </param>
-        public VectorFlexSpan ( ref TContainer vector, long start, long length, FlexSpanMode mode ) {
+        public QueueFlexSpan ( ref Queue<T> queue, long start, long length, FlexSpanMode mode ) {
 
-            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((ulong)length, (ulong)(vector.Count - start));
-            ArgumentOutOfRangeException.ThrowIfGreaterThan((ulong)start, (ulong)vector.Count);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual((ulong)length, (ulong)(queue.Size - start));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan((ulong)start, (ulong)queue.Size);
 
-            m_pReference = ref vector;
-            m_llength = vector.Count;
+            m_pReference = ref queue;
+            m_llength = queue.Size;
             m_eMode = mode;
 
             // View 
@@ -246,7 +220,7 @@ namespace SystemEx.Collections.Generic {
         /// The target FlexSpan receiving the copied elements. Must have a ViewLength
         /// greater than or equal to this span's ViewLength.
         /// </param>
-        public void CopyTo ( VectorFlexSpan<T, TContainer> destination ) {
+        public void CopyTo ( QueueFlexSpan<T> destination ) {
             if ( destination.ViewLength < this.ViewLength )
                 throw new ArgumentException("Destination FlexSpan is too small.");
 
@@ -342,3 +316,4 @@ namespace SystemEx.Collections.Generic {
         }
     }
 }
+

@@ -22,8 +22,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace SystemEx.Collections.Generic.Interfaces {
     /// \addtogroup collections
     /// @{
-    /// \addtogroup interfaces
-    /// @{
     /// 
     /// <summary>
     /// Defines the basic contract for a map-like container that stores elements

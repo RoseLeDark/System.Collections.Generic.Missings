@@ -19,7 +19,6 @@ using System.Collections;
 using System.Drawing;
 using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
-using SystemEx.Algorythmen;
 using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
@@ -30,7 +29,7 @@ namespace SystemEx.Collections.Generic {
     /// traversal, and basic search operations. Unlike dynamic arrays, this
     /// structure never grows and always maintains a constant capacity.
     /// </summary>
-    public struct FixedVector<T> : IVector<T> {
+    public struct FixedVector<T> : IVector<T>, ISwappable<long>, IUsedIterrator<T, RandomAccessIterator<T, FixedVector<T>>> {
         /// <summary>
         /// Internal storage buffer for Vector elements.
         /// </summary>
@@ -80,7 +79,7 @@ namespace SystemEx.Collections.Generic {
         /// vector as a stack-like structure. Accessing Current when the vector is
         /// empty or m_index is out of range is undefined.
         /// </summary>
-        public T Current => m_elements[m_index];
+        public Optional<T> Current => m_elements[m_index];
 
         /// <summary>
         /// Creates a <see cref="Find{T, TContainer}"/> wrapper for this vector,
@@ -600,7 +599,7 @@ namespace SystemEx.Collections.Generic {
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown if the Array is empty or the index exceeds the logical length.
         /// </exception>
-        public T ElementAt ( long index ) {
+        public Optional<T> ElementAt ( long index ) {
             if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
 
             return m_elements[index];

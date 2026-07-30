@@ -18,6 +18,7 @@
 using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
 using SystemEx.Collections.Generic.Interfaces;
+using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
 
@@ -84,7 +85,7 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The element type stored in the Vector.</typeparam>
 
-    public struct Vector<T> : IVector<T>   {
+    public struct Vector<T> : IVector<T>, IUsedIterrator<T, RandomAccessIterator<T, Vector<T>> >, ISwappable<long> {
         private long m_growSize;
         private bool m_autoGrow;
         
@@ -150,7 +151,7 @@ namespace SystemEx.Collections.Generic {
         /// vector as a stack-like structure. Accessing Current when the vector is
         /// empty or m_index is out of range is undefined.
         /// </summary>
-        public T Current => m_elements[m_index - 1];
+        public Optional<T> Current => m_elements[m_index - 1];
 
 
         /// <summary>
@@ -339,8 +340,10 @@ namespace SystemEx.Collections.Generic {
         public RandomAccessIterator<T, Vector<T>> End => new RandomAccessIterator<T, Vector<T>>(this, Count);
 
 
-        public RandomAccessIterator<T, Vector<T>> ReverseBegin => End;
+        public RandomAccessIterator<T, Vector<T>>  ReverseBegin => End;
         public RandomAccessIterator<T, Vector<T>> ReverseEnd => Begin;
+
+
         /// <summary>
         /// Creates a <see cref="VectorMultiSet{T, Vector{T}}"/> view over the given vector,
         /// allowing duplicate elements while preserving a defined ordering.
@@ -771,7 +774,7 @@ namespace SystemEx.Collections.Generic {
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown if the vector is empty or the index exceeds the logical length.
         /// </exception>
-        public T ElementAt ( long index ) {
+        public Optional<T> ElementAt ( long index ) {
             if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
 
             return m_elements[index];
@@ -954,6 +957,7 @@ namespace SystemEx.Collections.Generic {
             return new Pair<bool, long>(true, toCopy); 
         }
 
+
         /// <summary>
         /// Returns a copy of the internal buffer.
         /// </summary>
@@ -987,8 +991,31 @@ namespace SystemEx.Collections.Generic {
             }
             return true;
         }
+        /// <inheritdoc/>
+        public static bool operator ==  (Vector<T> a, Vector<T> b) {
+            bool _ret = true;
 
-        
+            if ( a.Length != b.Length ) {
+                _ret = false;
+            } else {
+                for ( long i = 0 ; i < a.Length ; i++ ) {
+                    var iten = a.ElementAt(i);
+                    var oi =   b.ElementAt(i);
+
+                    int cmp = Comparer< T>.Default.Compare(iten.Value, oi.Value);
+
+                    if ( cmp != 0 ) {
+                        _ret = false;
+                        break;
+                    }
+                }
+            }
+            return _ret;
+        }
+        /// <inheritdoc/>
+        public static bool operator != ( Vector<T> a, Vector<T> b ) {
+            return !(a == b);
+        }
     }
 
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

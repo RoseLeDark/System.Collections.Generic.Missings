@@ -17,22 +17,20 @@
 
 using System.Collections;
 
-namespace SystemEx.Collections.Generic.Interfaces {
+namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
-    /// @{
-    /// \addtogroup interfaces
     /// @{
     /// <summary>
     /// A random‑access iterator for <see cref="List{T}"/> that also implements
-    /// <see cref="IForeachIterator{T}"/> to support foreach‑style enumeration.
+    /// <see cref="Iterrator{T}"/> to support foreach‑style enumeration.
     /// Provides forward, backward, and offset‑based movement.
     /// </summary>
     /// <typeparam name="T">The element type stored in the list.</typeparam>
-    public class ListIterator<T> : IRandomAccessIterator<T>, IForeachIterator<T>  {
+    public struct ListIterator<T> : Iterrator<T>, IEnumerator {
         /// <summary>
         /// The underlying list being iterated over.
         /// </summary>
-        private  List<T> m_list;
+        private List<T> m_list;
         /// <summary>
         /// The current index within the list.
         /// </summary>
@@ -51,21 +49,28 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <summary>
         /// Gets the element at the current iterator position.
         /// </summary>
-        public T Current => m_list[m_index];
+        public Optional<T> Current => m_list[m_index];
         /// <summary>
         /// Indicates whether the iterator has reached the end of the list.
         /// </summary>
         public bool IsEnd => m_index >= m_list.Count;
-        /// <summary>
-        /// Gets the current index within the list.
-        /// </summary>
-        public int Index => m_index;
+        
+   
         /// <summary>
         /// Indicates whether the iterator is positioned at the beginning.
         /// </summary>
         public bool IsBegin => m_index == 0;
 
         object IEnumerator.Current => Current!;
+
+        /// <summary>
+        /// Gets the current index within the list.
+        /// </summary>
+        public long Index { 
+            get => this.Index; 
+            set => throw new NotImplementedException(); 
+        }
+
         /// <summary>
         /// Moves the iterator one step forward unless it is already at the end.
         /// </summary>
@@ -94,17 +99,14 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         /// <param name="offset">The number of positions to move.</param>
         /// <returns>The same iterator instance after movement.</returns>
-        public IRandomAccessIterator<T> Advance( long offset ) { m_index += (int)offset; return this; }
+        public ListIterator<T> Advance( long offset ) { m_index += (int)offset; return this; }
 
         /// <summary>
         /// Determines whether this iterator is equal to another iterator.
         /// </summary>
         /// <param name="other">The iterator to compare with.</param>
         /// <returns><c>true</c> if both iterators reference equal lists and positions.</returns>
-        public bool Equals(ListIterator<T>? other) {
-            if ( other == null ) return false;
-
-            // For Multitask in C# not STL Like
+        public bool Equals(ListIterator<T> other) {
             return m_list.SequenceEqual( other.m_list) && m_index == other.m_index;
         }
         /// <inheritdoc/>
@@ -127,14 +129,13 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// Creates a deep clone of the iterator, including a copy of the underlying list.
         /// </summary>
         /// <returns>A new iterator instance with its own list copy.</returns>
-        public IIterator<T> Clone() {
-            return new ListIterator<T>(m_list.ToList(), m_index);
+        public ListIterator<T> Clone () {
+            return new ListIterator<T>(m_list, m_index);
         }
         /// <summary>
         /// Returns this iterator as an enumerator.
         /// </summary>
-        public IEnumerator<T> GetEnumerator() => this;
-        IEnumerator IEnumerable.GetEnumerator() => this;
+        public IEnumerator<T> GetEnumerator() => m_list.GetEnumerator();
 
         /// <summary>
         /// Moves to the next element for foreach enumeration.
@@ -149,12 +150,6 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </summary>
         public void Reset() { }
 
-        /// <summary>
-        /// Disposes the iterator. No resources are held.
-        /// </summary>
-        public void Dispose() {
-            GC.SuppressFinalize(this);
-        }
         /// <summary>
         /// Equality operator for comparing two iterators.
         /// </summary>
@@ -180,23 +175,22 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <summary>
         /// Returns an iterator positioned at the beginning of the list.
         /// </summary>
-        public static IRandomAccessIterator<T> First<T>(this List<T> list)
+        public static ListIterator<T> First<T>(this List<T> list)
             => new ListIterator<T>(list, 0);
 
         /// <summary>
         /// Returns an iterator positioned at the specified index.
         /// </summary>
-        public static IRandomAccessIterator<T> At<T>(this List<T> list, int index)
+        public static ListIterator<T> At<T>(this List<T> list, int index)
             => new ListIterator<T>(list, index);
 
         /// <summary>
         /// Returns an iterator positioned at the end of the list.
         /// </summary>
-        public static IRandomAccessIterator<T> End<T>(this List<T> list)
+        public static ListIterator<T> End<T>(this List<T> list)
             => new ListIterator<T>(list, list.Count);
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

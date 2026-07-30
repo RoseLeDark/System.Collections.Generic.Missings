@@ -17,8 +17,6 @@
 namespace SystemEx.Collections.Generic.Interfaces {
     /// \addtogroup collections
     /// @{
-    /// \addtogroup interfaces
-    /// @{
     /// <summary>
     /// Represents a two‑element tuple consisting of a key and a value.
     /// Extends <see cref="ITuple"/> with strongly typed accessors and

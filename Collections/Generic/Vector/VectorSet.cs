@@ -47,7 +47,7 @@ namespace SystemEx.Collections.Generic {
     /// Must implement IContainerEx for the same element type.
     /// </typeparam>
     public ref struct VectorSet<T, TContainer> : IEquatable<VectorSet<T, TContainer>>
-        where TContainer : IVector<T> {
+        where TContainer : IVector<T>, ISwappable<long> {
 
         private ref TContainer m_pKeys;
         private ISimpleCompare<T> m_compare;
@@ -111,7 +111,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Returns the current element of the underlying container.
         /// </summary>
-        public T Current => m_pKeys.Current;
+        public Optional<T> Current => m_pKeys.Current;
 
         /// <summary>
         /// Returns the number of elements stored in the container.
@@ -146,8 +146,8 @@ namespace SystemEx.Collections.Generic {
                 // copy extracted elements
                 for ( long i = 0 ; i < extractCount ; i++ ) {
                     var itm = m_pKeys.ElementAt(index + i);
-                    if(itm != null) {
-                        _ret[i] = itm;
+                    if(!itm.IsNull) {
+                        _ret[i] = itm.Value!;
                     }
                 }
 
@@ -245,7 +245,7 @@ namespace SystemEx.Collections.Generic {
                     var prev = m_pKeys.ElementAt(i - 1);
                     var curr = m_pKeys.ElementAt(i);
 
-                    if ( prev == null || curr == null ) {
+                    if ( prev.IsNull || curr.IsNull ) {
                         _ret = false;
                         break;
                     }
@@ -376,11 +376,11 @@ namespace SystemEx.Collections.Generic {
         /// True if both keys are non-null and equal; otherwise false.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool EqualsKey( T? a, T? b) {
-            if ( a == null ) return false;
-            if ( b == null ) return false;
+        private bool EqualsKey( Optional<T> a, Optional<T> b ) {
+            if ( a.IsNull) return false;
+            if ( b.IsNull ) return false;
 
-            return a.Equals(b);
+            return a.Value!.Equals(b.Value);
         }
 
         /// <summary>
@@ -397,12 +397,12 @@ namespace SystemEx.Collections.Generic {
             long count = source.m_pKeys.Count;
 
             for ( long i = 0 ; i < count ; i++ ) {
-                T? value = source.m_pKeys.ElementAt(i);
-                if ( value == null )
+                Optional<T> value = source.m_pKeys.ElementAt(i);
+                if ( value.IsNull )
                     continue;
 
                 // check if this set already contains the value
-                long idx = m_finder.First(value);
+                long idx = m_finder.First(value.Value!);
 
                 if ( idx == -1 ) {
                     // extract from source

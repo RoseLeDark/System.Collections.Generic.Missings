@@ -11,20 +11,20 @@ namespace SystemEx {
 
         void Invoke ( T arg );
 
-        void AddFunc ( Action<IDelegate<T>, T> func );
+        void Subscribe ( Action<IDelegate<T>, T> func );
 
-        void RemoveFunc ( Action<IDelegate<T>, T> func );
+        void UnSubscribe ( Action<IDelegate<T>, T> func );
 
         void Clear ();
     }
 
     public struct Delegate<T> : IDelegate<T> , IComparable<Delegate<T>>, IEquatable< Delegate<T> >, IEnumerable<Action<IDelegate<T>, T>> {
 
-        private List< Action<IDelegate<T>, T >?> m_functions;
+        private Vector< Action<IDelegate<T>, T > > m_functions;
    
-        public Delegate ( Action<IDelegate<T>, T>? func = null) {
-            m_functions = new List<Action<IDelegate<T>, T>?>();
-            if(func != null) m_functions.Add(func);
+        public Delegate ( Action<IDelegate<T>, T> func ) {
+            m_functions = new Vector< Action<IDelegate<T>, T>   >();
+            if(func != null) m_functions.PushBack(func);
         }
         public void Invoke ( T arg ) {
 
@@ -34,12 +34,12 @@ namespace SystemEx {
   
         }
 
-        public void AddFunc( Action<IDelegate<T>, T> func ) {
-            m_functions.Add(func);
+        public void Subscribe ( Action<IDelegate<T>, T> func ) {
+            m_functions.PushBack(func);
         }
 
-        public void RemoveFunc ( Action<IDelegate<T>, T> func ) {
-            m_functions.Remove(func);
+        public void UnSubscribe ( Action<IDelegate<T>, T> func ) {
+            m_functions.Erase(func);
         }
 
         public void Clear () {
@@ -47,15 +47,27 @@ namespace SystemEx {
         }
 
         public int CompareTo ( Delegate<T> other ) {
-            if ( m_functions == null ) return (int)CompareResult.AIsSmallerB;
-            if ( other.m_functions == null ) return (int)CompareResult.AIsLargerB;
+            long _mA = 0, _mB = 0;
 
-            int A = m_functions.Count;
-            int B = other.m_functions.Count;
+            long A = m_functions.Count;
+            long B = other.m_functions.Count;
 
-            if ( A > B ) return (int)CompareResult.AIsLargerB;
-            if ( A < B ) return (int)CompareResult.AIsSmallerB;
+            long min = System.Math.Min(A, B);
 
+
+            for ( long i = 0 ; i < min ; i++ ) {
+                var iten = m_functions.ElementAt(i);
+                var oi = other.m_functions.ElementAt(i);
+
+                int cmp = Comparer< Action<IDelegate<T>, T>>.Default.Compare(iten.Value, oi.Value);
+
+                if ( cmp < 0 ) _mB++;
+                else if(cmp > 0) _mA ++;
+            }
+
+            if (_mA > _mB) return (int)CompareResult.Greater;
+            if ( _mA < _mB ) return (int)CompareResult.Less;
+            
             return 0;
         }
 
@@ -69,7 +81,14 @@ namespace SystemEx {
 
        
         public bool Equals ( Delegate<T> other ) {
-            return (other.m_functions == m_functions) ;
+            return m_functions == other.m_functions ;
+        }
+
+        public static bool operator == (Delegate<T> a, Delegate<T> b) {
+            return a.Equals(b);
+        }
+        public static bool operator != ( Delegate<T> a, Delegate<T> b ) {
+            return !a.Equals(b);
         }
     }
 

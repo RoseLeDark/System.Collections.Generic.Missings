@@ -21,8 +21,15 @@ using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
 
 namespace SystemEx.Collections.Generic {
-
-
+    /// \addtogroup collections
+    /// @{
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TCompare"></typeparam>
+    /// <param name="container"></param>
+    /// <param name="comparer"></param>
     public delegate void PriorityQueueAction<T, TCompare> ( ref T[] container, TCompare comparer );
 
     /// <summary>

@@ -15,7 +15,7 @@
  * changes and the date.
  */
 
-namespace SystemEx.Collections.Generic.Interfaces {
+namespace SystemEx.Collections.Generic {
 
     /// \addtogroup collections
     /// @{
@@ -50,7 +50,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// <param name="startIndex">The starting index (inclusive).</param>
         /// <param name="endIndex">The ending index (exclusive).</param>
         /// <param name="func">The action to apply to each visited element.</param>
-        void Traverse(TraversMode mode, int startIndex, int endIndex, Action<T> func);
+        void Traverse(TraversMode mode, long startIndex, long endIndex, Action<T> func);
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

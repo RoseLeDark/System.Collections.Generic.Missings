@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace SystemEx.Collections.Generic.Interfaces {
+namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
-    /// @{
-    /// \addtogroup interfaces
     /// @{
     /// <summary>
     /// Defines the minimal functionality required for a generic vextzu
@@ -15,66 +13,7 @@ namespace SystemEx.Collections.Generic.Interfaces {
     /// duplication of stored elements.
     /// </summary>
     /// <typeparam name="T">The element type stored in the container.</typeparam>
-    public interface IVector<T> {
-        /// <summary>
-        /// Gets a value indicating whether the container cannot accept
-        /// additional elements without growing.
-        /// </summary>
-        bool IsFull { get;  }
-        /// <summary>
-        /// Gets a value indicating whether the container contains no elements.
-        /// </summary>
-        bool IsEmpty { get; }
-
-        /// <summary>
-        /// Gets the element at the current logical position. The meaning of
-        /// the current position is implementation‑defined.
-        /// </summary>
-        T Current { get; }
-
-        /// <summary>
-        /// Gets the number of elements currently stored in the container.
-        /// </summary>
-        long Count { get; }
-
-
-        /// <summary>
-        /// Gets the total capacity of the container, including unused slots.
-        /// </summary>
-        long Length { get; }
-
-        /// <summary>
-        /// Appends an element to the end of the container. Implementations may
-        /// grow automatically or fail depending on their configuration.
-        /// </summary>
-        /// <param name="entry">The element to append.</param>
-        /// <returns>
-        /// True if the element was appended; otherwise false.
-        /// </returns>
-        bool PushBack ( T entry );
-
-        /// <summary>
-        /// Inserts an element at the specified index, shifting subsequent
-        /// elements to the right.
-        /// </summary>
-        /// <param name="index">The insertion index.</param>
-        /// <param name="entry">The element to insert.</param>
-        /// <returns>
-        /// True if the element was inserted; otherwise false.
-        /// </returns>
-        bool Insert ( long index, T entry );
-
-        /// <summary>
-        /// Inserts an element into the specified range. Implementations define
-        /// how the range affects the insertion behavior.
-        /// </summary>
-        /// <param name="start">The start index of the range.</param>
-        /// <param name="end">The end index of the range.</param>
-        /// <param name="entry">The element to insert.</param>
-        /// <returns>
-        /// True if the element was inserted; otherwise false.
-        /// </returns>
-        bool Insert ( long start, long end, T entry );
+    public interface IVector<T> : IContainer<T> {
 
         /// <summary>
         /// Inserts multiple elements starting at the specified index.
@@ -85,16 +24,6 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// True if the elements were inserted; otherwise false.
         /// </returns>
         bool InsertRange ( long start, T[] entrys );
-
-        /// <summary>
-        /// Replaces the element at the specified index.
-        /// </summary>
-        /// <param name="index">The index to replace.</param>
-        /// <param name="entry">The new element.</param>
-        /// <returns>
-        /// True if the element was replaced; otherwise false.
-        /// </returns>
-        bool Replace ( long index, T entry );
 
         /// <summary>
         /// Replaces all elements within the specified range.
@@ -117,15 +46,6 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// </returns>
         bool ReplaceRange ( long start, T[] entrys );
 
-        /// <summary>
-        /// Removes the element at the specified index, shifting subsequent
-        /// elements to the left.
-        /// </summary>
-        /// <param name="index">The index of the element to remove.</param>
-        /// <returns>
-        /// True if the element was removed; otherwise false.
-        /// </returns>
-        bool Erase ( long index );
 
         /// <summary>
         /// Removes all elements within the specified range.
@@ -156,38 +76,6 @@ namespace SystemEx.Collections.Generic.Interfaces {
         bool Grow ();
 
         /// <summary>
-        /// Returns the underlying storage as a native array. The returned array
-        /// may reflect the container's internal representation.
-        /// </summary>
-        /// <returns>A native array containing the stored elements.</returns>
-        T[] ToNative ();
-
-        /// <summary>
-        /// Returns the element at the specified index.
-        /// </summary>
-        /// <param name="index">The index of the element.</param>
-        /// <returns>The element at the specified index.</returns>
-        T? ElementAt ( long index );
-
-        /// <summary>
-        /// Removes all elements from the container, resetting its logical size.
-        /// </summary>
-        void Clear ();
-
-        /// <summary>
-        /// Returns the runtime type of the stored elements.
-        /// </summary>
-        /// <returns>The element type.</returns>
-        Type GetElementType ();
-
-        /// <summary>
-        /// Swaps the elements at the specified indices.
-        /// </summary>
-        /// <param name="i">The first index.</param>
-        /// <param name="j">The second index.</param>
-        void Swap ( long i, long j );
-
-        /// <summary>
         /// Creates a structural duplicate of the container using its
         /// copy constructor. The returned instance is independent and does
         /// not reference the original storage.
@@ -197,9 +85,11 @@ namespace SystemEx.Collections.Generic.Interfaces {
         /// elements as the original container.
         /// </returns>
         IVector<T> Duplicate ();
+
+
+        T[] ToNative ();
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

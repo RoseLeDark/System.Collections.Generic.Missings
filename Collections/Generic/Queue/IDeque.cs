@@ -20,64 +20,58 @@ namespace SystemEx.Collections.Generic {
     /// @{
 
     /// <summary>
-    /// 
+    /// Defines the non-generic base interface for double-ended queue (deque) containers.
+    /// A deque extends the basic queue interface with support for operations at both ends.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IDeque {
-        int Size { get;  }
-
-        /// <summary>
-        /// Indicates whether the deque contains no elements.
-        /// </summary>
-        public bool IsEmpty { get; }
-
-        /// <summary>
-        /// Indicates whether the deque has reached its maximum capacity.
-        /// </summary>
-        public bool IsFull { get; }
-
-
-        public void Clear ();
+    public interface IDeque : IQueue {
     }
 
     /// <summary>
-    /// 
+    /// Defines the generic interface for a double-ended queue (deque).
+    /// A deque allows insertion and removal of elements at both the front and the back.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of elements stored in the deque.</typeparam>
     public interface IDeque<T> : IDeque {
         /// <summary>
         /// Gets the element at the front of the deque.
         /// </summary>
-        public T Front { get; }
+        /// <remarks>
+        /// Accessing this property does not modify the deque.
+        /// </remarks>
+        T Front { get; }
 
         /// <summary>
         /// Gets the element at the back of the deque.
         /// </summary>
-        public T End { get; }
-
-        public bool PushBack ( T value );
+        /// <remarks>
+        /// Accessing this property does not modify the deque.
+        /// </remarks>
+        T End { get; }
 
         /// <summary>
         /// Removes the element at the back of the deque.
         /// </summary>
-        /// <param name="value">Receives the removed element.</param>
-        /// <returns><c>true</c> if an element was removed; otherwise <c>false</c>.</returns>
-        public bool PopBack ( ref T value );
+        /// <param name="value">
+        /// When this method returns, contains the removed element if the operation succeeded;
+        /// otherwise remains unchanged.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> if an element was removed;
+        /// otherwise <c>false</c>.
+        /// </returns>
+        bool PopBack ( ref Optional<T> value );
 
         /// <summary>
-        /// Adds an element to the front of the deque.  
-        /// Existing elements are shifted one position to the right.
+        /// Inserts an element at the front of the deque.
         /// </summary>
-        /// <param name="value">The element to add.</param>
-        public bool PushFront ( T value );
+        /// <param name="value">The element to insert at the front.</param>
+        /// <returns>
+        /// <c>true</c> if the element was successfully inserted;
+        /// otherwise <c>false</c> .
+        /// </returns>
+        bool PushFront ( T value );
 
-        /// <summary>
-        /// Removes the element at the front of the deque.  
-        /// Remaining elements are shifted one position to the left.
-        /// </summary>
-        /// <param name="value">Receives the removed element.</param>
-        /// <returns><c>true</c> if an element was removed; otherwise <c>false</c>.</returns>
-        public bool PopFront ( out T? value );
+
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}
