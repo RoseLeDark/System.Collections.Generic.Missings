@@ -20,30 +20,11 @@ using SystemEx.Collections.Generic;
 namespace SystemEx.AI {
     public interface IModelResult<T> {
         T Result { get; }
-        Map<string, object> Metadata { get; }
+        Map<ModelMeta, object> Metadata { get; }
         Optional<Exception> Error { get; }
         Optional<object> Raw { get; }
 
         bool Success { get; }
         DateTime Timestamp { get; }
     }
-
-
-
-    /// 
-    /*public sealed class FileSearchTool : IModelTool<string> {
-        public Task<IModelResult<string>> PreProcessAsync ( IModel<string> model, IModelPromp<string> input ) {
-            // Beispiel: KI darf nach Dateien fragen
-            if ( input.Prompt.Contains("find file") ) {
-                var files = Directory.GetFiles(model.WorkPath);
-                //return Task.FromResult(input + "\n\nFiles:\n" + string.Join("\n", files));
-            }
-
-            //return Task.FromResult(input);
-        }
-
-        public Task<IModelResult<string>> PostProcessAsync ( IModel<string> model, IModelPromp<string> output ) {
-           // return Task.FromResult(output);
-        }
-    }*/
 }

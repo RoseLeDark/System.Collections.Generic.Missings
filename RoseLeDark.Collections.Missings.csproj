@@ -88,6 +88,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
 	</ItemGroup>
   <ItemGroup>
     <Compile Remove="Collections\Generic\BasicRope.cs" />
+    <Compile Remove="Examples\ExampleAIWindowsBackend.cs" />
     <Compile Remove="Examples\VectorFind.cs" />
     <Compile Remove="Examples\VectorSet.cs" />
   </ItemGroup>
@@ -101,7 +102,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Examples\ExampleRamKernelAdd.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Examples\VectorFind.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -133,6 +134,15 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
 
   <ItemGroup>
     <None Include="Collections\Generic\BasicRope.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Examples\AI\Main.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Examples\AI\WinCopilotBackend.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

@@ -18,12 +18,15 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
+    
     public interface IModelBackend<T , TAI> {
         /// Optional: Backend-spezifische Fähigkeiten (z.B. Vision, Audio, Tools)
-        Map<string, object> Capabilities { get; }
+        Map<BackendCapabilities, object> Capabilities { get; }
 
         /// Optional: Backend-spezifische Konfiguration
         Map<string, object> Configuration { get; }
+
+        Map<SystemEx.AI.Environment, object> Enviro { get; }
 
         /// <summary>
         /// The backend name used for metadata and diagnostics.
@@ -58,13 +61,18 @@ namespace SystemEx.AI {
         bool UnregistTool ( string toolName );
         IReadOnlyList<TAI> ListTools ();
 
-        void Begin ( Map<string, object> config );
+        bool Initialization ( Map<string, object> configuration, Map<Environment, object> environment );
 
         /// Führt das Modell aus
         Task<IModelResult<T>> InvokeAsync ( string systemPrompt, IModelPromp<T> input);
 
-        void End ( bool wait );
+        void Release ( bool wait );
 
         bool HasTool ( string toolName );
+
+        Optional<object> GetValue ( string key );
+
+        void SetConfig ( string key, object value );
+
     }
 }

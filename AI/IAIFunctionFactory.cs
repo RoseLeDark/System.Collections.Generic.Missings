@@ -15,17 +15,22 @@
  * changes and the date.
  */
 
-using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-    public interface IModelPromp<T> {
-        public T Prompt { get; }
-        public Map<string, object> Context { get; }
-        public Optional<string> SessionId { get; }
-        public Map<string, object> Parameters { get; }
-        public Map<string, object> Tags { get; }
-        public bool Cancel { get; }
 
-        object this[string parameter] { get; set; }
+    /// <summary>
+    /// Converts the <see cref="IModelTool{T}"/> definitions into a compatible Object for the usend Backend
+    /// 
+    /// This factory is used by the backend to expose tools to the AI model.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The prompt type used by the model.
+    /// </typeparam>
+    /// <typeparam name="TAITOOL">
+    /// 
+    /// </typeparam>
+    public interface IAIFunctionFactory<T, TAITOOL> {
+        
+        bool Convert ( IModelTool<T> tool, out TAITOOL converted );
     }
 }
