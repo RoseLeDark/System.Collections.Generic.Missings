@@ -29,8 +29,11 @@
 - Renamed `SimpleConditionVariable` → `LightConditionVariable`.
 - `Dequeue<T>` is now auto‑growable and includes new utility functions.
 - `Map` addes more functions: TryGet, GetOrDefault , add Erase anbd Remove functions
-
-!! Remove issus 
+ 
+### Note
+This release contains several internal adjustments required for the ongoing integration of `SystemEx.AI`.  
+Some components have been temporarily simplified or restructured and will be restored or finalized in upcoming versions once the new architecture is fully consolidated.  
+The public API remains stable; only internal behavior may differ slightly until the next release.
 
 ---
 ## [0.59.164] 21.07.2026 -> Lacking
