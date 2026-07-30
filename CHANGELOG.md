@@ -1,5 +1,5 @@
 # Changelog
-## [0.6x.xxx] xx.07.2026 -> Lacking
+## [0.70.658] 30.07.2026 -> Lacking
 ### Added
 - Added `SafeCounter` with operator suite (++, --, +, -, ==, !=) with full atomic semantics.
 - Added new Interrfaces `ISpinlock<T>`, `ILock<T>` and `ILock` : unified locking abstraction for atomic and OS‑level synchronization.
@@ -13,13 +13,25 @@
     -  Added a `RandomAccessIterator<T, Array<T>> Begin`, `RandomAccessIterator<T, Array<T>> End`, `RandomAccessIterator<T, Array<T>> ReverseBegin` and `RandomAccessIterator<T, Array<T>> ReverseEnd` to `Array<T>` and `Vector<T>` Objects 
 
 - Added to `SortActions ` helper: simple heap‑based min/max sort placing minimum at the start and maximum at the end.
+
+### Added – SystemEx.AI
+- Introduced the `SystemEx.AI` subsystem, providing a unified abstraction layer for AI model invocation within SystemEx.
+- Added `Model<TPrompt, TResult>` as the base contract for all AI models, defining prompt handling, backend routing, configuration management, and result processing.
+- Added `IModelBackend<T>` to standardize backend communication, including request construction, parameter merging, and transport‑agnostic execution.
+- Added `WebAIBackend<T>` implementing `IModelBackend<T>` for HTTP‑based AI endpoints (e.g., OpenAI‑compatible APIs). Supports configurable model selection, streaming, response formatting, and backend‑specific parameters.
+- Added `ModelPromp<T>` and `ModelResult<T>` to formalize prompt input and result output, including context propagation, metadata, and optional session identifiers.
+- Added `WebAIModel`, a lightweight front‑facing wrapper around `WebAIBackend<T>`, providing model switching, configuration helpers (temperature, top‑p, max‑tokens, response‑format), and simplified usage for applications.
+- The subsystem is backend‑agnostic and allows future integration of additional AI backends (local inference, custom gateways, etc.) without modifying model‑level code.
+- Added `Example/AI/` directory containing a minimal working example (`Main.cs`) and bilingual documentation (`README.en.md`, `README.de.md`) demonstrating how to integrate Microsoft AITools using the `SystemEx.AI` abstraction layer.
+
 ### Changed
 - Renamed `SimpleThread` → `LightThread` for naming consistency.
 - Renamed `SimpleConditionVariable` → `LightConditionVariable`.
 - `Dequeue<T>` is now auto‑growable and includes new utility functions.
+- `Map` addes more functions: TryGet, GetOrDefault , add Erase anbd Remove functions
 
+!! Remove issus 
 
-Improved internal consistency across all concurrency primitives and clarified usage guidelines in XML comments.
 ---
 ## [0.59.164] 21.07.2026 -> Lacking
 ### Remove

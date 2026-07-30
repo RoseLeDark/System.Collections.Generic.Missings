@@ -15,7 +15,9 @@
  * changes and the date.
  */
 using System.Collections;
-using System.Numerics;
+using SystemEx.Collections;
+using SystemEx.Collections.Generic;
+
 
 namespace SystemEx.Base {
     /// <summary>
@@ -23,156 +25,186 @@ namespace SystemEx.Base {
     /// The stepper moves from Start to End in fixed increments and exposes
     /// forward/backward stepping, reset, and enumeration.
     /// </summary>
-    /// <typeparam name="T">Numeric type implementing <see cref="INumber{T}"/>.</typeparam>
-    public class NumberRangeStepper<T> : IEnumerable<T>, IEquatable<NumberRangeStepper<T>> where T : INumber<T> {
+    public struct NumberRangeStepper : IRange<long>, IEquatable<NumberRangeStepper>, IEnumerable<long> {
 
-        /// <summary>Fixed step size applied during iteration.</summary>
-        private T m_step;
+        /// <summary>From value of the range.</summary>
+        public long From { get; set; }
+        /// <summary>End value of the range.</summary>
+        public long To { get; set; }
 
-        /// <summary>Current working range, always normalized (Start ≤ End).</summary>
-        private NumberRange<T> m_current;
+        public long Step { get; set; }
 
-        /// <summary>Original start value used for reset and backward stepping.</summary>
-        private T m_startOld;
-
+        private Vector<long> m_range;
         /// <summary>
-        /// Initializes a new stepper for the specified range using the given step size.
-        /// The input range is normalized to ensure monotonic forward stepping.
+        /// Creates a new numeric range trom T.Zero to T.One
         /// </summary>
-        /// <param name="orig">Original range to iterate over.</param>
-        /// <param name="step">Step size applied to the cursor.</param>
-        public NumberRangeStepper(NumberRange<T> orig, T step) {
-            m_step = step;
-            m_current = orig.Normalize();
-            m_startOld = m_current.From;
+        public NumberRangeStepper () {
+            this.From = 0;
+            this.To = 1;
+            this.Step = 1;
         }
-
         /// <summary>
-        /// Enumerates all values from Start to End using the configured step size.
+        /// Creates a new numeric range with the specified start and end values.
         /// </summary>
-        /// <returns>Sequence of stepped values.</returns>
-        public IEnumerator<T> GetEnumerator() {
-            for ( T i = m_current.From; i <= m_current.To; i += m_step ) {
-                yield return i;
+        /// <param name="start">From value.</param>
+        /// <param name="end">To value.</param>
+        /// <param name="step">The next step</param>
+        public NumberRangeStepper ( long start, long end, long step = 1 ) {
+            this.From = start;
+            this.To = end;
+            Step = step;
+
+            m_range = new Vector<long>(2);
+
+            for ( long i = 0 ; i <= end ; i += step ) {
+                m_range.PushBack(i);
             }
         }
-        IEnumerator IEnumerable.GetEnumerator() 
-            => GetEnumerator();
-
         /// <summary>
-        /// Advances the cursor by one step. If no further step is possible,
-        /// the cursor is clamped to the End value.
+        /// Gets the length of the range (To - From).
         /// </summary>
-        /// <returns>The updated cursor position.</returns>
-        public T Next() {
-            if( HasNext() ) m_current.From += m_step;
-            else m_current.From = m_current.To;
-
-            return m_current.From;
-        }
+        public long Length => this.To - From;
         /// <summary>
-        /// Advances the cursor by a dynamic step value. If the next position
-        /// exceeds the range, the cursor is clamped to the End value.
+        /// Indicates whether the range is valid (From ≤ To).
         /// </summary>
-        /// <param name="step">Dynamic step size to apply.</param>
-        /// <returns>The updated cursor position.</returns>
-        public T Next(T step) {
-            if ( HasNext(step) ) m_current.From += step;
-            else m_current.From = m_current.To;
-
-            return m_current.From;
-        }
+        public bool IsValid => this.From <= this.To;
         /// <summary>
-        /// Moves the cursor backward by a dynamic step value. If the previous
-        /// position would fall below the original start value, the cursor is
-        /// clamped to the original Start.
+        /// Indicates whether the range represents a single value (From == To).
         /// </summary>
-        /// <param name="step">Dynamic step size to apply.</param>
-        /// <returns>The updated cursor position.</returns>
-        public T Prev(T step) {
-            if ( HasPrev(step) ) m_current.From -= step;
-            else m_current.From = m_startOld;
-            return m_current.From;
-        }
-
+        public bool IsSame => this.From == this.To;
         /// <summary>
-        /// Moves the cursor one step backward. If no backward step is possible,
-        /// the cursor is clamped to the original start value.
+        /// Returns an iterator positioned at the start of the range.
         /// </summary>
-        /// <returns>The updated cursor position.</returns>
-        public T Prev() {
-            if ( HasPrev() ) m_current.From -= m_step;
-            else m_current.From = m_startOld;
-            return m_current.From;
-        }
-
+        public NumberRangeIterator<long> Begin => new NumberRangeIterator<long>(m_range, 0);
         /// <summary>
-        /// Resets the cursor to the original start value.
+        /// Returns an iterator positioned past the end of the range.
         /// </summary>
-        /// <returns>The reset cursor position.</returns>
-        public T Reset() {
-            m_current.From = m_startOld;
-            return m_current.From;
-        }
+        public NumberRangeIterator<long> End => new NumberRangeIterator<long>(m_range, m_range.Length - 1);
 
-        /// <summary>
-        /// Determines whether a forward step remains within the range.
-        /// </summary>
-        public bool HasNext() => 
-            ( (m_current.From + m_step) < m_current.To ) ;
-
-        /// <summary>
-        /// Determines whether a backward step remains within the range.
-        /// </summary>
-        public bool HasPrev() => 
-            ((m_current.From - m_step) >= m_startOld);
-
-        /// <summary>
-        /// Determines whether a forward step of the given size remains within the range.
-        /// </summary>
-        /// <param name="step">Dynamic step size to test.</param>
-        /// <returns>
-        /// True if <c>Start + step</c> is still strictly below <c>End</c>;
-        /// otherwise false.
-        /// </returns>
-        public bool HasNext(T step)
-            => (m_current.From + step) < m_current.To;
-
-        /// <summary>
-        /// Determines whether a backward step of the given size remains within the range.
-        /// </summary>
-        /// <param name="step">Dynamic step size to test.</param>
-        /// <returns>
-        /// True if <c>Start - step</c> is still greater than or equal to the
-        /// original start value; otherwise false.
-        /// </returns>
-        public bool HasPrev(T step)
-            => (m_current.From - step) >= m_startOld;
-
-
-        /// <summary>
-        /// Checks equality based on range and step size.
-        /// The original start value is derived from the normalized range and
-        /// therefore does not need to be compared explicitly.
-        /// </summary>
-        /// <param name="other">Stepper to compare with.</param>
-        /// <returns>True if both steppers are equivalent.</returns>
-        public bool Equals( NumberRangeStepper<T>? other) {
-            if ( other == null ) return false;
-
-            return m_current.Equals(other.m_current) && 
-                   m_step.Equals(other.m_step)    ;
-        }
         /// <inheritdoc/>
-        public override bool Equals(object? obj) {
-            return Equals(obj as NumberRangeStepper<T>);
+        public override int GetHashCode () =>
+            HashCode.Combine(this.From, this.To);
+
+        /// <summary>
+        /// Determines whether the specified value lies within the range.
+        /// Works for both ascending and descending ranges.
+        /// </summary>
+        /// <param name="x">Value to test.</param>
+        /// <returns>True if the value is inside the range.</returns>
+        public bool Contains ( long x ) => (x - this.To) * (x - this.From) <= 0;
+
+        /// <summary>
+        /// Returns a normalized version of the range where From ≤ To.
+        /// </summary>
+        /// <returns>A normalized range.</returns>
+        public NumberRangeStepper Normalize () =>
+            (this.From <= this.To) ? this : new NumberRangeStepper(this.To, this.From, this.Step);
+
+        
+
+        /// <summary>
+        /// Creates a new range using optional override values for start and end.
+        /// </summary>
+        /// <param name="tstart">Optional new start value.</param>
+        /// <param name="tend">Optional new end value.</param>
+        /// <returns>A new range with substituted boundaries.</returns>
+        public IRange<long> GetRange ( long tstart, long tend ) {
+            return new NumberRangeStepper(tstart, tend, this.Step);
         }
 
         /// <summary>
-        /// Computes a hash code based on the range and step size.
+        /// Enumerates all values from From to To in increments of 1.
         /// </summary>
-        public override int GetHashCode() {
-            return HashCode.Combine(m_current, m_current, m_step);
+        /// <returns>Sequence of values in the range.</returns>
+        public IEnumerator<long> GetEnumerator () {
+            return m_range.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Determines whether this range overlaps with another range.
+        /// </summary>
+        /// <param name="other">Range to test.</param>
+        /// <returns>True if the ranges overlap.</returns>
+        public bool Overlaps ( IRange<long> other ) {
+            bool result = false;
+
+            if ( IsValid && other.IsValid )
+                result = !(other.To < From || other.From > this.To);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Computes the intersection of this range with another range.
+        /// </summary>
+        /// <param name="other">Range to intersect with.</param>
+        /// <returns>
+        /// A new range representing the intersection, or null if no overlap exists.
+        /// </returns>
+        public IRange<long>? Intersect ( IRange<long> other ) {
+            NumberRangeStepper? _ret = null;
+
+            if ( Overlaps(other) ) {
+                _ret = new NumberRangeStepper(long.Max(this.From, other.From),
+                                              long.Min(this.To, other.To), this.Step );
+            }
+
+            return _ret;
+        }
+
+        /// <summary>
+        /// Determines whether this range touches another range at exactly one boundary.
+        /// </summary>
+        /// <param name="other">Range to test.</param>
+        /// <returns>True if the ranges are adjacent.</returns>
+        public bool IsAdjacent ( IRange<long> other ) {
+            bool result = false;
+
+            if ( IsValid && other.IsValid )
+                result =
+                    this.To == other.From ||
+                    other.To == this.From;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Computes the union of this range with another range if they overlap
+        /// or are adjacent. Otherwise returns null.
+        /// </summary>
+        /// <param name="other">Range to merge with.</param>
+        /// <returns>The merged range, or null if no merge is possible.</returns>
+        public IRange<long>? Union ( IRange<long> other ) {
+            IRange<long>? result = null;
+
+            if ( Overlaps(other) || IsAdjacent(other) ) {
+                long start = long.Min(this.From, other.From);
+                long end   = long.Max(this.To, other.To);
+                result = new NumberRangeStepper(start, end, this.Step);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a string representation of the range.
+        /// </summary>
+        public override string ToString () {
+            return (IsValid) ?
+                string.Create(null, stackalloc char[256], $"Range: [{this.From} ... $[{this.To}]") :
+                string.Create(null, stackalloc char[256], $"Not Valid Range: [{this.From} ... $[{this.To}]");
+        }
+
+        public bool Equals ( NumberRangeStepper other ) {
+            return (m_range.Equals(other));
+        }
+
+        IEnumerator<long> IEnumerable<long>.GetEnumerator () {
+            return m_range.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator () {
+            return GetEnumerator();
         }
     }
 }

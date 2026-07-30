@@ -62,7 +62,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Returns the current element of the underlying container.
         /// </summary>
-        public T Current => m_pKeys.Current;
+        public T? Current => m_pKeys.Current.Value;
 
         /// <summary>
         /// Returns the number of elements stored in the container.
@@ -97,8 +97,8 @@ namespace SystemEx.Collections.Generic {
                 // copy extracted elements
                 for ( long i = 0 ; i < extractCount ; i++ ) {
                     var itm = m_pKeys.ElementAt(index + i);
-                    if ( itm != null ) {
-                        _ret[i] = itm;
+                    if ( itm.IsSome ) {
+                        _ret[i] = itm.Value!;
                     }
                 }
 
@@ -270,12 +270,12 @@ namespace SystemEx.Collections.Generic {
             long count = source.m_pKeys.Count;
 
             for ( long i = 0 ; i < count ; i++ ) {
-                T? value = source.m_pKeys.ElementAt(i);
-                if ( value == null )
+                Optional<T> value = source.m_pKeys.ElementAt(i);
+                if ( value.IsNull)
                     continue;
 
                 // check if this set already contains the value
-                long idx = m_finder.First(value);
+                long idx = m_finder.First(value.Value!);
 
                 if ( idx == -1 ) {
                     // extract from source
@@ -313,7 +313,7 @@ namespace SystemEx.Collections.Generic {
                     var a_key = m_pKeys.ElementAt(i);
                     var b_key = other.m_pKeys.ElementAt(i);
 
-                    if ( !EqualsKey(a_key, b_key) ) {
+                    if ( !EqualsKey(a_key.Value, b_key.Value) ) {
                         _ret = false;
                         break;
                     }

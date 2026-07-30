@@ -16,16 +16,17 @@ namespace SystemEx {
             m_then = thenDelegate;
             m_else = elseDelegate;
         }
+        public void Subscribe ( Action<IDelegate<T>, T> func ) => Subscribe(func, AddToThen);
 
-        public void AddFunc ( Action<IDelegate<T>, T> func ) => AddFunc(func, AddToThen);
+        public void UnSubscribe ( Action<IDelegate<T>, T> func ) => RemoveFunc(func);
 
-        public void AddThen ( Action<IDelegate<T>, T> func ) => AddFunc(func, true);
+        public void SubscribeTrue ( Action<IDelegate<T>, T> func ) => Subscribe(func, true);
 
-        public void AddElse ( Action<IDelegate<T>, T> func ) => AddFunc(func, false);
+        public void SubscribeElse ( Action<IDelegate<T>, T> func ) => Subscribe(func, false);
 
-        private void AddFunc ( Action<IDelegate<T>, T> func, bool then ) {
-            if ( then ) m_then.AddFunc(func);
-            else m_else.AddFunc(func);
+        private void Subscribe ( Action<IDelegate<T>, T> func, bool then ) {
+            if ( then ) m_then.Subscribe(func);
+            else m_else.Subscribe(func);
         }
 
         public void Invoke ( T arg ) {
@@ -36,13 +37,15 @@ namespace SystemEx {
         }
 
         public void RemoveFunc ( Action<IDelegate<T>, T> func ) {
-            m_then.RemoveFunc(func);
-            m_else.RemoveFunc(func);
+            m_then.UnSubscribe(func);
+            m_else.UnSubscribe(func);
         }
 
         public void Clear () {
             m_then.Clear();
             m_else.Clear();
         }
+
+        
     }
 }

@@ -60,11 +60,11 @@ namespace SystemEx.Algorithms {
             return _ret;
         }
         /// <inheritdoc />
-        public long Find ( ref TContainer container, Func<T?, CompareResult> func ) {
+        public long Find ( ref TContainer container, Func<Optional<T>, CompareResult> func ) {
             long _ret = 0;
 
             for ( var i = 0 ; i < container.Count ; i++ ) {
-                var item = container.ElementAt(i);
+                Optional<T> item = container.ElementAt(i);
 
                 if ( func(item) == CompareResult.Equal) {
                     _ret++;
@@ -74,14 +74,14 @@ namespace SystemEx.Algorithms {
         }
 
         /// <inheritdoc />
-        public Vector<Pair<long, T?>> Where ( ref TContainer container, Func<T?, CompareResult> func ) {
-            Vector<Pair<long, T?>> _elements = new Vector<Pair<long, T?>>();
+        public Vector<Pair<long, Optional<T>>> Where ( ref TContainer container, Func<Optional<T>, CompareResult> func ) {
+            Vector<Pair<long, Optional<T>>> _elements = new Vector<Pair<long, Optional<T>>>();
 
             for ( var i = 0 ; i < container.Count ; i++ ) {
-                T? item = container.ElementAt(i);
+                Optional<T> item = container.ElementAt(i);
 
                 if ( func(item) == CompareResult.Equal  ) {
-                    _elements.PushBack(new Pair<long, T?>(i, item));
+                    _elements.PushBack(new Pair<long, Optional<T>>(i, item));
                 }
             }
 

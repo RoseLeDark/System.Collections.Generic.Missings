@@ -16,7 +16,7 @@
  */
 
 using System.Collections;
-using System.Numerics;
+using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
 
 
@@ -27,33 +27,42 @@ namespace SystemEx {
     /// intersection, adjacency, union, and enumeration.
     /// </summary>
     /// <typeparam name="T">Numeric type implementing <see cref="INumber{T}"/>.</typeparam>
-    public class NumberRange<T> : IRange<T>, IEquatable<NumberRange<T>>, IEnumerable<T>
-        where T : INumber<T> {
+    public struct NumberRange : IRange<long>, IEquatable<NumberRange>, IEnumerable<long> {
         /// <summary>From value of the range.</summary>
-        public T From { get; set; }
+        public long From { get; set; }
         /// <summary>End value of the range.</summary>
-        public T To { get; set; }
+        public long To { get; set; }
 
+        public long Step { get; set; }
+
+        private Vector<long> m_range;
         /// <summary>
         /// Creates a new numeric range trom T.Zero to T.One
         /// </summary>
         public NumberRange () {
-            this.From = T.Zero;
-            this.To = T.One;
+            this.From = 0;
+            this.To = 1;
         }
         /// <summary>
         /// Creates a new numeric range with the specified start and end values.
         /// </summary>
         /// <param name="start">From value.</param>
         /// <param name="end">To value.</param>
-        public NumberRange (T start, T end) {
+        /// <param name="step">The next step</param>
+        public NumberRange (long start, long end, long step = 1) {
             this.From = start;
             this.To = end;
+
+            m_range = new Vector<long>(2);
+
+            for(long i = 0 ; i <= end; i ++  ) {
+                m_range.PushBack(i);
+            }
         }
         /// <summary>
         /// Gets the length of the range (To - From).
         /// </summary>
-        public T Length => this.To - From;
+        public long Length => this.To - From;
         /// <summary>
         /// Indicates whether the range is valid (From ≤ To).
         /// </summary>
@@ -65,29 +74,15 @@ namespace SystemEx {
         /// <summary>
         /// Returns an iterator positioned at the start of the range.
         /// </summary>
-        public IForwardIterator<T> Begin => new NumberRangeIterator<T>(this.From, this.To);
+        public NumberRangeIterator<long> Begin => new NumberRangeIterator<long>(m_range, 0);
         /// <summary>
         /// Returns an iterator positioned past the end of the range.
         /// </summary>
-        public IForwardIterator<T> End => new NumberRangeIterator<T>(this.To + T.One, this.To);
+        public NumberRangeIterator<long> End => new NumberRangeIterator<long>(m_range, m_range.Length - 1);
 
         /// <inheritdoc/>
         public override int GetHashCode() => 
             HashCode.Combine(this.From, this.To);
-
-        /// <inheritdoc/>
-        public override bool Equals(object? obj) =>
-            Equals(obj as NumberRange<T>);
-
-        /// <summary>
-        /// Determines equality based on start and end values.
-        /// </summary>
-        /// <param name="other">Range to compare with.</param>
-        /// <returns>True if both ranges are equal.</returns>
-        public bool Equals(NumberRange<T>? other) =>
-            other is not null &&
-            From.Equals(other.From) &&
-            this.To.Equals(other.To);
 
         /// <summary>
         /// Determines whether the specified value lies within the range.
@@ -95,14 +90,14 @@ namespace SystemEx {
         /// </summary>
         /// <param name="x">Value to test.</param>
         /// <returns>True if the value is inside the range.</returns>
-        public bool Contains(T x) => (x - this.To) * (x - this.From) <= T.Zero;
+        public bool Contains(long x) => (x - this.To) * (x - this.From) <= 0;
 
         /// <summary>
         /// Returns a normalized version of the range where From ≤ To.
         /// </summary>
         /// <returns>A normalized range.</returns>
-        public NumberRange<T> Normalize() =>
-            (this.From <= this.To) ? this : new NumberRange<T>(this.To, this.From);
+        public NumberRange Normalize() =>
+            (this.From <= this.To) ? this : new NumberRange(this.To, this.From, this.Step);
 
         /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator() => 
@@ -114,17 +109,16 @@ namespace SystemEx {
         /// <param name="tstart">Optional new start value.</param>
         /// <param name="tend">Optional new end value.</param>
         /// <returns>A new range with substituted boundaries.</returns>
-        public IRange<T> GetRange(T? tstart, T? tend) {
-            return new NumberRange<T>((tstart != null) ? tstart : this.From,
-                                      (tend != null) ? tend : this.To);
+        public IRange<long> GetRange( long tstart, long tend) {
+            return new NumberRange(tstart, tend);
         }
 
         /// <summary>
         /// Enumerates all values from From to To in increments of 1.
         /// </summary>
         /// <returns>Sequence of values in the range.</returns>
-        public IEnumerator<T> GetEnumerator() {
-            for ( T i = From; i <= this.To; i += T.One )
+        public IEnumerator GetEnumerator() {
+            for ( long i = From; i <= this.To; i += 1 )
                 yield return i;
         }
 
@@ -133,7 +127,7 @@ namespace SystemEx {
         /// </summary>
         /// <param name="other">Range to test.</param>
         /// <returns>True if the ranges overlap.</returns>
-        public bool Overlaps(IRange<T> other) {
+        public bool Overlaps(IRange<long> other) {
             bool result = false;
 
             if ( IsValid && other.IsValid )
@@ -149,12 +143,12 @@ namespace SystemEx {
         /// <returns>
         /// A new range representing the intersection, or null if no overlap exists.
         /// </returns>
-        public IRange<T>? Intersect(IRange<T> other) {
-            NumberRange<T>? _ret = null;
+        public IRange<long>? Intersect(IRange<long> other) {
+            NumberRange? _ret = null;
 
             if ( Overlaps(other) ) {
-                _ret = new NumberRange<T>(T.Max(this.From, other.From),
-                                          T.Min(this.To, other.To));
+                _ret = new NumberRange(long.Max(this.From, other.From),
+                                          long.Min(this.To, other.To));
             }
 
             return _ret;
@@ -165,7 +159,7 @@ namespace SystemEx {
         /// </summary>
         /// <param name="other">Range to test.</param>
         /// <returns>True if the ranges are adjacent.</returns>
-        public bool IsAdjacent(IRange<T> other) {
+        public bool IsAdjacent(IRange<long> other) {
             bool result = false;
 
             if ( IsValid && other.IsValid )
@@ -182,13 +176,13 @@ namespace SystemEx {
         /// </summary>
         /// <param name="other">Range to merge with.</param>
         /// <returns>The merged range, or null if no merge is possible.</returns>
-        public IRange<T>? Union( IRange<T> other) {
-            IRange<T>? result = null;
+        public IRange<long>? Union( IRange<long> other) {
+            IRange<long>? result = null;
 
             if ( Overlaps(other) || IsAdjacent(other) ) {
-                T start = T.Min(this.From, other.From);
-                T end   = T.Max(this.To, other.To);
-                result = new NumberRange<T>(start, end);
+                long start = long.Min(this.From, other.From);
+                long end   = long.Max(this.To, other.To);
+                result = new NumberRange(start, end);
             }
 
             return result;
@@ -201,6 +195,14 @@ namespace SystemEx {
             return (IsValid) ?
                 string.Create(null, stackalloc char[256], $"Range: [{this.From} ... $[{this.To}]") :
                 string.Create(null, stackalloc char[256], $"Not Valid Range: [{this.From} ... $[{this.To}]");
+        }
+
+        public bool Equals ( NumberRange other ) {
+            return (m_range.Equals(other));
+        }
+
+        IEnumerator<long> IEnumerable<long>.GetEnumerator () {
+            return m_range.GetEnumerator();
         }
     }
 }

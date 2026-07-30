@@ -15,7 +15,7 @@
  * changes and the date.
  */
 
-using SystemEx.Collections.Generic.Interfaces;
+using SystemEx.Collections.Generic;
 
 namespace SystemEx {
     /// \addtogroup STL
@@ -26,17 +26,17 @@ namespace SystemEx {
     /// adjacency detection, and intersection logic.
     /// </summary>
     /// <typeparam name="T">Numeric type used for the range boundaries.</typeparam>
-    public interface IRange<T> {
+    public interface IRange<T>  {
         /// <summary>
         /// Returns an iterator positioned at the start of the range.
         /// </summary>
         /// 
-        public IForwardIterator<T> Begin { get; }
+        public NumberRangeIterator<T> Begin { get; }
         /// <summary>
         /// Returns an iterator positioned past the end of the range.
         /// </summary>
         /// 
-        public IForwardIterator<T> End { get;  }
+        public NumberRangeIterator<T> End { get;  }
         /// <summary>
         /// Gets or sets the start value of the range.
         /// </summary>

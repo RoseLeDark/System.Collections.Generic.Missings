@@ -63,7 +63,7 @@ namespace SystemEx.Collections.Generic {
         /// but not including, <c>end</c>.
         /// </summary>
         public IEnumerator<T> GetEnumerator() {
-            var it = m_begin.Clone() as NodeIterrator<T>;
+            var it = m_begin as NodeIterrator<T>;
             if ( it == null )
                 throw new NotSupportedException();
 

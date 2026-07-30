@@ -17,7 +17,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using SystemEx.Algorithms.Interfaces;
-using SystemEx.Algorythmen;
+using SystemEx.Algorithms;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
@@ -37,7 +37,7 @@ namespace SystemEx.Collections.Generic {
     /// Must implement IContainerEx for the same element type.
     /// </typeparam>
     public ref struct VectorMultiSet<T, TContainer> : IEquatable<VectorMultiSet<T, TContainer>>
-        where TContainer : IVector<T>
+        where TContainer : IVector<T>, ISwappable<long>
          {
 
         private ref TContainer m_pKeys;
@@ -123,8 +123,11 @@ namespace SystemEx.Collections.Generic {
                 // copy extracted elements
                 for ( long i = 0 ; i < extractCount ; i++ ) {
                     var itm = m_pKeys.ElementAt(index + i);
+
+                    if(itm.IsSome)
                      {
-                        _ret[i] = itm!;
+
+                        _ret[i] = itm.Value!;
                     }
                 }
 
@@ -215,7 +218,7 @@ namespace SystemEx.Collections.Generic {
                     var prev = m_pKeys.ElementAt(i - 1); // T?
                     var curr = m_pKeys.ElementAt(i);     // T?
 
-                    if ( prev != null || curr != null ) {
+                    if ( prev.IsSome || curr.IsSome  ) {
                         _ret = false;
                         break;
                     }
@@ -292,15 +295,15 @@ namespace SystemEx.Collections.Generic {
 
             while ( lo < hi ) {
                 long mid = (lo + hi) >> 1;
-                T? val = m_pKeys.ElementAt(mid);
+                Optional<T> val = m_pKeys.ElementAt(mid);
 
-                if ( val == null ) {
+                if ( val.IsNull) {
                     lo = mid + 1;
                     continue;
                 }
 
                 // val < key → move right
-                if ( !m_compare.Compare(val, key) ) {
+                if ( !m_compare.Compare(val.Value!, key) ) {
                     lo = mid + 1;
                 } else {
                     _ret = mid;

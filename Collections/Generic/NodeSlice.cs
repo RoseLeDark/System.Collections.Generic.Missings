@@ -63,9 +63,9 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public NodeIterrator<T>? End {
             get {
-                var it = m_Begin.Clone() as NodeIterrator<T>;
+                var it = m_Begin as NodeIterrator<T>;
                 if ( it != null ) {
-                    it.Advance(m_Length);
+                   
                 }
                 return it;
             }
@@ -76,7 +76,7 @@ namespace SystemEx.Collections.Generic {
         /// <c>begin</c> up to <c>begin + length</c>.
         /// </summary>
         public IEnumerator<T> GetEnumerator() {
-            NodeIterrator<T> it = (NodeIterrator<T>)m_Begin.Clone();
+            NodeIterrator<T> it = (NodeIterrator<T>)m_Begin;
             int count = 0;
 
             while ( count < m_Length ) {

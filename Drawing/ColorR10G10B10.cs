@@ -25,7 +25,8 @@ namespace SystemEx.Drawing {
     ///  <summary>
     /// A Scbema is used to serialize and deserialize a ColorR10G10B10A2 color to and from a binary representation.
     /// </summary>
-    public class ColorR10G10B10FormatSchema : IByteFormatSchema {
+    public struct ColorR10G10B10FormatSchema : IByteFormatSchema {
+
         /// <summary>
         /// The total number of bytes required to represent a ColorR10G10B10A2 color in its packed binary form.
         /// </summary>
@@ -44,6 +45,7 @@ namespace SystemEx.Drawing {
         /// there is only one field named "DEFAULT" at offset 0.
         /// </summary>
         public Map<string, long> Offsets { get; private set; }
+
 
         /// <summary>
         /// Initializes a new instance of the ColorR10G10B10FormatSchema class with the specified endianness.

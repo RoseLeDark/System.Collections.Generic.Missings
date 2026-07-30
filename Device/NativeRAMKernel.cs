@@ -120,8 +120,8 @@ namespace SystemEx.Device {
             int _ret = -1;
 
             if ( OnAddBuffer(name, x) ) {
-                m_buffers.Add(name, x);
-                _ret = m_buffers.Count;
+                m_buffers.PushBack(name, x);
+                _ret = m_buffers.Count();
             }
             return _ret;
         }
@@ -129,7 +129,10 @@ namespace SystemEx.Device {
         /// Retrieves a shared buffer by its symbolic name.
         /// </summary>
         public DeviceSharedBuffer<RamSharedBackend>? GetBuffer ( string name ) {
-            return m_buffers.Get(name);
+
+            Optional<DeviceSharedBuffer<RamSharedBackend>> _ret =  m_buffers.Get(name);
+
+            return _ret.IsNull ? null : _ret.Value!;
         }
 
         /// <summary>
@@ -264,8 +267,9 @@ namespace SystemEx.Device {
 
             try {
                 for(; _i < m_buffers.Count ; _i ++) {
-    
-                    if ( m_buffers[_i].Second.Begin() == false ) {
+                    var opt = m_buffers.ElementAt(_i);
+                
+                    if ( opt.Second.Begin() == false ) {
                         _ret = false;
                         break;
                     }
@@ -283,11 +287,11 @@ namespace SystemEx.Device {
         /// Used to revert partial locking operations when an error occurs.
         /// </summary>
         private void UnLoockedAllBuffer(int k = 0) {
-            int count = (k != 0) ? k : m_buffers.Count;
+            long count = (k != 0) ? k : m_buffers.Length;
 
-            for(int i = count ; i >= 0 ; i-- ) {
-                if( m_buffers[i].Second.IsLocked)
-                    m_buffers[i].Second.End();
+            for(long i = count ; i >= 0 ; i-- ) {
+                if( m_buffers.ElementAt(i).Second.IsLocked)
+                    m_buffers.ElementAt(i).Second.End();
             }
             
         }

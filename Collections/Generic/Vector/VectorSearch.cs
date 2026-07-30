@@ -89,11 +89,11 @@ namespace SystemEx.Collections.Generic {
         /// The index of the first element for which the predicate indicates
         /// a match, or -1 if no element satisfies the condition.
         /// </returns>
-        public long FindEx(Func<T?, CompareResult> func ) {
+        public long FindEx(Func< Optional<T>, CompareResult> func ) {
             return m_provider.Find(ref m_container, func);
         }
 
-        public Vector<Pair<long, T>> Where (Func<T?, CompareResult> func ) {
+        public Vector<Pair<long, Optional<T> >> Where ( Func<Optional<T>, CompareResult> func ) {
             return m_provider.Where(ref m_container, func);
         }
 

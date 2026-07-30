@@ -51,7 +51,7 @@ namespace SystemEx.Collections.Generic {
     /// and cloning of iterator state.
     /// </summary>
     /// <typeparam name="T">The value type stored in each node.</typeparam>
-    public class NodeIterrator<T> : IRandomAccessIterator<T>, IForeachIterator<T>, IEnumerable<T>, IEnumerator<T> {
+    public class NodeIterrator<T> : IEnumerable<T>, IEnumerator<T> {
         /// <summary>
         /// The node currently referenced by the iterator.
         /// </summary>
@@ -74,12 +74,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public bool IsBegin => !m_pCurrent.HasPrev;
 
-        /// <summary>
-        /// Creates a clone of this iterator referencing the same logical position.
-        /// </summary>
-        public IIterator<T> Clone() {
-            return new NodeIterrator<T>(m_pCurrent);
-        }
+ 
         /// <summary>
         /// Moves the iterator one step forward.
         /// </summary>
@@ -132,18 +127,7 @@ namespace SystemEx.Collections.Generic {
         public void Dispose() {
             GC.SuppressFinalize(this);
         }
-        /// <summary>
-        /// Advances the iterator by the specified offset.
-        /// </summary>
-        /// <param name="offset">Positive or negative offset.</param>
-        /// <returns>The iterator itself.</returns>
-        public IRandomAccessIterator<T> Advance( long offset ) {
-            long r = 0;
-            m_pCurrent = m_pCurrent.GetAt(offset, out r);
-            AdvanceRest = r;
 
-            return this;
-        }
         /// <summary>
         /// Creates a new iterator starting at the specified node.
         /// </summary>
@@ -706,9 +690,9 @@ namespace SystemEx.Collections.Generic {
         /// <param name="start"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public NodeSlice<T> Slice(int start, int length) {
-            return new NodeSlice<T>((NodeIterrator<T>)First.Advance(start), length);
-        }
+        //public NodeSlice<T> Slice(int start, int length) {
+          //  return new NodeSlice<T>((NodeIterrator<T>)First.Advance(start), length);
+        //}
         /// <summary>
         /// 
         /// </summary>

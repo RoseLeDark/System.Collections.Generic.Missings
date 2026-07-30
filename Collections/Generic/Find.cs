@@ -75,7 +75,7 @@ namespace SystemEx.Collections.Generic {
             for ( long i = 0 ; i < m_container.Count ; i++ ) {
                 var item =  m_container.ElementAt(i);
 
-                if ( item != null && item.Equals(value) ) {
+                if ( item.IsSome && item.Value!.Equals(value) ) {
                     _ret = i;
                     break;
                 }
@@ -94,7 +94,7 @@ namespace SystemEx.Collections.Generic {
             for ( long i = 0 ; i < m_container.Count ; i++ ) {
                 var item = m_container.ElementAt(i);
 
-                if ( item != null && pred(item) ) {
+                if ( item.IsSome && pred(item.Value!) ) {
                     _ret = i;
                     break;
                 }
@@ -112,7 +112,7 @@ namespace SystemEx.Collections.Generic {
             for ( long i = m_container.Count - 1 ; i >= 0 ; i-- ) {
                 var item =  m_container.ElementAt(i);
 
-                if ( item != null && item.Equals(value) ) {
+                if ( item.IsSome && item.Value!.Equals(value) ) {
                     _ret = i;
                     break;
                 }
@@ -131,7 +131,7 @@ namespace SystemEx.Collections.Generic {
             for ( long i = m_container.Count - 1 ; i >= 0 ; i-- ) {
                 var item = m_container.ElementAt(i);
 
-                if ( item != null && pred(item) ) {
+                if ( item.IsSome && pred(item.Value!) ) {
                     _ret = i;
                     break;
                 }
@@ -148,7 +148,7 @@ namespace SystemEx.Collections.Generic {
             for ( long i = 0 ; i < m_container.Count ; i++ ) {
                 var item =  m_container.ElementAt(i);
 
-                if ( item != null && item.Equals(value) ) {
+                if ( item.IsSome && item.Value!.Equals(value) ) {
                     _ret++;
                 }
             }
@@ -164,7 +164,7 @@ namespace SystemEx.Collections.Generic {
             for ( long i = 0 ; i < m_container.Count ; i++ ) {
                 var item =  m_container.ElementAt(i);
 
-                if ( item != null && pred(item) ) {
+               if ( item.IsSome && pred(item.Value!) ) {
                     _ret++;
                 }
             }
@@ -180,7 +180,7 @@ namespace SystemEx.Collections.Generic {
             for ( int i = 0 ; i < m_container.Count ; i++ ) {
                 var item = m_container.ElementAt(i);
 
-                if ( item != null && item.Equals(value) ) {
+                if ( item.IsSome && item.Value!.Equals(value) ) {
                     _ret = true;
                     break;
                 }
@@ -196,7 +196,7 @@ namespace SystemEx.Collections.Generic {
             for ( int i = 0 ; i < m_container.Count ; i++ ) {
                 var p = m_container.ElementAt(i);
 
-                if ( p != null && p.Equals(Key) ) {
+                if ( p.IsSome && p.Value!.Equals(Key) ) {
                     index = i;
                     return true;
                 }
@@ -228,16 +228,16 @@ namespace SystemEx.Collections.Generic {
 
             while ( lo < hi ) {
                 long mid = (lo + hi) >> 1;
-                T? val = m_container.ElementAt(mid);
+                Optional<T> val = m_container.ElementAt(mid);
 
-                if ( val == null ) {
+                if ( val.IsNull) {
                     lo = mid + 1;
                     continue;
                 }
 
                 
                 // val < key → move right
-                if ( cmp.Compare(val, key)  ) {
+                if ( cmp.Compare(val.Value!, key)  ) {
                     lo = mid + 1;
                 } else {
                     _ret = mid;
@@ -272,15 +272,15 @@ namespace SystemEx.Collections.Generic {
 
             while ( lo < hi ) {
                 long mid = (lo + hi) >> 1;
-                T? val = m_container.ElementAt(mid);
+                Optional<T> val = m_container.ElementAt(mid);
 
-                if ( val == null ) {
+                if ( val.IsNull ) {
                     lo = mid + 1;
                     continue;
                 }
                 
                 // val <= key → move right
-                if ( cmp.Compare(val, key)  ) {
+                if ( cmp.Compare(val.Value!, key)  ) {
                     lo = mid + 1;
                 } else {
                     _ret = mid;

@@ -112,10 +112,10 @@ namespace SystemEx.Threading {
 
             if ( m_waits.IsEmpty ) return;
 
-            LightThread? _th;
+            Optional<LightThread> _th;
 
             if ( m_waits.PopFront(out _th) ) {
-                if ( _th != null ) _th.Signal(false);
+                if ( _th.HasValue ) _th.Value!.Signal(false);
             }
 
 #if DEBUG
@@ -132,10 +132,10 @@ namespace SystemEx.Threading {
             m_lockable.Lock();
 
             while ( !m_waits.IsEmpty ) {
-                LightThread? _th;
+                Optional<LightThread> _th;
 
                 if ( m_waits.PopFront(out _th) ) {
-                    if ( _th != null ) _th.Signal(true);
+                    if ( _th.HasValue ) _th.Value!.Signal(false);
 #if DEBUG
                     if ( OnBroadcast != null ) OnBroadcast.Invoke(this, m_waits.Count);
 #endif

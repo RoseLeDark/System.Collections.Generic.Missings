@@ -48,7 +48,7 @@ namespace SystemEx.IO.Provider {
         /// Gets a read‑only mapping of field names to their byte offsets.
         /// Offsets are relative to the start of the packed structure.
         /// </summary>
-        IReadOnlyMap<string, long> Offsets { get; } 
+        Map<string, long> Offsets { get; } 
     }
 
     /// <summary>

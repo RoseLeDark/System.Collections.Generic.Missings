@@ -43,7 +43,7 @@ namespace SystemEx.Collections.Generic.Queue {
         /// <returns>
         /// <c>true</c> if an element was removed; otherwise <c>false</c>.
         /// </returns>
-        public bool PopFront ( ref Optional<T> value ) => m_queue.PopFront(ref value);
+        public bool PopFront ( out Optional<T> value ) => m_queue.PopFront(out value);
         /// <summary>
         /// Initializes a new instance of the <see cref="UniqueQueue{T}"/> struct.
         /// </summary>

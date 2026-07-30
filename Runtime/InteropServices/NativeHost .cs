@@ -54,9 +54,10 @@ namespace SystemEx.Runtime.InteropServices {
 
             if ( !m_loadedModule.ContainsKey(strPath) ) {
                 _ret =  Module.LoadModule(strPath);
-                if(_ret != null) m_loadedModule.Add(strPath, _ret);
+                if(_ret != null) m_loadedModule.PushBack(strPath, _ret);
             } else {
-                _ret = m_loadedModule[strPath];
+                var value =m_loadedModule[strPath];
+                _ret = value.IsNull ? null : value.Value!;
             }
 
             return _ret;
@@ -100,10 +101,10 @@ namespace SystemEx.Runtime.InteropServices {
         /// A managed delegate bound to the native function, or <c>null</c> if the
         /// module or function cannot be resolved.
         /// </returns>
-        public static T? GetFunction<T> (string module, string func ) where T : Delegate {
-            Module? x = m_loadedModule.Get(module);
-            if(x != null) {
-                return GetFunction<T>(x, func);
+        public static T? GetFunction<T> ( string module, string func ) where T : Delegate {
+            Optional<Module> x = m_loadedModule[module];
+            if(x.IsSome) {
+                return GetFunction<T>(x.Value!, func);
             }
             return null;
 

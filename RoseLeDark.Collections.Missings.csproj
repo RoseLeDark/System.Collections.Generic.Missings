@@ -8,7 +8,7 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.59.164</AssemblyVersion>
+    <AssemblyVersion>0.70.658</AssemblyVersion>
     <FileVersion>0.59.164</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>RoseLeDark.Collections.Missings — Updated Description
@@ -23,7 +23,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.59.164</Version>
+    <Version>0.70.658</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -36,19 +36,38 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.59.164] 21.07.2026 -&gt; Lacking
-### Remove
-- 13.07.2026 Remove Array&lt;T&gt; old, FixedArray, SortedArray and Hashable 
+    <PackageReleaseNotes>## [0.70.658] 30.07.2026 -&gt; Lacking
+### Added
+- Added `SafeCounter` with operator suite (++, --, +, -, ==, !=) with full atomic semantics.
+- Added new Interrfaces `ISpinlock&lt;T&gt;`, `ILock&lt;T&gt;` and `ILock` : unified locking abstraction for atomic and OS‑level synchronization.
+- Added new Light atomic based Locks based on `ILock&lt;T&gt;` and SafeCounter: 
+  - `LightCountingSpinlock&lt;T&gt;`: atomic multi‑capacity spinlock with deterministic decrement/increment semantics.
+  - `LightMutex&lt;T&gt;` based on `LightCountingSpinlock&lt;T&gt;`: binary spinlock with strict owner‑tracking built on top of LightCountingSpinlock&lt;T&gt;.
+- Added `MutexLock` OS‑level blocking mutex wrapper; kernel‑managed, not interchangeable with atomic spinlock‑based locks.
+- Added `Spinlock` thin wrapper around System.Threading.SpinLock exposing a busy‑wait mutual exclusion primitive via  `ISpinlock&lt;T&gt;`.
+
+- Added new Iterrator System for IContainerEx System, the old in SystemEx.Collections.Generic.Interfaces are Obsolete and remove in version 1.0
+    -  Added a `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; Begin`, `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; End`, `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; ReverseBegin` and `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; ReverseEnd` to `Array&lt;T&gt;` and `Vector&lt;T&gt;` Objects 
+
+- Added to `SortActions ` helper: simple heap‑based min/max sort placing minimum at the start and maximum at the end.
+
+### Added – SystemEx.AI
+- Introduced the `SystemEx.AI` subsystem, providing a unified abstraction layer for AI model invocation within SystemEx.
+- Added `Model&lt;TPrompt, TResult&gt;` as the base contract for all AI models, defining prompt handling, backend routing, configuration management, and result processing.
+- Added `IModelBackend&lt;T&gt;` to standardize backend communication, including request construction, parameter merging, and transport‑agnostic execution.
+- Added `WebAIBackend&lt;T&gt;` implementing `IModelBackend&lt;T&gt;` for HTTP‑based AI endpoints (e.g., OpenAI‑compatible APIs). Supports configurable model selection, streaming, response formatting, and backend‑specific parameters.
+- Added `ModelPromp&lt;T&gt;` and `ModelResult&lt;T&gt;` to formalize prompt input and result output, including context propagation, metadata, and optional session identifiers.
+- Added `WebAIModel`, a lightweight front‑facing wrapper around `WebAIBackend&lt;T&gt;`, providing model switching, configuration helpers (temperature, top‑p, max‑tokens, response‑format), and simplified usage for applications.
+- The subsystem is backend‑agnostic and allows future integration of additional AI backends (local inference, custom gateways, etc.) without modifying model‑level code.
+- Added `Example/AI/` directory containing a minimal working example (`Main.cs`) and bilingual documentation (`README.en.md`, `README.de.md`) demonstrating how to integrate Microsoft AITools using the `SystemEx.AI` abstraction layer.
+
 ### Changed
-- 14.07.2026 Add to Vector&lt;T&gt; AsSet, AsMultiSet, AsUnorderedSet, AsUnorderedMultiSetSet, As AsFind and AsSearch as static functions, easer to use
-- 15.07.2026 Rename FastVector to Array and add AsSet, AsMultiSet, AsUnorderedSet, AsUnorderedMultiSetSet, As AsFind and AsSearch as static functions, easer to use
-- 21.07.2026 &lt;b&gt;FexedVector&lt;T&gt;&lt;/b&gt; renamed to &lt;b&gt;Array&lt;T&gt;&lt;/b&gt; and Update in all other objects
-- 
-## Added
-- 15.07.2026 Add Fast_Types (Fast_Interger, Fast_Short, Fast_Byte, Fast_Float) 
-- 21.07.2026 Add Seed Pipeline for SystemEx.Random System `ISeed`, `TimedBasedSeed`, `ValueBasedSeed` and SeedMixer for mixing multiple Seeds
-- 21.07.2026 Add Slices View with SubSlices for JobQueueue in the Future with Worker Threads
-- 21.07.2026 Add ` SubSlice` and `Slices` Provides a deterministic multi-thread slicing model over a container. A slice represents a continuous range of elements inside the container. Each slice can be exclusively owned by exactly one thread.
+- Renamed `SimpleThread` → `LightThread` for naming consistency.
+- Renamed `SimpleConditionVariable` → `LightConditionVariable`.
+- `Dequeue&lt;T&gt;` is now auto‑growable and includes new utility functions.
+- `Map` addes more functions: TryGet, GetOrDefault , add Erase anbd Remove functions
+
+!! Remove issus 
 </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
@@ -88,6 +107,9 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
 	</ItemGroup>
   <ItemGroup>
     <Compile Remove="Collections\Generic\BasicRope.cs" />
+    <Compile Remove="Examples\AI\Main.cs" />
+    <Compile Remove="Examples\AI\WinCopilotBackend.cs" />
+    <Compile Remove="Examples\AI\WinCopilotBackendFunctionFactory.cs" />
     <Compile Remove="Examples\ExampleAIWindowsBackend.cs" />
     <Compile Remove="Examples\VectorFind.cs" />
     <Compile Remove="Examples\VectorSet.cs" />
@@ -97,6 +119,12 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <None Update="CHANGELOG.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+    </None>
+    <None Update="Examples\AI\README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\AI\README_de.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Examples\ExampleHasher.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -134,15 +162,15 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
 
   <ItemGroup>
     <None Include="Collections\Generic\BasicRope.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Examples\AI\Main.cs">
+    <None Include="Examples\AI\Main.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Examples\AI\WinCopilotBackend.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
+    </None>
+    <None Include="Examples\AI\WinCopilotBackend.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\AI\WinCopilotBackendFunctionFactory.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

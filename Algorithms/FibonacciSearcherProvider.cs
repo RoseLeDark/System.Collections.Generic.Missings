@@ -17,6 +17,7 @@
 
 
 using System.Reflection;
+using System.Xml.Linq;
 using SystemEx.Algorithms.Interfaces;
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
@@ -107,9 +108,14 @@ namespace SystemEx.Algorithms {
                     }
                 }
 
+
                 // check the last element
-                if ( _fbNPrev == 1 && comp.Compare(value, container.ElementAt(_arCount - 1) ) == CompareResult.Equal ) {
-                    _ret++;
+                Optional<T> _it = container.ElementAt(_arCount - 1);
+
+                if ( _it.IsSome ) {
+                    if ( _fbNPrev == 1 && comp.Compare(value, _it) == CompareResult.Equal ) {
+                        _ret++;
+                    }
                 }
             }
             return _ret;
@@ -138,7 +144,7 @@ namespace SystemEx.Algorithms {
         /// The number of matches encountered during Fibonacci probing.  
         /// This value may be less than the actual number of matching elements.
         /// </returns>
-        public long Find ( ref TContainer container, Func<T?, CompareResult> func ) {
+        public long Find ( ref TContainer container, Func<Optional<T>, CompareResult> func ) {
             long _arCount= container.Count;
             long _ret = 0;
 
@@ -181,9 +187,15 @@ namespace SystemEx.Algorithms {
                 }
 
                 // check the last element
-                if ( _fbNPrev == 1 && func(container.ElementAt(_arCount - 1)) == CompareResult.Equal ) {
-                    _ret++;
+                Optional<T> _it = container.ElementAt(_arCount - 1);
+
+                if ( _it.IsSome ) {
+                    if ( _fbNPrev == 1 && func(_it) == CompareResult.Equal ) {
+                        _ret++;
+                    }
                 }
+
+               
             }
             return _ret;
         }
@@ -215,9 +227,9 @@ namespace SystemEx.Algorithms {
         /// for all elements encountered during Fibonacci probing that satisfy the
         /// predicate.
         /// </returns>
-        public Vector<Pair<long, T? >> Where ( ref TContainer container, Func<T?, CompareResult> func ) {
+        public Vector<Pair<long, Optional<T> >> Where ( ref TContainer container, Func<Optional<T>, CompareResult> func ) {
             long _arCount= container.Count;
-            Vector<Pair<long, T?>> _elements = new Vector<Pair<long, T?>>();
+            Vector<Pair<long, Optional<T> >> _elements = new Vector<Pair<long, Optional<T> >>();
 
 
             if ( _arCount > 0 ) {
@@ -255,15 +267,20 @@ namespace SystemEx.Algorithms {
                     _fbPrevB = _fbNum - _fbNPrev;
                     break;
                     default:
-                    _elements.PushBack(new Pair<long, T?>(_index, _item));  
+                    _elements.PushBack(new Pair<long, Optional<T> >(_index, _item));  
                     break;
                     }
                 }
 
                 // check the last element
-                if ( _fbNPrev == 1 && func(container.ElementAt(_arCount - 1)) == CompareResult.Equal ) {
+                Optional<T> _it = container.ElementAt(_arCount - 1);
 
-                    _elements.PushBack(new Pair<long, T?>(_arCount - 1, container.ElementAt(_arCount - 1) ));
+                if ( _it.IsSome ) {
+                    if ( _fbNPrev == 1 && func(_it) == CompareResult.Equal ) {
+
+
+                        _elements.PushBack(new Pair<long, Optional<T>>(_arCount - 1, _it.Value));
+                    }
                 }
             }
             return _elements;

@@ -14,7 +14,7 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using SystemEx.Algorythmen;
+using SystemEx.Algorithms;
 using SystemEx.Collections.Generic;
 using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
@@ -69,7 +69,7 @@ namespace SystemEx.Algorithms.Interfaces {
         /// The index of the first element for which the callback indicates a
         /// match, or -1 if no element satisfies the predicate.
         /// </returns>
-        long Find ( ref TContainer container, Func<T?, CompareResult> func );
+        long Find ( ref TContainer container, Func<Optional<T>, CompareResult> func );
 
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace SystemEx.Algorithms.Interfaces {
         /// </list>
         /// </returns>
 
-        Vector< Pair<long, T> > Where ( ref TContainer container, Func<T?, CompareResult> func );
+        Vector< Pair<long, Optional<T> > > Where ( ref TContainer container, Func<Optional<T>, CompareResult> func );
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

@@ -50,7 +50,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Number of direct children (outgoing edges) of this node.
         /// </summary>
-        public int Size { get; }
+        public long Size { get; }
         /// <summary>
         /// Mapping of child node to edge weight.
         /// </summary>
@@ -117,7 +117,7 @@ namespace SystemEx.Collections.Generic {
         public T Value => m_value;
 
         /// <summary>Gets the number of children.</summary>
-        public int Size => Child.Size;
+        public long Size => Child.Size;
 
         /// <summary>Gets the child map.</summary>
         public Map<ICluster<T>, uint> Child => m_childs;
@@ -129,14 +129,14 @@ namespace SystemEx.Collections.Generic {
         /// Indexer by integer index into the child map.
         /// </summary>
         public Pair<ICluster<T>, uint> this[int i] {
-            get => m_childs[i];
-            protected set => m_childs[i] = value;
+            get => m_childs.ElementAt(i);
+            protected set => m_childs.Replace(i, value);
         }
 
         /// <summary>
         /// Indexer by child node key to access the edge weight.
         /// </summary>
-        public uint this[ICluster<T> key] {
+        public Optional<uint> this[ICluster<T> key] {
             get => m_childs[key];
             protected set => m_childs[key] = value;
         }
@@ -156,7 +156,7 @@ namespace SystemEx.Collections.Generic {
         /// Add a child node with the specified weight.
         /// </summary>
         public bool Add(ICluster<T> other, uint gewicht) {
-            return m_childs.TryAdd(other, gewicht);
+            return m_childs.PushBack(other, gewicht);
         }
         /// <summary>
         /// Check whether the specified node is a direct child.
@@ -170,8 +170,8 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public bool Remove(ICluster<T> other) {
             bool _ret = false;
-            Pair<ICluster<T>, uint>? pair = m_childs.FindFirst(other);
-            if ( pair.HasValue ) _ret = m_childs.Remove(pair.Value);
+
+            m_childs.Remove(other);
             return _ret;
         }
 
@@ -193,43 +193,46 @@ namespace SystemEx.Collections.Generic {
             costs[this] = 0;
 
             while ( pq.Count > 0 ) {
-                var current = pq.Dequeue();
+                Optional<ICluster<T>> current = pq.Dequeue();
+                if ( current.IsNull ) continue;
 
                 // Skip if already visited
-                if ( finder.Exists(current) )
+                if ( finder.Exists(current.Value!) )
                     continue;
 
-                visited.PushBack(current);
-                ulong currentCost = costs[current];
+                visited.PushBack(current.Value!);
+                Optional<ulong> currentCost = costs[current.Value!];
 
                 // If current cost exceeds budget, abandon this path
-                if ( currentCost > budget )
+                if ( currentCost.Value! > budget )
                     continue;
 
                 // Found target?
                 if ( current.Value != null && current.Value.Equals(value) ) {
-                    cost = currentCost;
+                    cost = currentCost.Value!;
                     _ret = true;
                     break;
                 }
 
                 // Traverse children
-                for ( int i = 0; i < current.Child.Size; i++ ) {
-                    var childPair = current.Child[i]; // Pair<ICluster<T>, int>
+                for ( int i = 0; i < current.Value!.Child.Size; i++ ) {
+                    var childPair = current.Value!.Child.ElementAt(i); // Pair<ICluster<T>, int>
                     ICluster<T> childNode = childPair.First;
                     uint edgeCost = childPair.Second;
 
                     if ( finder.Exists(childNode) )
                         continue;
 
-                    ulong newCost = currentCost + (ulong)edgeCost;
+                    ulong newCost = currentCost.Value! + (ulong)edgeCost;
 
                     // Only continue if within budget
                     if ( newCost > budget )
                         continue;
 
                     // Found a better path?
-                    if ( !costs.ContainsKey(childNode) || newCost < costs[childNode] ) {
+                    var newC = costs[childNode];
+
+                    if ( !costs.ContainsKey(childNode) || newCost < newC.Value! ) {
                         costs[childNode] = newCost;
                         pq.Enqueue(childNode, newCost);
                     }
@@ -245,7 +248,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public bool find(T pradicat, SearchType type, ulong budget, ref Map<ICluster<T>, uint> steps) {
             // PriorityQueue: (cost, node)
-            var pq = new PriorityQueueEx<Triple<ICluster<T>, ulong, ulong>, ulong>();
+            var pq = new PriorityQueue<Triple<ICluster<T>, ulong, ulong>, ulong>();
             var visited = new Vector<ICluster<T>>(128, 16);
             var finder = Vector<ICluster<T>>.AsFinder(ref visited);
 
@@ -254,9 +257,11 @@ namespace SystemEx.Collections.Generic {
 
             while ( pq.Count > 0 ) {
                 var item = pq.Dequeue();
-                var current = item.First;
-                var energie = item.Second;
-                var cost = item.Third;
+                if ( item.IsNull ) continue;
+
+                ICluster<T> current = item.Value!.First;
+                ulong energie = item.Value!.Second;
+                ulong cost = item.Value!.Third;
 
                 if ( finder.Exists(current) )
                     continue;
@@ -272,7 +277,8 @@ namespace SystemEx.Collections.Generic {
 
                 // Kinder durchgehen
                 for ( int i = 0; i < current.Child.Size; i++ ) {
-                    var pair = current.Child[i];
+                    var pair = current.Child.ElementAt(i);
+
                     var child = pair.First;
                     ulong gewicht = pair.Second;
 

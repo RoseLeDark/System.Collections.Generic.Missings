@@ -39,7 +39,7 @@ namespace SystemEx.Algorithms {
         /// <param name="container">The container to sort.</param>
         /// <param name="cmp">Comparison strategy (e.g., Less).</param>
         public static void HeaptMaker<T, C> ( ref C container, ISimpleCompare<T> cmp  )
-            where C : IVector<T> {
+            where C : IVector<T>, ISwappable<long> {
 
             long n = container.Length;
             if ( n <= 1 ) return;
@@ -109,7 +109,7 @@ namespace SystemEx.Algorithms {
         /// Worst-case complexity: O(n²).
         /// </remarks>
         public static void BubbleSort<T, C> ( ref C container, ISimpleCompare<T> cmp )
-            where C : IVector<T> {
+            where C : IVector<T>, ISwappable<long> {
 
             long n = container.Length;
 
@@ -183,7 +183,7 @@ namespace SystemEx.Algorithms {
         /// Worst-case complexity: O(n²), but excellent real-world performance.
         /// </remarks>
         public static void InsertionSort<T, C> ( ref C container, ISimpleCompare<T> cmp )
-            where C : IVector<T> {
+            where C : IVector<T>, ISwappable<long> {
 
             long n = container.Length;
 
@@ -231,7 +231,7 @@ namespace SystemEx.Algorithms {
         /// Complexity: O(n²).
         /// </remarks>
         public static void GnomeSorter<T, C> ( ref C container, ISimpleCompare<T> cmp )
-            where C : IVector<T> {
+            where C : IVector<T>, ISwappable<long> {
 
             long j = 0;
             long n = container.Length;
@@ -289,7 +289,7 @@ namespace SystemEx.Algorithms {
         /// Random pivot selection avoids worst-case behavior on already sorted data.
         /// </remarks>
         public static void QuickSorter<T, C> ( ref C container, ISimpleCompare<T> cmp )
-            where C : IVector<T> {
+            where C : IVector<T>, ISwappable<long> {
 
             void Sort ( ref C container, long left, long right, ISimpleCompare<T> cmp ) {
                 long i = left;
@@ -368,7 +368,7 @@ namespace SystemEx.Algorithms {
         /// Uses gapped insertion sort to reduce disorder quickly.
         /// </remarks>
         public static void ShellSorter<T, C> ( ref C container, ISimpleCompare<T> cmp )
-                where C : IVector<T> {
+                where C : IVector<T>, ISwappable<long> {
             long n = container.Length;
 
             for ( long gap = n / 2 ; gap > 0 ; gap /= 2 ) {
@@ -431,7 +431,7 @@ namespace SystemEx.Algorithms {
         /// Useful when a simple, fast, non‑recursive sort is desired.
         /// </remarks>
         public static void CombSorter<T, C> ( ref C container, ISimpleCompare<T> cmp )
-                where C : IVector<T> {
+                where C : IVector<T>, ISwappable<long> {
 
             long n = container.Length;
             long gap = n;

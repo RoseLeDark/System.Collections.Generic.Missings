@@ -67,16 +67,19 @@ namespace SystemEx.Algorithms {
             // Try to locate ANY match using midpoint probing
             while ( left <= right ) {
                 long mid = (left + right) >> 1;
-                T? item = container.ElementAt(mid);
-                if ( item == null ) continue;
+                Optional<T> item = container.ElementAt(mid);
+                if ( item.IsNull ) continue;
 
-                if ( comp.Compare(item, value) == Utils.CompareResult.Equal  ) {
+                if ( comp.Compare(item.Value, value) == Utils.CompareResult.Equal  ) {
                     // Found one → expand to count all
                     _ret++;
 
                     // expand left
                     for ( var i = mid - 1 ; i >= 0 ; i-- ) {
-                        if ( comp.Compare(container.ElementAt(i), value) == Utils.CompareResult.Equal )
+                        Optional<T> _i2 = container.ElementAt(i);
+                        if ( item.IsNull ) continue;
+
+                        if ( comp.Compare(_i2.Value, value) == Utils.CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -84,7 +87,10 @@ namespace SystemEx.Algorithms {
 
                     // expand right
                     for ( var i = mid + 1 ; i < container.Count ; i++ ) {
-                        if ( comp.Compare(container.ElementAt(i), value) == Utils.CompareResult.Equal )
+                        Optional<T> _i2 = container.ElementAt(i);
+                        if ( item.IsNull ) continue;
+
+                        if (  comp.Compare(_i2.Value, value) == Utils.CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -100,7 +106,7 @@ namespace SystemEx.Algorithms {
             return _ret;
         }
         /// <inheritdoc />
-        public long Find ( ref TContainer container, Func<T, CompareResult> func ) {
+        public long Find ( ref TContainer container, Func< Optional<T> , CompareResult> func ) {
             if ( container.Count == 0 ) return 0;
 
             long _ret = 0;
@@ -110,15 +116,18 @@ namespace SystemEx.Algorithms {
             // Try to locate ANY match using midpoint probing
             while ( left <= right ) {
                 long mid = (left + right) >> 1;
-                T? item = container.ElementAt(mid);
-                if ( item == null ) continue;
+                Optional<T> item = container.ElementAt(mid);
+                if ( item.IsNull ) continue;
 
-                if ( func(item!) == CompareResult.Equal ) {
+                if ( func(item.Value!) == CompareResult.Equal ) {
                      _ret++;
 
                     // expand left
                     for ( var i = mid - 1 ; i >= 0 ; i-- ) {
-                        if ( func(container.ElementAt(i)) == Utils.CompareResult.Equal )
+                        Optional<T> _i2 = container.ElementAt(i);
+                        if ( item.IsNull ) continue;
+
+                        if (func(container.ElementAt(i).Value!) == Utils.CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -126,7 +135,10 @@ namespace SystemEx.Algorithms {
 
                     // expand right
                     for ( var i = mid + 1 ; i < container.Count ; i++ ) {
-                        if ( func(container.ElementAt(i)) == Utils.CompareResult.Equal )
+                        Optional<T> _i2 = container.ElementAt(i);
+                        if ( item.IsNull ) continue;
+
+                        if ( func(container.ElementAt(i).Value!)  == Utils.CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -144,8 +156,8 @@ namespace SystemEx.Algorithms {
 
 
         /// <inheritdoc />
-        public Vector<Pair<long, T >> Where ( ref TContainer container, Func<T, CompareResult> func ) {
-            Vector<Pair<long, T >> result = new Vector<Pair<long, T >>();
+        public Vector<Pair<long, Optional<T>>> Where ( ref TContainer container, Func<Optional<T>, CompareResult> func ) {
+            Vector<Pair<long, Optional<T> >> result = new Vector<Pair<long, Optional<T> >>();
 
             long left = 0;
             long right = container.Count - 1;
@@ -153,27 +165,33 @@ namespace SystemEx.Algorithms {
             // Try to locate ANY match using midpoint probing
             while ( left <= right ) {
                 long mid = (left + right) >> 1;
-                T? item = container.ElementAt(mid);
-                if ( item == null ) continue;
+                Optional<T> item = container.ElementAt(mid);
+                if ( item.IsNull ) continue;
 
 
-                if ( func(item) == Utils.CompareResult.Equal ) {
+                if ( func(item.Value!) == Utils.CompareResult.Equal ) {
                     // Found one → expand to count all
                     //if ( func(item) )
-                    result.PushBack(new Pair<long, T>(mid, item));
+                    result.PushBack(new Pair<long, Optional<T> >(mid, item.Value!));
 
                     // expand left
                     for ( var i = mid - 1 ; i >= 0 ; i-- ) {
-                        if ( func(container.ElementAt(i)) == Utils.CompareResult.Equal )
-                            result.PushBack(new Pair<long, T>(i, container.ElementAt(i) ));
+                        Optional<T> _i2 = container.ElementAt(i);
+                        if ( item.IsNull ) continue;
+
+                        if ( func(_i2.Value!) == Utils.CompareResult.Equal )
+                            result.PushBack(new Pair<long, Optional<T> >(i, _i2.Value!));
                         else
                             break;
                     }
 
                     // expand right
                     for ( var i = mid + 1 ; i < container.Count ; i++ ) {
-                        if ( func(container.ElementAt(i)) == Utils.CompareResult.Equal )
-                            result.PushBack(new Pair<long, T>(i, container.ElementAt(i)));
+                        Optional<T> _i2 = container.ElementAt(i);
+                        if ( item.IsNull ) continue;
+
+                        if (  func(_i2.Value!) == Utils.CompareResult.Equal )
+                            result.PushBack(new Pair<long, Optional<T> >(i, _i2.Value! ));
                         else
                             break;
                     }

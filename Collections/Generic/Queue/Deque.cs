@@ -174,8 +174,9 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         /// <param name="value">Receives the removed element.</param>
         /// <returns><c>true</c> if an element was removed; otherwise <c>false</c>.</returns>
-        public bool PopFront(ref Optional<T> value ) {
+        public bool PopFront(out Optional<T> value ) {
             if ( IsEmpty ) {
+                value = Optional<T>.NONE;
                 return false;
             }
 

@@ -15,53 +15,47 @@
  * changes and the date.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
-using SystemEx.Collections.Generic.Interfaces;
+using SystemEx.Collections.Generic;
 
 namespace SystemEx {
     /// <summary>
     /// Forward iterator over a normalized numeric range. Supports stepping
     /// by one unit and exposes the current value and end-of-range state.
     /// </summary>
-    /// <typeparam name="T">Numeric type implementing <see cref="INumber{T}"/>.</typeparam>
-    public struct NumberRangeIterator<T> : IForwardIterator<T>
-        where T : INumber<T> {
-        /// <summary>Current iterator position.</summary>
-        private T m_current;
+    public struct NumberRangeIterator<T> : Iterrator<T> {
+
+        private Vector<T> m_range;
 
         /// <summary>End boundary of the range (inclusive).</summary>
-        private readonly T m_end;
-
+        private readonly long m_end;
+        private long m_index;
         /// <summary>
-        /// Initializes a new iterator positioned at <paramref name="start"/>
-        /// and iterating until <paramref name="end"/>.
+        /// Initializes a new iterator
         /// </summary>
-        /// <param name="start">Initial iterator position.</param>
-        /// <param name="end">End boundary (inclusive).</param>
-        public NumberRangeIterator ( T start, T end ) {
-            m_current = start;
+        public NumberRangeIterator ( Vector<T> range, long end ) {
+            m_range = range;
             m_end = end;
+            m_index = 0;
         }
 
         /// <summary>
         /// Gets the element at the current iterator position.
         /// </summary>
-        public T Current => m_current;
+        public Optional<T> Current => m_range[m_index];
 
         /// <summary>
         /// Indicates whether the iterator has reached the end boundary.
         /// </summary>
-        public bool IsEnd => m_current > m_end;
+        public bool IsEnd =>  m_index > m_end;
+
+        public long Index { get => m_index; set => m_index = value; }
 
         /// <summary>
         /// Moves the iterator one step forward.
         /// </summary>
         public void Forward () {
             if ( !IsEnd )
-                m_current += T.One;
+                m_index += 1;
         }
 
         /// <summary>
@@ -73,49 +67,6 @@ namespace SystemEx {
                 --n;
                 Forward();
             }
-        }
-        /// <summary>
-        /// Creates a copy of this iterator at its current position.
-        /// </summary>
-        /// <returns>A new iterator instance positioned identically.</returns>
-        public IIterator<T> Clone ()
-            => new NumberRangeIterator<T>(m_current, m_end);
-
-        /// <summary>
-        /// Compares two iterators for equality based on their current position
-        /// and end boundary.
-        /// </summary>
-        public override bool Equals ( object? obj )
-            => obj is NumberRangeIterator<T> it &&
-               it.m_current.Equals(m_current) &&
-               it.m_end.Equals(m_end);
-
-        /// <summary>
-        /// Computes a hash code for this iterator.
-        /// </summary>
-        public override int GetHashCode ()
-            => HashCode.Combine(m_current, m_end);
-
-        /// <summary>
-        /// Compares two iterators for equality.
-        /// Two iterators are equal if both their current position
-        /// and end boundary match.
-        /// </summary>
-        /// <param name="left">Left iterator.</param>
-        /// <param name="right">Right iterator.</param>
-        /// <returns>True if both iterators are equal.</returns>
-        public static bool operator == ( NumberRangeIterator<T> left, NumberRangeIterator<T> right ) {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Compares two iterators for inequality.
-        /// </summary>
-        /// <param name="left">Left iterator.</param>
-        /// <param name="right">Right iterator.</param>
-        /// <returns>True if the iterators differ.</returns>
-        public static bool operator != ( NumberRangeIterator<T> left, NumberRangeIterator<T> right ) {
-            return !left.Equals(right);
         }
     }
 }

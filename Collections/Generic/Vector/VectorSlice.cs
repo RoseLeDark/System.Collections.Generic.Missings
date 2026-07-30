@@ -210,7 +210,7 @@ namespace SystemEx.Collections.Generic {
                 var _realindex = slice.GetIndex(index);
 
                 if ( _realindex != -1) {
-                    value = m_container.ElementAt(_realindex);
+                    value = m_container.ElementAt(_realindex).Value;
                     _ret = true;
                 }
             }

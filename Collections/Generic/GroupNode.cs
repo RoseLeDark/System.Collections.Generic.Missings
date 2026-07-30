@@ -48,23 +48,6 @@ namespace SystemEx.Collections.Generic {
             this.Value = val;
         }
 
-        /// <summary>
-        /// Returns a random‑access iterator positioned at the first node in the group.
-        /// </summary>
-        public new IRandomAccessIterator<INode<T>> First => m_nodes.First<INode<T>>();
-
-        /// <summary>
-        /// Returns a random‑access iterator positioned at the end of the group.
-        /// </summary>
-        public new IRandomAccessIterator<INode<T>> End => m_nodes.End<INode<T>>();
-
-        /// <summary>
-        /// Returns a random‑access iterator positioned at the specified index.
-        /// </summary>
-        /// <param name="index">The index of the node.</param>
-        public new IRandomAccessIterator<INode<T>> At ( int index ) {
-            return m_nodes.At<INode<T>>(index);
-        }
 
         /// <summary>
         /// Indicates whether the group contains no nodes.
