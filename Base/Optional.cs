@@ -28,7 +28,7 @@ namespace SystemEx {
     /// <typeparam name="T">
     /// The underlying value type. Can be either a reference type or a value type.
     /// </typeparam>
-    public struct Optional<T> : IComparableEx<Optional<T>>, IComparable<Optional<T>> {
+    public struct Optional<T> : IComparableEx<Optional<T>>, IComparable<Optional<T>>, IEquatable<Optional<T>> {
         private T m_value;
         private bool m_hasValue;
 
@@ -92,7 +92,6 @@ namespace SystemEx {
         public Optional ( T? value ) {
             if ( value == null ) {
                 m_hasValue = false;
-                m_value = default!;
             } else {
                 m_hasValue = true;
                 m_value = value;
@@ -105,7 +104,6 @@ namespace SystemEx {
         /// </summary>
         public void Nullable () {
             m_hasValue = false;
-            m_value = default!;
         }
 
         /// <summary>
@@ -176,6 +174,18 @@ namespace SystemEx {
             return (int)CompareTo(other);
         }
 
+        public bool Equals ( Optional<T> b ) {
+            bool _ret = false;
+
+            if ( IsNull && a.IsNull ) _ret = true;
+            else if ( IsNull && b.IsSome ) _ret = false;
+            else if ( IsSome && b.IsNull ) _ret = false;
+            else
+                _ret = Value!.GetHashCode() == b.Value!.GetHashCode();
+
+            return _ret;
+        }
+
         /// <summary>
         /// Implicitly converts a nullable value into an <see cref="Optional{T}"/>.
         /// A <c>null</c> value produces an empty optional; otherwise the value is stored.
@@ -235,6 +245,36 @@ namespace SystemEx {
         /// </returns>
         public static bool operator false ( Optional<T> opt ) {
             return !opt.m_hasValue;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool operator == ( Optional<T> a, Optional<T> b ) {
+            bool _ret = false;
+
+                 if ( a.IsNull && a.IsNull ) _ret = true;
+            else if ( a.IsNull && b.IsSome ) _ret = false;
+            else if ( a.IsSome && b.IsNull ) _ret = false;
+            else 
+                _ret = a.Value!.GetHashCode() == b.Value!.GetHashCode() ;
+
+            return _ret;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool operator != ( Optional<T> a, Optional<T> b ) {
+            return !(a == b);
+        }
+
+        public override bool Equals ( object? obj ) {
+            if ( obj is Optional<T> key ) 
+                return Equals(key);
+        }
+
+        public override int GetHashCode () {
+            return m_value!.GetHashCode();
         }
     }
 

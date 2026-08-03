@@ -16,7 +16,6 @@
  */
 
 using SystemEx.Collections.Generic;
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.IO.Provider;
 
 namespace SystemEx.Drawing {

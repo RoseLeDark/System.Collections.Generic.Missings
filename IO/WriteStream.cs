@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Text;
 using SystemEx.Collections.Generic;
-using SystemEx.Collections.Generic.Interfaces;
 
 #if TEXTING_BUILD
 namespace SystemEx.IO {

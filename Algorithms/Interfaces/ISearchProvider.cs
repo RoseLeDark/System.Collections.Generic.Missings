@@ -16,7 +16,6 @@
  */
 using SystemEx.Algorithms;
 using SystemEx.Collections.Generic;
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms.Interfaces {

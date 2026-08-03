@@ -18,7 +18,6 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 using SystemEx.Collections.Generic;
-using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.IO.Provider {
 

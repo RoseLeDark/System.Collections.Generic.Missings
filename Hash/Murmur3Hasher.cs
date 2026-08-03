@@ -17,7 +17,6 @@
 
 using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
-using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Hash {
 #if TESTING

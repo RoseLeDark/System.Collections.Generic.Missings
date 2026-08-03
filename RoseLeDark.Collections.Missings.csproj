@@ -173,4 +173,8 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Collections\Generic\Interfaces\" />
+  </ItemGroup>
+
 </Project>

@@ -16,7 +16,6 @@
  */
 
 using SystemEx.Collections.Generic;
-using SystemEx.Collections.Generic.Interfaces;
 
 
 namespace SystemEx.Drawing {
@@ -181,7 +180,7 @@ namespace SystemEx.Drawing {
         /// Layers do not contain rendered pixel data; they define transformation
         /// rules that are applied when the composed buffer is requested.
         /// </summary>
-        IReadOnlyMap<ISubCanvas<T>, BlendMode>  Layers {  get;  }
+        Map<ISubCanvas<T>, BlendMode>  Layers {  get;  }
 
         /// <summary>
         /// Gets the sub‑canvas at the specified index.
