@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
 using SystemEx.IO.Provider;
+using SystemEx.Utils;
 
 namespace SystemEx {
     /// <summary>
@@ -86,6 +87,52 @@ namespace SystemEx {
           
         }
 
+        /// <summary>
+        /// Creates a <see cref="FlexSpan{T}"/> over the specified byte array using
+        /// a starting offset and the given span mode. The span covers the array
+        /// from <paramref name="start"/> to the end of the underlying buffer,
+        /// interpreted according to the selected <see cref="FlexSpanMode"/>.
+        /// 
+        /// This overload is typically used when only a starting position is required
+        /// and the span length is implicitly determined by the array boundary.
+        /// </summary>
+        /// <param name="value">Reference to the underlying byte array.</param>
+        /// <param name="start">The starting index of the span.</param>
+        /// <param name="mode">
+        /// Determines how indexing is interpreted:
+        /// <see cref="FlexSpanMode.System"/> (forward),
+        /// <see cref="FlexSpanMode.Reverse"/> (reverse),
+        /// <see cref="FlexSpanMode.Ring"/> (circular).
+        /// </param>
+        /// <returns>A new <see cref="FlexSpan{byte}"/> instance.</returns>
+        public static FlexSpan<byte> AsFlexSpan ( ref byte[] value, long start, FlexSpanMode mode ) {
+            return new FlexSpan<byte>(ref value, start, mode);
+        }
+
+
+        /// <summary>
+        /// Creates a <see cref="FlexSpan{T}"/> over the specified byte array using
+        /// an explicit start and end range together with the selected span mode.
+        /// The span covers the region from <paramref name="start"/> to
+        /// <paramref name="end"/> inclusively, interpreted according to the chosen
+        /// <see cref="FlexSpanMode"/>.
+        /// 
+        /// This overload is used when a precise subrange of the array is required.
+        /// </summary>
+        /// <param name="value">Reference to the underlying byte array.</param>
+        /// <param name="start">The starting index of the span.</param>
+        /// <param name="end">The ending index of the span.</param>
+        /// <param name="mode">
+        /// Determines how indexing is interpreted:
+        /// <see cref="FlexSpanMode.System"/> (forward),
+        /// <see cref="FlexSpanMode.Reverse"/> (reverse),
+        /// <see cref="FlexSpanMode.Ring"/> (circular).
+        /// </param>
+        /// <returns>A new <see cref="FlexSpan{byte}"/> instance.</returns>
+        public static FlexSpan<byte> AsFlexSpan ( ref byte[] value, long start, long end, FlexSpanMode mode ) {
+            return new FlexSpan<byte>(ref value, start, end, mode);
+        }
+
 
         #region BYTE
 
@@ -126,6 +173,52 @@ namespace SystemEx {
         #endregion
 
         #region INT
+
+        
+
+        /// <summary>
+        /// Splits a 32-bit unsigned integer into its high and low 16-bit components.
+        /// </summary>
+        /// <param name="value">
+        /// The 32-bit unsigned integer to split.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Pair{T1,T2}"/> where:
+        /// <list type="bullet">
+        /// <item><description><b>Item1</b> is the high 16-bit word (unsigned).</description></item>
+        /// <item><description><b>Item2</b> is the low 16-bit word (signed).</description></item>
+        /// </list>
+        /// </returns>
+        public static Pair<ushort, short> ToShort(this uint value) {
+            byte [] arr = value.ToBytes(Endian.LittleEndian);
+
+            ushort h = arr.ToUShort(2);
+            short l = arr.ToShort(0);
+
+            return new Pair<ushort, short>(h, l);
+        }
+
+        /// <summary>
+        /// Splits a 32-bit signed integer into its high and low 16-bit components.
+        /// </summary>
+        /// <param name="value">
+        /// The 32-bit signed integer to split.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Pair{T1,T2}"/> where:
+        /// <list type="bullet">
+        /// <item><description><b>Item1</b> is the high 16-bit word (signed).</description></item>
+        /// <item><description><b>Item2</b> is the low 16-bit word (signed).</description></item>
+        /// </list>
+        /// </returns>
+        public static Pair<short, short> ToShort ( this int value  ) {
+            byte [] arr = value.ToBytes(Endian.LittleEndian);
+
+            short h = arr.ToShort(2);
+            short l = arr.ToShort(0);
+
+            return new Pair<short, short>(h, l);
+        }
 
         /// <summary>
         /// Converts a <see cref="uint"/> value into a 4‑byte array using the specified endianness.
@@ -349,6 +442,50 @@ namespace SystemEx {
         #endregion
 
         #region SHORT
+
+        /// <summary>
+        /// Splits a 16-bit signed integer into its high and low 8-bit components.
+        /// </summary>
+        /// <param name="value">
+        /// The 16-bit signed integer to split.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Pair{T1,T2}"/> where:
+        /// <list type="bullet">
+        /// <item><description><b>Item1</b> is the high 8-bit component (signed).</description></item>
+        /// <item><description><b>Item2</b> is the low 8-bit component (unsigned).</description></item>
+        /// </list>
+        /// </returns>
+        public static Pair<sbyte, byte> ToByte ( this short value ) {
+            byte [] arr = value.ToBytes(Endian.LittleEndian);
+
+            sbyte h = (sbyte)arr[1];
+            byte l = arr[0];
+
+            return new Pair<sbyte, byte>(h, l);
+        }
+
+        /// <summary>
+        /// Splits a 16-bit unsigned integer into its high and low 8-bit components.
+        /// </summary>
+        /// <param name="value">
+        /// The 16-bit signed integer to split.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Pair{T1,T2}"/> where:
+        /// <list type="bullet">
+        /// <item><description><b>Item1</b> is the high 8-bit component (unsigned).</description></item>
+        /// <item><description><b>Item2</b> is the low 8-bit component (unsigned).</description></item>
+        /// </list>
+        /// </returns>
+        public static Pair<byte, byte> ToByte ( this ushort value ) {
+            byte [] arr = value.ToBytes(Endian.LittleEndian);
+
+            byte h = arr[1];
+            byte l = arr[0];
+
+            return new Pair<byte, byte>(h, l);
+        }
         /// <summary>
         /// Converts a <see cref="short"/> value into a 2‑byte array using the specified endianness.
         /// </summary>
@@ -550,6 +687,9 @@ namespace SystemEx {
             // Die bestehende Methode aufrufen
             return slice.ToUShort(endian);
         }
+
+
+        
         #endregion
 
         #region STRUCT
@@ -1023,6 +1163,52 @@ namespace SystemEx {
 
         #region LONG
 
+        
+
+        /// <summary>
+        /// Splits a 64-bit unsigned integer into its high and low 32-bit components.
+        /// </summary>
+        /// <param name="value">
+        /// The 64-bit unsigned integer to split.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Pair{T1,T2}"/> where:
+        /// <list type="bullet">
+        /// <item><description><b>Item1</b> is the high 32-bit word (unsigned).</description></item>
+        /// <item><description><b>Item2</b> is the low 32-bit word (signed).</description></item>
+        /// </list>
+        /// </returns>
+        public static Pair<uint, int> ToShort ( this ulong value ) {
+            byte [] arr = value.ToBytes(Endian.LittleEndian);
+
+            uint h = arr.ToUInt(4);
+            int l = arr.ToInt(0);
+
+            return new Pair<uint, int>(h, l);
+        }
+
+        /// <summary>
+        /// Splits a 64-bit unsigned integer into its high and low 32-bit components.
+        /// </summary>
+        /// <param name="value">
+        /// The 64-bit unsigned integer to split.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Pair{T1,T2}"/> where:
+        /// <list type="bullet">
+        /// <item><description><b>Item1</b> is the high 32-bit word (signed).</description></item>
+        /// <item><description><b>Item2</b> is the low 32-bit word (signed).</description></item>
+        /// </list>
+        /// </returns>
+        public static Pair<int, int> ToShort ( this long value ) {
+            byte [] arr = value.ToBytes(Endian.LittleEndian);
+
+            int h = arr.ToInt(4);
+            int l = arr.ToInt(0);
+
+            return new Pair<int, int>(h, l);
+        }
+
         /// <summary>
         /// Converts a <see cref="long"/> value into an 8‑byte array using the specified endianness.
         /// </summary>
@@ -1258,7 +1444,16 @@ namespace SystemEx {
 
         #endregion
 
+        #region DLong
 
+
+        #endregion
+
+
+        #region QLong
+
+
+        #endregion
 
 
         /// <summary>
@@ -1266,20 +1461,32 @@ namespace SystemEx {
         /// into a byte count.  
         /// Defaults to 512 bytes if parsing fails.
         /// </summary>
-        public static uint SizeCalc(string value) {
+        public static ulong SizeCalc ( string value ) {
             string str = value.ToUpper(System.Globalization.CultureInfo.CurrentCulture).Trim();
             uint multiplier = 1;
 
-            if ( str.EndsWith("G", StringComparison.OrdinalIgnoreCase) ) {
+            if ( str.EndsWith("GI", StringComparison.Ordinal) ) {
                 multiplier = 1024u * 1024u * 1024u;
-                str = str[..^1];
-            } else if ( str.EndsWith("M", StringComparison.OrdinalIgnoreCase) ) {
+                str = str[..^2];
+            } else if ( str.EndsWith("MI", StringComparison.Ordinal) ) {
                 multiplier = 1024u * 1024u;
-                str = str[..^1];
-            } else if ( str.EndsWith("K", StringComparison.OrdinalIgnoreCase) ) {
+                str = str[..^2];
+            } else if ( str.EndsWith("KI", StringComparison.Ordinal) ) {
                 multiplier = 1024u;
+                str = str[..^2];
+            } else if ( str.EndsWith("BI", StringComparison.Ordinal) ) {
+                multiplier = 1;
+                str = str[..^2];
+            } else if ( str.EndsWith("G", StringComparison.Ordinal) ) {
+                multiplier = 1000u * 1000u * 1000u;
                 str = str[..^1];
-            } else if ( str.EndsWith("B", StringComparison.OrdinalIgnoreCase) ) {
+            } else if ( str.EndsWith("M", StringComparison.Ordinal) ) {
+                multiplier = 1000u * 1000u;
+                str = str[..^1];
+            } else if ( str.EndsWith("K", StringComparison.Ordinal) ) {
+                multiplier = 1000u;
+                str = str[..^1];
+            } else if ( str.EndsWith("B", StringComparison.Ordinal) ) {
                 multiplier = 1;
                 str = str[..^1];
             }
@@ -1288,6 +1495,7 @@ namespace SystemEx {
                 ? size * multiplier
                 : 512 * multiplier;
         }
+
         /// <summary>
         /// Compares two byte arrays for exact equality.
         /// </summary>

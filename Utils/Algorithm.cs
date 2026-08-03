@@ -152,7 +152,7 @@ namespace SystemEx.Utils {
         /// <summary>
         /// Returns both the minimum and maximum elements in the array.
         /// </summary>
-        public static Pair<T, T> MinMaxElement<T>(this T[] items, CompFunc<T> cmp) {
+        public static Pair<T, T> MinMaxElement<T>(this T[] items, CompFunc<T> cmp) where T : notnull {
             T? min = MinElement(items, cmp);
             T? max = MaxElement(items, cmp);
             return new Pair<T, T>(min!, max!);
@@ -161,7 +161,7 @@ namespace SystemEx.Utils {
         /// <summary>
         /// Returns the minimum and maximum of two values.
         /// </summary>
-        public static Pair<T, T> MinMax<T>(T a, T b, CompFunc<T> cmp) {
+        public static Pair<T, T> MinMax<T>(T a, T b, CompFunc<T> cmp ) where T : notnull {
             return cmp(a, b) == CompareResult.AIsSmallerB
                 ? new Pair<T, T>(b, a)
                 : new Pair<T, T>(a, b);

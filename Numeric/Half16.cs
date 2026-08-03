@@ -71,11 +71,11 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Gets the sign bit (true = negative).
         /// </summary>
-        public bool Sign => (bool) ( ((m_value >> 15) & 0x1) == 1);
+        public bool Sign => (bool) ( ((m_value >> ExponentBias ) & 0x1) == 1);
         /// <summary>
         /// Gets the exponent field (5 bits).
         /// </summary>
-        public ushort Exponent => (ushort)((m_value >> 10) & 0x1F);
+        public ushort Exponent => (ushort)((m_value >> MantissaBits ) & 0x1F);
         /// <summary>
         /// Gets the mantissa (fraction) field (10 bits).
         /// </summary>
@@ -168,13 +168,15 @@ namespace SystemEx.Numeric {
         /// Creates a Half16 from explicit sign, exponent, and mantissa fields.
         /// </summary>
         public Half16 ( ushort sign, ushort exponent, ushort mantissa ) {
-            m_value = (ushort)((sign << 15) | (exponent << 10) | mantissa);
+            m_value = (ushort)(((sign & 0x1) << ExponentBias ) | ((exponent & 0x1F) << MantissaBits ) | (mantissa & 0x3FF) );
         }
 
         /// <summary>
         /// Returns the raw 16‑bit representation.
         /// </summary>
-        public ushort AsUShort () => m_value;
+        public ushort ToBase => m_value;
+
+        public static Half16 NegativeZero => throw new NotImplementedException();
 
         /// <summary>
         /// Converts the value into a byte array using the specified endianness.
@@ -360,7 +362,14 @@ namespace SystemEx.Numeric {
 
             return (a.m_value == b.m_value) || ((a.m_value < b.m_value) ^ _neg);
         }
-        
+
+        /// <summary>
+        /// Equality operator with IEEE‑754 zero handling.
+        /// </summary>
+        public static bool operator == ( Half16 a, Half16 b ) {
+            if ( IsNaN(a) || IsNaN(b) ) return false;
+            return (a.m_value == b.m_value) || (IsZero(a) && IsZero(b));
+        }
 
         /// <summary>
         /// Greater‑than operator.
@@ -449,20 +458,13 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Returns the negated value.
         /// </summary>
-        static Half16 Negate ( Half16 h ) {
+        public static Half16 Negate ( Half16 h ) {
             ushort sign = (ushort)(h.Sign ? 1 : 0);
             return new Half16((ushort)(sign ^ 1), h.Exponent, h.Mantissa);
         }
 
 
-        /// <summary>
-        /// Equality operator with IEEE‑754 zero handling.
-        /// </summary>
-        public static bool operator == ( Half16 a, Half16 b ) {
-            if ( IsNaN(a) || IsNaN(b) ) return false;
-            return (a.m_value == b.m_value) || (IsZero(a) && IsZero(b));
-        }
-
+        
         /// <summary>
         /// Multiplies two Half16 values using full bit‑level arithmetic.
         /// </summary>
