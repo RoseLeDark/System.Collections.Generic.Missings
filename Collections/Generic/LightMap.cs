@@ -646,12 +646,13 @@ namespace SystemEx.Collections.Generic {
         
         private bool Resize ( long size ) {
             if ( size == Length ) return false;
-            if ( m_index > size )
-                m_index = size;
-
+            
             try {
+                long oldLen = Length;
                 Array.Resize(ref m_elements, (int)size);
                 Array.Resize(ref m_state, (int)size);
+                m_index = oldLen;
+
             } catch {
                 return false;
             }

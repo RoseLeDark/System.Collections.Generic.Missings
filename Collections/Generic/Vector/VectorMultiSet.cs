@@ -14,12 +14,9 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using System.Collections;
 using System.Runtime.CompilerServices;
-using SystemEx.Algorithms.Interfaces;
 using SystemEx.Algorithms;
-using SystemEx.Collections.Generic.Interfaces;
-using SystemEx.Utils;
+using SystemEx.Algorithms.Interfaces;
 
 namespace SystemEx.Collections.Generic {
 

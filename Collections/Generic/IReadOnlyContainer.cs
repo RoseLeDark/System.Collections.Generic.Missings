@@ -15,8 +15,12 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Gets the first element of the container.
         /// </summary>
-        public T Front { get; }
+        public Optional<T> Front { get; }
 
+        /// <summary>
+        /// Gets the Last element of the container.
+        /// </summary>
+        public Optional<T> Back { get;  }
 
         /// <summary>
         /// Indicates whether the container is full.

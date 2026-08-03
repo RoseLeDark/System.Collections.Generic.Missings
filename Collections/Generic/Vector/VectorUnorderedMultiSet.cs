@@ -16,7 +16,6 @@
  */
 
 using System.Runtime.CompilerServices;
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {

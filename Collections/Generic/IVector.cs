@@ -13,7 +13,7 @@ namespace SystemEx.Collections.Generic {
     /// duplication of stored elements.
     /// </summary>
     /// <typeparam name="T">The element type stored in the container.</typeparam>
-    public interface IVector<T> : IContainer<T> {
+    public interface IVector<T> : ILinearContainer<T> {
 
         /// <summary>
         /// Inserts multiple elements starting at the specified index.

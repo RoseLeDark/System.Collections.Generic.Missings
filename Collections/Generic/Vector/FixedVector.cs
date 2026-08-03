@@ -19,7 +19,6 @@ using System.Collections;
 using System.Drawing;
 using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
-using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
@@ -47,11 +46,11 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Gets the first element of the Vector.
         /// </summary>
-        public T Front => m_elements[0];
+        public Optional<T> Front => m_elements[0];
         /// <summary>
         /// Gets the last element of the Vector.
         /// </summary>
-        public T Back => m_elements[Count];
+        public Optional<T> Back => m_elements[Count];
 
         /// <summary>
         /// Indicates whether the Vector is full.
@@ -360,8 +359,6 @@ namespace SystemEx.Collections.Generic {
         public RandomAccessIterator<T, FixedVector<T>> End => new RandomAccessIterator<T, FixedVector<T>>(this, Count);
 
 
-        public RandomAccessIterator<T, FixedVector<T>> ReverseBegin => End;
-        public RandomAccessIterator<T, FixedVector<T>> ReverseEnd => Begin;
 
         /// <summary>
         /// Creates a new Array with a specified initial capacity.
@@ -780,6 +777,7 @@ namespace SystemEx.Collections.Generic {
 
             return new Pair<bool, long>(true, toCopy);
         }
+
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

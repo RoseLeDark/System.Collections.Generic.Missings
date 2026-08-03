@@ -15,7 +15,6 @@
  * changes and the date.
  */
 using System.Collections;
-using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
     /// <summary>

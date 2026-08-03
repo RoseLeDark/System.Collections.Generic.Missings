@@ -18,7 +18,6 @@
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Xml.Linq;
-using SystemEx.Collections.Generic.Interfaces;
 
 
 

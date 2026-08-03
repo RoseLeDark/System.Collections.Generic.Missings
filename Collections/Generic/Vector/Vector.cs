@@ -17,7 +17,6 @@
 
 using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
@@ -106,11 +105,11 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Gets the first element of the Vector.
         /// </summary>
-        public T Front => m_elements[0];
+        public Optional<T> Front => m_elements[0];
         /// <summary>
         /// Gets the last element of the Vector.
         /// </summary>
-        public T Back => m_elements[Count];
+        public Optional<T> Back => m_elements[Count];
 
         /// <summary>
         /// Indicates whether the Vector is full.
@@ -981,11 +980,11 @@ namespace SystemEx.Collections.Generic {
         /// </returns>
         private bool Resize ( long size ) {
             if ( size == Length ) return false;
-            if ( m_index > size )
-                m_index = size;
 
             try {
+                long _olfl = Length;
                 Array.Resize(ref m_elements, (int)size);
+                m_index = _olfl;
             } catch {
                 return false;
             }
@@ -1015,6 +1014,17 @@ namespace SystemEx.Collections.Generic {
         /// <inheritdoc/>
         public static bool operator != ( Vector<T> a, Vector<T> b ) {
             return !(a == b);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals ( object obj ) {
+            if ( obj is Vector<T> k ) return this.Equals(k);
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode () {
+            return m_elements.GetHashCode() ^ m_index.GetHashCode();
         }
     }
 

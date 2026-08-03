@@ -1,8 +1,5 @@
-﻿using System;
-using System.Text;
-using SystemEx.Algorithms;
+﻿using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {

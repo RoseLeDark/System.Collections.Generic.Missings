@@ -15,8 +15,6 @@
  * changes and the date.
  */
 
-using SystemEx.Collections.Generic.Interfaces;
-
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{

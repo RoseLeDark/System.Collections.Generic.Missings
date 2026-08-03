@@ -15,12 +15,6 @@
  * changes and the date.
  */
 
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using SystemEx.Base;
-using SystemEx.Collections.Generic.Interfaces;
-using SystemEx.Utils;
-
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{

@@ -18,7 +18,6 @@
 using System.Runtime.CompilerServices;
 using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
-using SystemEx.Collections.Generic.Interfaces;
 
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections

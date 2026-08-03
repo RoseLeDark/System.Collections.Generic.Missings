@@ -14,15 +14,5 @@ namespace SystemEx.Collections.Generic {
         /// 
         /// </summary>
         public TItterator End { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public TItterator ReverseBegin { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public TItterator ReverseEnd { get; }
     }
 }

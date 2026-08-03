@@ -15,8 +15,6 @@
  * changes and the date.
  */
 
-using SystemEx.Collections.Generic.Interfaces;
-
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
@@ -30,7 +28,7 @@ namespace SystemEx.Collections.Generic {
     /// <typeparam name="TW">The type of the third element.</typeparam>
     /// <typeparam name="TJ">The type of the fourth element.</typeparam>
     [Serializable]
-    public struct Quad<TT, TU, TW, TJ> : ITuple {
+    public struct Quad<TT, TU, TW, TJ> : ITuple<TT> where TT : notnull {
 
         /// <summary>
         /// Backing field for the first element.
@@ -164,7 +162,7 @@ namespace SystemEx.Collections.Generic {
         /// <exception cref="IndexOutOfRangeException">
         /// Thrown when the index is not 0–3.
         /// </exception>
-        public readonly object? Get(int index) {
+        public readonly Optional<object> Get (int index) {
             if ( index < 0 || index >= Count )
 #pragma warning disable CA2201
                 throw new IndexOutOfRangeException("index");
@@ -180,12 +178,10 @@ namespace SystemEx.Collections.Generic {
             };
         }
 
-        /// <summary>
-        /// Determines whether the first element equals the specified object.  
-        /// Used for <see cref="ITuple"/> compatibility.
-        /// </summary>
-        bool ITuple.EqualFirst(object key) {
-            return EqualFirst((TT)key);
+
+
+        Optional<object> ITuple<TT>.Get ( int index ) {
+            return Get(index);
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

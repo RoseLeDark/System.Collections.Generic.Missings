@@ -14,8 +14,6 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using SystemEx.Collections.Generic.Interfaces;
-
 
 namespace SystemEx.Collections.Generic {
 
@@ -26,17 +24,23 @@ namespace SystemEx.Collections.Generic {
     /// Provides indexed access, mutation, and compatibility with the <see cref="ITuple"/>
     /// interface used throughout the SystemEx collection and iterator framework.
     /// </summary>
-    public class Tuple : ITuple {
+    public class Tuple<TKey> : ITuple<TKey> where TKey : notnull {
+        private TKey m_index;
 
         /// <summary>
         /// Internal storage for tuple elements.
         /// </summary>
-        private FixedVector<object> m_elements;
+        private object[] m_elements;
 
         /// <summary>
         /// Gets the number of elements stored in the tuple.
         /// </summary>
-        public int Count => (int)m_elements.Count;
+        public int Count => (int)m_elements.Length + 1;
+
+        public TKey First { 
+            get => m_index; 
+            set => m_index = value; 
+        }
 
         /// <summary>
         /// Gets or sets the element at the specified index.
@@ -46,31 +50,29 @@ namespace SystemEx.Collections.Generic {
         /// Thrown when the index is outside the valid range.
         /// </exception>
         public object this[int index] {
-            get => m_elements.ElementAt(index);
+            get => Get(index);
             set => Set(index, value);
         }
 
-        /// <summary>
-        /// Creates a tuple with a default capacity of 5 elements.
-        /// </summary>
-        public Tuple() {
-            m_elements = new FixedVector<object>(5);
-        }
 
         /// <summary>
         /// Creates a tuple with the specified capacity.
         /// </summary>
+        /// <param name="key"></param>
         /// <param name="N">The number of elements the tuple can hold.</param>
-        public Tuple(int N) {
-            m_elements = new FixedVector<object>(N);
+        public Tuple (TKey key, int N) {
+            m_elements = new object[N];
+            m_index = key;
         }
 
         /// <summary>
         /// Creates a tuple using an existing <see cref="FixedVector{T}"/> as storage.
         /// </summary>
         /// <param name="elements">The array used as the underlying element buffer.</param>
-        public Tuple(FixedVector<object> elements) {
-            m_elements = elements;
+        /// <param name="key"></param>
+        public Tuple( TKey key, FixedVector<object> elements) {
+            m_elements = elements.ToNative();
+            m_index = key;
         }
 
         /// <summary>
@@ -81,13 +83,14 @@ namespace SystemEx.Collections.Generic {
         /// <exception cref="IndexOutOfRangeException">
         /// Thrown when the index is outside the valid range.
         /// </exception>
-        public object? Get(int index) {
+        public Optional<object> Get(int index) {
             if ( index < 0 || index >= Count )
 #pragma warning disable CA2201
                 throw new IndexOutOfRangeException("index");
 #pragma warning restore CA2201
 
-            return m_elements.ElementAt(index);
+            return index == 0 ? m_index : m_elements[index];
+            
         }
 
         /// <summary>
@@ -98,11 +101,16 @@ namespace SystemEx.Collections.Generic {
         /// <remarks>
         /// If the index is out of range, the operation is ignored.
         /// </remarks>
-        public void Set(int index, object value) {
-            if ( index < 0 || index >= m_elements.Count )
+        public void Set(int index, object value ) {
+            if ( index < 0 || index >= m_elements.Length)
                 return;
 
-            m_elements.Insert(index, value);
+            if ( index == 0 ) {
+                if(value is TKey key) {
+                    m_index = key;
+                }
+            }
+            m_elements[index] = value;
         }
 
         /// <summary>
@@ -113,9 +121,20 @@ namespace SystemEx.Collections.Generic {
         /// Always throws <see cref="NotImplementedException"/> because this tuple
         /// does not define a semantic "first" element.
         /// </returns>
-        bool ITuple.EqualFirst(object key) {
-            throw new NotImplementedException();
+        public bool EqualFirst ( TKey key ) {
+            return m_index.Equals(key);
         }
+        public bool EqualValue(long index, object value ) {
+            bool _ret = false;
+
+            if ( index < 1 || index >= Count ) {
+                _ret = m_elements[index].Equals(value);
+            } else if(index == 0) {
+                _ret = m_index.Equals(value);
+            }
+            return _ret;
+        }
+      
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

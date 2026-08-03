@@ -19,7 +19,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using SystemEx.Algorithms.Interfaces;
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {

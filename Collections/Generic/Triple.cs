@@ -14,8 +14,6 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using SystemEx.Collections.Generic.Interfaces;
-
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
@@ -30,7 +28,7 @@ namespace SystemEx.Collections.Generic {
     [Serializable]
 #pragma warning disable CA1067
     public struct Triple<TT, TU, TW> :
-        IEquatable<Triple<TT, TU, TW>>, ITuple
+        IEquatable<Triple<TT, TU, TW>>, ITuple<TT> where TT : notnull
 #pragma warning restore CA1067
     {
         /// <summary>
@@ -140,7 +138,7 @@ namespace SystemEx.Collections.Generic {
         /// <exception cref="IndexOutOfRangeException">
         /// Thrown when the index is not 0, 1, or 2.
         /// </exception>
-        public object? Get(int index) {
+        public Optional<object> Get (int index) {
             if ( index < 0 || index >= Count )
 #pragma warning disable CA2201
                 throw new IndexOutOfRangeException("index");

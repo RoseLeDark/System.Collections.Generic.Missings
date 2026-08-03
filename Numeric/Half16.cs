@@ -45,7 +45,7 @@ namespace SystemEx.Numeric {
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [HashAlgorithm(typeof(BernsteinHash), Endian.System)]
-    public struct Half16 : IHalf<Half16>, IEquatable<Half16>, IComparable, IComparable<Half16>, IComparableEx<Half16>, IHashable<Half16> {
+    public struct Half16 : IHalf<Half16> {
         private ushort m_value;
 
         /// <summary>
@@ -741,6 +741,7 @@ namespace SystemEx.Numeric {
         public FixedVector<byte> ToBytes () {
             return new FixedVector<byte>(m_value.ToBytes());
         }
+
     }
     /// @}
 }

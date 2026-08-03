@@ -15,8 +15,6 @@
  * changes and the date.
  */
 
-using SystemEx.Collections.Generic.Interfaces;
-
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
@@ -28,7 +26,7 @@ namespace SystemEx.Collections.Generic {
     /// <typeparam name="T">The type of the first element (key).</typeparam>
     /// <typeparam name="TU">The type of the second element (value).</typeparam>
     [Serializable]
-    public struct Pair<T, TU> : IPair<T, TU>, IComparable<Pair<T, TU> > {
+    public struct Pair<T, TU> : IPair<T, TU>, IComparable<Pair<T, TU> > where T : notnull {
 
         /// <summary>
         /// Backing field for the first element (key).
@@ -39,14 +37,6 @@ namespace SystemEx.Collections.Generic {
         /// Backing field for the second element (value).
         /// </summary>
         private TU m_value;
-
-        /// <summary>
-        /// Gets or sets the first element of the pair.
-        /// </summary>
-        public T First {
-            get => m_key;
-            set => m_key = value;
-        }
 
         /// <summary>
         /// Gets or sets the second element of the pair.
@@ -60,6 +50,10 @@ namespace SystemEx.Collections.Generic {
         /// Gets the number of elements in the tuple (always 2).
         /// </summary>
         public readonly int Count => 2;
+        /// <summary>
+        /// 
+        /// </summary>
+        public T First { get => m_key; set => m_key = value; }
 
         /// <summary>
         /// Creates a new pair with the specified key and value.
@@ -112,24 +106,11 @@ namespace SystemEx.Collections.Generic {
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when the index is not 0 or 1.
         /// </exception>
-        public readonly object? Get(int index) {
+        public readonly Optional<object> Get (int index) {
             if ( index < 0 || index >= Count )
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             return index == 0 ? m_key : m_value;
-        }
-
-        /// <summary>
-        /// Determines whether the first element equals the specified object.
-        /// Used for <see cref="ITuple"/> compatibility.
-        /// </summary>
-        /// <param name="key">The object to compare with the first element.</param>
-        /// <returns><c>true</c> if the object matches the first element; otherwise <c>false</c>.</returns>
-        bool ITuple.EqualFirst(object key) {
-            if ( key is T typed )
-                return EqualFirst(typed);
-
-            return false;
         }
 
         public int CompareTo ( Pair<T, TU> other ) {

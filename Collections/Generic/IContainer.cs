@@ -18,24 +18,12 @@
 namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
+    /// 
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface IContainer<T> : IReadOnlyContainer<T> {
-
-        
-
-
-        /// <summary>
-        /// Appends an element to the end of the container.
-        /// Automatically grows the buffer if AutoGrow is enabled.
-        /// </summary>
-        /// <param name="entry">Element to append.</param>
-        /// <returns>
-        /// True if the element was appended; false if the container was full and AutoGrow was disabled.
-        /// </returns>
-        public bool PushBack ( T entry );
 
         /// <summary>
         /// Inserts an element at the specified index, shifting elements to the right.
@@ -93,6 +81,21 @@ namespace SystemEx.Collections.Generic {
 
 
     }
+
+
+    public interface ILinearContainer<T> : IContainer<T> {
+        /// <summary>
+        /// Appends an element to the end of the container.
+        /// Automatically grows the buffer if AutoGrow is enabled.
+        /// </summary>
+        /// <param name="entry">Element to append.</param>
+        /// <returns>
+        /// True if the element was appended; false if the container was full and AutoGrow was disabled.
+        /// </returns>
+        public bool PushBack ( T entry );
+    }
+
+    
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

@@ -38,73 +38,41 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         AccumulateCost
     }
-    /// <summary>
-    /// Represents a cluster node in a weighted graph structure.
-    /// </summary>
-    /// <typeparam name="T">Type of the value stored in the cluster node.</typeparam>
-    public interface ICluster<T> {
-        /// <summary>
-        /// The value stored in this cluster node. May be null.
-        /// </summary>
-        public T? Value { get;  }
-        /// <summary>
-        /// Number of direct children (outgoing edges) of this node.
-        /// </summary>
-        public long Size { get; }
-        /// <summary>
-        /// Mapping of child node to edge weight.
-        /// </summary>
-        public Map<ICluster<T>, uint> Child {  get; }
-        /// <summary>
-        /// Optional parent pointer and the weight of the edge to the parent.
-        /// </summary>
-        public Pair<ICluster<T>, uint>? Parent { get; }
-        /// <summary>
-        /// Add a directed edge from this node to <paramref name="other"/> with the given weight.
-        /// </summary>
-        /// <param name="other">Target child node.</param>
-        /// <param name="gewicht">Edge weight.</param>
-        /// <returns>True if the child was added; otherwise false.</returns>
-        public bool Add(ICluster<T> other, uint gewicht);
-        /// <summary>
-        /// Remove the directed edge to <paramref name="other"/>.
-        /// </summary>
-        /// <param name="other">Child node to remove.</param>
-        /// <returns>True if the child was removed; otherwise false.</returns>
-        public bool Remove(ICluster<T> other);
-        /// <summary>
-        /// Determines whether <paramref name="other"/> is a direct child of this node.
-        /// </summary>
-        /// <param name="other">Node to check.</param>
-        /// <returns>True if <paramref name="other"/> is a child; otherwise false.</returns>
-        public bool Contains(ICluster<T> other);
 
-        /// <summary>
-        /// Search for a node whose Value equals <paramref name="value"/> using a cost-limited Dijkstra-like search.
-        /// If found, sets <paramref name="cost"/> to the accumulated cost.
-        /// </summary>
-        /// <param name="value">Value to search for.</param>
-        /// <param name="cost">Reference to store the found cost.</param>
-        /// <param name="budget">Maximum allowed cost for the search.</param>
-        /// <returns>True if a matching node was found within budget; otherwise false.</returns>
-        public bool Cost(T value, ref ulong cost, ulong budget);
+    public struct CluserIterrator <TElemet> : Iterrator<ICluster<TElemet>>  {
+        private long m_index, m_end;
+        private ICluster<TElemet> m_root;
+        private ICluster<TElemet> m_current;
 
-        /// <summary>
-        /// General search that propagates either remaining energy or accumulated cost according to <paramref name="type"/>.
-        /// Fills <paramref name="steps"/> with the remaining energy for visited nodes.
-        /// </summary>
-        /// <param name="pradicat">Predicate value to match against node values.</param>
-        /// <param name="type">Search mode that controls how weights affect energy/cost.</param>
-        /// <param name="budget">Energy or cost budget depending on the search type.</param>
-        /// <param name="steps">Map to record remaining energy per visited node.</param>
-        /// <returns>True if a matching node was found within constraints; otherwise false.</returns>
-        public bool find(T pradicat, SearchType type, ulong budget, ref Map<ICluster<T>, uint> steps);
+        public bool IsEnd => !HaveNext;
+
+        public bool HaveNext => m_index < m_end;
+
+        public long Index { get => m_index; set => m_index = value; }
+
+        public Optional<ICluster<TElemet>> Current => new Optional<ICluster<TElemet>>(m_current);
+
+        public CluserIterrator ( ICluster<TElemet> cluster, long index , long end) {
+            m_index = index;
+            m_root = cluster;
+            m_current = m_root;
+            m_end = end;
+        }
+
+        public void Forward () {
+            if ( HaveNext ) {
+                m_index++;
+                m_current = m_current.ElementAt(m_index);
+            }
+        }
     }
+
+    // TODO: Umbauen as Tree with N Childs!
     /// <summary>
     /// Basic implementation of <see cref="ICluster{T}"/> representing a node with weighted children.
     /// </summary>
     /// <typeparam name="T">Type of the stored value.</typeparam>
-    public class Cluster<T> : ICluster<T> {
+    public class Cluster<T> : ICluster<T>, IUsedIterrator<ICluster<T>, CluserIterrator<T> >  {
 #pragma warning disable CA1051
         /// <summary>Stored node value.</summary>
         protected T m_value;
@@ -124,6 +92,21 @@ namespace SystemEx.Collections.Generic {
 
         /// <summary>Optional parent pointer with edge weight.</summary>
         public Pair<ICluster<T>, uint>? Parent { get; set; }
+
+        /// <summary>
+        /// Begin IT on current layer
+        /// </summary>
+        public CluserIterrator<T> Begin => new CluserIterrator<T>(this, 0, Size);
+        /// <summary>
+        /// End IT im current layer
+        /// </summary>
+        public CluserIterrator<T> End => new CluserIterrator<T>(this, Size+1, Size);
+
+        /// <inheritdoc/>
+        public bool HaveChild { get => !m_childs.IsEmpty; }
+
+        /// <inheritdoc/>
+        public bool HaveParent  { get => Parent != null; }
 
         /// <summary>
         /// Indexer by integer index into the child map.
@@ -315,6 +298,10 @@ namespace SystemEx.Collections.Generic {
             // Not found within budget/constraints
             return false;
         }
+
+        public ICluster<T> ElementAt ( long index ) => m_childs.ElementAt(index).First;
+
+        public uint CostAt ( long index ) => m_childs.ElementAt(index).Second;
 
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

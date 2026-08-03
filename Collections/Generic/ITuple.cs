@@ -14,47 +14,45 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-namespace SystemEx.Collections.Generic.Interfaces {
+
+namespace SystemEx.Collections.Generic {
     /// \addtogroup collections
     /// @{
+    /// \addtogroup interfaces
+    /// @{
     /// <summary>
-    /// Represents a two‑element tuple consisting of a key and a value.
-    /// Extends <see cref="ITuple"/> with strongly typed accessors and
-    /// comparison helpers for the first and second elements.
+    /// A lightweight interface for serializable N‑element tuple consisting of strongly typed 
     /// </summary>
-    /// <typeparam name="T">The type of the first element (key).</typeparam>
-    /// <typeparam name="TU">The type of the second element (value).</typeparam>
-    public interface IPair<T, TU> : ITuple {
-
+    public interface ITuple<TKey> where TKey : notnull  {
         /// <summary>
         /// Gets or sets the first element of the pair.
         /// </summary>
-        T First { get; set; }
+        TKey First { get; set; }
 
         /// <summary>
-        /// Gets or sets the second element of the pair.
+        /// Gets the number of elements stored in the tuple.
         /// </summary>
-        TU Second { get; set; }
+        int Count { get; }
 
         /// <summary>
-        /// Determines whether the first element equals the specified value.
+        /// Determines whether the first element of the tuple is equal to the specified key.
         /// </summary>
-        /// <param name="other">The value to compare against the first element.</param>
+        /// <param name="key">The value to compare against the first element.</param>
         /// <returns>
-        /// <c>true</c> if the first element equals <paramref name="other"/>; 
+        /// <c>true</c> if the first element equals <paramref name="key"/>; 
         /// otherwise <c>false</c>.
         /// </returns>
-        bool EqualFirst(T other);
+        bool EqualFirst(TKey key);
+
 
         /// <summary>
-        /// Determines whether the second element equals the specified value.
+        /// Retrieves the vaue at the specified index, not key
         /// </summary>
-        /// <param name="other">The value to compare against the second element.</param>
+        /// <param name="index">The zero-based index of the element.</param>
         /// <returns>
-        /// <c>true</c> if the second element equals <paramref name="other"/>; 
-        /// otherwise <c>false</c>.
+        /// The element at the given index, or <c>null</c> if the index is out of range.
         /// </returns>
-        bool EqualSecond(TU other);
+        Optional<object> Get (int index);
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     /// @}

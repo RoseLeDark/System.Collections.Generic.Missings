@@ -17,7 +17,6 @@
 
 using System.Collections;
 using SystemEx.Base;
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic{

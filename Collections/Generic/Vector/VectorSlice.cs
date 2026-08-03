@@ -15,7 +15,6 @@
  * changes and the date.
  */
 
-using SystemEx.Collections.Generic.Interfaces;
 using SystemEx.Threading;
 
 namespace SystemEx.Collections.Generic {
