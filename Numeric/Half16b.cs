@@ -41,6 +41,8 @@ namespace SystemEx.Numeric {
         /// </summary>
         public ushort TotalBits => 16;
 
+        public ushort HiddenBit => 0x80;
+
         /// <summary>
         /// Gets the sign bit (true = negative).
         /// </summary>
@@ -121,7 +123,7 @@ namespace SystemEx.Numeric {
         }
 
         /// <summary>
-        /// Creates a Half16 from explicit sign, exponent, and mantissa fields.
+        /// Creates a Half16b from explicit sign, exponent, and mantissa fields.
         /// </summary>
         public Half16b ( ushort sign, ushort exponent, ushort mantissa ) {
             m_value = (ushort)(((sign & 0x1) << 15) | ((exponent & 0xFF) << MantissaBits ) | (mantissa & 0x7F));
@@ -138,10 +140,23 @@ namespace SystemEx.Numeric {
         public byte[] ToBytes ( Endian endian ) =>
             m_value.ToBytes(endian);
 
+        public void ToBytes ( ref byte[] destination, long offset, Endian endian ) {
+            // Encode the underlying value into a temporary byte array.
+            byte[] _dest = m_value.ToBytes(endian);
+
+            // Ensure the destination buffer is large enough.
+            long requiredSize = offset + _dest.LongLength;
+            Buffer.LongCapacity(ref destination, requiredSize);
+
+            // Copy the encoded bytes into the destination buffer at the given offset.
+            Buffer.LongCopy(_dest, 0, destination, offset, _dest.LongLength);
+        }
+
+
         /// <summary>
         /// Constructs a Half16 from a byte array.
         /// </summary>
-        public static Half16b FromBytes ( byte[] input, int offsets, Endian endian ) {
+        public static Half16b FromBytes ( byte[] input, long offsets, Endian endian ) {
             ushort value = input.ToUShort(offsets, endian);
             return new Half16b(value);
         }
@@ -163,7 +178,7 @@ namespace SystemEx.Numeric {
                 return IsZero(x);
 
             int shift = e - 127;
-            uint mant = (uint)(x.Mantissa | 0x80);
+            uint mant = (uint)(x.Mantissa | x.HiddenBit );
 
             return (mant & ((1u << shift) - 1)) == 0;
         }
@@ -213,8 +228,8 @@ namespace SystemEx.Numeric {
             ushort expA = a.Exponent;
             ushort expB = b.Exponent;
 
-            uint mantA = (expA == 0) ? a.Mantissa : (uint)(a.Mantissa | 0x80);
-            uint mantB = (expB == 0) ? b.Mantissa : (uint)(b.Mantissa | 0x80);
+            uint mantA = (expA == 0) ? a.Mantissa : (uint)(a.Mantissa | a.HiddenBit);
+            uint mantB = (expB == 0) ? b.Mantissa : (uint)(b.Mantissa | b.HiddenBit);
 
             int exp = expA;
             int diff = expA - expB;
@@ -245,12 +260,12 @@ namespace SystemEx.Numeric {
             if ( mant == 0 )
                 return new Half16b(0, 0, 0);
 
-            while ( (mant & 0x80) == 0 ) {
+            while ( (mant & a.HiddenBit) == 0 ) {
                 mant <<= 1;
                 exp--;
             }
 
-            return Normalize(sign, exp, mant);
+            return Normalize(sign, exp, mant, a.HiddenBit);
         }
 
 
@@ -262,7 +277,7 @@ namespace SystemEx.Numeric {
 
             if ( e >= 127 ) {
                 int shift = e - 127;
-                uint mant = (uint)(x.Mantissa | 0x80);
+                uint mant = (uint)(x.Mantissa | x.HiddenBit);
                 mant >>= shift;
                 mant <<= shift;
                 return new Half16b((ushort)(x.Sign ? 1 : 0), e, (ushort)(mant & 0x7F));
@@ -293,8 +308,8 @@ namespace SystemEx.Numeric {
             ushort expA = a.Exponent;
             ushort expB = b.Exponent;
 
-            uint mantA = (expA == 0) ? a.Mantissa : (uint)(a.Mantissa | 0x80);
-            uint mantB = (expB == 0) ? b.Mantissa : (uint)(b.Mantissa | 0x80);
+            uint mantA = (expA == 0) ? a.Mantissa : (uint)(a.Mantissa | a.HiddenBit);
+            uint mantB = (expB == 0) ? b.Mantissa : (uint)(b.Mantissa | b.HiddenBit);
 
             int exp = expA - expB + 127;
 
@@ -305,7 +320,7 @@ namespace SystemEx.Numeric {
                 exp--;
             }
 
-            return Normalize(sign, exp, mant);
+            return Normalize(sign, exp, mant, a.HiddenBit);
         }
 
 
@@ -317,7 +332,7 @@ namespace SystemEx.Numeric {
 
             if ( e >= 127 ) {
                 int shift = e - 127;
-                uint mant = (uint)(x.Mantissa | 0x80);
+                uint mant = (uint)(x.Mantissa | x.HiddenBit);
                 mant >>= shift;
                 mant <<= shift;
                 return new Half16b((ushort)(x.Sign ? 1 : 0), e, (ushort)(mant & 0x7F));
@@ -343,8 +358,8 @@ namespace SystemEx.Numeric {
             ushort expA = a.Exponent;
             ushort expB = b.Exponent;
 
-            uint mantA = (expA == 0) ? a.Mantissa : (uint)(a.Mantissa | 0x80);
-            uint mantB = (expB == 0) ? b.Mantissa : (uint)(b.Mantissa | 0x80);
+            uint mantA = (expA == 0) ? a.Mantissa : (uint)(a.Mantissa | a.HiddenBit);
+            uint mantB = (expB == 0) ? b.Mantissa : (uint)(b.Mantissa | b.HiddenBit);
 
             int exp = expA + expB - 127;
 
@@ -357,7 +372,7 @@ namespace SystemEx.Numeric {
 
             mant >>= 7;
 
-            return Normalize(sign, exp, mant);
+            return Normalize(sign, exp, mant, a.HiddenBit);
         }
 
 
@@ -380,7 +395,7 @@ namespace SystemEx.Numeric {
 
             if ( e >= 127 ) {
                 int shift = e - 127;
-                uint mant = (uint)(x.Mantissa | 0x80);
+                uint mant = (uint)(x.Mantissa | x.HiddenBit);
                 mant >>= shift;
                 mant <<= shift;
                 return new Half16b((ushort)(x.Sign ? 1 : 0), e, (ushort)(mant & 0x7F));
@@ -475,7 +490,7 @@ namespace SystemEx.Numeric {
         }
 
         /// <summary>
-        /// Equality operator with IEEE‑754 zero handling.
+        /// Equality operator with  zero handling.
         /// </summary>
         public static bool operator == ( Half16b a, Half16b b ) {
             if ( IsNaN(a) || IsNaN(b) ) return false;
@@ -617,11 +632,11 @@ namespace SystemEx.Numeric {
         }
 
 
-        static Half16b Normalize ( ushort sign, int exp, uint mant ) {
+        static Half16b Normalize ( ushort sign, int exp, uint mant, ushort hiddenbit ) {
             if ( mant == 0 )
                 return new Half16b(sign, 0, 0);
 
-            while ( (mant & 0x80) == 0 ) {
+            while ( (mant & hiddenbit) == 0 ) {
                 mant <<= 1;
                 exp--;
             }
@@ -650,5 +665,7 @@ namespace SystemEx.Numeric {
 
             return (mant >> 3) + add;
         }
+
+        
     }
 }

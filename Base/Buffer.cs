@@ -196,6 +196,93 @@ namespace SystemEx {
             }
 
         }
+        /// <summary>
+        /// Resizes an array to the specified new length using <c>long</c> indices.
+        /// A new array is allocated and existing elements are copied using raw
+        /// pointer access. If the new length is smaller, the array is truncated.
+        /// </summary>
+        /// <typeparam name="T">Blittable element type.</typeparam>
+        /// <param name="array">The array to resize.</param>
+        /// <param name="newLength">The desired length of the array.</param>
+        public static unsafe void LongReAlloc<T> ( ref T[] array, long newLength ) {
+            if ( newLength < 0 )
+                throw new ArgumentOutOfRangeException(nameof(newLength));
+
+            T[] newArray = new T[newLength];
+            if ( array == null ) {
+                array = newArray;
+                return;
+            }
+
+            long copyLength = System.Math.Min(array.LongLength, newLength);
+            LongCopy(array, 0, newArray, 0, copyLength);
+
+            array = newArray;
+        }
+        /// <summary>
+        /// Ensures that the array has at least the specified capacity. If the array
+        /// is too small, it is resized using <see cref="LongResize{T}"/>.
+        /// </summary>
+        public static void LongCapacity<T> ( ref T[] array, long requiredLength ) {
+            if ( array == null || array.LongLength < requiredLength )
+                LongReAlloc(ref array!, requiredLength);
+        }
+
+        /// <summary>
+        /// Clears a range of elements in an array using <c>long</c> indices.
+        /// </summary>
+        public static unsafe void LongClear<T> ( T[] array, long offset, long count ) {
+            if ( array == null ) return;
+            LongZeroMemory(array, offset, count);
+        }
+
+        /// <summary>
+        /// Creates a new array and copies the specified range into it.
+        /// </summary>
+        public static unsafe T[] LongCopy<T> ( T[] src, long srcOffset, long count ) {
+            if ( src == null )
+                throw new ArgumentNullException(nameof(src));
+
+            T[] result = new T[count];
+            LongCopy(src, srcOffset, result, 0, count);
+            return result;
+        }
+        /// <summary>
+        /// Appends the specified elements to the end of an array.
+        /// </summary>
+        public static unsafe void LongAppend<T> ( ref T[] array, T[] append ) {
+            if ( append == null || append.LongLength == 0 ) return;
+            if ( array == null ) return;
+
+            long oldLen = array?.LongLength ?? 0;
+            long newLen = oldLen + append.LongLength;
+
+            LongReAlloc(ref array!, newLen);
+            LongCopy(append, 0, array, oldLen, append.LongLength);
+        }
+        /// <summary>
+        /// Inserts a block of elements into an array at the specified offset.
+        /// </summary>
+        public static unsafe void LongInsert<T> ( ref T[] array, long offset, T[] block ) {
+            if ( block == null || block.LongLength == 0 )
+                return;
+
+            long oldLen = array?.LongLength ?? 0;
+            long newLen = oldLen + block.LongLength;
+
+            T[] newArray = new T[newLen];
+
+            // copy before insertion point
+            LongCopy(array!, 0, newArray, 0, offset);
+
+            // copy block
+            LongCopy(block, 0, newArray, offset, block.LongLength);
+
+            // copy remainder
+            LongCopy(array!, offset, newArray, offset + block.LongLength, oldLen - offset);
+
+            array = newArray;
+        }
 
     }
 }

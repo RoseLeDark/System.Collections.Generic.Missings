@@ -8,7 +8,9 @@ namespace SystemEx.Numeric {
     /// Implementations specify how many bits are used for sign,
     /// exponent and mantissa, including exponent bias and bit positions.
     /// </summary>
-    public interface IFloat<TSelf, TBias> : IEquatable<TSelf>, IComparable, IComparable<TSelf>, IComparableEx<TSelf>, IHashable<TSelf>
+    public interface IFloat<TSelf, TBias> : IEquatable<TSelf>, IComparable, IComparable<TSelf>, 
+        IComparableEx<TSelf>, IHashable<TSelf>, IByteSerializable<TSelf>
+
         where TSelf : struct, IFloat<TSelf, TBias> {
 
         public TBias ToBase { get;  }
@@ -33,6 +35,8 @@ namespace SystemEx.Numeric {
         /// Total number of bits in the representation 
         /// </summary>
         public TBias TotalBits { get; }
+
+        public ushort HiddenBit { get; }
 
         /// <summary>
         /// Gets the sign bit (true = negative).
@@ -97,8 +101,7 @@ namespace SystemEx.Numeric {
         static abstract bool operator == ( TSelf a, TSelf b );
         static abstract bool operator != ( TSelf a, TSelf b );
 
-        // --- Static factory ---
-        static abstract TSelf FromBytes ( byte[] bytes, int offset, Endian endian );
+        
     }
     /// @}
 }

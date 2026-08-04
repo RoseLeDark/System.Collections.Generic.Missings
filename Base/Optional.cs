@@ -177,7 +177,7 @@ namespace SystemEx {
         public bool Equals ( Optional<T> b ) {
             bool _ret = false;
 
-            if ( IsNull && a.IsNull ) _ret = true;
+            if ( IsNull && b.IsNull ) _ret = true;
             else if ( IsNull && b.IsSome ) _ret = false;
             else if ( IsSome && b.IsNull ) _ret = false;
             else
@@ -271,6 +271,7 @@ namespace SystemEx {
         public override bool Equals ( object? obj ) {
             if ( obj is Optional<T> key ) 
                 return Equals(key);
+            return false;
         }
 
         public override int GetHashCode () {
