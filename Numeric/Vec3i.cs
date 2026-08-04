@@ -11,7 +11,7 @@ namespace SystemEx.Numeric {
     /// \addtogroup Numeric
     /// @{
     /// <summary>
-    /// Represents a 2‑component inting‑point vector.
+    /// Represents a 3‑component inting‑point vector.
     ///
     /// <para>
     /// <see cref="Vec3i"/> is a lightweight numeric type used throughout SystemEx

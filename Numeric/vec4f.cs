@@ -11,7 +11,7 @@ namespace SystemEx.Numeric {
     /// \addtogroup Numeric
     /// @{
     /// <summary>
-    /// Represents a 2‑component floating‑point vector.
+    /// Represents a 4‑component floating‑point vector.
     ///
     /// <para>
     /// <see cref="Vec4f"/> is a lightweight numeric type used throughout SystemEx

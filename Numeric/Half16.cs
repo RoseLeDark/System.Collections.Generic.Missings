@@ -434,7 +434,7 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Normalizes a mantissa/exponent pair into a valid Half16 value.
         /// </summary>
-        static Half16 Normalize ( ushort sign, int exp, uint mant, ushort hiddenbit ) {
+        internal static Half16 Normalize ( ushort sign, int exp, uint mant, ushort hiddenbit ) {
             if ( mant == 0 ) return new Half16(sign, 0, 0);
 
             while ( (mant & hiddenbit) == 0 ) {

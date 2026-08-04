@@ -15,7 +15,6 @@
  * changes and the date.
  */
 
-using System;
 using System.Runtime.InteropServices;
 using SystemEx.Collections.Generic;
 
