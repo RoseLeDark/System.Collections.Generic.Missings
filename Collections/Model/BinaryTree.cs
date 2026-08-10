@@ -25,6 +25,16 @@ namespace SystemEx.Collections.Model {
 				m_rootNode = m_rootNode.Parent;
 			}
 		 }
+		 // Back only
+		 public virtual void Advance (int steps) {
+
+			while ( m_rootNode.Parent != null ) {
+				if ( steps <= 0 ) break;
+
+				m_rootNode = m_rootNode.Parent;
+				steps--;
+			}
+		}
 
 		public void Insert(T newData) {
 			var _c = new TreeNode<T>(2, newData);
