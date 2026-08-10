@@ -1,4 +1,15 @@
 # Changelog
+## 
+### Added
+- Add Half16hb (google Half 16 floa type) and baic structs for more float types
+- Add:
+  - `vec2h` (Half16) and `vec2hb` (Half16b)
+  - `vec3h` (Half16) and `vec3hb` (Half16b)
+  - `vec4h` (Half16) and `vec4hb` (Half16b)
+- Add Converstion from Float to Half16 and Half16b and to float
+- Add for Profi - `BitIntSpan`, `BitLongSpan` unsigned and signed version in FlexSpan style with reverse, ringbuffer and AsSpan System mode. 
+  Becarful by Ring mode 
+
 ## [0.70.658] 30.07.2026 -> Lacking
 ### Added
 - Added `SafeCounter` with operator suite (++, --, +, -, ==, !=) with full atomic semantics.

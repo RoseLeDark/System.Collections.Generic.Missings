@@ -54,13 +54,13 @@ namespace SystemEx.Threading {
         /// The parameters provide the condition variable instance, the thread being added,
         /// and the current number of waiting threads after insertion.
         /// </summary>
-        public Action<SimpleConditionVariable, SimpleThread, int>? OnAdd;
+        public Action<LightConditionVariable, LightThread, int>? OnAdd;
 
         /// <summary>
         /// Debug callback invoked whenever a broadcast operation is performed.
         /// The integer parameter indicates how many threads were signaled.
         /// </summary>
-        public Action<SimpleConditionVariable, int>? OnBroadcast;
+        public Action<LightConditionVariable, int>? OnBroadcast;
 
         /// <summary>
         /// Total number of wait operations registered on this condition variable.
@@ -95,19 +95,19 @@ namespace SystemEx.Threading {
             m_lockable = new LightLock();
             m_strName = strName;
 
-#if DEBUG
+#if GDEBUG
             OnAdd = null;
             OnBroadcast = null;
 #endif
 
-        }
+		}
 
-        /// <summary>
-        /// Wakes a single waiting thread, if any. The first thread in the FIFO
-        /// wait‑list is resumed. This operation is intentionally simple and does
-        /// not involve any advanced signaling semantics.
-        /// </summary>
-        public void Signal () {
+		/// <summary>
+		/// Wakes a single waiting thread, if any. The first thread in the FIFO
+		/// wait‑list is resumed. This operation is intentionally simple and does
+		/// not involve any advanced signaling semantics.
+		/// </summary>
+		public void Signal () {
             m_lockable.Lock();
 
             if ( m_waits.IsEmpty ) return;
@@ -118,10 +118,10 @@ namespace SystemEx.Threading {
                 if ( _th.HasValue ) _th.Value!.Signal(false);
             }
 
-#if DEBUG
+#if GDEBUG
             TotalSignals++;
 #endif
-            m_lockable.Unlock();
+			m_lockable.Unlock();
         }
 
         /// <summary>
@@ -137,17 +137,17 @@ namespace SystemEx.Threading {
                 if ( m_waits.PopFront(out _th) ) {
                     if ( _th.HasValue ) _th.Value!.Signal(false);
 #if DEBUG
-                    if ( OnBroadcast != null ) OnBroadcast.Invoke(this, m_waits.Count);
+					if ( OnBroadcast != null ) OnBroadcast.Invoke(this, m_waits.Count);
 #endif
-                }
+				}
 
-            }
+			}
 
 #if DEBUG
-            TotalBroadcasts++;
+			TotalBroadcasts++;
 #endif
 
-            m_lockable.Unlock();
+			m_lockable.Unlock();
         }
 
         /// <summary>
@@ -183,22 +183,22 @@ namespace SystemEx.Threading {
             m_lockable.Lock();
             m_waits.PushBack(task);
 #if DEBUG
-            if ( OnAdd != null ) OnAdd.Invoke(this, task, m_waits.Count);
+			if ( OnAdd != null ) OnAdd.Invoke(this, task, m_waits.Count);
 #endif
-            m_lockable.Unlock();
+			m_lockable.Unlock();
         }
 
 #if DEBUG
-        /// <summary>
-        /// Produces a debug dump containing internal statistics and state information
-        /// for this condition variable. Intended for diagnostics and development-time
-        /// inspection only.
-        /// </summary>
-        /// <returns>
-        /// A formatted string describing wait counts, signal activity, broadcast
-        /// operations, and the current number of waiting threads.
-        /// </returns>
-        public string DumpDebug () {
+		/// <summary>
+		/// Produces a debug dump containing internal statistics and state information
+		/// for this condition variable. Intended for diagnostics and development-time
+		/// inspection only.
+		/// </summary>
+		/// <returns>
+		/// A formatted string describing wait counts, signal activity, broadcast
+		/// operations, and the current number of waiting threads.
+		/// </returns>
+		public string DumpDebug () {
             m_lockable.Lock();
 
             var sb = new StringBuilder();
@@ -216,5 +216,5 @@ namespace SystemEx.Threading {
         }
 #endif
 
-    }
+	}
 }

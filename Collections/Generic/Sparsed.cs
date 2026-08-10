@@ -26,7 +26,9 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The element type stored in the container.</typeparam>
     public struct Sparsed<T> : IContainer<T>, IAutoGrowe, IEnumerable<T>, IEquatable<Sparsed<T>>, ITraverse<Optional<T>>, ISwappable<long> {
-        private Optional<T>[] m_elements;
+        private T[] m_elements;
+        private byte [] m_state;
+
         private long m_index;
         private long m_growSize;
         private bool m_autoGrow;
@@ -47,12 +49,12 @@ namespace SystemEx.Collections.Generic {
 
                 long index = -1;
                 for ( long i = 0 ; i < Length ; i++ ) {
-                    if ( m_elements[i].IsSome ) {
+                    if ( m_state[i] == 1 ) {
                         index = i; break;
                     }
                 }
 
-                return m_elements[index].Value!;
+                return m_elements[index];
             }
         }
         /// <summary>
@@ -71,12 +73,12 @@ namespace SystemEx.Collections.Generic {
                 long index = -1;
 
                 for ( long i = Length - 1 ; i >= 0 ; i-- ) {
-                    if ( m_elements[i].IsSome ) {
+                    if ( m_state[i] == 1 ) {
                         index = i; break;
                     }
                 }
 
-                return m_elements[index].Value!;
+                return m_elements[index];
             }
         }
         /// <summary>
@@ -126,7 +128,8 @@ namespace SystemEx.Collections.Generic {
         /// Initializes a new sparse container with the specified number of slots.
         /// </summary>
         public Sparsed ( long N , int growSize = 4) {
-            m_elements = new Optional<T>[N];
+            m_elements = new T[N];
+            m_state = new byte[N];
             m_growSize = growSize;
             m_index = 0;
         }
@@ -137,7 +140,8 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public void Clear () {
             var t = Length;
-            m_elements = new Optional<T>[t];
+            m_elements = new T[t];
+            m_state = new byte[t];
         }
         /// <summary>
         /// Returns the element at the specified index.
@@ -145,7 +149,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public Optional<T> ElementAt ( long index ) {
             if ( index < 0 || index >= Length ) throw new ArgumentOutOfRangeException("index");
-            m_index = -1;
+            
 
             return m_elements[index];
         }
@@ -155,12 +159,34 @@ namespace SystemEx.Collections.Generic {
         public bool Erase () {
             bool _ret = false;
 
-            if ( m_elements[m_index].IsSome ) {
-                m_elements[m_index].HasValue = false;
+            if ( m_state[m_index] == 1 ) {
+                m_state[m_index] = 0;
                 _ret = true;
             }
             return _ret;
         }
+        /// <summary>
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="all"></param>
+        /// <returns></returns>
+        public bool Erase (T entry, bool all = false) {
+            bool _ret = false;
+
+            for(long i = 0 ; i < Length ; i++ ) {
+                if(m_state[i] == 1 ) {
+                    if ( m_state[i] == 0 ) continue;
+
+                    if( m_elements[i]!.Equals(entry) ) {
+                        m_state[i] = 0;
+                        _ret = true;
+                        if ( !all ) break;
+                    }
+                }
+            }
+            return _ret;
+        }
+
         /// <summary>
         /// Removes the element at the specified index.
         /// </summary>
@@ -168,8 +194,8 @@ namespace SystemEx.Collections.Generic {
             if ( index < 0 || index >= Length ) throw new ArgumentOutOfRangeException("index");
             bool _ret = false;
 
-            if ( m_elements[index].IsSome ) {
-                m_elements[index].HasValue = false;
+            if ( m_state[index] == 1 ) {
+                m_state[index] = 0;
                 _ret = true;
             }
             return _ret;
@@ -211,8 +237,10 @@ namespace SystemEx.Collections.Generic {
 
             bool _ret =  false;
 
-            if ( m_elements[index].IsNull ) {
+            if ( m_state[index] == 0 ) {
                 m_index = index;
+                m_elements[index] = entry;
+                m_state[index] = 1;
                 _ret = true;
 
             } else {
@@ -220,6 +248,7 @@ namespace SystemEx.Collections.Generic {
 
                 if ( _t > -1 ) {
                     m_elements[_t] = entry;
+                    m_state[_t] = 1;
                     m_index = _t;
                     _ret = true;
                 }
@@ -251,8 +280,8 @@ namespace SystemEx.Collections.Generic {
             long _index = -1;
 
             if ( m_index >= 1 && m_index < Length - 1 ) {
-                if ( m_elements[m_index + 1].IsNull ) _index = m_index + 1;
-                else if ( m_elements[m_index - 1].IsNull ) _index = m_index - 1;
+                if ( m_state[m_index + 1] == 0 ) _index = m_index + 1;
+                else if ( m_state[m_index - 1] == 0 ) _index = m_index - 1;
                 else _index = getFreeSlot();
             } else {
                 _index = getFreeSlot();
@@ -260,6 +289,7 @@ namespace SystemEx.Collections.Generic {
 
 
             m_elements[_index] = entry;
+            m_state[_index] = 1;
             m_index = _index;
             return true;
         }
@@ -270,12 +300,12 @@ namespace SystemEx.Collections.Generic {
         public Optional<T> Pop () {
             Optional<T> _ret = Optional<T>.NONE;
 
-            if ( m_elements[m_index].IsSome ) {
-                _ret = new Optional<T>(m_elements[m_index].Value);
-                m_elements[m_index].HasValue = false;
+            if ( m_state[m_index] == 1 ) {
+                _ret = new Optional<T>(m_elements[m_index]);
+                m_state[m_index] = 0;
 
                 for ( long i = m_index ; i > -1 ; i-- ) {
-                    if ( m_elements[i].IsSome ) {
+                    if ( m_state[i] == 1 ) {
                         m_index = i;
                         break;
                     }
@@ -320,10 +350,10 @@ namespace SystemEx.Collections.Generic {
         private long getUsedCount () {
             long count = 0;
 
-            var local = m_elements;
+            var local = m_state;
 
             Parallel.For(0, Length, i => {
-                if ( local[i].IsSome ) {
+                if ( local[i] == 1 ) {
                     Interlocked.Increment(ref count);
                 }
             });
@@ -338,10 +368,10 @@ namespace SystemEx.Collections.Generic {
             if ( IsFull ) return -1;
 
             long result = -1;
-            var elements = m_elements;
+            var elements = m_state;
 
             Parallel.For(0, Length, ( i, state ) => {
-                if ( !elements[i].IsSome ) {
+                if ( elements[i] == 0 ) {
                     result = i;
                     state.Stop();   // ← bricht alle weiteren Iterationen ab
                 }
@@ -407,9 +437,13 @@ namespace SystemEx.Collections.Generic {
             if ( i < 0 || j < 0 ) return;
             if ( i >= Length || j >= Length ) return;
 
-            var tmp = m_elements[i];
+            var _elements = m_elements[i];
             m_elements[i] = m_elements[j];
-            m_elements[j] = tmp;
+            m_elements[j] = _elements;
+
+            var _state = m_state[i];
+            m_state[i] = m_state[j];
+            m_state[j] = _state;
         }
         /// <inheritdoc/>
         public void Traverse ( TraversMode mode, long startIndex, long endIndex, Action<Optional<T>> func ) {
@@ -418,12 +452,12 @@ namespace SystemEx.Collections.Generic {
 
             if ( mode == TraversMode.Forwards ) {
                 for ( long i = start ; i < end ; i++ ) {
-                    if ( m_elements[i].IsSome  )
+                    if ( m_state[i] == 1  )
                         func(m_elements[i]);
                 }
             } else if ( mode == TraversMode.Backwards ) {
                 for ( long i = end ; i >= start ; i-- ) {
-                    if ( m_elements[i].IsSome )
+                    if ( m_state[i] == 1 )
                         func(m_elements[i]);
                 }
             }
@@ -432,8 +466,8 @@ namespace SystemEx.Collections.Generic {
         /// <inheritdoc/>
         public IEnumerator<T> GetEnumerator () {
             for(long i = 0 ; i < Length ; i++) {
-                if(m_elements[i].IsSome ) {
-                    yield return m_elements[i].Value!;
+                if(m_state[i] == 1 ) {
+                    yield return m_elements[i];
                 }
             }
         }

@@ -14,13 +14,9 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using Microsoft.VisualBasic;
 using System.Numerics;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
 using SystemEx.IO.Provider;
-using SystemEx.Utils;
 
 namespace SystemEx {
     /// <summary>

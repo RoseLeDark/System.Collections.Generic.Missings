@@ -29,7 +29,7 @@ namespace SystemEx {
     /// The underlying value type. Can be either a reference type or a value type.
     /// </typeparam>
     public struct Optional<T> : IComparableEx<Optional<T>>, IComparable<Optional<T>>, IEquatable<Optional<T>> {
-        private T m_value;
+        private T? m_value;
         private bool m_hasValue;
 
         /// <summary>
@@ -92,6 +92,7 @@ namespace SystemEx {
         public Optional ( T? value ) {
             if ( value == null ) {
                 m_hasValue = false;
+                m_value = default(T);
             } else {
                 m_hasValue = true;
                 m_value = value;
@@ -205,7 +206,7 @@ namespace SystemEx {
         /// <param name="opt">The optional instance to extract from.</param>
         /// <returns>The stored value.</returns>
         public static explicit operator T ( Optional<T> opt ) {
-            return opt.m_value;
+            return opt.m_value!;
         }
 
         /// <summary>
@@ -246,13 +247,12 @@ namespace SystemEx {
         public static bool operator false ( Optional<T> opt ) {
             return !opt.m_hasValue;
         }
-        /// <summary>
-        /// 
-        /// </summary>
+
+        /// <inheritdoc/>
         public static bool operator == ( Optional<T> a, Optional<T> b ) {
             bool _ret = false;
 
-                 if ( a.IsNull && a.IsNull ) _ret = true;
+                 if ( a.IsNull && b.IsNull ) _ret = true;
             else if ( a.IsNull && b.IsSome ) _ret = false;
             else if ( a.IsSome && b.IsNull ) _ret = false;
             else 
@@ -260,24 +260,55 @@ namespace SystemEx {
 
             return _ret;
         }
+        /// <inheritdoc/>
+        public static bool operator == ( Optional<T> a, T? b ) {
+            bool _ret = false;
 
-        /// <summary>
-        /// 
-        /// </summary>
+            if ( a.IsNull && b is null ) _ret = true;
+            else if ( a.IsNull && b is not null ) _ret = false;
+            else if ( a.IsSome && b is null ) _ret = false;
+            else
+                _ret = a.Value!.GetHashCode() == b!.GetHashCode();
+
+            return _ret;
+        }
+        /// <inheritdoc/>
+        public static bool operator != ( Optional<T> a, T? b ) {
+            return !(a == b);
+        }
+
+        /// <inheritdoc/>
         public static bool operator != ( Optional<T> a, Optional<T> b ) {
             return !(a == b);
         }
 
+
+        /// <inheritdoc/>
         public override bool Equals ( object? obj ) {
             if ( obj is Optional<T> key ) 
                 return Equals(key);
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode () {
             return m_value!.GetHashCode();
         }
-    }
+
+		public override string ToString () {
+            if ( m_value != null ) return m_value.ToString();
+            else return "Optional<T>.NONE";
+		}
+
+		internal void SetValue ( T? value ) {
+			if ( value == null ) {
+				m_hasValue = false;
+			} else {
+				m_hasValue = true;
+				m_value = value;
+			}
+		}
+	}
 
 
 }

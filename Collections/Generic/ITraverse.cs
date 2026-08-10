@@ -34,6 +34,9 @@ namespace SystemEx.Collections.Generic {
         /// Traverses elements from higher to lower indices.
         /// </summary>
         Backwards,
+
+        InOrder,
+        PreOrder,
     }
 
     /// <summary>

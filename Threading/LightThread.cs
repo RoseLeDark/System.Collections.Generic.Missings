@@ -95,10 +95,10 @@ namespace SystemEx.Threading {
 
             cvl.Unlock();
             bool _ret = m_waitState.Lock ();
-#if DEBUG
+#if GERTDEBUG
             cv.TotalWaits++;
 #endif
-            cvl.Lock ();
+			cvl.Lock ();
 
             //task_utils::notify_take(true, timeOut);
             bool _os = true;
