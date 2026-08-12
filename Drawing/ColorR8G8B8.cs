@@ -82,11 +82,19 @@ namespace SystemEx.Drawing {
             m_green = g * 0.00392156862745098f;
             m_blue = b * 0.00392156862745098f;
         }
+		/// <summary>
+		/// Creates a grayscale color using a single byte value.
+		/// </summary>
+		public ColorR8G8B8 ( byte b ) {
+			m_red = b * 0.00392156862745098f;
+			m_green = b * 0.00392156862745098f;
+			m_blue = b * 0.00392156862745098f;
+		}
 
-        /// <summary>
-        /// Creates a color from 8‑bit RGB components.
-        /// </summary>
-        public ColorR8G8B8(byte r, byte g, byte b) {
+		/// <summary>
+		/// Creates a color from 8‑bit RGB components.
+		/// </summary>
+		public ColorR8G8B8(byte r, byte g, byte b) {
             m_red = r * 0.00392156862745098f;
             m_green = g * 0.00392156862745098f;
             m_blue = b * 0.00392156862745098f;
