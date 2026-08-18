@@ -70,9 +70,9 @@ namespace SystemEx.Drawing {
         /// <returns>
         /// <c>true</c> if the components match; otherwise <c>false</c>.
         /// </returns>
-        public bool Equals(ColorHSL other) {
-
-            return m_h.Equals(other.m_h) &&
+        public bool Equals(ColorHSL? other ) {
+			if ( other == null ) return false;
+			return m_h.Equals(other.m_h) &&
                 m_s.Equals(other.m_s) &&
                 m_l.Equals(other.m_h);
         }
@@ -86,8 +86,8 @@ namespace SystemEx.Drawing {
         /// Determines whether this instance is equal to another object.
         /// </summary>
         public override bool Equals(object? obj) {
-            if ( obj == null ) return false;
-            if ( obj is ColorHSL ) return Equals(obj as ColorHSL);
+			if ( obj == null ) return false;
+			if ( obj is ColorHSL d ) return Equals(d);
             return false;
         }
         /// <summary>

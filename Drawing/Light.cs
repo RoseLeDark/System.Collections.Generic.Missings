@@ -63,8 +63,8 @@ namespace SystemEx.Drawing {
         public Light() {
             m_Position = new Vec3f(-10.0f, 2.0f, 0.0f);
             m_Direction = new Vec3f(1.0f, 0.0f, 0.0f);
-            m_DiffuseColor = WhiteColors.Snow;
-            m_AmbientColor = YellowColors.LightYellow;
+            m_DiffuseColor = WhiteColors.Snow.ToColorHSV();
+            m_AmbientColor = YellowColors.LightYellow.ToColorHSV();
 
             m_Up = new Vec3f(0.0f, 1.0f, 0.0f);
 

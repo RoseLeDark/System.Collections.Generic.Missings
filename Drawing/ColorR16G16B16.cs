@@ -22,7 +22,7 @@ namespace SystemEx.Drawing {
     /// Represents a color with 16‑bit precision per channel (R16G16B16),
     /// stored internally as normalized floating‑point values (0–1).
     /// </summary>
-    public class ColorR16G16B16 : IColor<ColorR16G16B16>, IEquatable<ColorR16G16B16> {
+    public struct ColorR16G16B16 : IColor<ColorR16G16B16>, IEquatable<ColorR16G16B16> {
         private float m_red;
         private float m_green;
         private float m_blue;
@@ -257,8 +257,8 @@ namespace SystemEx.Drawing {
         /// Determines whether this instance is equal to another object.
         /// </summary>
         public override bool Equals(object? obj) {
-            if ( obj == null ) return false;
-            if ( obj is ColorR16G16B16 ) return Equals(obj as ColorR16G16B16);
+			if ( obj == null ) return false;
+			if ( obj is ColorR16G16B16 d) return Equals(d);
             return false;
         }
     }

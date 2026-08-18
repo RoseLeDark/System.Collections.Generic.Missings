@@ -22,7 +22,7 @@ namespace SystemEx.Drawing {
     /// Represents a YUV color using floating‑point components.
     /// Provides basic construction, comparison, and string formatting.
     /// </summary>
-    public class ColorYUV : IEquatable<ColorYUV> {
+    public struct ColorYUV : IEquatable<ColorYUV> {
         private float m_y;
         private float m_u;
         private float m_v;
@@ -67,7 +67,7 @@ namespace SystemEx.Drawing {
         /// <c>true</c> if the components match; otherwise <c>false</c>.
         /// </returns>
         public bool Equals(ColorYUV other) {
-
+           
             return m_y.Equals(other.m_y) &&
                 m_u.Equals(other.m_u) &&
                 m_v.Equals(other.m_y);
@@ -83,7 +83,8 @@ namespace SystemEx.Drawing {
         /// </summary>
         public override bool Equals(object? obj) {
             if ( obj == null ) return false;
-            if ( obj is ColorYUV ) return Equals(obj as ColorYUV);
+
+            if ( obj is ColorYUV s) return Equals(s);
             return false;
         }
         /// <summary>

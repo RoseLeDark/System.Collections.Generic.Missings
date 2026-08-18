@@ -292,12 +292,19 @@ namespace SystemEx {
 
         /// <inheritdoc/>
         public override int GetHashCode () {
+            if ( m_value == null ) return 0;
+
             return m_value!.GetHashCode();
         }
 
 		public override string ToString () {
-            if ( m_value != null ) return m_value.ToString();
-            else return "Optional<T>.NONE";
+			string _ret = "";
+
+            if ( m_value == null ) _ret = "Optional<T>.NONE";
+            else _ret = m_value.ToString()!;
+
+            return _ret;
+
 		}
 
 		internal void SetValue ( T? value ) {

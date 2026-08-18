@@ -250,7 +250,7 @@ namespace SystemEx {
         public static bool operator != ( FlexSpan<T> left, FlexSpan<T> right ) => !(left == right);
 
         [Obsolete("Equals() on FlexSpan will always throw an exception. Use the equality operator instead.")]
-        public override bool Equals ( object? obj ) => throw new NotSupportedException();
+        public override bool Equals ( object obj ) => throw new NotSupportedException();
 
         [Obsolete("GetHashCode() on FlexSpan will always throw an exception.")]
         public override int GetHashCode () => throw new NotSupportedException();

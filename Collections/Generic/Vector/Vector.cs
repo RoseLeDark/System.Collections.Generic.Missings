@@ -1017,7 +1017,7 @@ namespace SystemEx.Collections.Generic {
         }
 
         /// <inheritdoc/>
-        public override bool Equals ( object obj ) {
+        public override bool Equals ( object? obj ) {
             if ( obj is Vector<T> k ) return this.Equals(k);
             return false;
         }

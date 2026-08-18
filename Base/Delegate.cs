@@ -95,10 +95,10 @@ namespace SystemEx {
         /// <returns>
         /// A value indicating whether this delegate has fewer, equal, or more subscribed functions.
         /// </returns>
-        public int CompareTo ( Delegate<T> other ) {
- 
+        public int CompareTo ( Delegate<T> ? other ) {
+            
             long A = m_functions.Count;
-            long B = other.m_functions.Count;
+            long B = other!.m_functions.Count;
 
 
             if (A > B) return (int)CompareResult.Greater;
@@ -141,7 +141,26 @@ namespace SystemEx {
             return !a.Equals(b);
         }
 
-        
-    }
+        /// <inheritdoc/>
+		public override bool Equals ( object? obj ) {
+			if ( ReferenceEquals(this, obj) ) {
+				return true;
+			}
+
+			if ( ReferenceEquals(obj, null) ) {
+				return false;
+			}
+
+            if ( obj is Delegate<T> s ) {
+               return m_functions == s.m_functions;
+			}
+            return false;
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode () {
+            return m_functions.GetHashCode();
+		}
+	}
 
 }
