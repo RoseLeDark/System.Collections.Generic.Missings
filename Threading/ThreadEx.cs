@@ -126,12 +126,16 @@ namespace SystemEx.Threading {
         /// Lock Running LightLock
         /// </summary>
         /// <returns></returns>
-        protected bool LockRunning () => m_runningMutex.Lock();
+        protected bool LockRunning () {
+            return m_runningMutex.Lock();
+        }
 
         /// <summary>
         /// UnLock Running LightLock
         /// </summary>
-        protected void UnlockRunning () => m_runningMutex.Unlock();
+        protected void UnlockRunning () {
+			m_runningMutex.Unlock();
+		}
 
         /// <summary>
         /// Occurs when the thread performs its main task loop. Called repeatedly
@@ -219,12 +223,13 @@ namespace SystemEx.Threading {
 
             m_continuemutex.Lock() ;
             m_runningMutex.Lock() ;
+            m_contextMutext.Lock();
 
-            if ( m_bRunning ) {
+			if ( m_bRunning ) {
                 m_runningMutex.Unlock();
                 m_continuemutex.Unlock();
-
-                return false;
+				m_contextMutext.Unlock();
+				return false;
             }
             m_runningMutex.Unlock();
 
@@ -234,16 +239,18 @@ namespace SystemEx.Threading {
             if( !m_eventGroup.Wait(EVENTGROUP_BIT_STARTED, timeoutMS)) {
                 m_continuemutex.Unlock();
                 m_runningMutex.Unlock();
+				m_contextMutext.Unlock();
 
-                return false;
+				return false;
             }
 
             m_runningMutex.Lock();
             m_eState = ThreadExState.Waiting;
             m_continuemutex.Unlock();
             m_runningMutex.Unlock();
+			m_contextMutext.Unlock();
 
-            return true;
+			return true;
         }
 
         /// <summary>
@@ -286,21 +293,26 @@ namespace SystemEx.Threading {
                 return 42; // ERR_TASK_CALLFROMSELFTASK
             }
 
-            
 
-            m_runn = false;
+			
+
+			m_runn = false;
             m_eState =  (hardt)? ThreadExState.RequestKill : ThreadExState.RequestAbort;
             if ( hardt ) m_base.Interrupt();
 
             if ( IsSuspend() )
                 m_eventGroup.Set(EVENTGROUP_BIT_CONTINUE);
 
-            OnStop(this, hardt);
+			m_contextMutext.Lock();
+			OnStop(this, hardt);
+			m_contextMutext.Unlock();
 
-            m_runningMutex.Unlock();
+			m_runningMutex.Unlock();
             m_continuemutex.Unlock();
 
-            return 0; // ERR_TASK_OK;
+			
+
+			return 0; // ERR_TASK_OK;
         }
         /// <summary>
         /// Requests a graceful stop of the thread.
@@ -416,11 +428,16 @@ namespace SystemEx.Threading {
         /// </exception>
 
         public bool SendEvent(byte Event) {
-            if ( !m_base.IsAlive || !m_bRunning ) return false;//ERR_TASK_NOTRUNNING;
+			m_contextMutext.Lock();
+
+			if ( !m_base.IsAlive || !m_bRunning ) return false;//ERR_TASK_NOTRUNNING;
             if ( Event < 4) return false; // 0-3 sind resaviert
 
             m_eventGroup.Set(Event);
-            return true;
+
+			m_contextMutext.Unlock();
+
+			return true;
         }
 
         /// <summary>

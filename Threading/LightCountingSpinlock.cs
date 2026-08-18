@@ -83,7 +83,6 @@ namespace SystemEx.Threading {
         protected T? m_value;
 #pragma warning restore CS1591 // Fehledes XML-Kommentar für öffentlich sichtbaren Typ oder Element
         private readonly string m_name;
-        private bool m_locked;
 
         /// <summary>
         /// Gets the descriptive name assigned to this lock instance.
@@ -93,7 +92,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Indicates whether the lock currently has available capacity.
         /// </summary>
-        public bool IsHeld => m_locked;
+        public bool IsHeld => m_counter.Value <= m_min;
 
         /// <summary>
         /// Counting spinlocks do not track thread ownership.
@@ -110,7 +109,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Gets the current counter value representing available capacity.
         /// </summary>
-        public bool Handle => m_locked;
+        public bool Handle => m_counter.Value <= m_min;
 
         /// <summary>
         /// Indicates whether the lock is currently saturated (no capacity left).
@@ -189,7 +188,7 @@ namespace SystemEx.Threading {
                     // Erfolg: nicht unter minCapacity gerutscht
                     if ( newValue >= m_min ) {
                         _ret = true;
-                        break;
+						break;
                     }
 
                     // Unter minCapacity gerutscht → revert + spin
@@ -203,6 +202,7 @@ namespace SystemEx.Threading {
                     // Wenn keine Kapazität → sofort spinnen
                     if ( IsLocked ) {
                         Thread.SpinWait(1);
+                        
                         continue;
                     }
 
@@ -213,7 +213,7 @@ namespace SystemEx.Threading {
                     // Erfolg: nicht unter minCapacity gerutscht
                     if ( newValue >= m_min ) {
                         _ret = true;
-                        break;
+						break;
                     }
 
                     // Unter minCapacity gerutscht → revert + spin
@@ -250,8 +250,8 @@ namespace SystemEx.Threading {
             var current = m_counter.Value;
             if ( current >= m_max )
                 throw new InvalidOperationException("Unlock called too many times.");
-
-            m_counter++;
+	
+			m_counter++;
         }
 
         /// <summary>
@@ -262,9 +262,9 @@ namespace SystemEx.Threading {
 
             long newValue = m_counter.Decrement();
 
-            if ( newValue >= m_min )
+            if ( newValue >= m_min ) {
                 _ret = true;
-            else
+			} else
                 m_counter++;
 
             return _ret;

@@ -8,22 +8,57 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.70.658</AssemblyVersion>
-    <FileVersion>0.70.658</FileVersion>
+    <AssemblyVersion>0.90.1785</AssemblyVersion>
+    <FileVersion>0.90.1785</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <Description>RoseLeDark.Collections.Missings — Updated Description
-A lightweight extension library providing additional generic collection types and utility structures missing in .NET.
-Includes Vector&lt;T&gt;, FixedVector&lt;T&gt;, SortedArray&lt;T&gt;, Map&lt;TKey,TValue&gt;, SortedMap&lt;TKey,TValue&gt;, MultiMap&lt;TKey,TValue&gt;, Deque&lt;T&gt;, RingBuffer&lt;T&gt;, and tuple‑like helpers such as Pair&lt;T1,T2&gt; and Triple&lt;T1,T2,T3&gt;.
+    <Description>RoseLeDark.Collections.Missings 
 
-Provides extended numeric and color types including ColorRGB8, ColorRGB10, ColorRGB16, ColorHDR, ColorXYZ, and a unified Colors utility module.
-Adds lightweight hash implementations for non‑cryptographic scenarios, supporting deterministic hashing for engine‑oriented data structures.
+SystemEx is a modular, low‑level extension framework for .NET providing
+deterministic numeric types, high‑performance collections, STL‑style
+algorithms, advanced color models, random engines, interop utilities,
+threading primitives, and bit‑level tools.
 
-Designed as a minimal, allocation‑controlled complement to .NET’s built‑in collections, focusing on predictable behavior, simple APIs, and practical data structures commonly found in other ecosystems.</Description>
+It is designed for engine development, simulation, rendering pipelines,
+compiler tooling, and any environment requiring predictable, allocation‑aware,
+byte‑level control.
+
+&gt; **Design Note**
+&gt;
+&gt; SystemEx is intentionally structured to avoid deep cross‑dependencies between
+&gt; modules. In several areas — especially within the collection and numeric
+&gt; subsystems — certain data structures appear in multiple forms or are implemented
+&gt; more than once (for example, `Map&lt;TKey, TValue&gt;` using `Pair&lt;TKey, TValue&gt;[]`
+&gt; instead of reusing `Vector&lt;Pair&lt;...&gt;&gt;`).  
+&gt; 
+&gt; This duplication is deliberate. SystemEx is a large, highly generic low‑level
+&gt; framework, and isolating components prevents errors or design changes in one
+&gt; subsystem from propagating unpredictably into others. This approach keeps the
+&gt; library stable, easier to debug, and safer to extend, especially when working
+&gt; with complex iterator models, custom numeric types, and engine‑oriented memory
+&gt; layouts.
+&gt;
+&gt; SystemEx is a personal hobby project developed by a single intersex author; my pronouns 
+&gt; are dey/deren/dem/dem. While I aim for correctness, determinism, and clean architecture, 
+&gt; not every issue may be visible immediately, and responses or fixes may occasionally
+&gt; be delayed. Constructive feedback, improvement ideas, and technical discussions 
+&gt; are always welcome.
+
+## ✨ Core Philosophy
+
+SystemEx follows these principles:
+
+- **Deterministic behavior**  
+- **Zero‑magic, zero‑hidden‑allocation APIs**  
+- **Explicit numeric semantics** (Half16, Ratio, Fast_Int, Fast_Byte)  
+- **STL‑inspired algorithms and iterators**  
+- **Modular namespaces** for clean separation  
+- **Engine‑oriented design** (Random, Threading, Runtime, Drawing)  
+- **Interop‑friendly** (Linux, macOS, Windows dynamic loading)  </Description>
     <PackageTags>collections;generic;map;multimap;cache;buffer;datastructures;lowlevel;cache;pair;nodes;multimap;tuple;triple</PackageTags>
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.70.658</Version>
+    <Version>0.90.1785</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -36,38 +71,43 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.70.658] 30.07.2026 -&gt; Lacking
+    <PackageReleaseNotes>## [0.90.1785] 18.08.2026 intern Preview for 1.0 -&gt; Lacking
 ### Added
-- Added `SafeCounter` with operator suite (++, --, +, -, ==, !=) with full atomic semantics.
-- Added new Interrfaces `ISpinlock&lt;T&gt;`, `ILock&lt;T&gt;` and `ILock` : unified locking abstraction for atomic and OS‑level synchronization.
-- Added new Light atomic based Locks based on `ILock&lt;T&gt;` and SafeCounter: 
-  - `LightCountingSpinlock&lt;T&gt;`: atomic multi‑capacity spinlock with deterministic decrement/increment semantics.
-  - `LightMutex&lt;T&gt;` based on `LightCountingSpinlock&lt;T&gt;`: binary spinlock with strict owner‑tracking built on top of LightCountingSpinlock&lt;T&gt;.
-- Added `MutexLock` OS‑level blocking mutex wrapper; kernel‑managed, not interchangeable with atomic spinlock‑based locks.
-- Added `Spinlock` thin wrapper around System.Threading.SpinLock exposing a busy‑wait mutual exclusion primitive via  `ISpinlock&lt;T&gt;`.
-
-- Added new Iterrator System for IContainerEx System, the old in SystemEx.Collections.Generic.Interfaces are Obsolete and remove in version 1.0
-    -  Added a `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; Begin`, `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; End`, `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; ReverseBegin` and `RandomAccessIterator&lt;T, Array&lt;T&gt;&gt; ReverseEnd` to `Array&lt;T&gt;` and `Vector&lt;T&gt;` Objects 
-
-- Added to `SortActions ` helper: simple heap‑based min/max sort placing minimum at the start and maximum at the end.
-
-### Added – SystemEx.AI
-- Introduced the `SystemEx.AI` subsystem, providing a unified abstraction layer for AI model invocation within SystemEx.
-- Added `Model&lt;TPrompt, TResult&gt;` as the base contract for all AI models, defining prompt handling, backend routing, configuration management, and result processing.
-- Added `IModelBackend&lt;T&gt;` to standardize backend communication, including request construction, parameter merging, and transport‑agnostic execution.
-- Added `WebAIBackend&lt;T&gt;` implementing `IModelBackend&lt;T&gt;` for HTTP‑based AI endpoints (e.g., OpenAI‑compatible APIs). Supports configurable model selection, streaming, response formatting, and backend‑specific parameters.
-- Added `ModelPromp&lt;T&gt;` and `ModelResult&lt;T&gt;` to formalize prompt input and result output, including context propagation, metadata, and optional session identifiers.
-- Added `WebAIModel`, a lightweight front‑facing wrapper around `WebAIBackend&lt;T&gt;`, providing model switching, configuration helpers (temperature, top‑p, max‑tokens, response‑format), and simplified usage for applications.
-- The subsystem is backend‑agnostic and allows future integration of additional AI backends (local inference, custom gateways, etc.) without modifying model‑level code.
-- Added `Example/AI/` directory containing a minimal working example (`Main.cs`) and bilingual documentation (`README.en.md`, `README.de.md`) demonstrating how to integrate Microsoft AITools using the `SystemEx.AI` abstraction layer.
-
-### Changed
-- Renamed `SimpleThread` → `LightThread` for naming consistency.
-- Renamed `SimpleConditionVariable` → `LightConditionVariable`.
-- `Dequeue&lt;T&gt;` is now auto‑growable and includes new utility functions.
-- `Map` addes more functions: TryGet, GetOrDefault , add Erase anbd Remove functions
-
-!! Remove issus 
+- Added Half16hb (Google Half 16 floa type) and basic structs for more float types
+- Added:
+  - `vec2h` (Half16) and `vec2hb` (Half16b)
+  - `vec3h` (Half16) and `vec3hb` (Half16b)
+  - `vec4h` (Half16) and `vec4hb` (Half16b)
+- Added conversion from Float to Half16 and Half16b and to float
+- Added professional low‑level bit‑span-types `BitIntSpan`, `BitLongSpan` unsigned and signed version in FlexSpan style with reverse, ringbuffer and AsSpan System mode. 
+  Becarful by Ring mode 
+- Added `SystemEx.Numeric.Ratio`: Represents a rational number using a signed 64‑bit numerator and denominator. A Ratio stores an exact fractional value
+  without automatic reduction. This allows the representation of structural fractions such as gear ratios.
+- Added:
+  - `vec2r` (Ratio)
+  - `vec3r` (Ratio) 
+  - `vec4r` (Ratio) 
+- Added `SystemEx.MathR` for Ratio Math Utils with: 
+    - `Pow`: Raises a ratio to an integer power exactly.
+    - `DegreesToRadians`: Converts degrees to radians.
+    - `RadiansToDegrees`: Converts radians to degrees.
+    - `DegreesToTurns`: Converts degrees to turns (full rotations). deg / 360;
+    - `TurnsToDegrees`: Converts turns (full rotations) to degrees.
+    - `Sign`: Returns the sign of this ratio as a interger. The result is -1, 0, or 1 depending on the value of the ratio.
+    - `Abs`: Returns the absolute value of the giving ratio : ABS(Numerator), ABS(Denominator)
+    - `Clamp`: Clamps this ratio between the specified minimum and maximum values.
+    - `Min`, `Max`, `MinMax`:
+    - `Sqrt` with new return Type Result: Computes the square root of a `SystemEx.Numeric.Ratio` and returns the result
+  inside a `SystemEx.Result` object. The method distinguishes between
+  rational and irrational square roots. 
+- Added `SystemEx.Result`: Represents a flexible multi-value result container that can hold successful values, multiple 
+  return objects, assertion messages, or exception information.
+- Added `SystemEx.ResultBuilder`: Provides a fluent builder for constructing complex &lt;see cref="Result"/&gt;
+ objects across multiple processing steps, compiler stages, or mathematical operations.
+- Added `SystemEx.FlexSpan` View to all basic Types - int, long, float , double. Be careful with Ring Mode and Foreache without a break 
+  condition.
+- Added TupleMap&lt;T&gt;: A flexible tuple structure where the first element acts as a stable key and additional values are stored in an expandable object array, 
+  enabling structured multi‑value mappings.
 </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
@@ -110,6 +150,7 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
     <Compile Remove="Examples\AI\WinCopilotBackend.cs" />
     <Compile Remove="Examples\AI\WinCopilotBackendFunctionFactory.cs" />
     <Compile Remove="Examples\ExampleAIWindowsBackend.cs" />
+    <Compile Remove="Examples\ExampleBitView.cs" />
     <Compile Remove="Examples\VectorFind.cs" />
     <Compile Remove="Examples\VectorSet.cs" />
   </ItemGroup>
@@ -123,6 +164,9 @@ Designed as a minimal, allocation‑controlled complement to .NET’s built‑in
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Examples\AI\README_de.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Examples\ExampleBitView.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Examples\ExampleHasher.cs">

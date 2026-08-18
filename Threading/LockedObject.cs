@@ -42,25 +42,26 @@ namespace SystemEx.Threading {
             value = default;
 
             if( m_lock.Lock(timeoutms) ) {
-
-                value = m_value;
+				m_bLocked = true;
+				value = m_value;
                 _ret = true;
+                
                 m_lock.Unlock();
             }
-
-            return _ret;
+			m_bLocked = false;
+			return _ret;
         }
         public bool SetValue(T? value, int timeoutms = -1) {
             bool _ret = false;
             
             if ( m_lock.Lock(timeoutms) ) {
-
-                m_value = value;
+				m_bLocked = true;
+				m_value = value;
                 _ret = true;
                 m_lock.Unlock();
             }
-
-            return _ret;
+			m_bLocked = false;
+			return _ret;
         }
     }
 

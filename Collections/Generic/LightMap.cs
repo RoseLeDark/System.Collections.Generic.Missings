@@ -235,7 +235,8 @@ namespace SystemEx.Collections.Generic {
             m_state = new byte[e.Length];
 
             Buffer.LongCopy<Pair<T, TU>>(e, 0, m_elements, 0, e.Length);
-            m_index = e.LongLength;
+			Buffer.LongFill<byte>(m_state, 0, 1, m_elements.Length);
+			m_index = e.LongLength;
 
             GrowSize = growSize;
         }

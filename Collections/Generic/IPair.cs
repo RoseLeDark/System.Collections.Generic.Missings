@@ -24,7 +24,7 @@ namespace SystemEx.Collections.Generic {
     /// </summary>
     /// <typeparam name="T">The type of the first element (key).</typeparam>
     /// <typeparam name="TU">The type of the second element (value).</typeparam>
-    public interface IPair<T, TU> : ITuple<T> {
+    public interface IPair<T, TU> : ITuple<T> where T : notnull {
 
 
         /// <summary>
