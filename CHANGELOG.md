@@ -1,14 +1,48 @@
 # Changelog
-## 
+## [0.90.1785] 18.08.2026 intern Preview for 1.0 -> Lacking
 ### Added
-- Add Half16hb (google Half 16 floa type) and baic structs for more float types
-- Add:
+- Added Half16hb (Google Half 16 floa type) and basic structs for more float types
+- Added:
   - `vec2h` (Half16) and `vec2hb` (Half16b)
   - `vec3h` (Half16) and `vec3hb` (Half16b)
   - `vec4h` (Half16) and `vec4hb` (Half16b)
-- Add Converstion from Float to Half16 and Half16b and to float
-- Add for Profi - `BitIntSpan`, `BitLongSpan` unsigned and signed version in FlexSpan style with reverse, ringbuffer and AsSpan System mode. 
+- Added conversion from Float to Half16 and Half16b and to float
+- Added professional low‑level bit‑span-types `BitIntSpan`, `BitLongSpan` unsigned and signed version in FlexSpan style with reverse, ringbuffer and AsSpan System mode. 
   Becarful by Ring mode 
+- Added `SystemEx.Numeric.Ratio`: Represents a rational number using a signed 64‑bit numerator and denominator. A Ratio stores an exact fractional value
+  without automatic reduction. This allows the representation of structural fractions such as gear ratios.
+- Added:
+  - `vec2r` (Ratio)
+  - `vec3r` (Ratio) 
+  - `vec4r` (Ratio) 
+- Added `SystemEx.MathR` for Ratio Math Utils with: 
+    - `Pow`: Raises a ratio to an integer power exactly.
+    - `DegreesToRadians`: Converts degrees to radians.
+    - `RadiansToDegrees`: Converts radians to degrees.
+    - `DegreesToTurns`: Converts degrees to turns (full rotations). deg / 360;
+    - `TurnsToDegrees`: Converts turns (full rotations) to degrees.
+    - `Sign`: Returns the sign of this ratio as a interger. The result is -1, 0, or 1 depending on the value of the ratio.
+    - `Abs`: Returns the absolute value of the giving ratio : ABS(Numerator), ABS(Denominator)
+    - `Clamp`: Clamps this ratio between the specified minimum and maximum values.
+    - `Min`, `Max`, `MinMax`:
+    - `Sqrt` with new return Type Result: Computes the square root of a `SystemEx.Numeric.Ratio` and returns the result
+		inside a `SystemEx.Result` object. The method distinguishes between
+		rational and irrational square roots. 
+- Added `SystemEx.Result`: Represents a flexible multi-value result container that can hold successful values, multiple 
+  return objects, assertion messages, or exception information.
+- Added `SystemEx.ResultBuilder`: Provides a fluent builder for constructing complex <see cref="Result"/>
+ objects across multiple processing steps, compiler stages, or mathematical operations.
+- Added `SystemEx.FlexSpan` View to all basic Types - int, long, float , double. Be careful with Ring Mode and Foreache without a break 
+  condition.
+- Added TupleMap<T>: A flexible tuple structure where the first element acts as a stable key and additional values are stored in an expandable object array, 
+  enabling structured multi‑value mappings.
+
+## Update
+Remove many bugs
+
+This Release is the first Preview to 1.0
+
+!! Updatet README and Add other usable md Files
 
 ## [0.70.658] 30.07.2026 -> Lacking
 ### Added
