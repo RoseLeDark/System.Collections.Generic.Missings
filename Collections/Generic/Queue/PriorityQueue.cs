@@ -138,7 +138,7 @@ namespace SystemEx.Collections.Generic {
 
         public bool IsDirty => m_isDirty;
 
-        public PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>> SortFunctions {
+        public PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>>? SortFunctions {
             get => m_sorter;
             set {
                 m_sorter = value;

@@ -412,7 +412,7 @@ namespace SystemEx.Utils {
             !(left == right);
 
         [Obsolete("Equals() always throw an exception. Use the equality operator instead.")]
-        public override bool Equals ( object? obj ) => throw new NotSupportedException();
+        public override bool Equals ( object obj ) => throw new NotSupportedException();
 
         [Obsolete("GetHashCode() always throw an exception.")]
         public override int GetHashCode () => throw new NotSupportedException();
