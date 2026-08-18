@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Xml.Linq;
@@ -9,71 +8,10 @@ using SystemEx.Drawing;
 using SystemEx.Random;
 using static System.Net.Mime.MediaTypeNames;
 
+#if USE_DEVBUILD_UNSTABLE 
+
 namespace SystemEx.Collections.Model {
-
-    public class TreeNode<T> : IParentebleNode<T, TreeNode<T>, TreeNode<T> >  {
-        private TreeNode<T>?[] m_childs;
-        private Optional<T> m_data;
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        internal bool Visited { get; set; }
-
-        public TreeNode<T>? Parent { 
-            get => m_childs[0]; 
-            set => m_childs[0] = value; 
-        }
-
-        public TreeNode<T>? Left {
-            get => m_childs[1];
-            set => m_childs[1] = value;
-        }
-
-        public TreeNode<T>? Right {
-            get => m_childs[2];
-            set => m_childs[2] = value;
-        }
-
-        public int Count => m_childs.Length;
-
-        public Optional<T> Data => m_data;
-
-        public bool IsParent => GetChild(0) != null;
-
-        public bool IsLeft  => GetChild(1) != null;
-        public bool IsRight => GetChild(2) != null;
-
-        public TreeNode(int numChilds) {
-            m_childs = new TreeNode<T>?[numChilds+1];
-            m_data = new Optional<T>();
-        }
-        public TreeNode ( int numChilds, T data ) {
-            m_childs = new TreeNode<T>?[numChilds+1];
-            m_data = new Optional<T>(data);
-        }
-
-        public TreeNode<T>? GetChild ( uint index ) {
-            if ( index >= m_childs.Length ) throw new IndexOutOfRangeException(nameof(index));
-
-            return m_childs[index];
-        }
-
-        
-
-        public static void RotateLeft ( ref TreeNode<T> node, out TreeNode<T> newRoot ) {
-
-            TreeNode<T>? y = node.Right;
-            if ( y is null ) {
-                newRoot = node;
-                return;
-            }
-
-            node.Right = y.Left;
-            y.Left = node;
-
-            newRoot = y;
-        }
-    }
-    public class Tree<T> {
+    public class Tree<T> where T : IComparableEx<T> {
         protected TreeNode<T> m_rootNode;
 
         public Tree() {
@@ -145,27 +83,6 @@ namespace SystemEx.Collections.Model {
             x.Parent = newRoot;
         }
 
-        public static void PostOrder ( Tree<T> tree ) {
-            TreeNode<T> temp = tree.m_rootNode;
-
-            while ( temp != null && temp.Visited == false ) {
-
-                // Visited left subtree
-                if ( temp.IsLeft && temp.Left!.Visited == false )
-                    temp = temp.Left;
-
-                // Visited right subtree
-                else if ( temp.IsRight && temp.Right!.Visited == false )
-                    temp = temp.Right;
-
-                // Print node
-                else {
-                    Console.Write("{0} ", temp.Data.ToString());
-                    temp.Visited = true;
-                    temp = tree.m_rootNode;
-                }
-            }
-        }
 		public static void PreOrder ( Tree<T> tree ) {
 			TreeNode<T>? current = tree.m_rootNode;
 
@@ -195,3 +112,4 @@ namespace SystemEx.Collections.Model {
 		}
 	}
 }
+#endif

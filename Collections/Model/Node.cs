@@ -38,7 +38,7 @@ namespace SystemEx.Collections.Model {
         public TSelf? GetChild ( uint index );
     }
 
-    public interface IParentebleNode<T, TSelf, TParent> : INode<T, TSelf> where TSelf : INode<T>  {
-        public TParent Parent { get;  }
+    public interface IParentebleNode<T, TSelf> : INode<T, TSelf> where TSelf : INode<T>  {
+        public TSelf Parent { get;  }
     }
 }

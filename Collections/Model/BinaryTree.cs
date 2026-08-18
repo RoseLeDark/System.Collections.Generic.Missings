@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using SystemEx.Algorithms;
 using SystemEx.Algorithms.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
+#if USE_DEVBUILD_UNSTABLE
 namespace SystemEx.Collections.Model {
 	public class BinaryTree<T>  : Tree<T> 
 		where T : IComparable<T> {
@@ -42,7 +42,8 @@ namespace SystemEx.Collections.Model {
 			m_rootNode = InsertTree(m_rootNode, _c, m_compare);
 		}
 
-		private TreeNode<T> InsertTree ( TreeNode<T>? root, TreeNode<T> newnode, ISimpleCompare<T> cmp ) {
+		private TreeNode<T> InsertTree ( TreeNode<T>? root, TreeNode<T> newnode, ISimpleCompare<T> cmp ) 
+		 where T : IComparable<T> {
 
 			if ( root == null ) {
 				root = newnode;
@@ -70,3 +71,4 @@ namespace SystemEx.Collections.Model {
 
 	}
 }
+#endif

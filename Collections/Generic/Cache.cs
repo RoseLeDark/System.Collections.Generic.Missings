@@ -18,6 +18,7 @@
 using System.Collections;
 using SystemEx.Base;
 using SystemEx.Utils;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SystemEx.Collections.Generic{
     /// \addtogroup collections
@@ -230,10 +231,15 @@ namespace SystemEx.Collections.Generic{
         public virtual ulong WriteRange(ulong position, byte[] data) {
             return WriteRange(position, (ulong)data.LongLength, data);
         }
-        /// <summary>
-        /// Writes a byte range into the cache between <paramref name="start"/> and <paramref name="iend"/>.
-        /// </summary>
-        public virtual ulong WriteRange(ulong start, ulong iend, byte[] data) {
+
+		public ulong WriteRange ( ulong position, FixedVector<byte> data ) {
+			return WriteRange(position, (ulong)data.Length, data.ToNative() );
+		}
+
+		/// <summary>
+		/// Writes a byte range into the cache between <paramref name="start"/> and <paramref name="iend"/>.
+		/// </summary>
+		public virtual ulong WriteRange(ulong start, ulong iend, byte[] data) {
             if ( m_isLocked ) throw new InvalidOperationException("is Locked");
 
             // Start ungültig?
@@ -685,8 +691,10 @@ namespace SystemEx.Collections.Generic{
         public virtual VectorFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( long start, long endi, FlexSpanMode mode = FlexSpanMode.System )
             => FixedVector<byte>.AsFlexSpan(ref m_rawBuffer, start, endi, mode);
 
+		
+
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-        /// @}
+		/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    }
+	}
 }
