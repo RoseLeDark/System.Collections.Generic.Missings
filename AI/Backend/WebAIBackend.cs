@@ -27,7 +27,7 @@ namespace SystemEx.AI.Backend {
     /// <typeparam name="T">
     /// The type of the model's output and raw prompt.
     /// </typeparam>
-    public class WebAIBackend<T> : IModelBackend<T, Object> {
+    public class WebAIBackend<T> : IModelBackend<T, Object> where T : notnull  {
         public const string WB_CONFIG_MAX_TOKENS           = "WEBAI_MAX_TOKENS";
         public const string WB_CONFIG_TEMPERATUR           = "WEBAI_TEMPERATURE";
         public const string WB_CONFIG_TOP_P                = "WEBAI_TOP_P";
@@ -140,7 +140,7 @@ namespace SystemEx.AI.Backend {
         /// <exception cref="InvalidDataException">
         /// Thrown when the backend does not return an "output" field.
         /// </exception>
-        protected virtual Triple<T, MetaFormat, object> OnDeserialize ( string raw ) {
+        protected virtual Triple<T, MetaFormat, object> OnDeserialize ( string raw )  {
             // ---------------------------------------------------------
             // 1. Versuch: JSON erkennen
             // ---------------------------------------------------------
