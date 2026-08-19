@@ -118,7 +118,7 @@ namespace SystemEx.Threading {
         /// <returns>
         /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
         /// </returns>
-        public bool TryLock ( TimeSpan span ) => (m_bLocked = Monitor.TryEnter(m_lock, span));
+        public bool TryLock (  ) => (m_bLocked = Monitor.TryEnter(m_lock));
 
     }
 }

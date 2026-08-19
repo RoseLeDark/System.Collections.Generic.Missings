@@ -85,20 +85,29 @@ namespace SystemEx.Threading {
             (m_bLocked = m_isMutex.WaitOne(span));
 
         /// <summary>
-        /// Attempts to acquire the OS‑level mutex within the specified timeout.
-        /// This is functionally identical to <see cref="Lock(TimeSpan)"/>.
+        /// Attempts to acquire the OS‑level mutex 
         /// </summary>
-        /// <param name="span">The timeout duration.</param>
         /// <returns>
         /// <c>true</c> if the mutex was acquired; otherwise <c>false</c>.
         /// </returns>
-        public bool TryLock ( TimeSpan span ) =>
-            (m_bLocked = m_isMutex.WaitOne(span));
+        public bool TryLock (  ) =>
+            (m_bLocked = m_isMutex.WaitOne());
 
-        /// <summary>
-        /// Releases the OS‑level mutex. Only the owning thread may call this method.
-        /// </summary>
-        public void Unlock () {
+		/// <summary>
+		/// Attempts to acquire the OS‑level mutex within the specified timeout.
+		/// This is functionally identical to <see cref="Lock(TimeSpan)"/>.
+		/// </summary>
+		/// <param name="span">The timeout duration.</param>
+		/// <returns>
+		/// <c>true</c> if the mutex was acquired; otherwise <c>false</c>.
+		/// </returns>
+		public bool TryLock ( TimeSpan span ) =>
+			(m_bLocked = m_isMutex.WaitOne(span));
+
+		/// <summary>
+		/// Releases the OS‑level mutex. Only the owning thread may call this method.
+		/// </summary>
+		public void Unlock () {
             m_isMutex.ReleaseMutex();
             m_bLocked = false;
         }

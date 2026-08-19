@@ -257,7 +257,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Attempts to acquire capacity without blocking.
         /// </summary>
-        public virtual bool TryLock ( TimeSpan span ) {
+        public virtual bool TryLock ( ) {
             bool _ret = false;
 
             long newValue = m_counter.Decrement();

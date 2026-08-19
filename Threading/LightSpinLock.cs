@@ -118,7 +118,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Attempts to acquire the lock without blocking.
         /// </summary>
-        public bool TryLock ( TimeSpan span ) {
+        public bool TryLock (  ) {
             var _x = Interlocked.CompareExchange(ref m_locked, 1, 0) == 0;
 
             if(_x) m_owner = System.Threading.Thread.CurrentThread.ManagedThreadId;

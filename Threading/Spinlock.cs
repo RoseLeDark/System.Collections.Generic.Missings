@@ -126,27 +126,13 @@ namespace SystemEx.Threading {
         }
 
         /// <summary>
-        /// Attempts to acquire the lock using a <see cref="TimeSpan"/> timeout without
-        /// implying a blocking intent. This method is functionally identical to
-        /// <see cref="Lock(TimeSpan)"/>.
+        /// Attempts to acquire the lock
         /// </summary>
-        public bool TryLock ( TimeSpan span ) {
-            if ( span.Ticks <= 0 ) {
-                m_spin.TryEnter(0, ref m_isLocked);
-            } else {
-                var lockTaken = false;
-                var sw = System.Diagnostics.Stopwatch.StartNew();
+        public bool TryLock ( ) {
+            bool _xlocked = false;
+			m_spin.TryEnter(0, ref _xlocked);
+            return _xlocked;
 
-                while ( !lockTaken && sw.Elapsed < span ) {
-                    m_spin.TryEnter(0, ref lockTaken);
-                    if ( !lockTaken )
-                        Thread.SpinWait(1);
-                }
-
-                m_isLocked = lockTaken;
-            }
-
-            return m_isLocked;
         }
     }
 

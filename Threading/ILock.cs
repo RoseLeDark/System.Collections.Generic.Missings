@@ -70,15 +70,13 @@ namespace SystemEx.Threading {
         bool Wait ( TimeSpan span, bool exitContext );
 
         /// <summary>
-        /// Attempts to acquire the lock using a <see cref="TimeSpan"/> timeout without
+        /// Attempts to acquire the lock without
         /// implying a blocking intent. This method is semantically equivalent to
-        /// <see cref="Lock(TimeSpan)"/> but expresses a non‑blocking usage pattern.
         /// </summary>
-        /// <param name="span">Maximum duration to attempt acquiring the lock.</param>
         /// <returns>
         /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
         /// </returns>
-        bool TryLock ( TimeSpan span );
+        bool TryLock ( );
 
         /// <summary>
         /// Indicates whether the lock is currently held by the calling thread.

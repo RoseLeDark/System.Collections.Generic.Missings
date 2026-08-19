@@ -9,6 +9,7 @@ namespace SystemEx.Threading {
     /// </summary>
     public class SafeCounter : IEquatable<SafeCounter> {
         private long m_value;
+        private long m_startValue;
 
         /// <summary>
         /// Gets the current value.
@@ -25,21 +26,25 @@ namespace SystemEx.Threading {
         /// </summary>
         public SafeCounter () {
             m_value = 0L;
-        }
+
+		}
 
         /// <summary>
         /// Initializes the counter with a specific value.
         /// </summary>
         public SafeCounter ( long value ) {
             m_value = value;
-        }
+            m_startValue = value;
+		}
 
         /// <summary>
         /// Initializes the counter from another counter.
         /// </summary>
         public SafeCounter ( SafeCounter other ) {
-            m_value = other.m_value;
-        }
+            m_value = other.Value;
+            m_startValue = other.m_startValue;
+
+		}
 
         /// <summary>
         /// Assigns the value of another counter.
@@ -52,16 +57,16 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Converts the counter to its underlying long value.
         /// </summary>
-        public static implicit operator long ( SafeCounter c )
-            => Volatile.Read(ref c.m_value);
+        public static implicit operator long ( SafeCounter c ) => Volatile.Read(ref c.m_value);
 
-        /// <summary>
-        /// Assigns a raw long value.
-        /// </summary>
-        public SafeCounter Assign ( long value ) {
-            Interlocked.Exchange(ref m_value, value);
-            return this;
-        }
+
+		/// <summary>
+		/// Assigns a raw long value.
+		/// </summary>
+		public SafeCounter Assign ( long value ) {
+			Interlocked.Exchange(ref m_value, value);
+			return this;
+		}
 
         /// <summary>
         /// Prefix increment.
@@ -127,7 +132,7 @@ namespace SystemEx.Threading {
                 return true;
             if ( a is null || b is null )
                 return false;
-            return Volatile.Read(ref a.m_value) == Volatile.Read(ref b.m_value);
+            return Volatile.Read(ref a.m_value) == Volatile.Read(ref b.m_value) && a.m_startValue == b.m_startValue;
         }
 
         /// <summary>
@@ -137,10 +142,38 @@ namespace SystemEx.Threading {
             return !(a == b);
         }
 
-        /// <summary>
-        /// Standard override for equality comparison.
-        /// </summary>
-        public override bool Equals ( object? obj ) {
+
+		public static bool operator < ( SafeCounter? a, SafeCounter? b ) {
+		
+			if ( a is null || b is null )
+				return false;
+			return Volatile.Read(ref a.m_value) < Volatile.Read(ref b.m_value);
+		}
+
+		public static bool operator > ( SafeCounter? a, SafeCounter? b ) {
+
+			if ( a is null || b is null )
+				return false;
+			return Volatile.Read(ref a.m_value) > Volatile.Read(ref b.m_value);
+		}
+
+		public static bool operator <= ( SafeCounter? a, SafeCounter? b ) {
+
+			if ( a is null || b is null )
+				return false;
+			return Volatile.Read(ref a.m_value) <= Volatile.Read(ref b.m_value);
+		}
+
+		public static bool operator >= ( SafeCounter? a, SafeCounter? b ) {
+
+			if ( a is null || b is null )
+				return false;
+			return Volatile.Read(ref a.m_value) >= Volatile.Read(ref b.m_value);
+		}
+		/// <summary>
+		/// Standard override for equality comparison.
+		/// </summary>
+		public override bool Equals ( object? obj ) {
             if ( obj is SafeCounter other )
                 return this == other;
             return false;
@@ -159,5 +192,12 @@ namespace SystemEx.Threading {
 
             return this == other;
         }
-    }
+
+        /// <summary>
+        /// Reset the counter
+        /// </summary>
+        public void Reset() {
+            Assign(m_startValue);
+        }
+	}
 }
