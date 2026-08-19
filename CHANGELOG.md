@@ -1,4 +1,15 @@
 # Changelog
+## [0.91.1823] 18.08.2026 intern Preview for 1.0 -> Lacking
+### Correcture
+- Remove from ILock.TryLock the argument TimeSpan. Now ist TryLock != Lock 
+
+### Added
+- Added 
+    - `Latch`: A one‑shot countdown synchronization primitive that releases all 
+       waiting threads once its counter reaches zero and remains permanently open afterward.
+    - `Barrier`: A reusable multi‑phase synchronization barrier that blocks threads until 
+     a specified number of arrivals is reached, then executes a completion step and advances to the next phase.
+
 ## [0.90.1785] 18.08.2026 intern Preview for 1.0 -> Lacking
 ### Added
 - Added Half16hb (Google Half 16 floa type) and basic structs for more float types
