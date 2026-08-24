@@ -15,22 +15,20 @@
  * changes and the date.
  */
 
-namespace SystemEx.Algorithms.Interfaces {
-    /// \addtogroup Algorithms
-    /// @{
-    /// \addtogroup interfaces
-    /// @{
-    /// <summary>
-    /// Defines a minimal comparison strategy for two values of type <typeparamref name="T"/>.
-    /// 
-    /// Implementations provide a single boolean comparison operation, allowing containers,
-    /// sorting policies, and search utilities to determine ordering or equivalence without
-    /// requiring full <see cref="IComparer{T}"/> or <see cref="IComparable{T}"/> semantics.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The type of elements being compared.
-    /// </typeparam>
-    public interface ISimpleCompare<T> {
+namespace SystemEx.Algorithms {
+	/// \addtogroup SystemEx.Algorithms
+	/// @{
+	/// <summary>
+	/// Defines a minimal comparison strategy for two values of type <typeparamref name="T"/>.
+	/// 
+	/// Implementations provide a single boolean comparison operation, allowing containers,
+	/// sorting policies, and search utilities to determine ordering or equivalence without
+	/// requiring full <see cref="IComparer{T}"/> or <see cref="IComparable{T}"/> semantics.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The type of elements being compared.
+	/// </typeparam>
+	public interface ISimpleCompare<T> {
         /// <summary>
         /// Compares two values and returns <c>true</c> if the comparison condition defined
         /// by the implementation holds; otherwise <c>false</c>.

@@ -1,58 +1,72 @@
 ﻿
-using SystemEx.Algorithms.Interfaces;
+/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 using SystemEx.Collections.Generic;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-
-    /// \addtogroup Algorithms
-    /// @{
-    /// <summary>
-    /// A specialized search provider implementing binary-search-based probing.
-    /// 
-    /// <para>
-    /// This provider assumes that the underlying <typeparamref name="TContainer"/> is
-    /// sorted according to the predicate or comparison logic used. It performs a
-    /// midpoint probe to locate any matching element and then expands outward to
-    /// collect all adjacent matches. This makes the provider efficient for clustered
-    /// or repeated values in sorted sequences.
-    /// </para>
-    /// 
-    /// <para>
-    /// <b>Important:</b>
-    /// This search provider is only valid for sorted containers. If the data is not
-    /// sorted, use a linear search provider instead.
-    /// </para>
-    /// 
-    /// <para>
-    /// <b>Behavior:</b>
-    /// <list type="bullet">
-    /// <item>
-    /// <description>
-    /// <c>Find</c> returns the number of matching elements by probing the midpoint
-    /// and expanding left/right until non-matching elements are encountered.
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <description>
-    /// <c>Where</c> returns all matching elements together with their indices.
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <description>
-    /// Matching is determined solely by the provided predicate or
-    /// <see cref="ISimpleCompare{T}"/> implementation.
-    /// </description>
-    /// </item>
-    /// </list>
-    /// </para>
-    /// </summary>
-    /// <typeparam name="T">Element type stored in the container.</typeparam>
-    /// <typeparam name="TContainer">
-    /// Container type implementing <see cref="IVector{T}"/>.
-    /// Must provide indexed access and a stable element order.
-    /// </typeparam>
-    public struct BinarySearcherProvider< T, TContainer> : ISearchProvider<T, TContainer>
+	/// \addtogroup SystemEx.Algorithms
+	/// @{
+	/// <summary>
+	/// A specialized search provider implementing binary-search-based probing.
+	/// 
+	/// <para>
+	/// This provider assumes that the underlying <typeparamref name="TContainer"/> is
+	/// sorted according to the predicate or comparison logic used. It performs a
+	/// midpoint probe to locate any matching element and then expands outward to
+	/// collect all adjacent matches. This makes the provider efficient for clustered
+	/// or repeated values in sorted sequences.
+	/// </para>
+	/// 
+	/// <para>
+	/// <b>Important:</b>
+	/// This search provider is only valid for sorted containers. If the data is not
+	/// sorted, use a linear search provider instead.
+	/// </para>
+	/// 
+	/// <para>
+	/// <b>Behavior:</b>
+	/// <list type="bullet">
+	/// <item>
+	/// <description>
+	/// <c>Find</c> returns the number of matching elements by probing the midpoint
+	/// and expanding left/right until non-matching elements are encountered.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// <c>Where</c> returns all matching elements together with their indices.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// Matching is determined solely by the provided predicate or
+	/// <see cref="ISimpleCompare{T}"/> implementation.
+	/// </description>
+	/// </item>
+	/// </list>
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">Element type stored in the container.</typeparam>
+	/// <typeparam name="TContainer">
+	/// Container type implementing <see cref="IVector{T}"/>.
+	/// Must provide indexed access and a stable element order.
+	/// </typeparam>
+	public struct BinarySearcherProvider< T, TContainer> : ISearchProvider<T, TContainer>
         where TContainer : IVector<T> {
 
         /// <inheritdoc />

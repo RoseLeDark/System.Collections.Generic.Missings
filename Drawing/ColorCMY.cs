@@ -16,12 +16,12 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// A color in the CMY (Cyan–Magenta–Yellow) color space using floating‑point components.
-    /// </summary>
-    public class ColorCMY {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// A color in the CMY (Cyan–Magenta–Yellow) color space using floating‑point components.
+	/// </summary>
+	public class ColorCMY {
         private float m_c;
         private float m_m;
         private float m_y;

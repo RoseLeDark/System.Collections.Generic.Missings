@@ -15,16 +15,16 @@
  * changes and the date.
  */
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents a two‑element tuple consisting of a key and a value.
-    /// Extends <see cref="ITuple"/> with strongly typed accessors and
-    /// comparison helpers for the first and second elements.
-    /// </summary>
-    /// <typeparam name="T">The type of the first element (key).</typeparam>
-    /// <typeparam name="TU">The type of the second element (value).</typeparam>
-    public interface IPair<T, TU> : ITuple<T> where T : notnull {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a two‑element tuple consisting of a key and a value.
+	/// Extends <see cref="ITuple"/> with strongly typed accessors and
+	/// comparison helpers for the first and second elements.
+	/// </summary>
+	/// <typeparam name="T">The type of the first element (key).</typeparam>
+	/// <typeparam name="TU">The type of the second element (value).</typeparam>
+	public interface IPair<T, TU> : ITuple<T> where T : notnull {
 
 
         /// <summary>
@@ -43,7 +43,6 @@ namespace SystemEx.Collections.Generic {
         bool EqualSecond(TU other);
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+	/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

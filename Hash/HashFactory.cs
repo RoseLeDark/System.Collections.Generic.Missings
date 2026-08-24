@@ -21,39 +21,41 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// <summary>
-    /// Defines a contract for objects that can be converted into a raw byte
-    /// representation suitable for hashing, serialization, or low‑level
-    /// processing.
-    ///
-    /// <para>
-    /// The interface is intentionally minimal: any type implementing
-    /// <c>IHashable&lt;T&gt;</c> must provide a deterministic and stable
-    /// <see cref="ToBytes"/> method. The returned byte sequence is used by
-    /// SystemEx hashing algorithms and must remain consistent across platforms
-    /// and runtime sessions.
-    /// </para>
-    ///
-    /// <para>
-    /// <b>Example:</b><br/>
-    /// A type implementing both <c>IHashable&lt;T&gt;</c> and a hash attribute:
-    /// </para>
-    /// <code>
-    /// [HashAlgorithm(typeof(Bernstein))]
-    /// public class Foo : IHashable&lt;Foo&gt;
-    /// {
-    ///     public FixedVector&lt;byte&gt; ToBytes()
-    ///     {
-    ///         // Convert internal fields into a deterministic byte array.
-    ///         return new FixedVector&lt;byte&gt;( ... );
-    ///     }
-    /// }
-    /// </code>
-    /// </summary>
-    /// <typeparam name="T">
-    /// The type that provides its own byte representation.
-    /// </typeparam>
-    public interface IHashable<T> {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Defines a contract for objects that can be converted into a raw byte
+	/// representation suitable for hashing, serialization, or low‑level
+	/// processing.
+	///
+	/// <para>
+	/// The interface is intentionally minimal: any type implementing
+	/// <c>IHashable&lt;T&gt;</c> must provide a deterministic and stable
+	/// <see cref="ToBytes"/> method. The returned byte sequence is used by
+	/// SystemEx hashing algorithms and must remain consistent across platforms
+	/// and runtime sessions.
+	/// </para>
+	///
+	/// <para>
+	/// <b>Example:</b><br/>
+	/// A type implementing both <c>IHashable&lt;T&gt;</c> and a hash attribute:
+	/// </para>
+	/// <code>
+	/// [HashAlgorithm(typeof(Bernstein))]
+	/// public class Foo : IHashable&lt;Foo&gt;
+	/// {
+	///     public FixedVector&lt;byte&gt; ToBytes()
+	///     {
+	///         // Convert internal fields into a deterministic byte array.
+	///         return new FixedVector&lt;byte&gt;( ... );
+	///     }
+	/// }
+	/// </code>
+	/// </summary>
+	/// <typeparam name="T">
+	/// The type that provides its own byte representation.
+	/// </typeparam>
+	public interface IHashable<T> {
         /// <summary>
         /// Converts this instance into a deterministic byte array.
         /// The returned data is used as input for hashing algorithms.
@@ -202,4 +204,5 @@ namespace SystemEx.Hash {
             return _hash.Value;
         }
     }
+    ///@}
 }

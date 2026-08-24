@@ -16,14 +16,14 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines the generic FIFO queue.
-    /// Provides operations for inserting elements at the back and removing elements from the front.
-    /// </summary>
-    /// <typeparam name="T">The type of elements stored in the queue.</typeparam>
-    public class Queue<T> : IQueue<T>, IAutoGrowe {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines the generic FIFO queue.
+	/// Provides operations for inserting elements at the back and removing elements from the front.
+	/// </summary>
+	/// <typeparam name="T">The type of elements stored in the queue.</typeparam>
+	public class Queue<T> : IQueue<T>, IAutoGrowe {
 
         private long m_growSize;
         private bool m_autoGrow;

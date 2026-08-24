@@ -21,25 +21,25 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Simple non‑cryptographic hash function based on the Bernstein family of hash algorithms.
-    /// 
-    /// This implementation provides both 32‑bit and 64‑bit variants and supports seeding,
-    /// allowing deterministic or randomized hash streams depending on the caller.
-    /// 
-    /// Characteristics:
-    ///   - Very fast
-    ///   - Deterministic
-    ///   - Suitable for hash tables, indexing, lightweight hashing
-    ///   - Not intended for cryptographic use
-    /// 
-    /// The algorithm uses a classic multiply‑and‑xor mixing step:
-    ///     hash = (hash * M) ^ byte
-    /// where M is a constant chosen for diffusion.
-    /// </summary>
-    public class BernsteinHash : IHash {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Simple non‑cryptographic hash function based on the Bernstein family of hash algorithms.
+	/// 
+	/// This implementation provides both 32‑bit and 64‑bit variants and supports seeding,
+	/// allowing deterministic or randomized hash streams depending on the caller.
+	/// 
+	/// Characteristics:
+	///   - Very fast
+	///   - Deterministic
+	///   - Suitable for hash tables, indexing, lightweight hashing
+	///   - Not intended for cryptographic use
+	/// 
+	/// The algorithm uses a classic multiply‑and‑xor mixing step:
+	///     hash = (hash * M) ^ byte
+	/// where M is a constant chosen for diffusion.
+	/// </summary>
+	public class BernsteinHash : IHash {
         private const uint Default = 5381; // DJB2‑Seed
         private const ulong Default64 = 53811835;
 

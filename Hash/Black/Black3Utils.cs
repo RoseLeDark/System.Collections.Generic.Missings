@@ -1,15 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 
-namespace SystemEx.Hash.impl {
-    internal static class Black3Utils {
-        public static  UInt32[] IV = {  0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
+using System.Numerics;
+
+namespace SystemEx.Hash.Black {
+	/// \addtogroup SystemEx.Hash.Black
+	/// @{
+	/// <summary>
+	/// Internal utility helpers for the BLAKE3 hashing subsystem.
+	/// 
+	/// <para>
+	/// This class provides constants, message schedules, bit operations,
+	/// key loading, block loading, and chaining‑value storage helpers used
+	/// by the portable scalar compression implementation.
+	/// </para>
+	/// 
+	/// <para>
+	/// All members are internal and intended only for use inside the
+	/// SystemEx.Hash.Black3 module.
+	/// </para>
+	/// </summary>
+	internal static class Black3Utils {
+		/// <summary>
+		/// Initialization vector (IV) used by BLAKE3.
+		/// </summary>
+		public static  UInt32[] IV = {  0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
                                         0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19 
                                      };
-
-        public static byte[,] MSG_SCHEDULE = {
+		/// <summary>
+		/// Message schedule used for BLAKE3 rounds.
+		/// </summary>
+		public static byte[,] MSG_SCHEDULE = {
             {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
             {2, 6, 3, 10, 7, 0, 4, 13, 1, 11, 12, 5, 9, 14, 15, 8},
             {3, 4, 10, 12, 13, 2, 7, 14, 6, 5, 9, 0, 11, 15, 8, 1},
@@ -33,23 +68,44 @@ namespace SystemEx.Hash.impl {
             return n;
         }
 #else
-        public static int Clz ( ulong x ) {
+		/// <summary>
+		/// Counts leading zeros in a 64‑bit value.
+		/// </summary>
+		public static int Clz ( ulong x ) {
             if ( x == 0 )
                 return 64;
 
             return 63 - BitOperations.Log2(x);
         }
 #endif
-
-        public static uint highest_one ( UInt64 x ) => 63 ^ (uint)Clz(x);
-        public static UInt32 rotr32 ( UInt32 w, Int32 c ) => (w >> c) | (w << (32 - c));
-        public static UInt64 round_down_to_power_of_2 ( UInt64 x ) => (ulong)(1 << (int)highest_one(x | (ulong)1));
-        public static UInt32 counter_low ( UInt64 counter ) => (UInt32)counter;
-
-        public static UInt32 counter_high ( UInt64 counter ) => (UInt32)(counter >> 32);
-
-        public static void store32 ( byte[] dst, UInt32 w ) => dst = w.ToBytes(Endian.LittleEndian);
-        public static uint popcnt ( ulong x ) {
+		/// <summary>
+		/// Returns the index of the highest set bit.
+		/// </summary>
+		public static uint HighestOne ( UInt64 x ) => 63 ^ (uint)Clz(x);
+		/// <summary>
+		/// Rotates a 32‑bit word right by the given count.
+		/// </summary>
+		public static UInt32 Rotr32 ( UInt32 w, Int32 c ) => (w >> c) | (w << (32 - c));
+		/// <summary>
+		/// Rounds a value down to the nearest power of two.
+		/// </summary>
+		public static UInt64 RoundDown2Power2 ( UInt64 x ) => (ulong)(1 << (int)HighestOne(x | (ulong)1));
+		/// <summary>
+		/// Returns the low 32 bits of a 64‑bit counter.
+		/// </summary>
+		public static UInt32 CounterLow ( UInt64 counter ) => (UInt32)counter;
+		/// <summary>
+		/// Returns the high 32 bits of a 64‑bit counter.
+		/// </summary>
+		public static UInt32 CounterHigh ( UInt64 counter ) => (UInt32)(counter >> 32);
+		/// <summary>
+		/// Stores a 32‑bit word into a byte array in little‑endian order.
+		/// </summary>
+		public static void Store32 ( byte[] dst, UInt32 w ) => dst = w.ToBytes(Endian.LittleEndian);
+		/// <summary>
+		/// Counts the number of set bits in a 64‑bit value.
+		/// </summary>
+		public static uint PopCnt ( ulong x ) {
             uint count = 0;
             while ( x != 0 ) {
                 count += 1;
@@ -58,10 +114,14 @@ namespace SystemEx.Hash.impl {
             return count;
         }
 
-
-        public static string BLakeString => "1.8.5";
-
-        public static void load_key_words ( byte[] key, uint[] key_words ) {
+		/// <summary>
+		/// Returns the internal BLAKE3 version string.
+		/// </summary>
+		public static string BLakeString => "1.8.5";
+		/// <summary>
+		/// Loads eight 32‑bit key words from a byte array.
+		/// </summary>
+		public static void LoadKeyWords ( byte[] key, uint[] key_words ) {
             key_words[0] = key.ToUInt(0, Endian.LittleEndian);
             key_words[1] = key.ToUInt(4, Endian.LittleEndian);
             key_words[2] = key.ToUInt(8, Endian.LittleEndian);
@@ -73,8 +133,10 @@ namespace SystemEx.Hash.impl {
 
         }
 
-
-        public static void load_block_words ( byte[] block, UInt32[] block_words ) {
+		/// <summary>
+		/// Loads sixteen 32‑bit block words from a byte array.
+		/// </summary>
+		public static void LoadBlockWords ( byte[] block, UInt32[] block_words ) {
             block_words[0] = block.ToUInt(0, Endian.LittleEndian);// load32(&block[i * 4]);
             block_words[1] = block.ToUInt(4, Endian.LittleEndian);// load32(&block[i * 4]);
             block_words[2] = block.ToUInt(8, Endian.LittleEndian);// load32(&block[i * 4]);
@@ -95,8 +157,10 @@ namespace SystemEx.Hash.impl {
 
 
 
-
-        public static void store_cv_words ( byte[] bout, UInt32[] cv_words ) {
+		/// <summary>
+		/// Stores eight chaining‑value words into a byte array in little‑endian order.
+		/// </summary>
+		public static void StoreCVWords ( byte[] bout, UInt32[] cv_words ) {
             for ( int i = 0 ; i < 8 ; i++ ) {
                 byte[] x = cv_words[i].ToBytes(Endian.LittleEndian);
                 var o = i * 4;
@@ -108,4 +172,5 @@ namespace SystemEx.Hash.impl {
             }
         }
     }
+    /// @}
 }

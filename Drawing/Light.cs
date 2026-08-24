@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
@@ -6,13 +22,15 @@ using System.Text;
 using SystemEx.Numeric;
 
 namespace SystemEx.Drawing {
-    /// <summary>
-    /// Base light class used for all light types in the SystemEx.Drawing namespace.
-    /// Provides shared parameters such as position, direction, diffuse/ambient color
-    /// and projection settings. Specific light types (spot, point, directional)
-    /// extend this class with additional behavior.
-    /// </summary>
-    public class Light {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Base light class used for all light types in the SystemEx.Drawing namespace.
+	/// Provides shared parameters such as position, direction, diffuse/ambient color
+	/// and projection settings. Specific light types (spot, point, directional)
+	/// extend this class with additional behavior.
+	/// </summary>
+	public class Light {
         /// <summary>
         /// projection-based lights (e.g., spot lights).
         /// </summary>
@@ -201,19 +219,35 @@ namespace SystemEx.Drawing {
             set => m_Attenuation.W = value;
         }
 
-        public PointLight() : base() {
+		/// <summary>
+		/// Create a basic PointLigh with Brightness: 0, BrightnessFalloff: 0, 
+        /// BrightnessDistance:0.4f and Range: 0
+		/// </summary>
+		public PointLight () : base() {
             m_Attenuation = new Vec4f(0, 0, 0.4f, 0);
         }
-        public PointLight ( Vec4f Attenuation ) : base() {
+		/// <summary>
+		/// Create a basic PointLigh with given Values for Brightness: X, BrightnessFalloff: Y, 
+		/// BrightnessDistance: Z and Range: W
+		/// </summary>
+		public PointLight ( Vec4f Attenuation ) : base() {
             m_Attenuation = Attenuation;
         }
-
-        public PointLight ( Vec4f Attenuation,
+		/// <summary>
+		/// Create A Basic Pointligt with given parameter
+		/// </summary>
+		/// <param name="Attenuation">Properties Brightness: X, BrightnessFalloff: Y, 
+		/// BrightnessDistance: Z and Range: W</param>
+		/// <param name="position">The Position</param>
+		/// <param name="direction">The light direction</param>
+		/// <param name="ambient">The light ambient</param>
+		/// <param name="diffuse">The light diffuse</param>
+		public PointLight ( Vec4f Attenuation,
             Vec3f position, Vec3f direction, ColorR8G8B8 ambient, ColorR8G8B8 diffuse )
             : base(position, direction, ambient, diffuse) {
             m_Attenuation = Attenuation;
         }
     }
 
-
+    ///  @}
 }

@@ -22,25 +22,66 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-    public struct TupleMap<T> : IEnumerable<Tuple<T>>, IEnumerable, ITraverse<Tuple<T>>, ICollection<Tuple<T>>
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A sparse, linear container that stores elements as <see cref="Tuple{T}"/> 
+	/// objects, each consisting of a single key of type <typeparamref name="T"/> 
+	/// and an arbitrary number of additional values.
+	/// 
+	/// <para>
+	/// Unlike <see cref="Map{T, TU}"/>, which stores fixed two‑value pairs, 
+	/// <see cref="TupleMap{T}"/> supports variable‑length, heterogeneous value 
+	/// sequences per key. This makes it suitable for scenarios where each key 
+	/// represents a record, row, or structured entry with multiple fields.
+	/// </para>
+	/// 
+	/// <para>
+	/// The container behaves like a sparse vector: inactive slots remain allocated 
+	/// but are ignored during traversal, lookup, and enumeration. This design 
+	/// enables efficient slicing, copying, and low‑level operations without 
+	/// compacting or reallocating the underlying storage.
+	/// </para>
+	/// 
+	/// <para>
+	/// Automatic growth is controlled through <see cref="GrowSize"/> and 
+	/// <see cref="AutoGrow"/>. When enabled, the internal buffer expands 
+	/// automatically to accommodate additional tuples.
+	/// </para>
+	/// </summary>
+	public class TupleMap<T> : IEnumerable<Tuple<T>>, IEnumerable, ITraverse<Tuple<T>>, ICollection<Tuple<T>>
 	 where T : notnull {
-
+		/// <summary>
+		/// Stores the configured growth size used when automatic expansion is enabled.
+		/// </summary>
 		private long m_growSize;
-		private bool m_autoGrow;
 
+		/// <summary>
+		/// Indicates whether automatic growth is currently enabled.
+		/// </summary>
+		private bool m_autoGrow;
+		/// <summary>
+		/// Internal storage buffer containing all tuples
+		/// </summary>
 		private Tuple<T>[] m_elements;
+		/// <summary>
+		/// State buffer marking active (1) and inactive (0) entries.
+		/// </summary>
 		private byte [] m_state;
 
 		/// <summary>
-		/// Max Elements where can Hold in this Map
+		/// Gets the theoretical maximum logical size of the tuple.
 		/// </summary>
 		public long Size => Int64.MaxValue;
 
 		/// <summary>
-		/// Current number of valid elements stored in the Map.
+		/// Logical number of active elements stored in the tuple.
 		/// </summary>
 		private long m_index;
 
+		/// <summary>
+		/// Gets a collection containing all active keys in the tuple.
+		/// </summary>
 		public ICollection<T> Keys {
 			get {
 				List<T> tmp = new List<T>();
@@ -51,25 +92,42 @@ namespace SystemEx.Collections.Generic {
 				return tmp;
 			}
 		}
-
-		public ICollection<Object> Values {
+		/// <summary>
+		/// Gets a collection containing all active Values in the tuple.
+		/// </summary>
+		public ICollection< ICollection<Object> > Values {
 			get {
-				List<Object> tmp = new List<Object>();
+				List< ICollection<Object>  > tmp = new List<ICollection<Object>>();
+
 				for ( int i = 0 ; i < Length ; i++ ) {
 					if ( m_state[i] == 0 ) continue;
 
-					tmp.Add(m_elements[i].Get(1) );
+					ICollection<Object>  elements = new List<object>();
+					for(int j = 1 ; j < m_elements[i].Count - 1 ; i++ ) {
+						elements.Add(m_elements[i].Get(j));
+					}
+					tmp.Add(elements);
 				}
 				return tmp;
 			}
 		}
 
+		/// <summary>
+		/// Gets the number of allocated slots in the internal buffer.
+		/// </summary>
 		public long Length => m_elements.LongLength;
-
+		/// <summary>
+		/// Gets the first active element in the tuplemap.
+		/// </summary>
 		public Tuple<T> Front => m_elements[0];
-
+		/// <summary>
+		/// Gets the last active element in the tuplemap.
+		/// </summary>
 		public Tuple<T> Back => m_elements[Count - 1];
-
+		/// <summary>
+		/// Gets or sets the automatic growth size. When positive, the map grows
+		/// by this amount whenever additional capacity is required.
+		/// </summary>
 		public long GrowSize {
 			get => (m_autoGrow ? m_growSize : 0);
 			set {
@@ -77,14 +135,23 @@ namespace SystemEx.Collections.Generic {
 				m_autoGrow = (m_growSize > 0);
 			}
 		}
-
+		/// <summary>
+		/// Gets or sets a value indicating whether the map should automatically
+		/// grow when full.
+		/// </summary>
 		public bool AutoGrow { get => (m_growSize == 0 ? false : m_autoGrow); set => m_autoGrow = value; }
 
-
+		/// <summary>
+		/// Gets the number of active elements stored in the tuplemap.
+		/// </summary>
 		public long Count => m_index;
-
+		/// <summary>
+		/// Gets a value indicating whether the map is full.
+		/// </summary>
 		public bool IsFull => (AutoGrow ? false : m_index >= Length);
-
+		/// <summary>
+		/// Gets a value indicating whether the map contains no active elements.
+		/// </summary>
 		public bool IsEmpty => m_index == 0;
 
 		public TupleMap ( long size) {
@@ -147,7 +214,12 @@ namespace SystemEx.Collections.Generic {
 		/// empty or m_index is out of range is undefined.
 		/// </summary>
 		public Tuple<T>? Current => (m_index > 0 ? m_elements[m_index - 1] : null);
-
+		/// <summary>
+		/// Gets the first active element in the tuplemap.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">
+		/// Thrown when the map contains no active elements.
+		/// </exception>
 		public Tuple<T>? First {
 			get {
 				if ( m_elements.Length == 0 )
@@ -163,7 +235,12 @@ namespace SystemEx.Collections.Generic {
 				return m_elements[index];
 			}
 		}
-
+		/// <summary>
+		/// Gets the last active element in the tuplemap.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">
+		/// Thrown when the map contains no active elements.
+		/// </exception>
 		public Tuple<T>? Last {
 			get {
 				if ( m_elements.Length == 0 )
@@ -179,10 +256,18 @@ namespace SystemEx.Collections.Generic {
 				return m_elements[index];
 			}
 		}
+		/// <summary>
+		/// Gets the number of active elements stored in the map (ICollection implementation).
+		/// </summary>
 		int ICollection<Tuple<T>>.Count => (int)this.Count;
-
+		/// <summary>
+		/// Always false; the map supports modification.
+		/// </summary>
 		public bool IsReadOnly => false;
-
+		/// <summary>
+		/// Gets or sets the value associated with the specified key.
+		/// If the key does not exist, a new entry is appended.
+		/// </summary>
 		public Optional<Tuple<T>> this[T key] {
 			get {
 				return Get(key);
@@ -196,7 +281,9 @@ namespace SystemEx.Collections.Generic {
 			}
 		}
 
-		
+		/// <summary>
+		/// Appends a key–value pair to the end of the tuplemap.
+		/// </summary>
 		public bool PushBack ( Tuple<T> entry ) {
 			if ( ContainsKey(entry.First) ) return false;
 
@@ -210,7 +297,9 @@ namespace SystemEx.Collections.Generic {
 			m_index++;
 			return true;
 		}
-
+		/// <summary>
+		/// Inserts a key–value pair at the front of the tuplemap.
+		/// </summary>
 		public bool PushFront ( Tuple<T> entry ) {
 			if ( ContainsKey(entry.First) ) return false;
 
@@ -240,7 +329,9 @@ namespace SystemEx.Collections.Generic {
 
 			return true;
 		}
-
+		/// <summary>
+		/// Inserts an element at the specified index, shifting elements to the right.
+		/// </summary>
 		public bool Insert ( long index, Tuple<T> entry ) {
 			if ( index < 0 ) return false;
 			if ( ContainsKey(entry.First) ) return false;
@@ -269,7 +360,9 @@ namespace SystemEx.Collections.Generic {
 
 			return true;
 		}
-
+		/// <summary>
+		/// Finds all entries matching the specified key.
+		/// </summary>
 		public IEnumerable<Tuple<T>> Find ( T Key ) {
 			for ( long i = 0 ; i < m_elements.LongLength ; i++ ) {
 
@@ -280,7 +373,9 @@ namespace SystemEx.Collections.Generic {
 				}
 			}
 		}
-
+		/// <summary>
+		/// Inserts a range of elements starting at the specified index.
+		/// </summary>
 		public bool InsertRange ( int start, IEnumerable<Tuple<T>> items ) {
 			var _arr = items.ToArray();
 
@@ -290,9 +385,14 @@ namespace SystemEx.Collections.Generic {
 			}
 			return true;
 		}
-
+		/// <summary>
+		/// Inserts an element at the specified index, shifting elements to the right.
+		/// </summary>
 		public bool Insert ( long start, long end, Tuple<T> entry ) => Insert(start, entry);
 
+		/// <summary>
+		/// Inserts a range of elements starting at the specified index.
+		/// </summary>
 		public bool InsertRange ( long start, Tuple<T>[] entrys ) {
 			for ( long i = 0 ; i < entrys.Length ; i++ ) {
 				if ( !Insert(start + i, entrys[i]) )
@@ -300,7 +400,10 @@ namespace SystemEx.Collections.Generic {
 			}
 			return true;
 		}
-
+		
+		/// <summary>
+		/// Replaces the element at the specified index.
+		/// </summary>
 		public bool Replace ( long index, Tuple<T> entry ) {
 			if ( index < 0 ) return false;
 
@@ -323,7 +426,9 @@ namespace SystemEx.Collections.Generic {
 
 			return true;
 		}
-
+		/// <summary>
+		/// Replaces the value associated with the specified key.
+		/// </summary>
 		public bool Replace ( T key, Tuple<T> entry ) {
 			bool _ret = false;
 			for ( long i = 0 ; i < m_elements.LongLength ; i++ ) {
@@ -351,7 +456,9 @@ namespace SystemEx.Collections.Generic {
 			}
 			return _ret;
 		}
-
+		/// <summary>
+		/// Replaces a range of elements with the specified entry.
+		/// </summary>
 		public bool Replace ( long start, long end, Tuple<T> entry ) {
 			if ( start < 0 || end < start ) return false;
 			if ( m_index >= m_elements.Length ) Grow();
@@ -367,7 +474,9 @@ namespace SystemEx.Collections.Generic {
 			return true;
 		}
 
-
+		/// <summary>
+		/// Replaces a range of elements with the specified entries.
+		/// </summary>
 		public bool ReplaceRange ( long start, Tuple<T>[] entrys ) {
 			for ( long i = 0 ; i < entrys.Length ; i++ ) {
 				if ( !Replace(start + i, entrys[i]) )
@@ -376,7 +485,9 @@ namespace SystemEx.Collections.Generic {
 			return true;
 		}
 
-
+		/// <summary>
+		/// Removes the last active element.
+		/// </summary>
 		public bool Erase () {
 			if ( IsEmpty ) return false;
 			m_state[m_index - 1] = 0;
@@ -386,7 +497,9 @@ namespace SystemEx.Collections.Generic {
 
 			return true;
 		}
-
+		/// <summary>
+		/// Removes the element at the specified index.
+		/// </summary>
 		public bool Erase ( long index ) {
 			if ( IsEmpty ) return false;
 			if ( index >= Length ) return false;
@@ -395,7 +508,9 @@ namespace SystemEx.Collections.Generic {
 
 			return true;
 		}
-
+		/// <summary>
+		/// Removes all elements in the specified range.
+		/// </summary>
 		public bool Erase ( long start, long end ) {
 			if ( start < 0 || end < start ) return false;
 			if ( start >= Length ) return false;
@@ -409,7 +524,9 @@ namespace SystemEx.Collections.Generic {
 
 			return true;
 		}
-
+		/// <summary>
+		/// Removes the specified  tuple.
+		/// </summary>
 		public bool Erase ( Tuple<T> value ) {
 			bool _ret = false;
 
@@ -423,7 +540,11 @@ namespace SystemEx.Collections.Generic {
 
 			return _ret;
 		}
-
+		/// <summary>
+		/// Swaps two elements in the map, including their active/inactive state.
+		/// </summary>
+		/// <param name="i">Index of the first element.</param>
+		/// <param name="j">Index of the second element.</param>
 		public void Swap ( long i, long j ) {
 			if ( i < 0 || j < 0 ) return;
 			if ( i >= m_index || j >= m_index ) return;
@@ -437,31 +558,54 @@ namespace SystemEx.Collections.Generic {
 			m_state[j] = tmps;
 		}
 
-
+		/// <summary>
+		/// Returns the element at the specified index.
+		/// </summary>
+		/// <param name="index">The index to retrieve.</param>
+		/// <returns>The element at the given index.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown when the index is outside the allocated range.
+		/// </exception>
+		/// <exception cref="Exception">
+		/// Thrown when the slot is inactive.
+		/// </exception>
 		public Tuple<T> ElementAt ( long index ) {
 			if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
 			if ( m_state[index] == 0 ) throw new Exception("No element on this position");
 			return m_elements[index];
 		}
-
+		/// <summary>
+		/// Grows the internal buffer by <see cref="GrowSize"/> if automatic growth is enabled.
+		/// </summary>
+		/// <returns>True if the buffer was successfully resized; otherwise false.</returns>
 		public bool Grow () {
 			if ( !AutoGrow ) return false;
 			return Resize(Length + GrowSize);
 		}
-
+		/// <summary>
+		/// Clears the map by resetting the logical index and reinitializing the buffers.
+		/// </summary>
 		public void Clear () {
 			m_index = 0;
 			var len = Length;
 			m_elements = new Tuple<T>[len];
 			m_state = new byte[len];
 		}
-
+		/// <summary>
+		/// Enumerates all active elements in the tuplemap.
+		/// </summary>
 		public IEnumerator<Tuple<T>> GetEnumerator () {
 			for ( int i = 0 ; i < m_index ; i++ )
 				if ( m_state[i] == 1 )
 					yield return m_elements[i];
 		}
-
+		/// <summary>
+		/// Traverses a range of elements using the specified traversal mode.
+		/// </summary>
+		/// <param name="mode">Traversal direction (forwards or backwards).</param>
+		/// <param name="startIndex">Start index of traversal.</param>
+		/// <param name="endIndex">End index of traversal.</param>
+		/// <param name="func">Callback invoked for each active element.</param>
 		public void Traverse ( TraversMode mode, long startIndex, long endIndex, Action<Tuple<T>> func ) {
 			var start = System.Math.Max(startIndex, 0);
 			var end = System.Math.Min(endIndex,  m_index);
@@ -478,12 +622,21 @@ namespace SystemEx.Collections.Generic {
 				}
 			}
 		}
-
+		/// <summary>
+		/// Copies a range of elements to another map starting at the specified index.
+		/// </summary>
 		public Pair<bool, long> CopyTo ( TupleMap<T> vector, ulong VectorIndex ) {
 			return CopyTo(0, vector, 0, VectorIndex);
 		}
 
-
+		/// <summary>
+		/// Copies a range of elements to another tuplemap.
+		/// </summary>
+		/// <param name="sourceOffset">Offset in the source tuplemap.</param>
+		/// <param name="destination">Destination tuplemap.</param>
+		/// <param name="destinationOffset">Offset in the destination tuplemap.</param>
+		/// <param name="count">Number of elements to copy.</param>
+		/// <returns>A pair indicating success and number of copied elements.</returns>
 		public Pair<bool, long> CopyTo ( uint sourceOffset, TupleMap<T> destination, ulong destinationOffset, ulong count ) {
 
 			long src = (long)sourceOffset;
@@ -508,7 +661,10 @@ namespace SystemEx.Collections.Generic {
 		}
 
 
-
+		/// <summary>
+		/// Copies a range of elements from another map into this tuplemap.
+		/// Automatically grows the buffer if required.
+		/// </summary>
 		public Pair<bool, long> CopyFrom ( TupleMap<T> source, ulong sourceOffset, ulong destinationOffset, ulong count ) {
 			long src = (long)sourceOffset;
 			long dst = (long)destinationOffset;
@@ -567,7 +723,11 @@ namespace SystemEx.Collections.Generic {
 			return vec;
 		}
 
-
+		/// <summary>
+		/// Resizes the internal buffers to the specified size.
+		/// </summary>
+		/// <param name="size">New buffer size.</param>
+		/// <returns>True if resizing succeeded; otherwise false.</returns>
 		private bool Resize ( long size ) {
 			if ( size == Length ) return false;
 
@@ -582,11 +742,15 @@ namespace SystemEx.Collections.Generic {
 			}
 			return true;
 		}
-
+		/// <summary>
+		/// Gets the element type stored in the tuplemap.
+		/// </summary>
 		public Type GetElementType () {
 			return typeof(Tuple<T>);
 		}
-
+		/// <summary>
+		/// Determines whether any element has the specified key.
+		/// </summary>
 		public bool ContainsKey ( T Key ) {
 			bool _ret = false;
 			for ( long i = 0 ; i < Count ; i++ ) {
@@ -615,7 +779,9 @@ namespace SystemEx.Collections.Generic {
 			}
 			return false;
 		}
-
+		/// <summary>
+		/// Retrieves the value associated with the specified key.
+		/// </summary>
 		public Optional<TU> Get<TU> ( T Key ) {
 
 			Optional<TU> _ret = Optional<TU>.NONE;
@@ -630,14 +796,28 @@ namespace SystemEx.Collections.Generic {
 			}
 			return _ret;
 		}
-		public void Add ( Tuple<T> item ) => PushBack(item);
 
+		/// <summary>
+		/// Adds an element to the tuplemap.
+		/// </summary>
+		public void Add ( Tuple<T> item ) => PushBack(item);
+		/// <summary>
+		/// Removes the element at the specified index.
+		/// </summary>
 		public void RemoveAt ( int pos ) => Erase(pos);
+
+		/// <summary>
+		/// Removes all elements in the specified range.
+		/// </summary>
 		public void RemoveAt ( int start, int iend ) => Erase(start, iend);
 
-
+		/// <summary>
+		/// Removes the specified key–value pair.
+		/// </summary>
 		public bool Remove ( Tuple<T> item ) => Erase(item);
-
+		/// <summary>
+		/// Removes the element with the specified key.
+		/// </summary>
 		public bool Remove ( T key ) {
 			bool _ret = false;
 
@@ -650,7 +830,9 @@ namespace SystemEx.Collections.Generic {
 			}
 			return _ret;
 		}
-
+		/// <summary>
+		/// Determines whether the specified item exists.
+		/// </summary>
 		public bool Contains ( Tuple<T> item ) {
 			bool _ret = false;
 			for ( long i = 0 ; i < Length ; i++ ) {
@@ -665,11 +847,15 @@ namespace SystemEx.Collections.Generic {
 
 
 
-
+		/// <summary>
+		/// Copies the internal buffer to an external array.
+		/// </summary>
 		public void CopyTo ( Tuple<T>[] array, int arrayIndex ) {
 			m_elements.CopyTo(array, arrayIndex);
 		}
-
+		/// <summary>
+		/// Attempts to retrieve a value by key.
+		/// </summary>
 		public bool TryGeValue<TU> ( T key, [MaybeNullWhen(false)] out TU? value ) {
 
 			for ( long i = 0 ; i < Count ; i++ ) {
@@ -685,19 +871,18 @@ namespace SystemEx.Collections.Generic {
 			return false;
 		}
 
-
-
-		public void Set<TU> ( T v, TU value ) {
-			throw new NotImplementedException();
-		}
-
+		/// <summary>
+		/// Appends all active elements from another tuplemap.
+		/// </summary>
 		public void PushBack ( TupleMap<T> other ) {
 			for ( long i = 0 ; i < other.Count ; i++ ) {
 				if ( other.m_state[i] == 1 )
 					this.PushBack(other.m_elements[i]);
 			}
 		}
-
+		/// <summary>
+		/// Enumerates all active elements.
+		/// </summary>
 		IEnumerator IEnumerable.GetEnumerator () {
 			return GetEnumerator();
 		}

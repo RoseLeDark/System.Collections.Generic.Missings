@@ -18,15 +18,15 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A cache that maintains a mirrored copy of all written data.  
-    /// Every write operation is performed on the primary cache and a reversed
-    /// (byte‑mirrored) version of the data is written to the secondary cache.  
-    /// During reads, both caches are compared to ensure data integrity.
-    /// </summary>
-    public class MirroredCache : Cache {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A cache that maintains a mirrored copy of all written data.  
+	/// Every write operation is performed on the primary cache and a reversed
+	/// (byte‑mirrored) version of the data is written to the secondary cache.  
+	/// During reads, both caches are compared to ensure data integrity.
+	/// </summary>
+	public class MirroredCache : Cache {
 
         /// <summary>
         /// The secondary cache storing the mirrored byte sequence.

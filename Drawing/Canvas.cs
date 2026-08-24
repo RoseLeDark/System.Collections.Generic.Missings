@@ -19,21 +19,20 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.Drawing {
 
-    /// \addtogroup color
-    /// @{
-    /// @{
-    /// <summary>
-    /// Represents a mathematical 2D canvas storing color values of type <typeparamref name="T"/>.
-    /// This interface defines a deterministic data structure that models a rectangular grid of
-    /// values. The canvas does not perform graphical drawing; instead, it provides structured
-    /// access, mutation, and region‑based operations on its underlying data.
-    ///
-    /// All operations are purely mathematical and affect only the internal buffer. Visual output
-    /// is never produced directly; color values are only observable through <see cref="GetPixel"/>,
-    /// <see cref="Buffer"/>, or by transferring computed data into another canvas.
-    /// </summary>
-    /// <typeparam name="T">The color type stored in the canvas.</typeparam>
-    public interface ICanvas<T>
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a mathematical 2D canvas storing color values of type <typeparamref name="T"/>.
+	/// This interface defines a deterministic data structure that models a rectangular grid of
+	/// values. The canvas does not perform graphical drawing; instead, it provides structured
+	/// access, mutation, and region‑based operations on its underlying data.
+	///
+	/// All operations are purely mathematical and affect only the internal buffer. Visual output
+	/// is never produced directly; color values are only observable through <see cref="GetPixel"/>,
+	/// <see cref="Buffer"/>, or by transferring computed data into another canvas.
+	/// </summary>
+	/// <typeparam name="T">The color type stored in the canvas.</typeparam>
+	public interface ICanvas<T>
     {
         /// <summary>
         /// Returns the color value at the specified coordinates. This method provides direct

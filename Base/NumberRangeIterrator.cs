@@ -18,11 +18,13 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx {
-    /// <summary>
-    /// Forward iterator over a normalized numeric range. Supports stepping
-    /// by one unit and exposes the current value and end-of-range state.
-    /// </summary>
-    public struct NumberRangeIterator<T> : Iterrator<T> {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Forward iterator over a normalized numeric range. Supports stepping
+	/// by one unit and exposes the current value and end-of-range state.
+	/// </summary>
+	public struct NumberRangeIterator<T> : Iterrator<T> {
 
         private Vector<T> m_range;
 
@@ -69,4 +71,5 @@ namespace SystemEx {
             }
         }
     }
+	//@}
 }

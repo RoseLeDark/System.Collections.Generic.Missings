@@ -20,12 +20,12 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Implements the Fletcher hash algorithm. 
-    /// </summary>
-    public sealed class FletcherHash : IHash {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Implements the Fletcher hash algorithm. 
+	/// </summary>
+	public sealed class FletcherHash : IHash {
         Endian m_endian;
         /// <summary>
         /// Craate a new instance

@@ -14,19 +14,18 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI.Tools {
-    // \addtogroup AI
-    /// @{
-    /// \addtogroup Tools
-    /// @{
-    /// <summary>
-    /// A tool that calculates the difference between two dates.
-    /// 
-    /// The result is returned as the number of days between the two timestamps.
-    /// Both input values must be valid ISO 8601 date strings.
-    /// </summary>
-    public sealed class DateDifferenceTool : IModelTool<string> {
+	// \addtogroup SystemEx.AI.Tools 
+	/// @{
+	/// <summary>
+	/// A tool that calculates the difference between two dates.
+	/// 
+	/// The result is returned as the number of days between the two timestamps.
+	/// Both input values must be valid ISO 8601 date strings.
+	/// </summary>
+	public sealed class DateDifferenceTool : IModelTool<string> {
         /// <summary>
         /// Gets the unique tool name used by the AI runtime.
         /// </summary>
@@ -60,7 +59,7 @@ namespace SystemEx.AI.Tools {
         /// <summary>
         /// Executes the date difference calculation.
         /// </summary>
-        /// <param name="args">Dictionary containing tool arguments.</param>
+        /// <param name="args">Map containing tool arguments.</param>
         /// <param name="ct">Cancellation token.</param>
         /// <returns>
         /// A double representing the number of days between the two dates.
@@ -69,7 +68,7 @@ namespace SystemEx.AI.Tools {
         /// Thrown when required parameters are missing or invalid.
         /// </exception>
         public async Task<object?> ExecuteAsync (
-            Dictionary<string, object?> args,
+            Map<string, object?> args,
             CancellationToken ct ) {
             if ( !args.TryGetValue("start", out var s) || s is not string startStr )
                 throw new ArgumentException("Missing 'start' parameter.");

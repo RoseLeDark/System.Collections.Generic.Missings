@@ -17,14 +17,12 @@
 
 namespace SystemEx.Collections.Generic {
 
-    /// \addtogroup collections
-    /// @{
-    /// \addtogroup interfaces
-    /// @{
-    /// <summary>
-    /// Specifies the traversal direction for iterating over a sequence.
-    /// </summary>
-    public enum TraversMode {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Specifies the traversal direction for iterating over a sequence.
+	/// </summary>
+	public enum TraversMode {
         /// <summary>
         /// Traverses elements from lower to higher indices.
         /// </summary>
@@ -56,7 +54,6 @@ namespace SystemEx.Collections.Generic {
         void Traverse(TraversMode mode, long startIndex, long endIndex, Action<T> func);
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+	/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

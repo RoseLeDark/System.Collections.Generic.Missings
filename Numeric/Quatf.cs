@@ -24,14 +24,14 @@ using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-    /// \addtogroup Numeric
-    /// @{
+	/// \addtogroup SystemEx.Numeric
+	/// @{
 
 
-    /// <summary>
-    /// Defines the comparison mode used by <see cref="Quatf"/>.
-    /// </summary>
-    public enum CompareType {
+	/// <summary>
+	/// Defines the comparison mode used by <see cref="Quatf"/>.
+	/// </summary>
+	public enum CompareType {
         /// <summary>
         /// Compares quaternions by their scalar component <c>w</c>.
         /// </summary>

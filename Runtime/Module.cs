@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using SystemEx.Collections.Generic;
@@ -6,15 +22,7 @@ using SystemEx.Runtime.InteropServices;
 
 
 
-#if WINDOWS
-using ProcLoader = SystemEx.Runtime.InteropServices.Platform.WindowsProcLoader;
-#elif LINUX
-using ProcLoader = SystemEx.Runtime.InteropServices.Platform.LinuxProcLoader;
-#elif MACOS
-using ProcLoader = SystemEx.Runtime.InteropServices.Platform.MacProcLoader;
-#else
-using ProcLoader = SystemEx.Runtime.InteropServices.Platform.NoSupportProcLoader;
-#endif
+
 
 #if DOXYGEN
 
@@ -27,18 +35,30 @@ using ProcLoader = SystemEx.Runtime.InteropServices.Platform.MacProcLoader;
 /// Used when no PLatform supported
 using ProcLoader = SystemEx.Runtime.InteropServices.Platform.NoSupportProcLoader;
 
+#else
+
+#if WINDOWS
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.WindowsProcLoader;
+#elif LINUX
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.LinuxProcLoader;
+#elif MACOS
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.MacProcLoader;
+#else
+using ProcLoader = SystemEx.Runtime.InteropServices.Platform.NoSupportProcLoader;
+#endif
+
 #endif
 
 namespace SystemEx.Runtime {
-    /// \addtogroup Runtime
-    /// @{
-    /// <summary>
-    /// Represents a loaded native module (DLL, SO, or DYLIB).  
-    /// A <see cref="Module"/> encapsulates the operating system handle of the
-    /// loaded library and provides helper methods for resolving exported
-    /// functions and unloading the module.
-    /// </summary>
-    public class Module {
+	/// \addtogroup SystemEx.Runtime
+	/// @{
+	/// <summary>
+	/// Represents a loaded native module (DLL, SO, or DYLIB).  
+	/// A <see cref="Module"/> encapsulates the operating system handle of the
+	/// loaded library and provides helper methods for resolving exported
+	/// functions and unloading the module.
+	/// </summary>
+	public class Module {
         /// <summary>
         /// Gets the native handle of the loaded module.  
         /// This value corresponds to the OS‑specific library handle returned by

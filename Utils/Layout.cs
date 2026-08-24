@@ -1,16 +1,34 @@
-﻿using System.Drawing;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace SystemEx.Utils {
-
-    /// <summary>
-    /// Exception thrown when a struct used for unmanaged interop does not specify
-    /// <see cref="StructLayoutAttribute"/> with <see cref="LayoutKind.Sequential"/>.  
-    /// Required for deterministic field ordering in native interop, binary
-    /// serialization, and memory‑mapped structures.
-    /// </summary>
-    [Serializable]
+	// addtogroup SystemEx.Utils
+	/// @{
+	/// <summary>
+	/// Exception thrown when a struct used for unmanaged interop does not specify
+	/// <see cref="StructLayoutAttribute"/> with <see cref="LayoutKind.Sequential"/>.  
+	/// Required for deterministic field ordering in native interop, binary
+	/// serialization, and memory‑mapped structures.
+	/// </summary>
+	[Serializable]
     public sealed class MissingStructLayoutSequentialException : Exception {
         /// <summary>
         /// Gets the struct type that caused the exception.
@@ -121,5 +139,5 @@ namespace SystemEx.Utils {
             return true;
         }
     }
-
+    ///@}
 }

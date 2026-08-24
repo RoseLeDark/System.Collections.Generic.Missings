@@ -19,13 +19,15 @@
 using SystemEx.Threading;
 
 namespace SystemEx.Random {
-    /// <summary>
-    /// Defines the available mixing strategies used to combine two random seeds.
-    /// These operations are purely mathematical and intended for non‑cryptographic
-    /// random number generation. Each mode describes how the corresponding seed
-    /// values are combined to produce a new mixed seed.
-    /// </summary>
-    public enum SeedMix : byte {
+	/// \addtogroup SystemEx.Random
+	/// @{
+	/// <summary>
+	/// Defines the available mixing strategies used to combine two random seeds.
+	/// These operations are purely mathematical and intended for non‑cryptographic
+	/// random number generation. Each mode describes how the corresponding seed
+	/// values are combined to produce a new mixed seed.
+	/// </summary>
+	public enum SeedMix : byte {
         /// <summary>
         /// Bitwise exclusive OR (XOR) between corresponding seed values.
         /// Produces strong bit diffusion and is commonly used in PRNG mixing.
@@ -218,4 +220,5 @@ namespace SystemEx.Random {
             return this;
         }
     }
+	///@}
 }

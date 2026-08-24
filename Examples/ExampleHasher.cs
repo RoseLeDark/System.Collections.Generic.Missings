@@ -63,7 +63,7 @@
 using SystemEx;
 using SystemEx.Collections.Generic;
 using SystemEx.Hash;
-
+using SystemEx.Utils;
 
 namespace Examples {
 

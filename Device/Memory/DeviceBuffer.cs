@@ -40,13 +40,15 @@ OpenCL.Run();
 
 
 namespace SystemEx.Device.Memory {
-    /// <summary>
-    /// Represents a cache that can be shared with a hardware backend through
-    /// <see cref="DeviceSharedBuffer{TDeviceSharedBackend}"/>.  
-    /// A <see cref="DeviceBuffer"/> behaves like a normal <see cref="Cache"/>,
-    /// but supports locking and shared‑memory synchronization for device kernels.
-    /// </summary>
-    public class DeviceBuffer : Cache {
+	// \addtogroup SystemEx.Device.Memory
+	/// @{
+	/// <summary>
+	/// Represents a cache that can be shared with a hardware backend through
+	/// <see cref="DeviceSharedBuffer{TDeviceSharedBackend}"/>.  
+	/// A <see cref="DeviceBuffer"/> behaves like a normal <see cref="Cache"/>,
+	/// but supports locking and shared‑memory synchronization for device kernels.
+	/// </summary>
+	public class DeviceBuffer : Cache {
         /// <summary>
         /// Internal lock object used to mark the buffer as shared and prevent
         /// concurrent modifications while a hardware backend is accessing it.
@@ -101,7 +103,7 @@ namespace SystemEx.Device.Memory {
             IsLocked = false;
         }
     }
-
+	/// @}
 }
 
 

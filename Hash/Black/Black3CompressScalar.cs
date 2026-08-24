@@ -1,12 +1,44 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace SystemEx.Hash.impl {
-    internal static class Black3CompressScalar {
-
-        public static void in_place_portable ( uint[] cv, byte[] block, byte block_len, UInt64 counter, blake3_flags flags ) {
+namespace SystemEx.Hash.Black {
+	/// \addtogroup SystemEx.Hash.Black
+	/// @{
+	/// <summary>
+	/// Internal scalar BLAKE3 compression implementation.
+	/// 
+	/// <para>
+	/// This class provides the portable fallback version of the BLAKE3
+	/// compression function. It operates entirely on 32‑bit words and does not
+	/// use SIMD instructions. All methods are internal and intended only for
+	/// the SystemEx hashing subsystem.
+	/// </para>
+	/// </summary>
+	internal static class Black3CompressScalar {
+		/// <summary>
+		/// Computes a BLAKE3 compression round and updates the chaining value
+		/// in place. This is the standard compression path used for tree hashing.
+		/// </summary>
+		public static void InPlacePortable ( uint[] cv, byte[] block, byte block_len, UInt64 counter, Blake3Flags flags ) {
             uint[] state = new uint[16];
 
             compress_pre(state, cv, block, block_len, counter, flags);
@@ -20,7 +52,11 @@ namespace SystemEx.Hash.impl {
             cv[6] = state[6] ^ state[14];
             cv[7] = state[7] ^ state[15];
         }
-        public static void xof_portable ( uint[] cv, byte[] block, byte block_len, UInt64 counter, blake3_flags flags, byte[] uout ) {
+		/// <summary>
+		/// Computes a BLAKE3 compression round and writes the extended output
+		/// (XOF) into the provided buffer.
+		/// </summary>
+		public static void XOFPortable ( uint[] cv, byte[] block, byte block_len, UInt64 counter, Blake3Flags flags, byte[] uout ) {
             uint[] state = new uint[16];
             compress_pre(state, cv, block, block_len, counter, flags);
 
@@ -76,8 +112,11 @@ namespace SystemEx.Hash.impl {
             uout[60] = x[0]; uout[61] = x[1]; uout[62] = x[2]; uout[63] = x[3];
 
         }
-
-        public static void shift_input ( byte[] input, int len, ref int remain ) {
+		/// <summary>
+		/// Shifts the input buffer forward by one block (64 bytes) and clears
+		/// the remaining bytes. Used during sequential block processing.
+		/// </summary>
+		public static void ShiftInput ( byte[] input, int len, ref int remain ) {
             remain = len - 64;
 
             if ( remain > 0 ) {
@@ -92,8 +131,12 @@ namespace SystemEx.Hash.impl {
             }
         }
 
-
-        public static void hash_one_portable ( byte[] input, UInt64 blocks, UInt32[] key, UInt64 counter, blake3_flags flags, blake3_flags flags_start, blake3_flags flags_end, byte[] bout ) {
+		/// <summary>
+		/// Hashes a single input buffer using the portable compression path.
+		/// Supports start/end flags and multi‑block processing.
+		/// </summary>
+		public static void HashOnePortable ( byte[] input, UInt64 blocks, UInt32[] key, UInt64 counter, Blake3Flags flags, 
+                Blake3Flags flags_start, Blake3Flags flags_end, byte[] bout ) {
             uint[] cv = new uint[Black3Infos.BLAKE3_KEY_LEN];
             byte n = 0;
 
@@ -103,14 +146,14 @@ namespace SystemEx.Hash.impl {
             }
 
 
-            blake3_flags block_flags = flags | flags_start;
+			Blake3Flags block_flags = flags | flags_start;
             int remaining = 0;
 
             while ( blocks > 0 ) {
                 if ( blocks == 1 ) {
                     block_flags |= flags_end;
                 }
-                in_place_portable(cv, input, Black3Infos.BLAKE3_BLOCK_LEN, counter, block_flags);
+				InPlacePortable(cv, input, Black3Infos.BLAKE3_BLOCK_LEN, counter, block_flags);
                 // input = &input[BLAKE3_BLOCK_LEN];
                 /*int total = input.Length;
                 int remaining = total - 64;
@@ -128,16 +171,21 @@ namespace SystemEx.Hash.impl {
                     for ( int i = 0 ; i < total ; i++ )
                         input[i] = 0;
                 }*/
-                shift_input(input, input.Length, ref remaining);
+                ShiftInput(input, input.Length, ref remaining);
 
                 blocks -= 1;
                 block_flags = flags;
             }
-            Black3Utils.store_cv_words(bout, cv);
+            Black3Utils.StoreCVWords(bout, cv);
         }
-        public static List<byte[]> blake3_hash_many_portable ( List<byte[]> input,
-                               UInt64 blocks, uint[] key, UInt64 counter, bool increment_counter, blake3_flags flags, blake3_flags flags_start,
-                               blake3_flags flags_end ) {
+
+		/// <summary>
+		/// Hashes multiple input buffers sequentially using the portable
+		/// compression path. Optionally increments the counter for each buffer.
+		/// </summary>
+		public static List<byte[]> HashManyPortable ( List<byte[]> input,
+                               UInt64 blocks, uint[] key, UInt64 counter, bool increment_counter, Blake3Flags flags, Blake3Flags flags_start,
+							   Blake3Flags flags_end ) {
 
             List<byte[]> _ret = new List<byte[]>(input.Count);
 
@@ -146,7 +194,7 @@ namespace SystemEx.Hash.impl {
             for ( int i = 0 ; i < input.Count ; i++ ) {
                 byte[] bout = new byte[Black3Infos.BLAKE3_BLOCK_LEN];
 
-                hash_one_portable(input[i], blocks, key, counter, flags, flags_start, flags_end, bout);
+                HashOnePortable(input[i], blocks, key, counter, flags, flags_start, flags_end, bout);
 
                 if ( increment_counter ) {
                     counter += 1;
@@ -156,20 +204,12 @@ namespace SystemEx.Hash.impl {
             }
             return _ret;
         }
-
-        public static void g ( uint[] state, UInt64 a, UInt64 b, UInt64 c, UInt64 d, uint x, uint y ) {
-            state[a] = state[a] + state[b] + x;
-            state[d] = Black3Utils.rotr32(state[d] ^ state[a], 16);
-            state[c] = state[c] + state[d];
-            state[b] = Black3Utils.rotr32(state[b] ^ state[c], 12);
-            state[a] = state[a] + state[b] + y;
-            state[d] = Black3Utils.rotr32(state[d] ^ state[a], 8);
-            state[c] = state[c] + state[d];
-            state[b] = Black3Utils.rotr32(state[b] ^ state[c], 7);
-
-        }
-
-        public static void round_fn ( uint[] state, uint[] msg, UInt64 round ) {
+		
+		/// <summary>
+		/// Executes one full BLAKE3 round, mixing columns and rows according
+		/// to the message schedule.
+		/// </summary>
+		public static void RoundFN ( uint[] state, uint[] msg, UInt64 round ) {
             // Mix the columns.
             g(state, 0, 4, 8, 12, msg[Black3Utils.MSG_SCHEDULE[round, 0]], msg[Black3Utils.MSG_SCHEDULE[round, 1]]);
             g(state, 1, 5, 9, 13, msg[Black3Utils.MSG_SCHEDULE[round, 2]], msg[Black3Utils.MSG_SCHEDULE[round, 3]]);
@@ -182,8 +222,11 @@ namespace SystemEx.Hash.impl {
             g(state, 2, 7, 8, 13, msg[Black3Utils.MSG_SCHEDULE[round, 12]], msg[Black3Utils.MSG_SCHEDULE[round, 13]]);
             g(state, 3, 4, 9, 14, msg[Black3Utils.MSG_SCHEDULE[round, 14]], msg[Black3Utils.MSG_SCHEDULE[round, 15]]);
         }
-
-        public static void compress_pre ( uint[] state, uint[] cv, byte[] block, byte block_len, UInt64 counter, blake3_flags flags ) {
+		/// <summary>
+		/// Prepares the compression state by loading chaining values, block
+		/// words, counter, block length, and flags. Executes all BLAKE3 rounds.
+		/// </summary>
+		public static void compress_pre ( uint[] state, uint[] cv, byte[] block, byte block_len, UInt64 counter, Blake3Flags flags ) {
             uint[] block_words = new uint[16];
 
             block_words[0] = block.ToUInt(0, Endian.LittleEndian);
@@ -215,20 +258,35 @@ namespace SystemEx.Hash.impl {
             state[9] = (uint)Black3Utils.IV[1];
             state[10] = (uint)Black3Utils.IV[2];
             state[11] = (uint)Black3Utils.IV[3];
-            state[12] = Black3Utils.counter_low(counter);
-            state[13] = Black3Utils.counter_high(counter);
+            state[12] = Black3Utils.CounterLow(counter);
+            state[13] = Black3Utils.CounterHigh(counter);
             state[14] = (uint)block_len;
             state[15] = (uint)flags;
 
-            round_fn(state, block_words, 0);
-            round_fn(state, block_words, 1);
-            round_fn(state, block_words, 2);
-            round_fn(state, block_words, 3);
-            round_fn(state, block_words, 4);
-            round_fn(state, block_words, 5);
-            round_fn(state, block_words, 6);
+			RoundFN(state, block_words, 0);
+			RoundFN(state, block_words, 1);
+			RoundFN(state, block_words, 2);
+			RoundFN(state, block_words, 3);
+			RoundFN(state, block_words, 4);
+			RoundFN(state, block_words, 5);
+			RoundFN(state, block_words, 6);
         }
 
-        
-    }
+		/// <summary>
+		/// BLAKE3 G‑function. Mixes four state words using additions, XOR,
+		/// and rotations. This is the core permutation step.
+		/// </summary>
+		private static void g ( uint[] state, UInt64 a, UInt64 b, UInt64 c, UInt64 d, uint x, uint y ) {
+			state[a] = state[a] + state[b] + x;
+			state[d] = Black3Utils.Rotr32(state[d] ^ state[a], 16);
+			state[c] = state[c] + state[d];
+			state[b] = Black3Utils.Rotr32(state[b] ^ state[c], 12);
+			state[a] = state[a] + state[b] + y;
+			state[d] = Black3Utils.Rotr32(state[d] ^ state[a], 8);
+			state[c] = state[c] + state[d];
+			state[b] = Black3Utils.Rotr32(state[b] ^ state[c], 7);
+
+		}
+	}
+    ///  @}
 }

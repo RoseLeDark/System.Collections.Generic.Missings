@@ -24,35 +24,35 @@ using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-    /// \addtogroup Numeric
-    /// @{
+	/// \addtogroup SystemEx.Numeric
+	/// @{
 
-    /// <summary>
-    /// Represents a doubleing‑point quaternion used for 3D rotations.
-    ///
-    /// <para>
-    /// <see cref="Quatd"/> stores a scalar component <c>w</c> and a vector
-    /// component <c>(x,y,z)</c> in a sequential memory layout, making it suitable
-    /// for native interop, compute kernels, and deterministic hashing.
-    /// </para>
-    ///
-    /// <para>
-    /// The struct is annotated with <see cref="HashAlgorithmAttribute"/> to enable
-    /// attribute‑driven hashing via <see cref="HashFactory"/>.  
-    /// BernsteinHash is used because it is fast, byte‑linear, and ideal for small
-    /// fixed‑size numeric types.
-    /// </para>
-    ///
-    /// <para>
-    /// <see cref="Quatd"/> implements multiple comparison and hashing interfaces:
-    /// <list type="bullet">
-    /// <item><description><see cref="IComparable"/> and <see cref="IComparable{T}"/> for ordering</description></item>
-    /// <item><description><see cref="IEquatable{T}"/> for equality checks</description></item>
-    /// <item><description><see cref="IHashable{T}"/> for deterministic byte‑level hashing</description></item>
-    /// </list>
-    /// </para>
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+	/// <summary>
+	/// Represents a doubleing‑point quaternion used for 3D rotations.
+	///
+	/// <para>
+	/// <see cref="Quatd"/> stores a scalar component <c>w</c> and a vector
+	/// component <c>(x,y,z)</c> in a sequential memory layout, making it suitable
+	/// for native interop, compute kernels, and deterministic hashing.
+	/// </para>
+	///
+	/// <para>
+	/// The struct is annotated with <see cref="HashAlgorithmAttribute"/> to enable
+	/// attribute‑driven hashing via <see cref="HashFactory"/>.  
+	/// BernsteinHash is used because it is fast, byte‑linear, and ideal for small
+	/// fixed‑size numeric types.
+	/// </para>
+	///
+	/// <para>
+	/// <see cref="Quatd"/> implements multiple comparison and hashing interfaces:
+	/// <list type="bullet">
+	/// <item><description><see cref="IComparable"/> and <see cref="IComparable{T}"/> for ordering</description></item>
+	/// <item><description><see cref="IEquatable{T}"/> for equality checks</description></item>
+	/// <item><description><see cref="IHashable{T}"/> for deterministic byte‑level hashing</description></item>
+	/// </list>
+	/// </para>
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
     [HashAlgorithm(typeof(BernsteinHash), Endian.System)]
     public struct Quatd : IComparable, IComparableEx<Quatd>, IComparable<Quatd>, IEquatable<Quatd>, IHashable<Quatd> {
         /// <summary>

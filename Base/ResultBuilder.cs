@@ -15,11 +15,10 @@
  * changes and the date.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SystemEx {
+	/// \addtogroup SystemEx
+	/// @
 	/// <summary>
 	/// Provides a fluent builder for constructing complex <see cref="Result"/>
 	/// objects across multiple processing steps, compiler stages, or mathematical
@@ -129,5 +128,5 @@ namespace SystemEx {
 			return m_result;
 		}
 	}
-
+	//@}
 }

@@ -16,14 +16,14 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A fixed-size queue that stores up to two elements. When full, the oldest
-    /// element is automatically removed to make room for a new one.
-    /// </summary>
-    /// <typeparam name="T">The type of elements stored in the queue.</typeparam>
-    public interface IBinQueue<T> : IDeque {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A fixed-size queue that stores up to two elements. When full, the oldest
+	/// element is automatically removed to make room for a new one.
+	/// </summary>
+	/// <typeparam name="T">The type of elements stored in the queue.</typeparam>
+	public interface IBinQueue<T> : IDeque {
         // <summary>
         /// Adds a new element to the queue. If the queue is full, the oldest
         /// element is removed automatically before inserting the new one.

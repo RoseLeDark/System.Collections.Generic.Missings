@@ -23,16 +23,14 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Runtime.InteropServices.Platform {
-    /// \addtogroup Runtime
-    /// @{
-    /// \addtogroup Platform
-    /// @{
-    /// <summary>
-    /// Provides Windows-specific native module loading and symbol resolution
-    /// using the <c>dll</c> API.  
-    /// This backend supports loading dynamic libraries (.dll).
-    /// </summary>
-    [SupportedOSPlatform("windows")]
+	/// \addtogroup SystemEx.Runtime.InteropServices.Platform
+	/// @{
+	/// <summary>
+	/// Provides Windows-specific native module loading and symbol resolution
+	/// using the <c>dll</c> API.  
+	/// This backend supports loading dynamic libraries (.dll).
+	/// </summary>
+	[SupportedOSPlatform("windows")]
     public class WindowsProcLoader  {
         
         /// <summary>
@@ -136,7 +134,6 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
     /// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

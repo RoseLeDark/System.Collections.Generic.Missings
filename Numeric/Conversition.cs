@@ -17,17 +17,15 @@
 
 
 namespace SystemEx.Numeric.Utils {
-    /// \addtogroup Numeric
-    /// @{
-    /// \addtogroup Conversition
-    /// @{
+	/// \addtogroup SystemEx.Numeric.Utils
+	/// @{
 
-    /// <summary>
-    /// Defines the rounding precision used during float-to-Half16 conversion.
-    /// The value represents the number of temporary mantissa bits used
-    /// before packing into the final 10‑bit Half16 mantissa.
-    /// </summary>
-    public enum MantisseRoundMode {
+	/// <summary>
+	/// Defines the rounding precision used during float-to-Half16 conversion.
+	/// The value represents the number of temporary mantissa bits used
+	/// before packing into the final 10‑bit Half16 mantissa.
+	/// </summary>
+	public enum MantisseRoundMode {
         /// <summary>
         /// Classic IEEE‑754 style rounding.  
         /// Uses 13 temporary mantissa bits.  
@@ -261,7 +259,10 @@ namespace SystemEx.Numeric.Utils {
             return new Vec4i((int)vec.X, (int)vec.Y, (int)vec.Z, (int)vec.W);
         }
 
-        public static uint ToInteger(this float value) {
+		/// <summary>
+		/// Converts a float vector to a uint 
+		/// </summary>
+		public static uint ToInteger(this float value) {
             uint _bits = 0;
 
             unsafe {
@@ -269,8 +270,10 @@ namespace SystemEx.Numeric.Utils {
             }
             return _bits;
         }
-
-        public static ulong ToInteger ( this double value ) {
+		/// <summary>
+		/// Converts a double vector to a ulong 
+		/// </summary>
+		public static ulong ToInteger ( this double value ) {
             ulong _bits = 0;
 
             unsafe {
@@ -278,13 +281,20 @@ namespace SystemEx.Numeric.Utils {
             }
             return _bits;
         }
+		/// <summary>
+		/// Converts a Half16 vector to a ushort 
+		/// </summary>
+		public static ushort ToInteger ( this Half16 value ) => value.ToBase;
+		/// <summary>
+		/// Converts a Half16b vector to a ushort 
+		/// </summary>
+		public static ushort ToInteger ( this Half16b value ) => value.ToBase;
 
-        public static ushort ToInteger ( this Half16 value ) => value.ToBase;
-        public static ushort ToInteger ( this Half16b value ) => value.ToBase;
 
-        
-
-        public static Half16 ToHalf16 ( this float value, MantisseRoundMode mode = MantisseRoundMode.Moderate ) {
+		/// <summary>
+		/// Converts a float vector to a Half16. with  MantisseRoundMode
+		/// </summary>
+		public static Half16 ToHalf16 ( this float value, MantisseRoundMode mode = MantisseRoundMode.Moderate ) {
             int tempMantissaBits = (int)mode;   // z.B. 13, 14, 15, 16, 18 …
 
             uint bits = value.ToInteger();      // deine Methode
@@ -346,8 +356,10 @@ namespace SystemEx.Numeric.Utils {
         }
 
 
-
-        public static Half16b ToHalf16b ( this float value ) {
+		/// <summary>
+		/// Converts a float vector to a Half16b. 
+		/// </summary>
+		public static Half16b ToHalf16b ( this float value ) {
             if ( float.IsNaN(value) ) { return Half16b.NaN; }
 
             uint _bits = value.ToInteger();
@@ -361,8 +373,10 @@ namespace SystemEx.Numeric.Utils {
 
             return new Half16b(_bfloat);
         }
-
-        public static float ToFloat(this Half16b value) {
+		/// <summary>
+		/// Converts a Half16b vector to a float. 
+		/// </summary>
+		public static float ToFloat(this Half16b value) {
             // bfloat16 is simply the upper 16 bits of a float
             uint floatBits = (uint)value.ToBase << 16;
 
@@ -373,8 +387,10 @@ namespace SystemEx.Numeric.Utils {
                 return result;
             }
         }
-
-        public static float ToFloat ( this Half16 value ) {
+		/// <summary>
+		/// Converts a Half16 vector to a float. 
+		/// </summary>
+		public static float ToFloat ( this Half16 value ) {
             ushort bits = value.ToBase;
 
             uint sign = (uint)(bits >> 15) & 0x1;
@@ -435,6 +451,5 @@ namespace SystemEx.Numeric.Utils {
         }
 
     }
-    /// @}
     /// @}
 }

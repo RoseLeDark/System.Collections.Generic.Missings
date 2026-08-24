@@ -16,13 +16,13 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a color in the CIE XYZ color space using floating‑point components.
-    /// Provides basic construction, comparison, and string formatting utilities.
-    /// </summary>
-    public class ColorXYZ : IEquatable<ColorXYZ> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a color in the CIE XYZ color space using floating‑point components.
+	/// Provides basic construction, comparison, and string formatting utilities.
+	/// </summary>
+	public struct ColorXYZ : IEquatable<ColorXYZ> {
         private float m_x;
         private float m_y;
         private float m_z;
@@ -61,9 +61,7 @@ namespace SystemEx.Drawing {
         /// <returns>
         /// <c>true</c> if the components match; otherwise <c>false</c>.
         /// </returns>
-        public bool Equals(ColorXYZ? other) {
-            if ( other == null )
-                return false;
+        public bool Equals(ColorXYZ other) {
 
             return m_x.Equals(other.m_x) &&
                    m_y.Equals(other.m_y) &&
@@ -73,8 +71,7 @@ namespace SystemEx.Drawing {
         /// Determines whether this instance is equal to another object.
         /// </summary>
         public override bool Equals(object? obj) {
-            if(obj == null) return false;
-            if(obj is ColorXYZ)  return Equals(obj as ColorXYZ);
+            if(obj is ColorXYZ c)  return Equals(c);
             return false;
         }
         /// <summary>

@@ -20,19 +20,19 @@ using SystemEx.Base;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Collections.Generic {
-    
 
 
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A simple fixed‑size double‑ended queue (deque) implemented using a linear array.
-    /// Supports pushing and popping at both the front and the back.  
-    /// This implementation does not use a ring buffer; shifting is performed when
-    /// inserting or removing at the front.
-    /// </summary>
-    /// <typeparam name="T">The type of elements stored in the deque.</typeparam>
-    public struct Deque<T> : IDeque<T>, IAutoGrowe {
+
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A simple fixed‑size double‑ended queue (deque) implemented using a linear array.
+	/// Supports pushing and popping at both the front and the back.  
+	/// This implementation does not use a ring buffer; shifting is performed when
+	/// inserting or removing at the front.
+	/// </summary>
+	/// <typeparam name="T">The type of elements stored in the deque.</typeparam>
+	public struct Deque<T> : IDeque<T>, IAutoGrowe {
         private long m_growSize;
         private bool m_autoGrow;
 

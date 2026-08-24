@@ -16,14 +16,14 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents a logical sub‑stack inside a shared stack buffer.
-    /// A layer defines its own independent boundaries and a current pointer,
-    /// allowing multiple virtual stacks to coexist within the same array.
-    /// </summary>
-    public struct StackLayer {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a logical sub‑stack inside a shared stack buffer.
+	/// A layer defines its own independent boundaries and a current pointer,
+	/// allowing multiple virtual stacks to coexist within the same array.
+	/// </summary>
+	public struct StackLayer {
         /// <summary>
         /// Gets or sets the lower boundary (inclusive) of the layer.
         /// This is the point where the layer becomes full.

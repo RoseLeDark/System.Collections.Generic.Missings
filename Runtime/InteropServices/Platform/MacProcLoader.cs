@@ -19,19 +19,17 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 namespace SystemEx.Runtime.InteropServices.Platform {
-    /// \addtogroup Runtime
-    /// @{
-    /// \addtogroup Platform
-    /// @{
-    /// <summary>
-    /// Provides macOS-specific native module loading and symbol resolution
-    /// using the <c>libdl</c> API.  
-    /// This backend supports loading dynamic libraries (.dylib),
-    /// resolving exported symbols, and searching system library paths
-    /// including <c>/usr/lib</c>, <c>/usr/local/lib</c>, and
-    /// <c>DYLD_LIBRARY_PATH</c>.
-    /// </summary>
-    [SupportedOSPlatform("macos")]
+	/// \addtogroup SystemEx.Runtime.InteropServices.Platform
+	/// @{
+	/// <summary>
+	/// Provides macOS-specific native module loading and symbol resolution
+	/// using the <c>libdl</c> API.  
+	/// This backend supports loading dynamic libraries (.dylib),
+	/// resolving exported symbols, and searching system library paths
+	/// including <c>/usr/lib</c>, <c>/usr/local/lib</c>, and
+	/// <c>DYLD_LIBRARY_PATH</c>.
+	/// </summary>
+	[SupportedOSPlatform("macos")]
     internal class MacProcLoader {
         /// <summary>
         /// POSIX dynamic loader library used for <c>dlopen</c>, <c>dlsym</c>,
@@ -134,7 +132,6 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+	/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

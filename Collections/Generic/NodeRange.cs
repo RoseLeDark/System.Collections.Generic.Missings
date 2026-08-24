@@ -1,6 +1,4 @@
-﻿// SPDX-License-Identifier: EUPL-1.2
-
-/* 
+﻿/* 
  * SPDX-License-Identifier: EUPL-1.2
  *
  * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
@@ -21,22 +19,22 @@ using System.Collections;
 
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents a simple range defined by a begin and end iterator over
-    /// intrusive <see cref="Node{T}"/> structures.  
-    /// Conceptually similar to <c>std::ranges::subrange</c>, but designed
-    /// specifically for your intrusive node and iterator system.
-    /// </summary>
-    /// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
-    /// <example>
-    /// var range = new NodeRange&lt;int&gt;(node.First(), node.At(10));
-    ///
-    /// foreach (var x in range)
-    ///     Console.WriteLine(x);
-    /// </example>
-    public struct NodeRange<T> : IEnumerable<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a simple range defined by a begin and end iterator over
+	/// intrusive <see cref="Node{T}"/> structures.  
+	/// Conceptually similar to <c>std::ranges::subrange</c>, but designed
+	/// specifically for your intrusive node and iterator system.
+	/// </summary>
+	/// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
+	/// <example>
+	/// var range = new NodeRange&lt;int&gt;(node.First(), node.At(10));
+	///
+	/// foreach (var x in range)
+	///     Console.WriteLine(x);
+	/// </example>
+	public struct NodeRange<T> : IEnumerable<T> {
 
         /// <summary>
         /// Iterator marking the beginning of the range (inclusive).

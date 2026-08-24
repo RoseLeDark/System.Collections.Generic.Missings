@@ -24,25 +24,25 @@ using SystemEx.Collections.Generic;
 using AIEnv = SystemEx.AI.Environment;
 
 namespace SystemEx.AI {
-    /// \addtogroup AI
-    /// @{
-    /// <summary>
-    /// Represents a generic AI model instance within the SystemEX framework.
-    /// 
-    /// This class acts as the high‑level controller for:
-    /// - Model configuration (capabilities, environment, runtime settings)
-    /// - Tool registration and management
-    /// - Backend interaction (Begin, RunAsync, End)
-    /// - Prompt execution and session handling
-    /// 
-    /// The model is generic over:
-    /// <typeparamref name="T"/>     → The prompt/input type
-    /// <typeparamref name="TTOOL"/> → The runtime tool type used by the backend
-    /// 
-    /// A model does NOT execute AI logic itself. Instead, it delegates all
-    /// execution to the backend (<see cref="IModelBackend{T, TTOOL}"/>).
-    /// </summary>
-    public class Model<T, TTOOL> : IModel<T, TTOOL> {
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Represents a generic AI model instance within the SystemEX framework.
+	/// 
+	/// This class acts as the high‑level controller for:
+	/// - Model configuration (capabilities, environment, runtime settings)
+	/// - Tool registration and management
+	/// - Backend interaction (Begin, RunAsync, End)
+	/// - Prompt execution and session handling
+	/// 
+	/// The model is generic over:
+	/// <typeparamref name="T"/>     → The prompt/input type
+	/// <typeparamref name="TTOOL"/> → The runtime tool type used by the backend
+	/// 
+	/// A model does NOT execute AI logic itself. Instead, it delegates all
+	/// execution to the backend (<see cref="IModelBackend{T, TTOOL}"/>).
+	/// </summary>
+	public class Model<T, TTOOL> : IModel<T, TTOOL> {
         /// <summary>
         /// Internal list of tools registered for this model.
         /// Tools are forwarded to the backend when added.

@@ -16,6 +16,8 @@
  */
 
 namespace SystemEx {
+	/// \addtogroup SystemEx
+	/// @
 	/// <summary>
 	/// Represents a flexible multi-value result container that can hold
 	/// successful values, multiple return objects, assertion messages,
@@ -39,7 +41,7 @@ namespace SystemEx {
 		/// Internal storage for all returned objects, including values,
 		/// diagnostic information, or assertion messages.
 		/// </summary>
-		private object[] m_result;
+		private object?[] m_result;
 		/// <summary>
 		/// Stores an exception if the operation failed.
 		/// </summary>
@@ -82,7 +84,7 @@ namespace SystemEx {
 		/// <exception cref="IndexOutOfRangeException">
 		/// Thrown when attempting to read an index outside the valid range.
 		/// </exception>
-		public object this [int index] {
+		public object? this [int index] {
 			get {
 				if ( index >= Count ) throw new IndexOutOfRangeException();
 				return m_result[index];
@@ -165,12 +167,18 @@ namespace SystemEx {
 		/// <exception cref="IndexOutOfRangeException">
 		/// Thrown when the index is outside the valid range.
 		/// </exception>
-		public Optional<T> GetAs<T>(int index) {
+		public Optional<T> GetAs<T>(int index = 0) {
 			if ( index >= Count ) throw new IndexOutOfRangeException();
 
 			var Item = m_result[index];
 			if ( Item is T it ) return it;
 			else return Optional<T>.NONE;
+		}
+
+		public object? Get( int index = 0) {
+			if ( index >= Count ) throw new IndexOutOfRangeException();
+
+			return m_result[index];
 		}
 
 		/// <summary>
@@ -207,6 +215,7 @@ namespace SystemEx {
 			return condition;
 		}
 
+
 		/// <summary>
 		/// Throws the captured exception if one exists.
 		/// </summary>
@@ -229,4 +238,5 @@ namespace SystemEx {
 		/// </summary>
 		private void AssertHandler ( bool condition, Result sender ) { }
 	}
+	//@}
 }

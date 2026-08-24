@@ -16,33 +16,32 @@
  */
 using SystemEx.Utils;
 using SystemEx.Collections.Generic;
-using SystemEx.Algorithms.Interfaces;
 
 
 namespace SystemEx.Algorithms {
-    /// \addtogroup Algorithms
-    /// @{
-    /// <summary>
-    /// A simple fallback search provider that performs a linear scan over the
-    /// container and counts how many elements match the given condition.
-    ///
-    /// <para>
-    /// <b>Important:</b>
-    /// This provider does <b>not</b> return an index. It returns the
-    /// <b>number of matches</b>. The <see cref="VectorSearch{T, TContainer}"/>
-    /// system is designed for complex search algorithms that may evaluate
-    /// multiple matches, patterns, or conditions. It is not a replacement
-    /// for the traditional <c>Find</c> API.
-    /// </para>
-    ///
-    /// <para>
-    /// <b>Purpose:</b>
-    /// LinearSearchProvider serves as a universal fallback implementation.
-    /// More advanced providers (binary search, segmented search, pattern
-    /// matching, domain‑specific logic) should be implemented separately.
-    /// </para>
-    /// </summary>
-    public struct LinearSearchProvider<T, TContainer> : ISearchProvider<T, TContainer>
+	/// \addtogroup SystemEx.Algorithms
+	/// @{
+	/// <summary>
+	/// A simple fallback search provider that performs a linear scan over the
+	/// container and counts how many elements match the given condition.
+	///
+	/// <para>
+	/// <b>Important:</b>
+	/// This provider does <b>not</b> return an index. It returns the
+	/// <b>number of matches</b>. The <see cref="VectorSearch{T, TContainer}"/>
+	/// system is designed for complex search algorithms that may evaluate
+	/// multiple matches, patterns, or conditions. It is not a replacement
+	/// for the traditional <c>Find</c> API.
+	/// </para>
+	///
+	/// <para>
+	/// <b>Purpose:</b>
+	/// LinearSearchProvider serves as a universal fallback implementation.
+	/// More advanced providers (binary search, segmented search, pattern
+	/// matching, domain‑specific logic) should be implemented separately.
+	/// </para>
+	/// </summary>
+	public struct LinearSearchProvider<T, TContainer> : ISearchProvider<T, TContainer>
         where TContainer : IVector<T> {
 
         /// <inheritdoc />

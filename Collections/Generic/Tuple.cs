@@ -17,14 +17,14 @@
 
 namespace SystemEx.Collections.Generic {
 
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A dynamically sized tuple storing elements as <see cref="object"/> values.
-    /// Provides indexed access, mutation, and compatibility with the <see cref="ITuple"/>
-    /// interface used throughout the SystemEx collection and iterator framework.
-    /// </summary>
-    public class Tuple<TKey> : ITuple<TKey> where TKey : notnull {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A dynamically sized tuple storing elements as <see cref="object"/> values.
+	/// Provides indexed access, mutation, and compatibility with the <see cref="ITuple"/>
+	/// interface used throughout the SystemEx collection and iterator framework.
+	/// </summary>
+	public class Tuple<TKey> : ITuple<TKey> where TKey : notnull {
         private TKey m_index;
 
         /// <summary>

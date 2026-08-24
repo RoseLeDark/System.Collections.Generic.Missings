@@ -19,42 +19,44 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace SystemEx.Utils {
-    /// <summary>
-    /// Provides a low-level bit window over a referenced <see cref="int"/> value.
-    /// This type exposes individual bits as a mutable span-like view with support
-    /// for forward, reverse, and ring-based indexing modes.
-    /// 
-    /// <para>
-    /// <b>Warning:</b> This API is intended for advanced developers only.
-    /// It operates directly on a referenced integer and mutates its bits without
-    /// safety guards, bounds normalization, or copy-on-write semantics.
-    /// Incorrect usage may lead to unexpected side effects, corrupted state,
-    /// or infinite iteration when using ring mode.
-    /// </para>
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// <b>ref struct:</b> The type is stack-only and cannot be boxed, stored on the heap,
-    /// captured by lambdas, or used in async methods.
-    /// </para>
-    /// <para>
-    /// <b>Direct bit mutation:</b> All operations modify the underlying integer in-place.
-    /// Multiple spans referencing the same integer will observe each other's changes.
-    /// </para>
-    /// <para>
-    /// <b>Windowed view:</b> The span exposes only the bits between <c>Start</c> and <c>End</c>.
-    /// Access outside this range throws exceptions.
-    /// </para>
-    /// <para>
-    /// <b>Indexing modes:</b>
-    /// <list type="bullet">
-    /// <item><description><b>System</b>: forward indexing (Start → End).</description></item>
-    /// <item><description><b>Reverse</b>: backward indexing (End-1 → Start).</description></item>
-    /// <item><description><b>Ring</b>: cyclic indexing; enumeration never terminates.</description></item>
-    /// </list>
-    /// </para>
-    /// </remarks>
-    public ref struct BitUIntSpan {
+	// \addtogroup SystemEx.Utils
+	/// @{
+	/// <summary>
+	/// Provides a low-level bit window over a referenced <see cref="uint"/> value.
+	/// This type exposes individual bits as a mutable span-like view with support
+	/// for forward, reverse, and ring-based indexing modes.
+	/// 
+	/// <para>
+	/// <b>Warning:</b> This API is intended for advanced developers only.
+	/// It operates directly on a referenced integer and mutates its bits without
+	/// safety guards, bounds normalization, or copy-on-write semantics.
+	/// Incorrect usage may lead to unexpected side effects, corrupted state,
+	/// or infinite iteration when using ring mode.
+	/// </para>
+	/// </summary>
+	/// <remarks>
+	/// <para>
+	/// <b>ref struct:</b> The type is stack-only and cannot be boxed, stored on the heap,
+	/// captured by lambdas, or used in async methods.
+	/// </para>
+	/// <para>
+	/// <b>Direct bit mutation:</b> All operations modify the underlying integer in-place.
+	/// Multiple spans referencing the same integer will observe each other's changes.
+	/// </para>
+	/// <para>
+	/// <b>Windowed view:</b> The span exposes only the bits between <c>Start</c> and <c>End</c>.
+	/// Access outside this range throws exceptions.
+	/// </para>
+	/// <para>
+	/// <b>Indexing modes:</b>
+	/// <list type="bullet">
+	/// <item><description><b>System</b>: forward indexing (Start → End).</description></item>
+	/// <item><description><b>Reverse</b>: backward indexing (End-1 → Start).</description></item>
+	/// <item><description><b>Ring</b>: cyclic indexing; enumeration never terminates.</description></item>
+	/// </list>
+	/// </para>
+	/// </remarks>
+	public ref struct BitUIntSpan {
         /// <summary>
         /// Enumerates the bits of a <see cref="BitUIntSpan"/> according to its indexing mode.
         /// </summary>
@@ -164,14 +166,28 @@ namespace SystemEx.Utils {
         /// Length of the view (End - Start).
         /// </summary>
         public short ViewLength => (short)(m_lEnd - m_lStart);
+		/// <summary>
+		/// Gets the total number of bits in a <see cref="uint"/> value.
+		/// </summary>
+		public short Bits => (short)(sizeof(uint) * 8);
 
-        public short Bits => (short)(sizeof(uint) * 8);
-        public bool IsSigned => false;
-        public bool IsUnsigned => true;
+		/// <summary>
+		/// Indicates whether the underlying integer is treated as a signed value.
+		/// </summary>
+		public bool IsSigned => false;
+
+		/// <summary>
+		/// Indicates whether the underlying integer is treated as an unsigned value.
+		/// </summary>
+		public bool IsUnsigned => true;
 
         private FlexSpanMode m_mode;
 
-        public Enumerator GetEnumerator () => new Enumerator(this);
+		/// <summary>
+		/// Returns an enumerator that iterates over the bit span according to the
+		/// configured indexing mode. In ring mode, enumeration never terminates.
+		/// </summary>
+		public Enumerator GetEnumerator () => new Enumerator(this);
 
         /// <summary>
         /// Initializes a new <see cref="BitUIntSpan"/> that exposes a bit-level view
@@ -218,8 +234,13 @@ namespace SystemEx.Utils {
             m_lEnd = endPos;
             m_lStart = startPos;
         }
-
-        private bool GetAt ( int pos ) {
+		/// <summary>
+		/// Reads the bit at the specified absolute position within the underlying
+		/// integer. Access outside the valid bit range throws an exception.
+		/// </summary>
+		/// <param name="pos">The absolute bit position.</param>
+		/// <returns><c>true</c> if the bit is set; otherwise <c>false</c>.</returns>
+		private bool GetAt ( int pos ) {
             if ( pos >= Bits ) throw new ArgumentOutOfRangeException("pos");
             return ((m_value >> pos) & 1) != 0;
         }
@@ -269,8 +290,13 @@ namespace SystemEx.Utils {
             throw new InvalidOperationException();
             }
         }
-
-        private void SetAt ( int pos, bool value ) {
+		/// <summary>
+		/// Writes a bit at the specified absolute position within the underlying
+		/// integer. Access outside the valid bit range throws an exception.
+		/// </summary>
+		/// <param name="pos">The absolute bit position.</param>
+		/// <param name="value">The bit value to write.</param>
+		private void SetAt ( int pos, bool value ) {
             if ( pos >= Bits ) throw new ArgumentOutOfRangeException("pos");
 
             byte current = (byte)((m_value  >> pos) & 1U) ;
@@ -316,99 +342,60 @@ namespace SystemEx.Utils {
             }
         }
 
-        /// <summary>
-        /// Get the current mode
-        /// </summary>
-        /// <returns>The current mode</returns>
-        public FlexSpanMode GetMode () {
+		/// <summary>
+		/// Gets the indexing mode used by this bit span.
+		/// </summary>
+		public FlexSpanMode GetMode () {
             return m_mode;
         }
-        /// <summary>
-        /// Gets or sets the bit at the specified index within the span's view.
-        /// </summary>
-        /// <param name="index">The logical bit index.</param>
-        /// <returns>The bit value at the given index.</returns>
-        /// <remarks>
-        /// <para>
-        /// Equivalent to <see cref="ElementAt(byte)"/> and its setter.
-        /// </para>
-        /// <para>
-        /// <b>Warning:</b> This indexer performs direct bit manipulation on the
-        /// referenced integer. Use with caution when multiple spans share the same
-        /// underlying value.
-        /// </para>
-        /// </remarks>
-        public bool this[byte index] {
+		/// <summary>
+		/// Gets or sets the bit at the specified window-relative index.
+		/// This is equivalent to calling <see cref="ElementAt(byte)"/>.
+		/// </summary>
+		public bool this[byte index] {
             get => ElementAt(index);
             set => ElementAt(index, value);
         }
 
-        /// <summary>
-        /// Returns an empty FlexSpan.
-        /// </summary>
-        public static BitUIntSpan Empty => default;
+		/// <summary>
+		/// Returns an empty instance.
+		/// </summary>
+		public static BitUIntSpan Empty => default;
 
 
 
 
-        /// <summary>
-        /// Creates a new bit span representing a subrange of the current view.
-        /// </summary>
-        /// <param name="start">The offset from the current start position.</param>
-        /// <param name="mode">
-        /// Optional override for the indexing mode. If omitted, the current mode is reused.
-        /// </param>
-        /// <returns>
-        /// A new <see cref="BitUIntSpan"/> referencing the same underlying integer,
-        /// but with an adjusted window.
-        /// </returns>
-        /// <remarks>
-        /// <para>
-        /// <b>Warning:</b> The returned span shares the same integer reference.
-        /// Mutations in either span affect the other.
-        /// </para>
-        /// </remarks>
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+		/// <summary>
+		/// Creates a new bit span beginning at the specified offset within the
+		/// current window. The new span references the same underlying integer.
+		/// </summary>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BitUIntSpan Slice ( short start, FlexSpanMode? mode = null )
             => new BitUIntSpan(ref m_value, (short)(m_lStart + start), (short)(m_lEnd - start), mode ?? m_mode);
 
-        /// <summary>
-        /// Creates a new bit span representing a subrange of the current view.
-        /// </summary>
-        /// <param name="start">The offset from the current start position.</param>
-        /// <param name="length">The length of the view </param>
-        /// <param name="mode">
-        /// Optional override for the indexing mode. If omitted, the current mode is reused.
-        /// </param>
-        /// <returns>
-        /// A new <see cref="BitUIntSpan"/> referencing the same underlying integer,
-        /// but with an adjusted window.
-        /// </returns>
-        /// <remarks>
-        /// <para>
-        /// <b>Warning:</b> The returned span shares the same integer reference.
-        /// Mutations in either span affect the other.
-        /// </para>
-        /// </remarks>
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+		/// <summary>
+		/// Creates a new bit span beginning at the specified offset within the
+		/// current window. The new span references the same underlying integer.
+		/// </summary>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public BitUIntSpan Slice ( short start, short length, FlexSpanMode? mode = null )
             => new BitUIntSpan(ref m_value, (short)(m_lStart + start), length > Bits ? Bits : length, mode ?? m_mode);
 
-        /// <summary>
-        /// Structural equality comparison.
-        /// </summary>
-        public static bool operator == ( BitUIntSpan left, BitUIntSpan right ) =>
+		/// <summary>
+		/// Determines whether two bit spans reference the same underlying integer
+		/// and expose the same window and indexing mode.
+		/// </summary>
+		public static bool operator == ( BitUIntSpan left, BitUIntSpan right ) =>
             left.m_value == right.m_value &&
             left.m_mode == right.m_mode &&
             left.m_lStart == right.m_lStart &&
             left.m_lEnd == right.m_lEnd;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static bool operator != ( BitUIntSpan left, BitUIntSpan right ) =>
+		/// <summary>
+		/// Determines whether two bit spans differ in referenced value, window
+		/// boundaries, or indexing mode.
+		/// </summary>
+		public static bool operator != ( BitUIntSpan left, BitUIntSpan right ) =>
             !(left == right);
 
         [Obsolete("Equals() always throw an exception. Use the equality operator instead.")]
@@ -418,5 +405,5 @@ namespace SystemEx.Utils {
         public override int GetHashCode () => throw new NotSupportedException();
     }
 
-    
+	/// @}
 }

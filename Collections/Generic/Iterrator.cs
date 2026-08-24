@@ -16,18 +16,17 @@
  */
 
 using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents a generic iterator over a collection.
-    /// Provides access to the current element and supports advancing the iterator.
-    /// </summary>
-    /// <typeparam name="T">The element type.</typeparam>
-    public interface Iterrator<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a generic iterator over a collection.
+	/// Provides access to the current element and supports advancing the iterator.
+	/// </summary>
+	/// <typeparam name="T">The element type.</typeparam>
+	public interface Iterrator<T> {
 
         /// <summary>
         /// Gets a value indicating whether the iterator has reached the end of the sequence.

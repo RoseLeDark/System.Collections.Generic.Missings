@@ -16,11 +16,14 @@
  */
 
 namespace SystemEx {
-    /// <summary>
-    /// Represents a three-valued logic type with True, False, and Nin (neither true nor false) states.
-    /// </summary>
-#pragma warning disable CS8981 
-    public enum triple : sbyte {
+#pragma warning disable CS8981
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Represents a three-valued logic type with True, False, and Nin (neither true nor false) states.
+	/// </summary>
+
+	public enum triple : sbyte {
 
         /// <summary>
         /// The state representing true.
@@ -35,5 +38,6 @@ namespace SystemEx {
         /// </summary>
         Nin = -1
     }
+    //@}
 #pragma warning restore CS8981 
 }

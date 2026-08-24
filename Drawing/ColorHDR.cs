@@ -16,16 +16,16 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a high‑dynamic‑range color in the HSV color space,
-    /// where the value component can exceed the normalized range (0–1)
-    /// and extend up to <see cref="MaxValue"/>.
-    /// Provides hue‑aware interpolation, brightness manipulation,
-    /// and arithmetic operations for HDR color processing.
-    /// </summary>
-    public class ColorHDR : IColor<ColorHDR> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a high‑dynamic‑range color in the HSV color space,
+	/// where the value component can exceed the normalized range (0–1)
+	/// and extend up to <see cref="MaxValue"/>.
+	/// Provides hue‑aware interpolation, brightness manipulation,
+	/// and arithmetic operations for HDR color processing.
+	/// </summary>
+	public class ColorHDR : IColor<ColorHDR> {
         private float m_maxValue = 10.0f;
         internal float m_hue;   // 0–360°
         internal float m_saturation;   // 0–1

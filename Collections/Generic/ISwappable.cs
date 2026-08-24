@@ -16,29 +16,31 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// <summary>
-    /// Defines a container capability for swapping two elements.
-    /// 
-    /// Any container implementing <see cref="ISwappable{T}"/> guarantees that it can
-    /// exchange the items located at the specified positions. This interface is used
-    /// by sorting algorithms, heap builders, and other data‑structure utilities that
-    /// require in‑place element reordering.
-    /// 
-    /// Notes:
-    /// <para>
-    /// The type parameter <typeparamref name="T"/> represents the index or position
-    /// used by the container. In most SystemEx containers this is a <c>long</c>.
-    /// </para>
-    /// <para>
-    /// The interface does not impose any comparison or ordering semantics; it only
-    /// provides structural mutation capability. Higher‑level algorithms (sorting,
-    /// heapifying, priority queues) rely on this method to perform element exchanges.
-    /// </para>
-    /// </summary>
-    /// <typeparam name="T">
-    /// The index type used by the container. Typically <c>long</c>.
-    /// </typeparam>
-    public interface ISwappable<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines a container capability for swapping two elements.
+	/// 
+	/// Any container implementing <see cref="ISwappable{T}"/> guarantees that it can
+	/// exchange the items located at the specified positions. This interface is used
+	/// by sorting algorithms, heap builders, and other data‑structure utilities that
+	/// require in‑place element reordering.
+	/// 
+	/// Notes:
+	/// <para>
+	/// The type parameter <typeparamref name="T"/> represents the index or position
+	/// used by the container. In most SystemEx containers this is a <c>long</c>.
+	/// </para>
+	/// <para>
+	/// The interface does not impose any comparison or ordering semantics; it only
+	/// provides structural mutation capability. Higher‑level algorithms (sorting,
+	/// heapifying, priority queues) rely on this method to perform element exchanges.
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">
+	/// The index type used by the container. Typically <c>long</c>.
+	/// </typeparam>
+	public interface ISwappable<T> {
         /// <summary>
         /// Swaps the elements located at the given positions.
         /// Implementations must ensure that both indices are valid and that the
@@ -48,4 +50,5 @@ namespace SystemEx.Collections.Generic {
         /// <param name="j">The second index.</param>
         void Swap ( T i, T j );
     }
+	/// @}
 }

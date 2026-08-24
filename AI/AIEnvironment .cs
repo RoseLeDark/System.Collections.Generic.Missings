@@ -16,11 +16,13 @@
  */
 
 namespace SystemEx.AI {
-    /// <summary>
-    /// Describes the runtime environment required or used by an AI backend.
-    /// This enum is intentionally broad and future-proof.
-    /// </summary>
-    public enum Environment : int {
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Describes the runtime environment required or used by an AI backend.
+	/// This enum is intentionally broad and future-proof.
+	/// </summary>
+	public enum Environment : int {
         // OS
         AI_ENV_OS_WINDOWS        = 0x3001,
         AI_ENV_OS_LINUX          = 0x3002,
@@ -71,6 +73,6 @@ namespace SystemEx.AI {
         // Custom
         AI_ENV_CUSTOM            = 0x3FFF
     }
-
+	///@}
 
 }

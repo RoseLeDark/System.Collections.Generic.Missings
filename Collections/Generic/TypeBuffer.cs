@@ -16,26 +16,26 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A typed view over a raw <c>Cache</c> that exposes elements of an unmanaged type <typeparamref name="T"/>.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// <c>TypeBuffer&lt;T&gt;</c> provides element access, cloning, clearing and simple fill semantics
-    /// for fixed‑stride unmanaged types. The buffer owns an internal <c>Cache</c> instance sized to
-    /// <c>length * sizeof(T)</c>. All reads and writes perform endian conversion using the configured
-    /// <see cref="Endian"/> value.
-    /// </para>
-    /// <para>
-    /// This type assumes <typeparamref name="T"/> is an unmanaged value type and uses a fixed stride
-    /// equal to <c>sizeof(T)</c>. Index and offset parameters are validated by the underlying cache
-    /// and may throw on out‑of‑range access.
-    /// </para>
-    /// </remarks>
-    /// <typeparam name="T">An unmanaged value type stored in the buffer.</typeparam>
-    public class TypeBuffer<T> : ITypeBuffer<T>
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A typed view over a raw <c>Cache</c> that exposes elements of an unmanaged type <typeparamref name="T"/>.
+	/// </summary>
+	/// <remarks>
+	/// <para>
+	/// <c>TypeBuffer&lt;T&gt;</c> provides element access, cloning, clearing and simple fill semantics
+	/// for fixed‑stride unmanaged types. The buffer owns an internal <c>Cache</c> instance sized to
+	/// <c>length * sizeof(T)</c>. All reads and writes perform endian conversion using the configured
+	/// <see cref="Endian"/> value.
+	/// </para>
+	/// <para>
+	/// This type assumes <typeparamref name="T"/> is an unmanaged value type and uses a fixed stride
+	/// equal to <c>sizeof(T)</c>. Index and offset parameters are validated by the underlying cache
+	/// and may throw on out‑of‑range access.
+	/// </para>
+	/// </remarks>
+	/// <typeparam name="T">An unmanaged value type stored in the buffer.</typeparam>
+	public class TypeBuffer<T> : ITypeBuffer<T>
         where T : unmanaged {
         private readonly Cache m_cache;
         private readonly int m_stride;

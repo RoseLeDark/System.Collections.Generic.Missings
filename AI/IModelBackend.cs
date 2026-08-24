@@ -18,15 +18,31 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-    
-    public interface IModelBackend<T , TAI> {
-        /// Optional: Backend-spezifische Fähigkeiten (z.B. Vision, Audio, Tools)
-        Map<BackendCapabilities, object> Capabilities { get; }
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Basic backend implementation for all using models with this framework.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The type of the model's output and raw prompt.
+	/// </typeparam>
+	/// <typeparam name="TAI">The type of the model's output as TAI</typeparam>
+	public interface IModelBackend<T , TAI> {
 
-        /// Optional: Backend-spezifische Konfiguration
-        Map<string, object> Configuration { get; }
+		/// <summary>
+		/// Describes backend capabilities (text, chat, JSON, remote, etc.).
+		/// </summary>
+		Map<BackendCapabilities, object> Capabilities { get; }
 
-        Map<SystemEx.AI.Environment, object> Enviro { get; }
+		/// <summary>
+		/// Stores backend configuration values such as the base URL.
+		/// </summary>
+		Map<string, object> Configuration { get; }
+
+		/// <summary>
+		/// Stores backend environment
+		/// </summary>
+		Map<SystemEx.AI.Environment, object> Enviro { get; }
 
         /// <summary>
         /// The backend name used for metadata and diagnostics.
@@ -57,22 +73,64 @@ namespace SystemEx.AI {
         /// </summary>
         bool IsAvailable { get; }
 
-        bool RegistTool ( IModelTool<T> tool );
-        bool UnregistTool ( string toolName );
+		/// <summary>
+		/// Regist a tool with this model
+		/// </summary>
+		/// <returns><c>true</c> when added or <c>false</c> when not</returns>
+		bool RegistTool ( IModelTool<T> tool );
+		/// <summary>
+		/// Unregist a tool with this model
+		/// </summary>
+		/// <returns><c>true</c> when added or <c>false</c> when not</returns>
+		bool UnregistTool ( string toolName );
+
+        /// <summary>
+        /// Get A list of all regist tools with this model
+        /// </summary>
         IReadOnlyList<TAI> ListTools ();
 
-        bool Initialization ( Map<string, object> configuration, Map<Environment, object> environment );
+		/// <summary>
+		/// Initialization the model
+		/// </summary>
+		/// <param name="configuration">The configuration for this model.</param>
+		/// <param name="environment">The enviroment for thie model.</param>
+		/// <returns><c>true</c> when init or <c>false</c> when not</returns>
+		bool Initialization ( Map<string, object> configuration, Map<Environment, object> environment );
 
-        /// Führt das Modell aus
-        Task<IModelResult<T>> InvokeAsync ( string systemPrompt, IModelPromp<T> input);
+		/// <summary>
+		/// Executes the model by sending a payload to the model.
+		/// </summary>
+		/// <param name="systemPrompt">The system instruction for the model.</param>
+		/// <param name="input">The user prompt and context.</param>
+		/// <returns>
+		/// A <see cref="ModelResult{T}"/> containing:
+		/// - The parsed output
+		/// - Metadata
+		/// - Raw JSON
+		/// - Error information (if any)
+		/// </returns>
+		Task<IModelResult<T>> InvokeAsync ( string systemPrompt, IModelPromp<T> input);
 
+		/// <summary>
+		/// Release the model
+		/// </summary>
         void Release ( bool wait );
 
+		/// <summary>
+		/// Has this model tools
+		/// </summary>
         bool HasTool ( string toolName );
 
-        Optional<object> GetValue ( string key );
-
-        void SetConfig ( string key, object value );
+		/// <summary>
+		/// Get Value from config
+		/// </summary>
+		Optional<object> GetValue ( string key );
+		/// <summary>
+		/// Set config
+		/// </summary>
+		void SetConfig ( string key, object value );
 
     }
+
+    ///@}
 }

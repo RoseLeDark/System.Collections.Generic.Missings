@@ -19,14 +19,14 @@ using System.Collections;
 
 namespace SystemEx.Collections.Generic {
 
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A fixed-size queue that stores up to two elements. When full, the oldest
-    /// element is automatically removed to make room for a new one.
-    /// </summary>
-    /// <typeparam name="T">The type of elements stored in the queue.</typeparam>
-    public ref struct BinQueue<T> : IBinQueue<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A fixed-size queue that stores up to two elements. When full, the oldest
+	/// element is automatically removed to make room for a new one.
+	/// </summary>
+	/// <typeparam name="T">The type of elements stored in the queue.</typeparam>
+	public ref struct BinQueue<T> : IBinQueue<T> {
 
         /// <summary>
         /// Internal storage buffer for the BinQueue elements.

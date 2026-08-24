@@ -19,10 +19,12 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Random {
-    /// <summary>
-    /// Provides a simple interface for generating random numbers using the ISAAC algorithm.
-    /// </summary>
-    public sealed class Randx {
+	/// \addtogroup SystemEx.Random
+	/// @{
+	/// <summary>
+	/// Provides a simple interface for generating random numbers using the ISAAC algorithm.
+	/// </summary>
+	public sealed class Randx {
         private readonly Isaac32Engine _core;
         /// <summary>
         /// Initializes a new instance of the <see cref="Randx"/> class with the specified
@@ -118,4 +120,5 @@ namespace SystemEx.Random {
             return Next64();
         }
     }
+	///@}
 }

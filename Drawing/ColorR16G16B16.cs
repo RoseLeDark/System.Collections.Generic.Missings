@@ -16,13 +16,13 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a color with 16‑bit precision per channel (R16G16B16),
-    /// stored internally as normalized floating‑point values (0–1).
-    /// </summary>
-    public struct ColorR16G16B16 : IColor<ColorR16G16B16>, IEquatable<ColorR16G16B16> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a color with 16‑bit precision per channel (R16G16B16),
+	/// stored internally as normalized floating‑point values (0–1).
+	/// </summary>
+	public struct ColorR16G16B16 : IColor<ColorR16G16B16>, IEquatable<ColorR16G16B16> {
         private float m_red;
         private float m_green;
         private float m_blue;

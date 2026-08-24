@@ -19,20 +19,20 @@ using System.Runtime.CompilerServices;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents an unordered set view over an underlying container.
-    /// Elements are not sorted and no ordering guarantees are provided.
-    /// Duplicate values are not allowed. All operations work directly on
-    /// the underlying container without applying any sorting logic.
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the container.</typeparam>
-    /// <typeparam name="TContainer">
-    /// The container type that stores the elements. 
-    /// Must implement IContainerEx for the same element type.
-    /// </typeparam>
-    public ref struct VectorUnorderedMultiSet<T, TContainer> : IEquatable<VectorUnorderedMultiSet<T, TContainer>>
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents an unordered set view over an underlying container.
+	/// Elements are not sorted and no ordering guarantees are provided.
+	/// Duplicate values are not allowed. All operations work directly on
+	/// the underlying container without applying any sorting logic.
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the container.</typeparam>
+	/// <typeparam name="TContainer">
+	/// The container type that stores the elements. 
+	/// Must implement IContainerEx for the same element type.
+	/// </typeparam>
+	public ref struct VectorUnorderedMultiSet<T, TContainer> : IEquatable<VectorUnorderedMultiSet<T, TContainer>>
         where TContainer : IVector<T> {
 
         private ref TContainer m_pKeys;

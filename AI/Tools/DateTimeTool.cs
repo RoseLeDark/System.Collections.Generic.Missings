@@ -14,19 +14,18 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI.Tools {
-    // \addtogroup AI
-    /// @{
-    /// \addtogroup Tools
-    /// @{
-    /// <summary>
-    /// A simple tool that returns the current date and time.
-    /// 
-    /// This tool demonstrates how to expose system information to the AI model.
-    /// It supports both local time and UTC time depending on the provided parameter.
-    /// </summary>
-    public sealed class DateTimeTool : IModelTool<string> {
+	// \addtogroup SystemEx.AI.Tools 
+	/// @{
+	/// <summary>
+	/// A simple tool that returns the current date and time.
+	/// 
+	/// This tool demonstrates how to expose system information to the AI model.
+	/// It supports both local time and UTC time depending on the provided parameter.
+	/// </summary>
+	public sealed class DateTimeTool : IModelTool<string> {
         /// <summary>
         /// Gets the unique tool name used by the AI runtime.
         /// </summary>
@@ -54,13 +53,13 @@ namespace SystemEx.AI.Tools {
         /// <summary>
         /// Executes the tool logic.
         /// </summary>
-        /// <param name="args">Dictionary containing tool arguments.</param>
+        /// <param name="args">Map containing tool arguments.</param>
         /// <param name="ct">Cancellation token.</param>
         /// <returns>
         /// A string containing the current date/time in ISO 8601 format.
         /// </returns>
         public async Task<object?> ExecuteAsync (
-            Dictionary<string, object?> args,
+			Map<string, object?> args,
             CancellationToken ct ) {
             bool useUtc = args.TryGetValue("useUtc", out var v) && v is bool b && b;
 
@@ -69,6 +68,5 @@ namespace SystemEx.AI.Tools {
                 : DateTime.Now.ToString("o");
         }
     }
-    /// @}
     /// @}
 }

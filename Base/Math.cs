@@ -17,13 +17,15 @@
 using SystemEx.Numeric;
 
 namespace SystemEx {
-    /// <summary>
-    /// Provides mathematical helper functions that are not included in
-    /// <see cref="System.Math"/>.  
-    /// Contains a deterministic implementation of the C/C++ <c>fmod</c>
-    /// operation for both <see cref="double"/> and <see cref="float"/>.
-    /// </summary>
-    public static class Math {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Provides mathematical helper functions that are not included in
+	/// <see cref="System.Math"/>.  
+	/// Contains a deterministic implementation of the C/C++ <c>fmod</c>
+	/// operation for both <see cref="double"/> and <see cref="float"/>.
+	/// </summary>
+	public static class Math {
         /// <summary>
         /// Computes the floating‑point remainder of <paramref name="a"/> divided by
         /// <paramref name="b"/> using truncation toward zero, matching the behavior

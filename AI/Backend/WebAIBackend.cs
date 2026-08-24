@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http.Headers;
@@ -8,26 +24,26 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI.Backend {
 
-    // \addtogroup AI
-    /// @{
-    /// 
-    /// <summary>
-    /// backend implementation for AI models that communicate with
-    /// remote Web‑API services using HTTP POST requests.
-    /// 
-    /// This backend:
-    /// - Serializes model input into UserFormat
-    /// - Sends it to a remote endpoint
-    /// - Receives responses
-    /// - Deserializes the result into <typeparamref name="T"/>
-    /// 
-    /// It is designed for free or public AI endpoints that do not require
-    /// authentication or advanced runtime integration.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The type of the model's output and raw prompt.
-    /// </typeparam>
-    public class WebAIBackend<T> : IModelBackend<T, Object> where T : notnull  {
+	/// \addtogroup SystemEx.AI.Backend
+	/// @{
+	/// 
+	/// <summary>
+	/// backend implementation for AI models that communicate with
+	/// remote Web‑API services using HTTP POST requests.
+	/// 
+	/// This backend:
+	/// - Serializes model input into UserFormat
+	/// - Sends it to a remote endpoint
+	/// - Receives responses
+	/// - Deserializes the result into <typeparamref name="T"/>
+	/// 
+	/// It is designed for free or public AI endpoints that do not require
+	/// authentication or advanced runtime integration.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The type of the model's output and raw prompt.
+	/// </typeparam>
+	public class WebAIBackend<T> : IModelBackend<T, Object> where T : notnull  {
         public const string WB_CONFIG_MAX_TOKENS           = "WEBAI_MAX_TOKENS";
         public const string WB_CONFIG_TEMPERATUR           = "WEBAI_TEMPERATURE";
         public const string WB_CONFIG_TOP_P                = "WEBAI_TOP_P";
@@ -83,7 +99,7 @@ namespace SystemEx.AI.Backend {
         }
 
         /// <summary>
-        /// Get Value fraom config
+        /// Get Value from config
         /// </summary>
         public Optional<object> GetValue ( string key ) {
             return m_configuration.Get(key);
@@ -214,7 +230,7 @@ namespace SystemEx.AI.Backend {
                 new MediaTypeWithQualityHeaderValue("application/json")
             );
 
-            m_caps = new Map<BackendCapabilities, object>
+            m_caps = new Map<BackendCapabilities, object>(8)
             {
                 [BackendCapabilities.AI_BACKEND_CAPS_TEXT] = 1,
                 [BackendCapabilities.AI_BACKEND_CAPS_CHAT] = 1,
@@ -237,15 +253,15 @@ namespace SystemEx.AI.Backend {
                 m_caps[BackendCapabilities.AI_BACKEND_CAPS_NEEDS_API_KEY] = 1;
             }
 
-            m_configuration = new Map<string, object>
+            m_configuration = new Map<string, object>(1)
             {
                 ["WB_BACKEND_CONFIG_URL"] = strURL
             };
-            m_environment = new Map<Environment, object>();
+            m_environment = new Map<Environment, object>(1);
         }
 
-        
-        public virtual bool Initialization ( Map<string, object> configuration, Map<Environment, object> environment ) {
+		/// <inheritdoc/>
+		public virtual bool Initialization ( Map<string, object> configuration, Map<Environment, object> environment ) {
 
             foreach(var it in configuration) {
                 m_configuration.PushBack(it);
@@ -256,7 +272,7 @@ namespace SystemEx.AI.Backend {
             return true;                    
         }
 
-        
+        /// <inheritdoc/>
         public virtual void Release ( bool wait ) { }
 
 
@@ -377,9 +393,9 @@ namespace SystemEx.AI.Backend {
             }
         }
 
-        
 
-        private Map<string, object> BuildWebParameters ( Map<string, object> modelParams) {
+		/// <inheritdoc/>
+		private Map<string, object> BuildWebParameters ( Map<string, object> modelParams) {
 
             var p = new Map<string, object>();
 

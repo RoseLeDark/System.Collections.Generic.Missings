@@ -16,29 +16,28 @@
  */
 
 
-using SystemEx.Algorithms.Interfaces;
 using SystemEx.Collections.Generic;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-    /// \addtogroup Algorithms
-    /// @{
-    /// <summary>
-    /// Provides a Fibonacci‑based search strategy for containers implementing
-    /// <see cref="IContainer{T}"/>.  
-    /// 
-    /// Fibonacci search is an alternative to binary search that uses decreasing
-    /// Fibonacci intervals to narrow the search space. It is particularly suited
-    /// for sorted containers and scenarios where comparison operations are more
-    /// expensive than index arithmetic.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The element type stored in the container.
-    /// </typeparam>
-    /// <typeparam name="TContainer">
-    /// The container type being searched. Must implement <see cref="IVector{T}"/>.
-    /// </typeparam>
-    public struct FibonacciSearcherProvider<T, TContainer> : ISearchProvider<T, TContainer>
+	/// \addtogroup SystemEx.Algorithms
+	/// @{
+	/// <summary>
+	/// Provides a Fibonacci‑based search strategy for containers implementing
+	/// <see cref="IContainer{T}"/>.  
+	/// 
+	/// Fibonacci search is an alternative to binary search that uses decreasing
+	/// Fibonacci intervals to narrow the search space. It is particularly suited
+	/// for sorted containers and scenarios where comparison operations are more
+	/// expensive than index arithmetic.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The element type stored in the container.
+	/// </typeparam>
+	/// <typeparam name="TContainer">
+	/// The container type being searched. Must implement <see cref="IVector{T}"/>.
+	/// </typeparam>
+	public struct FibonacciSearcherProvider<T, TContainer> : ISearchProvider<T, TContainer>
         where TContainer : IVector<T> {
 
         /// <summary>

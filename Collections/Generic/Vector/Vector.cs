@@ -16,75 +16,74 @@
  */
 
 using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
 
 
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A modern, policy‑driven dynamic Vector container that provides fast indexed access,
-    /// optional auto‑growth, insertion, removal, traversal, and multiple zero‑overhead
-    /// reinterpretation views.
-    ///
-    /// Beyond basic dynamic array functionality, <see cref="Vector{T}"/> supports
-    /// several high‑level transformations such as:
-    /// <list type="bullet">
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsFlexSpan"/> – a multi‑mode span view supporting forward, reverse, and ring ( circular) traversal.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsSet"/> / <see cref="AsMultiSet"/> – sorted views with configurable
-    ///     comparison and sorting policies.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsUnorderedSet"/> / <see cref="AsUnorderedMultiSet"/> – unordered
-    ///     unique or multi‑value views without sorting overhead.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsSearch"/> – a binary‑search optimized lookup view.
-    ///     </description>
-    ///   </item>
-    ///   <item>
-    ///     <description>
-    ///     <see cref="AsFind"/> – a linear search view for unsorted data.
-    ///     </description>
-    ///   </item>
-    /// </list>
-    ///
-    /// These views allow the same underlying Vector to be interpreted as a span,
-    /// a sorted set, a multiset, an unordered set, or a search helper — without copying
-    /// or allocating additional memory.
-    ///
-    /// <para>
-    /// Beginners:  
-    /// Think of <see cref="Vector{T}"/> as a dynamic array that can instantly transform
-    /// into different “shapes” such as a set, a multiset, or a span, depending on what
-    /// you need.
-    /// </para>
-    ///
-    /// <para>
-    /// Professionals:  
-    /// <see cref="Vector{T}"/> follows a modern C++‑style multi‑view design.
-    /// Ordering is defined by <see cref="ISimpleCompare{T}"/> strategies, sorting is
-    /// controlled by <see cref="SortAction{TCompare, TContainer}"/> policies, and all
-    /// reinterpretations are zero‑overhead wrappers.  
-    /// This enables policy‑based sorting, strategy‑based comparison, and flexible
-    /// container semantics without hidden allocations or implicit behavior.
-    /// </para>
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the Vector.</typeparam>
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A modern, policy‑driven dynamic Vector container that provides fast indexed access,
+	/// optional auto‑growth, insertion, removal, traversal, and multiple zero‑overhead
+	/// reinterpretation views.
+	///
+	/// Beyond basic dynamic array functionality, <see cref="Vector{T}"/> supports
+	/// several high‑level transformations such as:
+	/// <list type="bullet">
+	///   <item>
+	///     <description>
+	///     <see cref="AsFlexSpan"/> – a multi‑mode span view supporting forward, reverse, and ring ( circular) traversal.
+	///     </description>
+	///   </item>
+	///   <item>
+	///     <description>
+	///     <see cref="AsSet"/> / <see cref="AsMultiSet"/> – sorted views with configurable
+	///     comparison and sorting policies.
+	///     </description>
+	///   </item>
+	///   <item>
+	///     <description>
+	///     <see cref="AsUnorderedSet"/> / <see cref="AsUnorderedMultiSet"/> – unordered
+	///     unique or multi‑value views without sorting overhead.
+	///     </description>
+	///   </item>
+	///   <item>
+	///     <description>
+	///     <see cref="AsSearch"/> – a binary‑search optimized lookup view.
+	///     </description>
+	///   </item>
+	///   <item>
+	///     <description>
+	///     <see cref="AsFind"/> – a linear search view for unsorted data.
+	///     </description>
+	///   </item>
+	/// </list>
+	///
+	/// These views allow the same underlying Vector to be interpreted as a span,
+	/// a sorted set, a multiset, an unordered set, or a search helper — without copying
+	/// or allocating additional memory.
+	///
+	/// <para>
+	/// Beginners:  
+	/// Think of <see cref="Vector{T}"/> as a dynamic array that can instantly transform
+	/// into different “shapes” such as a set, a multiset, or a span, depending on what
+	/// you need.
+	/// </para>
+	///
+	/// <para>
+	/// Professionals:  
+	/// <see cref="Vector{T}"/> follows a modern C++‑style multi‑view design.
+	/// Ordering is defined by <see cref="ISimpleCompare{T}"/> strategies, sorting is
+	/// controlled by <see cref="SortAction{TCompare, TContainer}"/> policies, and all
+	/// reinterpretations are zero‑overhead wrappers.  
+	/// This enables policy‑based sorting, strategy‑based comparison, and flexible
+	/// container semantics without hidden allocations or implicit behavior.
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the Vector.</typeparam>
 
-    public struct Vector<T> : IVector<T>, IUsedIterrator<T, RandomAccessIterator<T, Vector<T>> >, ISwappable<long> {
+	public struct Vector<T> : IVector<T>, IUsedIterrator<T, RandomAccessIterator<T, Vector<T>> >, ISwappable<long> {
         private long m_growSize;
         private bool m_autoGrow;
         

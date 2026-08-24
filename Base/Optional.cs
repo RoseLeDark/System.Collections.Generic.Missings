@@ -19,16 +19,17 @@
 using SystemEx.Utils;
 
 namespace SystemEx {
-
-    /// <summary>
-    /// Represents a optional value container that stores a value only when
-    /// <see cref="HasValue"/> is true. Unlike <see cref="Nullable{T}"/>, this type does not
-    /// preserve <c>null</c> as a stored value; assigning <c>null</c> clears the optional state.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The underlying value type. Can be either a reference type or a value type.
-    /// </typeparam>
-    public struct Optional<T> : IComparableEx<Optional<T>>, IComparable<Optional<T>>, IEquatable<Optional<T>> {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Represents a optional value container that stores a value only when
+	/// <see cref="HasValue"/> is true. Unlike <see cref="Nullable{T}"/>, this type does not
+	/// preserve <c>null</c> as a stored value; assigning <c>null</c> clears the optional state.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The underlying value type. Can be either a reference type or a value type.
+	/// </typeparam>
+	public struct Optional<T> : IComparableEx<Optional<T>>, IComparable<Optional<T>>, IEquatable<Optional<T>> {
         private T? m_value;
         private bool m_hasValue;
 
@@ -317,5 +318,5 @@ namespace SystemEx {
 		}
 	}
 
-
+	//@}
 }

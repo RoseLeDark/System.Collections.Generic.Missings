@@ -17,18 +17,20 @@
 
 
 namespace SystemEx {
-    /// <summary>
-    /// Provides binary serialization and deserialization capabilities for a type.
-    /// Implementations define how an instance is encoded into a byte sequence and
-    /// how it is reconstructed from raw binary data.
-    /// 
-    /// The interface supports endian‑aware serialization and allows writing the
-    /// encoded representation into an existing buffer at a specified offset.
-    /// </summary>
-    /// <typeparam name="TSelf">
-    /// The implementing type that provides its own binary encoding and decoding logic.
-    /// </typeparam>
-    public interface IByteSerializable<TSelf> {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Provides binary serialization and deserialization capabilities for a type.
+	/// Implementations define how an instance is encoded into a byte sequence and
+	/// how it is reconstructed from raw binary data.
+	/// 
+	/// The interface supports endian‑aware serialization and allows writing the
+	/// encoded representation into an existing buffer at a specified offset.
+	/// </summary>
+	/// <typeparam name="TSelf">
+	/// The implementing type that provides its own binary encoding and decoding logic.
+	/// </typeparam>
+	public interface IByteSerializable<TSelf> {
 
         /// <summary>
         /// Creates an instance of <typeparamref name="TSelf"/> from a byte array.
@@ -83,5 +85,5 @@ namespace SystemEx {
         /// </param>
         void ToBytes ( ref byte[] destination, long offset, Endian endian );
     }
-
+	//@}
 }

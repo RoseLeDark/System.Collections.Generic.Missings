@@ -16,20 +16,18 @@
  */
 
 namespace SystemEx.Runtime.InteropServices.Platform {
-    /// \addtogroup Runtime
-    /// @{
-    /// \addtogroup Platform
-    /// @{
-    /// <summary>
-    /// Provides a fallback implementation for platforms that do not support
-    /// native module loading or symbol resolution.  
-    /// Instead of performing real dynamic loading, this loader simulates all
-    /// operations by printing diagnostic messages to the console.  
-    /// It allows the rest of the runtime to function without throwing exceptions,
-    /// making it useful for testing, unsupported environments, or platforms
-    /// without dynamic linking capabilities.
-    /// </summary>
-    internal class NoSupportProcLoader {
+	/// \addtogroup SystemEx.Runtime.InteropServices.Platform
+	/// @{
+	/// <summary>
+	/// Provides a fallback implementation for platforms that do not support
+	/// native module loading or symbol resolution.  
+	/// Instead of performing real dynamic loading, this loader simulates all
+	/// operations by printing diagnostic messages to the console.  
+	/// It allows the rest of the runtime to function without throwing exceptions,
+	/// making it useful for testing, unsupported environments, or platforms
+	/// without dynamic linking capabilities.
+	/// </summary>
+	internal class NoSupportProcLoader {
         /// <summary>
         /// Stores the last requested module name for diagnostic output.
         /// </summary>
@@ -99,7 +97,6 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+	/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

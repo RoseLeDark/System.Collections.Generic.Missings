@@ -25,13 +25,14 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.Versioning;
 
 namespace SystemEx.Device.Memory {
-
-    /// <summary>
-    /// Specifies how a shared cache interacts with the hardware backend.  
-    /// Determines the direction of data flow between the managed cache and the
-    /// device‑specific hardware buffer.
-    /// </summary>
-    public enum SharedCacheType : byte {
+	// \addtogroup SystemEx.Device.Memory
+	/// @{
+	/// <summary>
+	/// Specifies how a shared cache interacts with the hardware backend.  
+	/// Determines the direction of data flow between the managed cache and the
+	/// device‑specific hardware buffer.
+	/// </summary>
+	public enum SharedCacheType : byte {
         /// <summary>
         /// Data flows from the cache to the hardware buffer only.  
         /// Hardware cannot write back into the cache.
@@ -175,5 +176,5 @@ namespace SystemEx.Device.Memory {
         }
     }
 
-
+	/// @}
 }

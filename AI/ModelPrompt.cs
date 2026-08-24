@@ -20,21 +20,51 @@ using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-    public struct ModelPromp<T> : IModelPromp<T> {
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Represents a concrete implementation of <see cref="IModelPromp{T}"/> used to 
+	/// encapsulate model input, contextual metadata, session information, execution 
+	/// parameters, and optional tags.  
+	/// 
+	/// <para>
+	/// <see cref="ModelPromp{T}"/> is the standard prompt container used by all 
+	/// <see cref="IModelBackend"/> implementations. It provides a mutable structure 
+	/// for building and enriching prompts before they are passed into the model 
+	/// pipeline, while also supporting functional-style cloning through the 
+	/// <c>With*</c> methods.
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">
+	/// The underlying prompt type (e.g., text, tokens, binary data, AST, etc.).
+	/// </typeparam>
+	public struct ModelPromp<T> : IModelPromp<T> {
         private readonly T m_strPrompt;
         private Map<string, object> m_context;
         private Optional<string> m_sessionID;
         private Map<string, object> m_parameter;
         private Map<string, object> m_tags;
 
-        public T Prompt => m_strPrompt;
-        public Map<string, object> Context => m_context;
-        public Optional<string> SessionId => m_sessionID;
-        public Map<string, object> Parameters => m_parameter;
-        public Map<string, object> Tags => m_tags;
-        public bool Cancel { get; }
+		/// <inheritdoc/>
+		public T Prompt => m_strPrompt;
+		/// <inheritdoc/>
+		public Map<string, object> Context => m_context;
+		/// <inheritdoc/>
+		public Optional<string> SessionId => m_sessionID;
+		/// <inheritdoc/>
+		public Map<string, object> Parameters => m_parameter;
+		/// <inheritdoc/>
+		public Map<string, object> Tags => m_tags;
+		/// <inheritdoc/>
+		public bool Cancel { get; }
 
-        public ModelPromp ( T prompt, Optional<string> sessionId ) {
+		/// <summary>
+		/// Initializes a new prompt with the specified raw value and session identifier.
+		/// Context, parameters, and tags are created empty.
+		/// </summary>
+		/// <param name="prompt">The raw prompt value.</param>
+		/// <param name="sessionId">Optional session identifier.</param>
+		public ModelPromp ( T prompt, Optional<string> sessionId ) {
 
             m_strPrompt = prompt;
             m_context = new Map<string, object>();
@@ -43,8 +73,16 @@ namespace SystemEx.AI {
             Cancel = false;
             m_tags = new Map<string, object>();
         }
-
-        public ModelPromp ( T prompt, Map<string, object> context, Optional<string> sessionId, Optional<Map<string, object>> parameters ) {
+		/// <summary>
+		/// Initializes a new prompt using explicit context and parameter maps.
+		/// </summary>
+		/// <param name="prompt">The raw prompt value.</param>
+		/// <param name="context">The contextual metadata map.</param>
+		/// <param name="sessionId">Optional session identifier.</param>
+		/// <param name="parameters">
+		/// Optional parameter map; if null, an empty map is created.
+		/// </param>
+		public ModelPromp ( T prompt, Map<string, object> context, Optional<string> sessionId, Optional<Map<string, object>> parameters ) {
 
             m_strPrompt = prompt;
             m_context = context;
@@ -53,8 +91,17 @@ namespace SystemEx.AI {
             Cancel = false;
             m_tags = new Map<string, object>();
         }
-
-        public ModelPromp (  T prompt, Map<string, object> context, Optional<string> sessionId,
+		/// <summary>
+		/// Initializes a new prompt with full control over context, parameters, tags, 
+		/// and cancellation state.
+		/// </summary>
+		/// <param name="prompt">The raw prompt value.</param>
+		/// <param name="context">The contextual metadata map.</param>
+		/// <param name="sessionId">Optional session identifier.</param>
+		/// <param name="parameters">Optional parameter map.</param>
+		/// <param name="cancel">Indicates whether the prompt should be cancelled.</param>
+		/// <param name="tags">Optional tag map.</param>
+		public ModelPromp (  T prompt, Map<string, object> context, Optional<string> sessionId,
             Optional<Map<string, object>> parameters, bool cancel, Optional<Map<string, object>> tags ) {
 
             m_strPrompt = prompt;
@@ -65,6 +112,7 @@ namespace SystemEx.AI {
             m_tags = tags.IsSome ? tags.Value! : new Map<string, object>();
         }
 
+        /// <inheritdoc/>
         public object this [string parameter] {
             get {
                 return m_parameter[parameter];
@@ -74,45 +122,93 @@ namespace SystemEx.AI {
             }
         }
 
-
-        public void AddContext ( string key, object value )
+		/// <summary>
+		/// Adds or replaces a context value associated with the specified key.
+		/// </summary>
+		public void AddContext ( string key, object value )
             => m_context[key] = value;
-
-        public bool RemoveContext ( string key )
+		/// <summary>
+		/// Removes a context entry if it exists.
+		/// </summary>
+		/// <returns>
+		/// True if the entry was removed; otherwise false.
+		/// </returns>
+		public bool RemoveContext ( string key )
             => m_context.Remove(key);
-
-        public bool HasContext ( string key )
+		/// <summary>
+		/// Determines whether a context entry with the specified key exists.
+		/// </summary>
+		public bool HasContext ( string key )
             => m_context.ContainsKey(key);
-
-        public bool TryGetContext ( string key, out object? value )
+		/// <summary>
+		/// Attempts to retrieve a context value.
+		/// </summary>
+		/// <param name="key">The context key.</param>
+		/// <param name="value">The retrieved value, if present.</param>
+		/// <returns>
+		/// True if the value exists; otherwise false.
+		/// </returns>
+		public bool TryGetContext ( string key, out object? value )
             => m_context.TryGetValue(key, out value);
-
-        public void AddParameter ( string key, object value )
-        => m_parameter[key] = value;
-
-        public bool RemoveParameter ( string key )
+		/// <summary>
+		/// Adds or replaces a parameter value associated with the specified key.
+		/// </summary>
+		public void AddParameter ( string key, object value )
+            => m_parameter[key] = value;
+		/// <summary>
+		/// Removes a parameter entry if it exists.
+		/// </summary>
+		public bool RemoveParameter ( string key )
             => m_parameter.Remove(key);
-
-        public bool HasParameter ( string key )
+		/// <summary>
+		/// Determines whether a parameter entry with the specified key exists.
+		/// </summary>
+		public bool HasParameter ( string key )
             => m_parameter.ContainsKey(key);
-
-        public bool TryGetParameter ( string key, out object? value )
+		/// <summary>
+		/// Attempts to retrieve a parameter value.
+		/// </summary>
+		/// <param name="key">The parameter key.</param>
+		/// <param name="value">The retrieved value, if present.</param>
+		/// <returns>
+		/// True if the value exists; otherwise false.
+		/// </returns>
+		public bool TryGetParameter ( string key, out object? value )
             => m_parameter.TryGetValue(key, out value);
 
-        // ---------- TAGS ----------
-        public void AddTag ( string key, object value )
+		/// <summary>
+		/// Adds or replaces a tag value associated with the specified key.
+		/// </summary>
+		public void AddTag ( string key, object value )
             => m_tags[key] = value;
-
-        public bool RemoveTag ( string key )
+		/// <summary>
+		/// Removes a tag entry if it exists.
+		/// </summary>
+		public bool RemoveTag ( string key )
             => m_tags.Remove(key);
-
-        public bool HasTag ( string key )
+		/// <summary>
+		/// Determines whether a tag entry with the specified key exists.
+		/// </summary>
+		public bool HasTag ( string key )
             => m_tags.ContainsKey(key);
-
-        public bool TryGetTag ( string key, out object? value )
+		/// <summary>
+		/// Attempts to retrieve a tag value.
+		/// </summary>
+		/// <param name="key">The tag key.</param>
+		/// <param name="value">The retrieved value, if present.</param>
+		/// <returns>
+		/// True if the value exists; otherwise false.
+		/// </returns>
+		public bool TryGetTag ( string key, out object? value )
             => m_tags.TryGetValue(key, out value);
-
-        public ModelPromp<T> WithParameter ( string key, object value ) {
+		/// <summary>
+		/// Creates a new prompt instance with an updated parameter value.
+		/// The original instance remains unchanged.
+		/// </summary>
+		/// <param name="key">The parameter key.</param>
+		/// <param name="value">The new value.</param>
+		/// <returns>A new <see cref="ModelPromp{T}"/> instance.</returns>
+		public ModelPromp<T> WithParameter ( string key, object value ) {
             var newParams = new Map<string, object>(m_parameter);
             newParams[key] = value;
 
@@ -125,8 +221,10 @@ namespace SystemEx.AI {
                 m_tags
             );
         }
-
-        public ModelPromp<T> WithTag ( string key, object value ) {
+		/// <summary>
+		/// Creates a new prompt instance with an updated tag value.
+		/// </summary>
+		public ModelPromp<T> WithTag ( string key, object value ) {
             var newTags = new Map<string, object>(m_tags);
             newTags[key] = value;
 
@@ -139,8 +237,10 @@ namespace SystemEx.AI {
                 newTags
             );
         }
-
-        public ModelPromp<T> WithContext ( string key, object value ) {
+		/// <summary>
+		/// Creates a new prompt instance with an updated context value.
+		/// </summary>
+		public ModelPromp<T> WithContext ( string key, object value ) {
             var newContext = new Map<string, object>(m_context);
             newContext[key] = value;
 
@@ -153,7 +253,12 @@ namespace SystemEx.AI {
                 m_tags
             );
         }
-        public override string ToString () {
+		/// <summary>
+		/// Returns a human‑readable representation of the prompt, including 
+		/// prompt value, session identifier, cancellation state, context, 
+		/// parameters, and tags.
+		/// </summary>
+		public override string ToString () {
             var sb = new System.Text.StringBuilder();
 
             sb.Append("ModelPromp<");
@@ -217,5 +322,5 @@ namespace SystemEx.AI {
         }
 
     }
-
+	///@}
 }

@@ -18,14 +18,16 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-    /// <summary>
-    /// A sparse container that stores elements in dynamic slots without enforcing
-    /// contiguous or linear placement. Slots may be empty, and operations do not
-    /// shift or compact elements. Designed for scenarios where random-access
-    /// sparse storage is required with dynamic resizing.
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the container.</typeparam>
-    public struct Sparsed<T> : IContainer<T>, IAutoGrowe, IEnumerable<T>, IEquatable<Sparsed<T>>, ITraverse<Optional<T>>, ISwappable<long> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A sparse container that stores elements in dynamic slots without enforcing
+	/// contiguous or linear placement. Slots may be empty, and operations do not
+	/// shift or compact elements. Designed for scenarios where random-access
+	/// sparse storage is required with dynamic resizing.
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the container.</typeparam>
+	public struct Sparsed<T> : IContainer<T>, IAutoGrowe, IEnumerable<T>, IEquatable<Sparsed<T>>, ITraverse<Optional<T>>, ISwappable<long> {
         private T[] m_elements;
         private byte [] m_state;
 
@@ -488,5 +490,5 @@ namespace SystemEx.Collections.Generic {
             return !(a == b);
         }
     }
-
+	/// @}
 }

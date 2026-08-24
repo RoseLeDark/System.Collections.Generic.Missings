@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -8,38 +24,38 @@ using static System.Reflection.Metadata.BlobBuilder;
 using static SystemEx.Hash.GrøstlHash;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Implements the Grøstl-256 and Grøstl-512 hashing functions as part of
-    /// the SystemEx low-level cryptographic subsystem. This class provides a
-    /// fully self-contained, allocation-free, deterministic hash engine based
-    /// on the original Grøstl specification (SHA-3 finalist).
-    ///
-    /// The implementation is designed for systems programming scenarios where
-    /// predictable behavior, portability, and runtime independence are required.
-    /// All operations are performed using fixed-size buffers, explicit state
-    /// transformations, and constant-time primitives where applicable.
-    ///
-    /// GroestlHash exposes two public hashing interfaces:
-    /// <list type="bullet">
-    /// <item><description><see cref="Compute"/> — Produces a 32-bit hash derived from the full Grøstl-256 digest.</description></item>
-    /// <item><description><see cref="ComputeLong"/> — Produces a 64-bit hash derived from the full Grøstl-512 digest.</description></item>
-    /// </list>
-    ///
-    /// Both variants support endian-aware extraction and optional seed mixing,
-    /// enabling integration into heterogeneous environments, custom keying
-    /// schemes, and internal hashing pipelines.
-    ///
-    /// This class is intended for:
-    /// <list type="bullet">
-    /// <item><description>Deterministic hashing inside low-level frameworks</description></item>
-    /// <item><description>Internal key generation and seeding mechanisms</description></item>
-    /// <item><description>Data integrity checks and non-cryptographic fingerprinting</description></item>
-    /// <item><description>Embedded or isolated verification modules</description></item>
-    /// </list>
-    /// </summary>
-    public sealed class GrøstlHash : IHash {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Implements the Grøstl-256 and Grøstl-512 hashing functions as part of
+	/// the SystemEx low-level cryptographic subsystem. This class provides a
+	/// fully self-contained, allocation-free, deterministic hash engine based
+	/// on the original Grøstl specification (SHA-3 finalist).
+	///
+	/// The implementation is designed for systems programming scenarios where
+	/// predictable behavior, portability, and runtime independence are required.
+	/// All operations are performed using fixed-size buffers, explicit state
+	/// transformations, and constant-time primitives where applicable.
+	///
+	/// GroestlHash exposes two public hashing interfaces:
+	/// <list type="bullet">
+	/// <item><description><see cref="Compute"/> — Produces a 32-bit hash derived from the full Grøstl-256 digest.</description></item>
+	/// <item><description><see cref="ComputeLong"/> — Produces a 64-bit hash derived from the full Grøstl-512 digest.</description></item>
+	/// </list>
+	///
+	/// Both variants support endian-aware extraction and optional seed mixing,
+	/// enabling integration into heterogeneous environments, custom keying
+	/// schemes, and internal hashing pipelines.
+	///
+	/// This class is intended for:
+	/// <list type="bullet">
+	/// <item><description>Deterministic hashing inside low-level frameworks</description></item>
+	/// <item><description>Internal key generation and seeding mechanisms</description></item>
+	/// <item><description>Data integrity checks and non-cryptographic fingerprinting</description></item>
+	/// <item><description>Embedded or isolated verification modules</description></item>
+	/// </list>
+	/// </summary>
+	public sealed class GrøstlHash : IHash {
         internal  struct PaddingState {
             internal byte BytesInBlock;
             internal byte FirstPaddingBlock;

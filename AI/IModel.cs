@@ -18,14 +18,15 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-
-    /// <summary>
-    /// Represents a generic AI model with configuration, environment information,
-    /// backend integration, tool support, and execution capabilities.
-    /// </summary>
-    /// <typeparam name="T">The primary data type used by the model (input/output).</typeparam>
-    /// <typeparam name="TTOOL">The tool type supported by the model.</typeparam>
-    public interface IModel<T, TTOOL> {
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Represents a generic AI model with configuration, environment information,
+	/// backend integration, tool support, and execution capabilities.
+	/// </summary>
+	/// <typeparam name="T">The primary data type used by the model (input/output).</typeparam>
+	/// <typeparam name="TTOOL">The tool type supported by the model.</typeparam>
+	public interface IModel<T, TTOOL> {
         /// <summary>
         /// Gets the model's unique name.
         /// </summary>
@@ -142,5 +143,5 @@ namespace SystemEx.AI {
         void Release ();
     }
 
-
+	///@}
 }

@@ -17,7 +17,6 @@
 
 
 using System.Numerics;
-using SystemEx.Algorithms.Interfaces;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {

@@ -16,18 +16,18 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A lightweight, serializable four‑element tuple consisting of strongly typed
-    /// first, second, third, and fourth values.  
-    /// Implements <see cref="ITuple"/> for indexed access and structural comparison.
-    /// </summary>
-    /// <typeparam name="TT">The type of the first element.</typeparam>
-    /// <typeparam name="TU">The type of the second element.</typeparam>
-    /// <typeparam name="TW">The type of the third element.</typeparam>
-    /// <typeparam name="TJ">The type of the fourth element.</typeparam>
-    [Serializable]
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A lightweight, serializable four‑element tuple consisting of strongly typed
+	/// first, second, third, and fourth values.  
+	/// Implements <see cref="ITuple"/> for indexed access and structural comparison.
+	/// </summary>
+	/// <typeparam name="TT">The type of the first element.</typeparam>
+	/// <typeparam name="TU">The type of the second element.</typeparam>
+	/// <typeparam name="TW">The type of the third element.</typeparam>
+	/// <typeparam name="TJ">The type of the fourth element.</typeparam>
+	[Serializable]
     public struct Quad<TT, TU, TW, TJ> : ITuple<TT> where TT : notnull {
 
         /// <summary>
@@ -179,8 +179,15 @@ namespace SystemEx.Collections.Generic {
         }
 
 
-
-        Optional<object> ITuple<TT>.Get ( int index ) {
+		/// <summary>
+		/// Retrieves the element at the specified index.  
+		/// Index 0 returns the first element, index 1 the second,  
+		/// index 2 the third, index 3 the fourth.
+		/// </summary>
+		/// <exception cref="IndexOutOfRangeException">
+		/// Thrown when the index is not 0–3.
+		/// </exception>
+		Optional<object> ITuple<TT>.Get ( int index ) {
             return Get(index);
         }
     }

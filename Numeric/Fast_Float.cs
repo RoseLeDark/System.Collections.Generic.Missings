@@ -18,20 +18,21 @@
 using System.Runtime.InteropServices;
 
 namespace SystemEx.Numeric {
-
-    /// <summary>
-    /// Provides low-level IEEE‑754 bit inspection and manipulation for 32‑bit floating-point values.
-    /// This type follows the naming and structural conventions of the Fast_Type family, but is
-    /// specialized for floating-point analysis rather than general-purpose bitmask operations.
-    /// 
-    /// Exposes:
-    ///   - Sign bit (1 bit)
-    ///   - Exponent (8 bits)
-    ///   - Mantissa (23 bits)
-    /// 
-    /// Uses SystemEx byte conversion utilities for endian-safe reinterpretation.
-    /// </summary>
-    public struct Fast_Float {
+	/// \addtogroup SystemEx.Numeric
+	/// @{
+	/// <summary>
+	/// Provides low-level IEEE‑754 bit inspection and manipulation for 32‑bit floating-point values.
+	/// This type follows the naming and structural conventions of the Fast_Type family, but is
+	/// specialized for floating-point analysis rather than general-purpose bitmask operations.
+	/// 
+	/// Exposes:
+	///   - Sign bit (1 bit)
+	///   - Exponent (8 bits)
+	///   - Mantissa (23 bits)
+	/// 
+	/// Uses SystemEx byte conversion utilities for endian-safe reinterpretation.
+	/// </summary>
+	public struct Fast_Float {
 
         private float m_value;
 
@@ -172,4 +173,5 @@ namespace SystemEx.Numeric {
             return exponent == 0 && mantissa != 0;
         }
     }
+    //@}
 }

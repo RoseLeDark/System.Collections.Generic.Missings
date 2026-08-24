@@ -19,17 +19,19 @@ using SystemEx.Device.Intertropt;
 
 namespace SystemEx.Device.Memory {
 
-    /// <summary>
-    /// Defines the interface for a compute kernel that operates on one or more
-    /// <see cref="DeviceSharedBuffer{TDeviceSharedBackend}"/> instances.  
-    /// A kernel represents a unit of computation that may run on different
-    /// backends such as RAM, OpenCL, Vulkan, CUDA, or custom hardware.
-    /// </summary>
-    /// <typeparam name="TIDeviceSharedBackend">
-    /// The backend type used for shared buffer operations.  
-    /// Must implement <see cref="IDeviceSharedBackend"/>.
-    /// </typeparam>
-    public interface IKernel<TIDeviceSharedBackend>
+	// \addtogroup SystemEx.Device.Memory
+	/// @{
+	/// <summary>
+	/// Defines the interface for a compute kernel that operates on one or more
+	/// <see cref="DeviceSharedBuffer{TDeviceSharedBackend}"/> instances.  
+	/// A kernel represents a unit of computation that may run on different
+	/// backends such as RAM, OpenCL, Vulkan, CUDA, or custom hardware.
+	/// </summary>
+	/// <typeparam name="TIDeviceSharedBackend">
+	/// The backend type used for shared buffer operations.  
+	/// Must implement <see cref="IDeviceSharedBackend"/>.
+	/// </typeparam>
+	public interface IKernel<TIDeviceSharedBackend>
         where TIDeviceSharedBackend : IDeviceSharedBackend {
 
         /// <summary>
@@ -133,5 +135,5 @@ namespace SystemEx.Device.Memory {
     }
 
 
-
+	/// @}
 }

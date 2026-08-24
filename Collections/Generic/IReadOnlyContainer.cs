@@ -1,16 +1,32 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines the minimal read‑only functionality required for a generic
-    /// container used by the SystemEx collection framework. Implementations
-    /// provide indexed access and structural inspection without allowing
-    /// modification of stored elements.
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the container.</typeparam>
-    public interface IReadOnlyContainer<T>  {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines the minimal read‑only functionality required for a generic
+	/// container used by the SystemEx collection framework. Implementations
+	/// provide indexed access and structural inspection without allowing
+	/// modification of stored elements.
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the container.</typeparam>
+	public interface IReadOnlyContainer<T>  {
 
         /// <summary>
         /// Gets the first element of the container.

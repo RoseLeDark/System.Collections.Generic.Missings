@@ -1,19 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 using System.Runtime.InteropServices;
-using System.Text;
 using SystemEx.Collections.Generic;
 using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-
-    /// <summary>
-    /// This value type represents A Half16b value.
-    /// See https://cloud.google.com/blog/products/ai-machine-learning/bfloat16-the-secret-to-high-performance-on-cloud-tpus
-    /// for details,
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+	/// \addtogroup SystemEx.Numeric
+	/// @{
+	/// <summary>
+	/// This value type represents A Half16b value.
+	/// See https://cloud.google.com/blog/products/ai-machine-learning/bfloat16-the-secret-to-high-performance-on-cloud-tpus
+	/// for details,
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
     [HashAlgorithm(typeof(BernsteinHash), Endian.System)]
     public struct Half16b : IHalf<Half16b> {
 
@@ -32,45 +46,36 @@ namespace SystemEx.Numeric {
         /// </summary>
         public ushort MantissaBits => 7;
 
-        /// <summary>
-        /// Exponent bias used by the bfloat16 format (15).
-        /// </summary>
-        public ushort ExponentBias => 127;
-        /// <summary>
-        /// Total number of bits in the representation (16).
-        /// </summary>
-        public ushort TotalBits => 16;
+		/// <inheritdoc/>
+		public ushort ExponentBias => 127;
+		/// <inheritdoc/>
+		public ushort TotalBits => 16;
+		/// <inheritdoc/>
+		public ushort HiddenBit => 0x80;
 
-        public ushort HiddenBit => 0x80;
+		/// <inheritdoc/>
+		public bool Sign => (bool)(((m_value >> 15) & 0x1) == 1);
+		/// <inheritdoc/>
+		public ushort Exponent => (ushort)((m_value >> MantissaBits) & 0xFF);
+		/// <inheritdoc/>
+		public ushort Mantissa => (ushort)(m_value & 0x7F);
+		/// <inheritdoc/>
+		public static Half16b Zero => new Half16b(0x0000);
+		/// <inheritdoc/>
+		public static Half16b One => new Half16b(0x3F80);
+		/// <inheritdoc/>
+		public static Half16b NegativeOne => new Half16b(0xBF80);
+		/// <inheritdoc/>
+		public static Half16b NegativeZero => new Half16b(0x8000);
+		/// <inheritdoc/>
+		public static Half16b PositiveInfinity => new Half16b(0x7F80);
+		/// <inheritdoc/>
+		public static Half16b NegativeInfinity => new Half16b(0xFF80);
+		/// <inheritdoc/>
+		public static Half16b NaN => new Half16b(0xFFC1);
 
-        /// <summary>
-        /// Gets the sign bit (true = negative).
-        /// </summary>
-        public bool Sign => (bool)(((m_value >> 15) & 0x1) == 1);
-        /// <summary>
-        /// Gets the exponent field .
-        /// </summary>
-        public ushort Exponent => (ushort)((m_value >> MantissaBits) & 0xFF);
-        /// <summary>
-        /// Gets the mantissa (fraction) field .
-        /// </summary>
-        public ushort Mantissa => (ushort)(m_value & 0x7F);
-
-        public static Half16b Zero => new Half16b(0x0000);
-
-        public static Half16b One => new Half16b(0x3F80);
-
-        public static Half16b NegativeOne => new Half16b(0xBF80);
-
-        public static Half16b NegativeZero => new Half16b(0x8000);
-
-        public static Half16b PositiveInfinity => new Half16b(0x7F80);
-
-        public static Half16b NegativeInfinity => new Half16b(0xFF80);
-
-        public static Half16b NaN => new Half16b(0xFFC1);
-
-        public static Half16b Epsilon => new Half16b(0x0080);
+		/// <inheritdoc/>
+		public static Half16b Epsilon => new Half16b(0x0080);
 
         /// <summary>
         /// Alternative NaN encoding.
@@ -163,12 +168,12 @@ namespace SystemEx.Numeric {
         public static bool IsFinite ( Half16b x ) =>
             x.Exponent != 0xFF;
 
-
-        public static bool IsInfinity ( Half16b val ) =>
+		/// <inheritdoc/>
+		public static bool IsInfinity ( Half16b val ) =>
                 (val.Exponent == 0xFF) && (val.Mantissa == 0);
 
-
-        public static bool IsInteger ( Half16b x ) {
+		/// <inheritdoc/>
+		public static bool IsInteger ( Half16b x ) {
             if ( IsNaN(x) || IsInfinity(x) )
                 return false;
 
@@ -191,31 +196,31 @@ namespace SystemEx.Numeric {
             (val.Exponent == 0xFF) && (val.Mantissa != 0);
 
 
-
-        public static bool IsNegative ( Half16b val ) =>
+		/// <inheritdoc/>
+		public static bool IsNegative ( Half16b val ) =>
             (val.m_value & 0x8000) != 0;
 
-
-        public static bool IsNormal ( Half16b x ) {
+		/// <inheritdoc/>
+		public static bool IsNormal ( Half16b x ) {
             ushort e = x.Exponent;
             return e != 0 && e != 0xFF;
         }
 
-
-        public static bool IsSubnormal ( Half16b x ) =>
+		/// <inheritdoc/>
+		public static bool IsSubnormal ( Half16b x ) =>
             x.Exponent == 0 && x.Mantissa != 0;
 
-
-        public static bool IsZero ( Half16b value ) =>
+		/// <inheritdoc/>
+		public static bool IsZero ( Half16b value ) =>
             (value.m_value & ~0x8000) == 0;
 
-
-        public static Half16b Abs ( Half16b x ) =>
+		/// <inheritdoc/>
+		public static Half16b Abs ( Half16b x ) =>
             new Half16b(0, x.Exponent, x.Mantissa);
 
-        
 
-        public static Half16b Add ( Half16b a, Half16b b ) {
+		/// <inheritdoc/>
+		public static Half16b Add ( Half16b a, Half16b b ) {
             if ( IsNaN(a) || IsNaN(b) ) return Half16b.NaN;
             if ( IsInfinity(a) && IsInfinity(b) && a.Sign != b.Sign ) return Half16b.NaN;
 
@@ -268,8 +273,8 @@ namespace SystemEx.Numeric {
             return Normalize(sign, exp, mant, a.HiddenBit);
         }
 
-
-        public static Half16b Ceil ( Half16b x ) {
+		/// <inheritdoc/>
+		public static Half16b Ceil ( Half16b x ) {
             if ( IsNaN(x) || IsInfinity(x) )
                 return x;
 
@@ -289,8 +294,8 @@ namespace SystemEx.Numeric {
             return x.Sign ? Half16b.Zero : Half16b.One;
         }
 
-
-        public static Half16b Div ( Half16b a, Half16b b ) {
+		/// <inheritdoc/>
+		public static Half16b Div ( Half16b a, Half16b b ) {
             if ( IsNaN(a) || IsNaN(b) ) return Half16b.NaN;
             if ( IsZero(b) ) return Half16b.NaN;
             if ( IsZero(a) ) return Half16b.Zero;
@@ -323,8 +328,8 @@ namespace SystemEx.Numeric {
             return Normalize(sign, exp, mant, a.HiddenBit);
         }
 
-
-        public static Half16b Floor ( Half16b x ) {
+		/// <inheritdoc/>
+		public static Half16b Floor ( Half16b x ) {
             if ( IsNaN(x) || IsInfinity(x) )
                 return x;
 
@@ -345,8 +350,8 @@ namespace SystemEx.Numeric {
         }
 
 
-
-        public static Half16b Mul ( Half16b a, Half16b b ) {
+		/// <inheritdoc/>
+		public static Half16b Mul ( Half16b a, Half16b b ) {
             if ( IsNaN(a) || IsNaN(b) ) return Half16b.NaN;
             if ( IsZero(a) || IsZero(b) ) return Half16b.Zero;
 
@@ -375,19 +380,19 @@ namespace SystemEx.Numeric {
             return Normalize(sign, exp, mant, a.HiddenBit);
         }
 
-
-        public static Half16b Negate ( Half16b h ) {
+		/// <inheritdoc/>
+		public static Half16b Negate ( Half16b h ) {
             ushort sign = (ushort)(h.Sign ? 1 : 0);
             return new Half16b((ushort)(sign ^ 1), h.Exponent, h.Mantissa);
         }
-
-        public static Half16b Signum ( Half16b x ) {
+		/// <inheritdoc/>
+		public static Half16b Signum ( Half16b x ) {
             if ( IsNaN(x) ) return Half16b.NaN;
             if ( IsZero(x) ) return Half16b.Zero;
             return x.Sign ? Half16b.NegativeOne : Half16b.One;
         }
-
-        public static Half16b Trunc ( Half16b x ) {
+		/// <inheritdoc/>
+		public static Half16b Trunc ( Half16b x ) {
             if ( IsNaN(x) || IsInfinity(x) )
                 return x;
 
@@ -404,8 +409,8 @@ namespace SystemEx.Numeric {
             return Half16b.Zero;
         }
 
-
-        public static Half16b Clamp ( Half16b x, Half16b min, Half16b max ) {
+		/// <inheritdoc/>
+		public static Half16b Clamp ( Half16b x, Half16b min, Half16b max ) {
             if ( x < min ) return min;
             if ( x > max ) return max;
             return x;
@@ -632,7 +637,7 @@ namespace SystemEx.Numeric {
         }
 
 
-        static Half16b Normalize ( ushort sign, int exp, uint mant, ushort hiddenbit ) {
+		static Half16b Normalize ( ushort sign, int exp, uint mant, ushort hiddenbit ) {
             if ( mant == 0 )
                 return new Half16b(sign, 0, 0);
 
@@ -665,7 +670,6 @@ namespace SystemEx.Numeric {
 
             return (mant >> 3) + add;
         }
-
-        
     }
+    //@}
 }

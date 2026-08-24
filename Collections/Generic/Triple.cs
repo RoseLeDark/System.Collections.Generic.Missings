@@ -15,17 +15,17 @@
  * changes and the date.
  */
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A lightweight, serializable three‑element tuple consisting of strongly typed
-    /// first, second, and third values. Implements <see cref="ITuple"/> and
-    /// <see cref="IEquatable{T}"/> for structural comparison.
-    /// </summary>
-    /// <typeparam name="TT">The type of the first element.</typeparam>
-    /// <typeparam name="TU">The type of the second element.</typeparam>
-    /// <typeparam name="TW">The type of the third element.</typeparam>
-    [Serializable]
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A lightweight, serializable three‑element tuple consisting of strongly typed
+	/// first, second, and third values. Implements <see cref="ITuple"/> and
+	/// <see cref="IEquatable{T}"/> for structural comparison.
+	/// </summary>
+	/// <typeparam name="TT">The type of the first element.</typeparam>
+	/// <typeparam name="TU">The type of the second element.</typeparam>
+	/// <typeparam name="TW">The type of the third element.</typeparam>
+	[Serializable]
 #pragma warning disable CA1067
     public struct Triple<TT, TU, TW> :
         IEquatable<Triple<TT, TU, TW>>, ITuple<TT> where TT : notnull

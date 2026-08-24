@@ -8,8 +8,8 @@
     <Company>Amber-Sophia Schröck</Company>
     <PackageIcon>SystemEx.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>0.90.1785</AssemblyVersion>
-    <FileVersion>0.90.1785</FileVersion>
+    <AssemblyVersion>0.92.1902</AssemblyVersion>
+    <FileVersion>0.92.1902</FileVersion>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Description>RoseLeDark.Collections.Missings 
 
@@ -58,7 +58,7 @@ SystemEx follows these principles:
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <RepositoryUrl>https://github.com/RoseLeDark/System.Collections.Generic.Missings.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>0.90.1785</Version>
+    <Version>0.92.1902</Version>
     <PackageProjectUrl>https://roseledark.github.io/SystemEx.Docs/</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -71,44 +71,39 @@ SystemEx follows these principles:
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <RootNamespace>SystemEx</RootNamespace>
-    <PackageReleaseNotes>## [0.90.1785] 18.08.2026 intern Preview for 1.0 -&gt; Lacking
+    <PackageReleaseNotes>
+## [0.92.1902] 24.08.2026 intern Preview for 1.0 -&gt; Lacking
+### Correcture
+- Remove from ILock.TryLock the argument TimeSpan. Now ist TryLock != Lock 
+- Update Result, can nocw habdle null. `this [int index]` return object? and add function `Get(int index = 0)` return object?
+
 ### Added
-- Added Half16hb (Google Half 16 floa type) and basic structs for more float types
-- Added:
-  - `vec2h` (Half16) and `vec2hb` (Half16b)
-  - `vec3h` (Half16) and `vec3hb` (Half16b)
-  - `vec4h` (Half16) and `vec4hb` (Half16b)
-- Added conversion from Float to Half16 and Half16b and to float
-- Added professional low‑level bit‑span-types `BitIntSpan`, `BitLongSpan` unsigned and signed version in FlexSpan style with reverse, ringbuffer and AsSpan System mode. 
-  Becarful by Ring mode 
-- Added `SystemEx.Numeric.Ratio`: Represents a rational number using a signed 64‑bit numerator and denominator. A Ratio stores an exact fractional value
-  without automatic reduction. This allows the representation of structural fractions such as gear ratios.
-- Added:
-  - `vec2r` (Ratio)
-  - `vec3r` (Ratio) 
-  - `vec4r` (Ratio) 
-- Added `SystemEx.MathR` for Ratio Math Utils with: 
-    - `Pow`: Raises a ratio to an integer power exactly.
-    - `DegreesToRadians`: Converts degrees to radians.
-    - `RadiansToDegrees`: Converts radians to degrees.
-    - `DegreesToTurns`: Converts degrees to turns (full rotations). deg / 360;
-    - `TurnsToDegrees`: Converts turns (full rotations) to degrees.
-    - `Sign`: Returns the sign of this ratio as a interger. The result is -1, 0, or 1 depending on the value of the ratio.
-    - `Abs`: Returns the absolute value of the giving ratio : ABS(Numerator), ABS(Denominator)
-    - `Clamp`: Clamps this ratio between the specified minimum and maximum values.
-    - `Min`, `Max`, `MinMax`:
-    - `Sqrt` with new return Type Result: Computes the square root of a `SystemEx.Numeric.Ratio` and returns the result
-  inside a `SystemEx.Result` object. The method distinguishes between
-  rational and irrational square roots. 
-- Added `SystemEx.Result`: Represents a flexible multi-value result container that can hold successful values, multiple 
-  return objects, assertion messages, or exception information.
-- Added `SystemEx.ResultBuilder`: Provides a fluent builder for constructing complex &lt;see cref="Result"/&gt;
- objects across multiple processing steps, compiler stages, or mathematical operations.
-- Added `SystemEx.FlexSpan` View to all basic Types - int, long, float , double. Be careful with Ring Mode and Foreache without a break 
-  condition.
-- Added TupleMap&lt;T&gt;: A flexible tuple structure where the first element acts as a stable key and additional values are stored in an expandable object array, 
-  enabling structured multi‑value mappings.
-</PackageReleaseNotes>
+- Added in SystemEx.Threading
+    - `Latch`: A one-shot countdown synchronization primitive that releases all 
+       waiting threads once its counter reaches zero and remains permanently open afterward.
+    - `Barrier`: A reusable multi-phase synchronization barrier that blocks threads until 
+     a specified number of arrivals is reached, then executes a completion step and advances to the next phase.
+    - `RCUObject&lt;T&gt;`: Represents a minimal Read-Copy-Update (RCU) container that provides lock-free read 
+       access and exclusive write access to a protected value.
+    
+- Added in SystemEx:
+    - `IValueWriter` &amp; `IValueWriter&lt;T&gt;`: Provides endian-aware write operations for genric/primitive numeric types.
+    - `IValueReader` &amp; `IValueReader&lt;T&gt;`: Provides endian-aware reader operations for genric/primitive numeric types
+- Added in SystemEx.IO: 
+    - `RCUStream&lt;TStream&gt;`: A Read-Copy-Update (RCU) wrapper around a System.IO.Stream that provides 
+       lock-free read operations and exclusive write operations. `RCUStream&lt;TStream&gt;` implt `IValueWriter` and
+       `IValueReader`. 
+- Added in SystemEx.Collections.Generic:
+    - `RCUCache`: Provides a Read-Copy-Update (RCU) wrapper around a &lt;see cref="Cache"/&gt; instance.
+    
+### Remove
+- Remove `LongLenght` from Cache - redudance with `long Lenght`
+- Remove `Write(value ... )` and `Read{Uint, int ....}` from ICache and Cache and RCUCache implt now `ICache`, `IValueWriter` and
+  `IValueReader`. 
+
+### Update Coution
+- namespace `SystemEx.Algorithms.Interfaces` and `SystemEx.Algorithms` are marged to `SystemEx.Algorithms`. !!
+              </PackageReleaseNotes>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
     <Platforms>AnyCPU</Platforms>

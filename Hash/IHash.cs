@@ -19,16 +19,16 @@ using System.Drawing;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Represents a 32‑bit hash value produced by a SystemEx hashing algorithm.
-    /// 
-    /// The struct is immutable and stores the raw 32‑bit result exactly as
-    /// returned by the underlying hasher. No normalization or reinterpretation
-    /// is performed.
-    /// </summary>
-    public readonly struct Hash32 {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Represents a 32‑bit hash value produced by a SystemEx hashing algorithm.
+	/// 
+	/// The struct is immutable and stores the raw 32‑bit result exactly as
+	/// returned by the underlying hasher. No normalization or reinterpretation
+	/// is performed.
+	/// </summary>
+	public readonly struct Hash32 {
         /// <summary>
         /// The raw 32‑bit hash value.
         /// </summary>

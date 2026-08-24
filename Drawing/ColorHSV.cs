@@ -16,16 +16,16 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a color in the HSV (Hue–Saturation–Value) color space using
-    /// floating‑point components.  
-    /// Provides hue‑aware interpolation, component manipulation, arithmetic
-    /// operations, and normalization utilities. 
-    /// <Note> The Main Color in this Libary</Note>
-    /// </summary>
-    public class ColorHSV : IColor<ColorHSV>, IEquatable<ColorHSV>, IComparable<ColorHSV> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a color in the HSV (Hue–Saturation–Value) color space using
+	/// floating‑point components.  
+	/// Provides hue‑aware interpolation, component manipulation, arithmetic
+	/// operations, and normalization utilities. 
+	/// <Note> The Main Color in this Libary</Note>
+	/// </summary>
+	public struct ColorHSV : IColor<ColorHSV>, IEquatable<ColorHSV>, IComparable<ColorHSV> {
         internal float m_hue;         // 0–360°
         internal float m_saturation;  // 0–1
         internal float m_value;       // 0–1
@@ -46,17 +46,17 @@ namespace SystemEx.Drawing {
         /// Gets or sets the hue component in degrees (0–360).  
         /// Values outside the range are wrapped automatically.
         /// </summary>
-        public virtual float H { get => m_hue; set => m_hue = ClampHue(value); }
+        public float H { get => m_hue; set => m_hue = ClampHue(value); }
 
         /// <summary>
         /// Gets or sets the value (brightness) component in the range 0–1.
         /// </summary>
-        public virtual float V { get => m_value; set => m_value = System.Math.Clamp(value, 0f, 1f); }
+        public float V { get => m_value; set => m_value = System.Math.Clamp(value, 0f, 1f); }
 
         /// <summary>
         /// Gets or sets the saturation component in the range 0–1.
         /// </summary>
-        public virtual float S { get => m_saturation; set => m_saturation = System.Math.Clamp(value, 0f, 1f); }
+        public float S { get => m_saturation; set => m_saturation = System.Math.Clamp(value, 0f, 1f); }
 
         /// <summary>
         /// Initializes a new HSV color with the specified component values.
@@ -70,7 +70,7 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Adjusts the saturation by the specified delta.
         /// </summary>
-        public virtual ColorHSV Saturation(float delta) {
+        public ColorHSV Saturation(float delta) {
             m_saturation = System.Math.Clamp(m_saturation + delta, 0f, 1f);
             return this;
         }
@@ -78,7 +78,7 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Adjusts the value (brightness) by the specified delta.
         /// </summary>
-        public virtual ColorHSV Brightness(float delta) {
+        public ColorHSV Brightness(float delta) {
             m_value = System.Math.Clamp(m_value + delta, 0f, 1f);
             return this;
         }
@@ -87,7 +87,7 @@ namespace SystemEx.Drawing {
         /// Adds another HSV color to this one, component by component.
         /// Hue is wrapped, saturation and value are clamped.
         /// </summary>
-        public virtual ColorHSV Addition(ColorHSV a) {
+        public ColorHSV Addition(ColorHSV a) {
             m_saturation = System.Math.Clamp(m_saturation + a.m_saturation, 0f, 1f);
             m_value = System.Math.Clamp(m_value + a.m_value, 0f, 1f);
             m_hue = ClampHue(m_hue + a.m_hue);
@@ -98,7 +98,7 @@ namespace SystemEx.Drawing {
         /// Subtracts another HSV color from this one, component by component.
         /// Hue is wrapped, saturation and value are clamped.
         /// </summary>
-        public virtual ColorHSV Subtraction(ColorHSV a) {
+        public ColorHSV Subtraction(ColorHSV a) {
             m_saturation = System.Math.Clamp(m_saturation - a.m_saturation, 0f, 1f);
             m_value = System.Math.Clamp(m_value - a.m_value, 0f, 1f);
             m_hue = ClampHue(m_hue - a.m_hue);
@@ -109,7 +109,7 @@ namespace SystemEx.Drawing {
         /// Multiplies this color with another, component by component.
         /// Hue is not affected.
         /// </summary>
-        public virtual ColorHSV Multiplication(ColorHSV a) {
+        public ColorHSV Multiplication(ColorHSV a) {
             m_saturation = System.Math.Clamp(m_saturation * a.m_saturation, 0f, 1f);
             m_value = System.Math.Clamp(m_value * a.m_value, 0f, 1f);
             return this;
@@ -119,7 +119,7 @@ namespace SystemEx.Drawing {
         /// Divides this color by another, component by component.
         /// Hue is not affected.
         /// </summary>
-        public virtual ColorHSV Division(ColorHSV a) {
+        public ColorHSV Division(ColorHSV a) {
             if ( a.m_saturation != 0f )
                 m_saturation = System.Math.Clamp(m_saturation / a.m_saturation, 0f, 1f);
 
@@ -152,9 +152,7 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Determines whether this instance is equal to another HSV color.
         /// </summary>
-        public bool Equals(ColorHSV? other) {
-            if ( other == null )
-                return false;
+        public bool Equals(ColorHSV other) {
 
             return other.m_hue == m_hue &&
                    other.m_saturation == m_saturation &&
@@ -183,7 +181,7 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Wraps a hue value into the range 0–360 degrees.
         /// </summary>
-        protected static float ClampHue(float h) {
+        private float ClampHue(float h) {
             h %= 360f;
             return h < 0f ? h + 360f : h;
         }
@@ -220,7 +218,6 @@ namespace SystemEx.Drawing {
         }
 
         public int CompareTo(ColorHSV other) {
-            if(other == null) return 1;
             if(this > other ) return -1;
             return 0;
         }

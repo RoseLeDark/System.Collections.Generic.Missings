@@ -18,28 +18,26 @@ using SystemEx.Algorithms;
 using SystemEx.Collections.Generic;
 using SystemEx.Utils;
 
-namespace SystemEx.Algorithms.Interfaces {
-    /// \addtogroup Algorithms
-    /// @{
-    /// \addtogroup interfaces
-    /// @{
-    /// <summary>
-    /// Defines a pluggable search strategy for use with the <c>Search</c> object.
-    /// 
-    /// A search provider encapsulates the lookup logic and can implement
-    /// any strategy: linear scan, binary search, segmented search, pattern
-    /// matching, or domain‑specific evaluation.
-    /// 
-    /// The provider receives the container by reference to allow efficient
-    /// access without copying. It never modifies the container.
-    /// </summary>
-    /// <typeparam name="TContainer">
-    /// The container type implementing <see cref="IVector{T}"/>.
-    /// </typeparam>
-    /// <typeparam name="T">
-    /// The element type stored in the container.
-    /// </typeparam>
-    public interface ISearchProvider<T, TContainer>
+namespace SystemEx.Algorithms {
+	/// \addtogroup SystemEx.Algorithms
+	/// @{
+	/// <summary>
+	/// Defines a pluggable search strategy for use with the <c>Search</c> object.
+	/// 
+	/// A search provider encapsulates the lookup logic and can implement
+	/// any strategy: linear scan, binary search, segmented search, pattern
+	/// matching, or domain‑specific evaluation.
+	/// 
+	/// The provider receives the container by reference to allow efficient
+	/// access without copying. It never modifies the container.
+	/// </summary>
+	/// <typeparam name="TContainer">
+	/// The container type implementing <see cref="IVector{T}"/>.
+	/// </typeparam>
+	/// <typeparam name="T">
+	/// The element type stored in the container.
+	/// </typeparam>
+	public interface ISearchProvider<T, TContainer>
         where TContainer : IVector<T> {
         /// <summary>
         /// Searches the container for the specified value using the provider's

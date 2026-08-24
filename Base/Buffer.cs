@@ -18,13 +18,15 @@
 
 #pragma warning disable CS8500 
 namespace SystemEx {
-    /// <summary>
-    /// Performs a raw, pointer‑based copy operation between two managed arrays.
-    /// 
-    /// No bounds checking is performed. The caller is responsible for ensuring
-    /// that the offsets and element count are valid for both arrays.
-    /// </summary>
-    public static class Buffer {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Performs a raw, pointer‑based copy operation between two managed arrays.
+	/// 
+	/// No bounds checking is performed. The caller is responsible for ensuring
+	/// that the offsets and element count are valid for both arrays.
+	/// </summary>
+	public static class Buffer {
 
         /// <summary>
         /// Copies a sequence of elements from one array to another using raw
@@ -285,5 +287,6 @@ namespace SystemEx {
         }
 
     }
+	//@}
 }
 #pragma warning restore CS8500

@@ -18,22 +18,22 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents a slice over intrusive <see cref="Node{T}"/> structures,
-    /// defined by a starting iterator and a fixed length.  
-    /// Conceptually similar to <c>Span&lt;T&gt;</c>, but operating on your
-    /// intrusive node/iterator system instead of contiguous memory.
-    /// </summary>
-    /// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
-    /// <example>
-    /// var slice = new NodeSlice&lt;int&gt;(node.At(5), 10);
-    ///
-    /// foreach (var x in slice)
-    ///     Console.WriteLine(x);
-    /// </example>
-    public readonly struct NodeSlice<T> : IEnumerable<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a slice over intrusive <see cref="Node{T}"/> structures,
+	/// defined by a starting iterator and a fixed length.  
+	/// Conceptually similar to <c>Span&lt;T&gt;</c>, but operating on your
+	/// intrusive node/iterator system instead of contiguous memory.
+	/// </summary>
+	/// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
+	/// <example>
+	/// var slice = new NodeSlice&lt;int&gt;(node.At(5), 10);
+	///
+	/// foreach (var x in slice)
+	///     Console.WriteLine(x);
+	/// </example>
+	public readonly struct NodeSlice<T> : IEnumerable<T> {
 
         /// <summary>
         /// Iterator marking the beginning of the slice.

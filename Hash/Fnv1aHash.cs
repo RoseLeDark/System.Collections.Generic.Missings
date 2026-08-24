@@ -20,12 +20,12 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Implements the FNV-1a hash algorithm.
-    /// </summary> 
-    public sealed class Fnv1aHash : IHash {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Implements the FNV-1a hash algorithm.
+	/// </summary> 
+	public sealed class Fnv1aHash : IHash {
         private const ulong Offset64 = 14695981039346656037UL;
         private const ulong Prime64  = 1099511628211UL;
 

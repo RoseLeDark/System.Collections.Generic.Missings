@@ -16,23 +16,23 @@
  */
 
 
-using SystemEx.Algorithms.Interfaces;
+using SystemEx.Algorithms;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-    /// \addtogroup Algorithms
-    /// @{
-    /// <summary>
+	/// \addtogroup SystemEx.Algorithms
+	/// @{
+	/// <summary>
 
 
-    /// <summary>
-    /// Provides a three-valued comparison based on standard .NET ordering.
-    /// Determines whether A is smaller, greater, or equal to B.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The type of values being compared.
-    /// </typeparam>
-    public sealed class NetStdCompare<T> : ISimpleCompare<T> {
+	/// <summary>
+	/// Provides a three-valued comparison based on standard .NET ordering.
+	/// Determines whether A is smaller, greater, or equal to B.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The type of values being compared.
+	/// </typeparam>
+	public sealed class NetStdCompare<T> : ISimpleCompare<T> {
         /// <summary>
         /// Returns <see cref="triple.True"/> if A is strictly smaller than B,
         /// <see cref="triple.False"/> if A is strictly greater than B,

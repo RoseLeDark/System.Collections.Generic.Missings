@@ -22,10 +22,12 @@ using SystemEx.Collections.Generic;
 using SystemEx.Drawing;
 
 namespace SystemEx.IO.Provider {
-    /// <summary>
-    /// Provides a base implementation for serializing objects to and from byte arrays.
-    /// </summary>
-    public abstract class ByteSeriablizeProvider  {
+	// \addtogroup SystemEx.IO.Provider
+	/// @{
+	/// <summary>
+	/// Provides a base implementation for serializing objects to and from byte arrays.
+	/// </summary>
+	public abstract class ByteSeriablizeProvider  {
         private IByteFormatSchema m_schema;
         private Endian m_endian;
         /// <summary>
@@ -42,7 +44,7 @@ namespace SystemEx.IO.Provider {
         /// </summary>
         /// <param name="obj">The object to serialize.</param>
         /// <returns>The byte array containing the serialized data.</returns>
-        public Cache? ToBytes<T>(T? obj) {
+        public Cache? ToBytes<U>(U? obj) {
             if ( obj == null ) return null;
             
             var ret = new Cache((int)(m_schema.TotalSize / 8), CacheType.Both); // Bits → Bytes
@@ -62,10 +64,10 @@ namespace SystemEx.IO.Provider {
        /// <summary>
        /// Deserializes the specified byte array to an object.
        /// </summary>
-       /// <typeparam name="T">The type of the object to deserialize.</typeparam>
+       /// <typeparam name="U">The type of the object to deserialize.</typeparam>
        /// <param name="obj">The byte array containing the serialized data.</param>
        /// <returns>The deserialized object.</returns>
-        public T? FromBytes<T>(Cache obj)  {
+        public object? FromBytes(Cache obj)  {
  
             var entries = new Map<string, byte[]>();
 
@@ -80,7 +82,7 @@ namespace SystemEx.IO.Provider {
 
                 entries.Add(new Pair<string, byte[]>(name, raw) );
             }
-            return (T)CreateObjectFromEntrys(entries, m_endian)!;
+            return CreateObjectFromEntrys(entries, m_endian)!;
         }
         /// <summary>
         /// Gets the bytes for the specified entry.
@@ -89,7 +91,7 @@ namespace SystemEx.IO.Provider {
         /// <param name="name">The entry</param>
         /// <param name="endian">Endian</param>
         /// <returns></returns>
-        protected abstract FixedVector<byte> GetBytesForEntry(object obj, string name, Endian endian);
+        protected abstract FixedVector<byte> GetBytesForEntry( object obj, string name, Endian endian);
         /// <summary>
         /// Gets the size of the specified entry.
         /// </summary>
@@ -107,4 +109,5 @@ namespace SystemEx.IO.Provider {
         protected abstract object? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian);
 
     }
+	//@}
 }

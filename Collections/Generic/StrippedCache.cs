@@ -38,75 +38,80 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         private readonly FixedVector<byte> m_segmentTemp;
 
-        /// <summary>
-        /// Additional cache segments beyond the base segment.
-        /// </summary>
-        private readonly Cache[] m_caches;
+		/// <summary>
+		/// Total length of all segments combined.
+		/// </summary>
+		private readonly ulong m_totalLength;
+
+		/// <summary>
+		/// Additional cache segments beyond the base segment.
+		/// </summary>
+		private readonly Cache[] m_caches;
         /// <summary>
         /// Gets the total length of the cache in bytes.
         /// </summary>
-        public override ulong Length => LongLength;
+        public override ulong Length => m_totalLength;
 
-        /// <summary>
-        /// Creates a <see cref="FlexSpan{T}"/> view into the stripped cache at the
-        /// specified global offset. The stripped cache is composed of multiple
-        /// fixed-size cache segments arranged sequentially. This method resolves
-        /// the global position into the correct segment and returns a span view
-        /// over that segment's internal buffer.
-        /// 
-        /// The returned span does not allocate and directly references the
-        /// underlying segment storage.
-        /// </summary>
-        /// <param name="start">
-        /// Global byte offset within the combined stripped-cache space.
-        /// Must be within the range <c>[0, LongLength)</c>.
-        /// </param>
-        /// <param name="mode">
-        /// Indexing mode used by the returned <see cref="FlexSpan{T}"/>.
-        /// Supports System, Reverse, and Ring indexing.
-        /// </param>
-        /// <returns>
-        /// A <see cref="FlexSpan{T}"/> referencing the correct cache segment
-        /// at the resolved local offset.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when <paramref name="start"/> is outside the valid range.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public override VectorFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System ) {
-            if ( start < 0 || start >= (long)LongLength )
-                throw new ArgumentOutOfRangeException(nameof(start));
+		/// <summary>
+		/// Creates a new segmented cache with the specified number of segments
+		/// and segment size.
+		/// </summary>
+		/// <param name="cacheCount">The total number of segments.</param>
+		/// <param name="cacheSize">The size of each segment in bytes.</param>
+		public StrippedCache ( int cacheCount, int cacheSize ) : base(cacheSize, CacheType.Both) {
 
-            long segmentIndex = start / (long)base.LongLength;
-            long localOffset  = start % (long)base.LongLength;
+			m_caches = new Cache[cacheCount - 1];
+			for ( int i = 0 ; i < cacheCount - 1 ; i++ )
+				m_caches[i] = new Cache(cacheSize, CacheType.Both);
 
-            if ( segmentIndex == 0 ) {
-                // Base cache
-                return base.AsFlexSpan(localOffset, mode);
-            } else {
-                // Other segments
-                return m_caches[segmentIndex - 1].AsFlexSpan(localOffset, mode);
-            }
-        }
+			m_totalLength = (ulong)(cacheCount * cacheSize);
+			// m_currentCache = 0;
+			SetSavePosition(0);
 
-        /// <summary>
-        /// Creates a new segmented cache with the specified number of segments
-        /// and segment size.
-        /// </summary>
-        /// <param name="cacheCount">The total number of segments.</param>
-        /// <param name="cacheSize">The size of each segment in bytes.</param>
-        public StrippedCache (int cacheCount, int cacheSize) : base(cacheSize, CacheType.Both) {
+			m_segmentTemp = new FixedVector<byte>(cacheSize);
+		}
 
-            m_caches = new Cache[cacheCount-1];
-            for ( int i = 0; i < cacheCount-1; i++ )
-                m_caches[i] = new Cache(cacheSize, CacheType.Both);
+		/// <summary>
+		/// Creates a <see cref="FlexSpan{T}"/> view into the stripped cache at the
+		/// specified global offset. The stripped cache is composed of multiple
+		/// fixed-size cache segments arranged sequentially. This method resolves
+		/// the global position into the correct segment and returns a span view
+		/// over that segment's internal buffer.
+		/// 
+		/// The returned span does not allocate and directly references the
+		/// underlying segment storage.
+		/// </summary>
+		/// <param name="start">
+		/// Global byte offset within the combined stripped-cache space.
+		/// Must be within the range <c>[0, LongLength)</c>.
+		/// </param>
+		/// <param name="mode">
+		/// Indexing mode used by the returned <see cref="FlexSpan{T}"/>.
+		/// Supports System, Reverse, and Ring indexing.
+		/// </param>
+		/// <returns>
+		/// A <see cref="FlexSpan{T}"/> referencing the correct cache segment
+		/// at the resolved local offset.
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown when <paramref name="start"/> is outside the valid range.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public override VectorFlexSpan<byte, FixedVector<byte>> AsFlexSpan ( long start, FlexSpanMode mode = FlexSpanMode.System ) {
+			if ( start < 0 || start >= (long)m_totalLength )
+				throw new ArgumentOutOfRangeException(nameof(start));
 
-            LongLength = (ulong)(cacheCount * cacheSize);
-           // m_currentCache = 0;
-            SetSavePosition(0);
+			long segmentSize = (long)base.Length;
+			long segmentIndex = start / segmentSize;
+			long localOffset = start % segmentSize;
 
-            m_segmentTemp = new FixedVector<byte>(cacheSize);
-        }
+			if ( segmentIndex == 0 )
+				return base.AsFlexSpan(localOffset, mode);
+			else
+				return m_caches[segmentIndex - 1].AsFlexSpan(localOffset, mode);
+		}
+
+        
 
 
         /// <summary>
@@ -116,10 +121,10 @@ namespace SystemEx.Collections.Generic {
         /// <param name="data">The data to write.</param>
         /// <returns>The number of bytes written.</returns>
         public override ulong WriteRange(ulong position, byte[] data) {
-            ulong written = WriteRange(Position + position, (ulong)data.LongLength, data);
-            SetSavePosition(Position + written);
-            return written;
-        }
+			ulong written = WriteRange(Position + position, (ulong)data.LongLength, data);
+			SetSavePosition(Position + written);
+			return written;
+		}
 
         /// <summary>
         /// Writes a range of bytes into the segmented cache.  
@@ -130,60 +135,57 @@ namespace SystemEx.Collections.Generic {
         /// <param name="data">The data to write.</param>
         /// <returns>The number of bytes successfully written.</returns>
         public override ulong WriteRange(ulong start, ulong iend, byte[] data) {
-            if ( iend <= start ) return 0;
-            if ( iend > LongLength ) iend = LongLength;
+			if ( iend <= start ) return 0;
+			if ( iend > m_totalLength ) iend = m_totalLength;
 
-            ulong rangeLen = iend - start;
-            ulong writableLen = (ulong)data.Length < rangeLen ? (ulong)data.Length : rangeLen;
+			ulong rangeLen = iend - start;
+			ulong writableLen = (ulong)data.Length < rangeLen ? (ulong)data.Length : rangeLen;
 
-            ulong totalWritten = 0;
-            ulong pos = start;
-            int dataOffset = 0;
-            ulong segmentSize = base.LongLength;
+			ulong totalWritten = 0;
+			ulong pos = start;
+			int dataOffset = 0;
 
-            while ( totalWritten < writableLen ) {
-                ulong cacheIdx = pos / segmentSize;
-                ulong cacheOff = pos % segmentSize;
-                if ( cacheIdx >= (ulong)(m_caches.Length + 1) ) break;
+			ulong segmentSize = base.Length;
 
-                ulong spaceInCache = segmentSize - cacheOff;
-                ulong remaining = writableLen - totalWritten;
-                uint chunkLen = (uint)((remaining < spaceInCache) ? remaining : spaceInCache);
+			while ( totalWritten < writableLen ) {
+				ulong cacheIdx = pos / segmentSize;
+				ulong cacheOff = pos % segmentSize;
 
-                // Fast path: ganzes data-Array passt und kein Offset nötig
-                if ( chunkLen == data.Length && dataOffset == 0 && cacheOff == 0 ) {
+				if ( cacheIdx >= (ulong)(m_caches.Length + 1) )
+					break;
 
-                    ulong written = (cacheIdx == 0)
-                        ? base.WriteRange(cacheOff, cacheOff + (ulong)chunkLen, data)
-                        : m_caches[cacheIdx - 1].WriteRange(cacheOff, cacheOff + (ulong)chunkLen, data);
+				ulong spaceInCache = segmentSize - cacheOff;
+				ulong remaining = writableLen - totalWritten;
+				uint chunkLen = (uint)((remaining < spaceInCache) ? remaining : spaceInCache);
 
-                    if ( written == 0 ) break;
+				if ( chunkLen == data.Length && dataOffset == 0 && cacheOff == 0 ) {
+					ulong written = (cacheIdx == 0)
+					? base.WriteRange(cacheOff, cacheOff + (ulong)chunkLen, data)
+					: m_caches[cacheIdx - 1].WriteRange(cacheOff, cacheOff + (ulong)chunkLen, data);
 
-                    totalWritten += written;
-                    pos += written;
-                    dataOffset += (int)written;
+					if ( written == 0 ) break;
 
-                } else {
+					totalWritten += written;
+					pos += written;
+					dataOffset += (int)written;
+				} else {
+					m_segmentTemp.CopyFrom(new FixedVector<byte>(data), (uint)dataOffset, 0, chunkLen);
+					byte[] internalBuf = m_segmentTemp.ToNative();
 
-                    m_segmentTemp.CopyFrom(new FixedVector<byte>(data), (uint)dataOffset, 0, chunkLen);
-                    // Hole internen Buffer (ToArray liefert m_elements)
-                    byte[] internalBuf = m_segmentTemp.ToNative();
+					ulong writtenChunk = (cacheIdx == 0)
+					? base.WriteRange(cacheOff, cacheOff + (ulong)chunkLen, internalBuf)
+					: m_caches[cacheIdx - 1].WriteRange(cacheOff, cacheOff + (ulong)chunkLen, internalBuf);
 
-                    // Schreibe den Chunk in den jeweiligen Cache
-                    ulong writtenChunk = (cacheIdx == 0)
-                        ? base.WriteRange(cacheOff, cacheOff + (ulong)chunkLen, internalBuf)
-                        : m_caches[cacheIdx - 1].WriteRange(cacheOff, cacheOff + (ulong)chunkLen, internalBuf);
+					if ( writtenChunk == 0 ) break;
 
-                    if ( writtenChunk == 0 ) break;
+					totalWritten += writtenChunk;
+					pos += writtenChunk;
+					dataOffset += (int)writtenChunk;
+				}
+			}
 
-                    totalWritten += writtenChunk;
-                    pos += writtenChunk;
-                    dataOffset += (int)writtenChunk;
-                }
-            }
-
-            return totalWritten;
-        }
+			return totalWritten;
+		}
 
 
 
@@ -195,13 +197,10 @@ namespace SystemEx.Collections.Generic {
         /// <param name="index">The segment index (0 = base segment).</param>
         /// <returns>The segment data, or <c>null</c> if the index is invalid.</returns>
         public byte[]? ToArray(int index) {
-            byte[]? _ret = null; 
-
-            if ( index == 0 ) _ret = base.ToArray();
-            else if( m_caches.Length > index ) _ret = m_caches[index].ToArray();
-
-            return _ret;
-        }
+			if ( index == 0 ) return base.ToArray();
+			if ( index < m_caches.Length ) return m_caches[index].ToArray();
+			return null;
+		}
 
 
     }

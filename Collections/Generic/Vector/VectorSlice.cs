@@ -18,8 +18,16 @@
 using SystemEx.Threading;
 
 namespace SystemEx.Collections.Generic {
-     
-    public struct SubSlice<T, TContainer>
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// SubSlice describes a mathematical range and ownership state.
+	/// </summary>
+	/// <typeparam name="T">Element type stored in the container.</typeparam>
+	/// <typeparam name="TContainer">
+	/// Container type implementing <see cref="IVector{T}"/>.
+	/// </typeparam>
+	public struct SubSlice<T, TContainer>
         where TContainer : IVector<T> {
 
         private long m_start;
@@ -29,7 +37,7 @@ namespace SystemEx.Collections.Generic {
         private LightLock m_lock;
         private int m_managedID;
 
-        public bool HasOwner => m_managedID != -1;
+        public bool HasOwner => m_managedID > -1;
 
         public SubSlice ( long sliceStart, long sliceLen ) {
             m_start = sliceStart;
@@ -39,6 +47,9 @@ namespace SystemEx.Collections.Generic {
             m_end = m_start + m_len;
         }
 
+        /// <summary>
+        /// Get the real index 
+        /// </summary>
         public long GetIndex ( int sub_index ) {
             long _ret = -1;
             var _index = sub_index + m_start;
@@ -49,40 +60,59 @@ namespace SystemEx.Collections.Generic {
             
             return _ret;
         }
-
+        /// <summary>
+        /// Is the given id he owner of this SubSlice
+        /// </summary>
         internal bool IsOwner(int id) {
-            bool _ret = false;
-            if ( m_lock.Lock() ) {
-                _ret =  m_managedID == id;
-            }
-            return _ret;
-        }
- 
-        internal bool SetOwner(int id) {
-            bool _ret = false;
 
-            if(m_lock.Lock()) {
-                if ( m_managedID == -1 ) { 
-                    m_managedID = id;
-                    _ret = true;
+			using ( var _l = new ScopedLock<LightLock>(ref m_lock) ) {
+                return  m_managedID == id;
+            }
+        }
+		/// <summary>
+		/// Assigns ownership to a thread if this currently unowned.
+		/// Ownership is exclusive: only one thread may own a slice at any time.
+		/// </summary>
+		/// <param name="id">The requesting thread ID.</param>
+		/// <returns>
+		/// <c>true</c> if ownership was successfully assigned; otherwise <c>false</c>.
+		/// </returns>
+		internal Result SetOwner (int id) {
+
+			try {
+				using ( var _l = new ScopedLock<LightLock>(ref m_lock) ) {
+                    if ( !HasOwner ) {
+                        m_managedID = id;
+                        return new Result(true);
+                    } else {
+						return new Result(false);
+					}
+				}
+			} catch ( Exception ex ) {
+				return new Result(ex);
+			}
+		}
+		/// <summary>
+		/// Unset the ownership
+		/// Ownership is exclusive: only one thread may own a slice at any time.
+		/// </summary>
+		/// <param name="id">The requesting thread ID.</param>
+		/// <c>true</c> if ownership was successfully unassigned; otherwise <c>false</c>.
+		internal Result UnsetOwner(int id) {
+            try {
+                using ( var _l = new ScopedLock<LightLock>(ref m_lock) ) {
+                    if ( m_managedID == Thread.CurrentThread.ManagedThreadId ) {
+                        m_managedID = -1;
+						return new Result(true);
+					} else {
+						return new Result(false);
+					}
                 }
-                m_lock.Unlock();
-            }
-            return _ret;
-        }
-
-        internal bool UnsetOwner(int id) {
-            bool _ret = false;
-
-            if ( m_lock.Lock() ) {
-                if ( m_managedID == Thread.CurrentThread.ManagedThreadId ) {
-                    m_managedID = -1;
-                    _ret = true;
-                }
-                m_lock.Unlock();
-            }
-            return _ret;
-        }
+            } catch(Exception ex) {
+				return new Result(ex);
+			}
+			
+		}
     }
 
 
@@ -154,14 +184,12 @@ namespace SystemEx.Collections.Generic {
         /// <returns>
         /// <c>true</c> if ownership was successfully assigned; otherwise <c>false</c>.
         /// </returns>
-        public bool SetOwner( SubSlice<T, TContainer> slice, int thread_id ) {
-            bool _ret = false;
-            
+        public Result SetOwner( SubSlice<T, TContainer> slice, int thread_id ) {
 
             if (!slice.HasOwner ) {
-                _ret = slice.SetOwner(thread_id);
+                return slice.SetOwner(thread_id);
             }
-            return _ret;
+            return new Result(false);
         }
 
         /// <summary>
@@ -179,7 +207,8 @@ namespace SystemEx.Collections.Generic {
 
             if ( !(sliceID < 0 || sliceID >= m_subSlices.Length) ) {
                 if(!m_subSlices[sliceID].HasOwner) {
-                    _ret = m_subSlices[sliceID].SetOwner(thread_id);
+                    var __ret = m_subSlices[sliceID].SetOwner(thread_id);
+                    _ret = (bool)(__ret.Get()!);
                 }
             }
                 
@@ -223,4 +252,5 @@ namespace SystemEx.Collections.Generic {
                 m_subSlices.Equals(other.m_subSlices);
         }
     }
+    ///@}
 }

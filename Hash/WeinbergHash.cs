@@ -20,12 +20,12 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Implements the Weinberg hash algorithm.
-    /// </summary>
-    public sealed class WeinbergHash : IHash {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Implements the Weinberg hash algorithm.
+	/// </summary>
+	public sealed class WeinbergHash : IHash {
 
         Endian m_endian;
         /// <summary>

@@ -19,12 +19,12 @@ using System.Numerics;
 using System.Reflection;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines how the search algorithm treats edge weights during traversal.
-    /// </summary>
-    public enum SearchType {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines how the search algorithm treats edge weights during traversal.
+	/// </summary>
+	public enum SearchType {
         /// <summary>
         /// Subtract the edge weight from the current energy: energy = energy - weight.
         /// </summary>

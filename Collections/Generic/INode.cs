@@ -16,15 +16,15 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines the basic contract for a node in a multi‑linked structure,
-    /// such as a tree, graph, or intrusive node network.
-    /// Provides access to the stored value and metadata about child counts.
-    /// </summary>
-    /// <typeparam name="T">The type of value stored in the node.</typeparam>
-    public interface INode<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines the basic contract for a node in a multi‑linked structure,
+	/// such as a tree, graph, or intrusive node network.
+	/// Provides access to the stored value and metadata about child counts.
+	/// </summary>
+	/// <typeparam name="T">The type of value stored in the node.</typeparam>
+	public interface INode<T> {
 
         /// <summary>
         /// Gets or sets the value stored in this node.

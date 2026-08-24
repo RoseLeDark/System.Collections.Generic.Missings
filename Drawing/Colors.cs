@@ -16,8 +16,8 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
+	/// \addtogroup SystemEx.Drawing
+	/// @{
 
 	/// <summary>
 	/// Brown Colors Group

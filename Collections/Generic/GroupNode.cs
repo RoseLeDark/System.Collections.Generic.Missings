@@ -18,16 +18,16 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents a grouping node that stores an arbitrary number of intrusive
-    /// <see cref="Node{T}"/> instances inside a standard <see cref="List{T}"/>.  
-    /// Unlike <see cref="Node{T}"/>’s own Prev/Next chain, a <see cref="GroupNode{T}"/>
-    /// does not form a linked structure; it simply aggregates nodes into a collection.
-    /// </summary>
-    /// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
-    public class GroupNode<T> : Node<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a grouping node that stores an arbitrary number of intrusive
+	/// <see cref="Node{T}"/> instances inside a standard <see cref="List{T}"/>.  
+	/// Unlike <see cref="Node{T}"/>’s own Prev/Next chain, a <see cref="GroupNode{T}"/>
+	/// does not form a linked structure; it simply aggregates nodes into a collection.
+	/// </summary>
+	/// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
+	public class GroupNode<T> : Node<T> {
         /// <summary>
         /// Internal list storing all nodes that belong to this group.
         /// </summary>

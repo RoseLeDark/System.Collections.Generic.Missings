@@ -1,16 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 
 namespace SystemEx.Random {
 
-
-    /// <summary>
-    /// Represents a generic seed source for random number generators.
-    /// Implementations provide an array of 32‑bit seed values, support
-    /// indexed access, and may update their internal state when required.
-    /// </summary>
-    public interface ISeed {
+	/// \addtogroup SystemEx.Random
+	/// @{
+	/// <summary>
+	/// Represents a generic seed source for random number generators.
+	/// Implementations provide an array of 32‑bit seed values, support
+	/// indexed access, and may update their internal state when required.
+	/// </summary>
+	public interface ISeed {
         /// <summary>
         /// Returns the underlying seed values as an array of 32‑bit unsigned integers.
         /// The returned array defines the complete state of the seed at the time of access.
@@ -64,6 +78,6 @@ namespace SystemEx.Random {
         void Update ( T value );
     }
 
-
+	///@}
 
 }

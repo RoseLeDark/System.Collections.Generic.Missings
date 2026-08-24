@@ -19,18 +19,16 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 namespace SystemEx.Runtime.InteropServices.Platform {
-    /// \addtogroup Runtime
-    /// @{
-    /// \addtogroup Platform
-    /// @{
-    /// <summary>
-    /// Provides Linux-specific native module loading and symbol resolution
-    /// using the <c>libdl</c> API.  
-    /// This backend is responsible for locating shared objects (.so),
-    /// loading them via <c>dlopen</c>, resolving exported functions via
-    /// <c>dlsym</c>, and unloading modules via <c>dlclose</c>.
-    /// </summary>
-    [SupportedOSPlatform("linux")]
+	/// \addtogroup SystemEx.Runtime.InteropServices.Platform
+	/// @{
+	/// <summary>
+	/// Provides Linux-specific native module loading and symbol resolution
+	/// using the <c>libdl</c> API.  
+	/// This backend is responsible for locating shared objects (.so),
+	/// loading them via <c>dlopen</c>, resolving exported functions via
+	/// <c>dlsym</c>, and unloading modules via <c>dlclose</c>.
+	/// </summary>
+	[SupportedOSPlatform("linux")]
     internal class LinuxProcLoader {
 
         /// <summary>
@@ -141,7 +139,6 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+	/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

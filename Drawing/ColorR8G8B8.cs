@@ -16,12 +16,12 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents the qualitative contrast level between two colors.
-    /// </summary>
-    public enum ContrastLevel {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents the qualitative contrast level between two colors.
+	/// </summary>
+	public enum ContrastLevel {
         /// <summary>Colors are nearly identical with minimal visible difference.</summary>
         VeryLow,
 

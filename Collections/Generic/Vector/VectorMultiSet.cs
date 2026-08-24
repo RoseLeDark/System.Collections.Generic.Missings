@@ -16,24 +16,24 @@
  */
 using System.Runtime.CompilerServices;
 using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
 
 namespace SystemEx.Collections.Generic {
 
-
-    /// <summary>
-    /// Equivalent to a std::flat_multiset, but implemented as an open, non-owning sorted view 
-    /// over any IContainerEx instance. The MultiSet struct does not store elements itself; 
-    /// it maintains ordering by sorting the referenced container using either a 
-    /// user-provided sorting delegate or a built-in BubbleSort fallback when no 
-    /// delegate is supplied.
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the container.</typeparam>
-    /// <typeparam name="TContainer">
-    /// The container type that stores the elements. 
-    /// Must implement IContainerEx for the same element type.
-    /// </typeparam>
-    public ref struct VectorMultiSet<T, TContainer> : IEquatable<VectorMultiSet<T, TContainer>>
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Equivalent to a std::flat_multiset, but implemented as an open, non-owning sorted view 
+	/// over any IContainerEx instance. The MultiSet struct does not store elements itself; 
+	/// it maintains ordering by sorting the referenced container using either a 
+	/// user-provided sorting delegate or a built-in BubbleSort fallback when no 
+	/// delegate is supplied.
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the container.</typeparam>
+	/// <typeparam name="TContainer">
+	/// The container type that stores the elements. 
+	/// Must implement IContainerEx for the same element type.
+	/// </typeparam>
+	public ref struct VectorMultiSet<T, TContainer> : IEquatable<VectorMultiSet<T, TContainer>>
         where TContainer : IVector<T>, ISwappable<long>
          {
 
@@ -453,4 +453,5 @@ namespace SystemEx.Collections.Generic {
         }
 
     }
+    ///@}
 }

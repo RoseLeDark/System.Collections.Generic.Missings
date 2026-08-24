@@ -1,29 +1,43 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// \addtogroup interfaces
-    /// @{
-    /// <summary>
-    /// Defines a typed, fixed‑stride buffer abstraction for unmanaged element types.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// <c>ITypeBuffer&lt;T&gt;</c> represents a simple, element‑oriented view over a raw byte buffer
-    /// (for example a <c>Cache</c>). Implementations expose element access, cloning, clearing and
-    /// fill semantics for unmanaged value types. All conversions between <typeparamref name="T"/>
-    /// and the underlying bytes are the responsibility of the concrete implementation.
-    /// </para>
-    /// <para>
-    /// The interface intentionally keeps the surface small and portable: implementations may perform
-    /// endian conversion, bounds validation, and copy semantics as required by the runtime.
-    /// </para>
-    /// </remarks>
-    /// <typeparam name="T">An unmanaged value type stored in the buffer.</typeparam>
-    public interface ITypeBuffer<T>
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines a typed, fixed‑stride buffer abstraction for unmanaged element types.
+	/// </summary>
+	/// <remarks>
+	/// <para>
+	/// <c>ITypeBuffer&lt;T&gt;</c> represents a simple, element‑oriented view over a raw byte buffer
+	/// (for example a <c>Cache</c>). Implementations expose element access, cloning, clearing and
+	/// fill semantics for unmanaged value types. All conversions between <typeparamref name="T"/>
+	/// and the underlying bytes are the responsibility of the concrete implementation.
+	/// </para>
+	/// <para>
+	/// The interface intentionally keeps the surface small and portable: implementations may perform
+	/// endian conversion, bounds validation, and copy semantics as required by the runtime.
+	/// </para>
+	/// </remarks>
+	/// <typeparam name="T">An unmanaged value type stored in the buffer.</typeparam>
+	public interface ITypeBuffer<T>
         where T : unmanaged {
         /// <summary>
         /// Gets the number of elements contained in the buffer.
@@ -82,7 +96,6 @@ namespace SystemEx.Collections.Generic {
         ITypeBuffer<T> Clone ();
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+	/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

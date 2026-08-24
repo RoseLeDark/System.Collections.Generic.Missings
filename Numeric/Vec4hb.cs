@@ -23,38 +23,38 @@ using SystemEx.Numeric.Utils;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-    /// \addtogroup Numeric
-    /// @{
-    /// <summary>
-    /// Represents a 4‑component Half16bing‑point vector.
-    ///
-    /// <para>
-    /// <see cref="Vec4hb"/> is a lightweight numeric type used throughout SystemEx
-    /// for geometry, MathF utilities, device operations, and compute kernels.
-    /// It stores two <see cref="Half16b"/> values (<c>X</c> and <c>Y</c>) in a
-    /// sequential memory layout, making it compatible with native interop and
-    /// high‑performance compute backends.
-    /// </para>
-    ///
-    /// <para>
-    /// The struct is annotated with <see cref="HashAlgorithmAttribute"/> to enable
-    /// attribute‑driven hashing via <see cref="HashFactory"/>.  
-    /// BernsteinHash is used because it is fast, byte‑linear, and ideal for small
-    /// fixed‑size numeric types such as vectors.
-    /// </para>
-    ///
-    /// <para>
-    /// <see cref="Vec4hb"/> implements multiple comparison and hashing interfaces:
-    /// <list type="bullet">
-    /// <item><description><see cref="IComparable"/> and <see cref="IComparable{T}"/> for ordering</description></item>
-    /// <item><description><see cref="IEquatable{T}"/> for equality checks</description></item>
-    /// <item><description><see cref="IHashable{T}"/> for deterministic byte‑level hashing</description></item>
-    /// </list>
-    /// This makes the type suitable for use in dictionaries, sorting, spatial
-    /// hashing, and compute pipelines.
-    /// </para>
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+	/// \addtogroup SystemEx.Numeric
+	/// @{
+	/// <summary>
+	/// Represents a 4‑component Half16bing‑point vector.
+	///
+	/// <para>
+	/// <see cref="Vec4hb"/> is a lightweight numeric type used throughout SystemEx
+	/// for geometry, MathF utilities, device operations, and compute kernels.
+	/// It stores two <see cref="Half16b"/> values (<c>X</c> and <c>Y</c>) in a
+	/// sequential memory layout, making it compatible with native interop and
+	/// high‑performance compute backends.
+	/// </para>
+	///
+	/// <para>
+	/// The struct is annotated with <see cref="HashAlgorithmAttribute"/> to enable
+	/// attribute‑driven hashing via <see cref="HashFactory"/>.  
+	/// BernsteinHash is used because it is fast, byte‑linear, and ideal for small
+	/// fixed‑size numeric types such as vectors.
+	/// </para>
+	///
+	/// <para>
+	/// <see cref="Vec4hb"/> implements multiple comparison and hashing interfaces:
+	/// <list type="bullet">
+	/// <item><description><see cref="IComparable"/> and <see cref="IComparable{T}"/> for ordering</description></item>
+	/// <item><description><see cref="IEquatable{T}"/> for equality checks</description></item>
+	/// <item><description><see cref="IHashable{T}"/> for deterministic byte‑level hashing</description></item>
+	/// </list>
+	/// This makes the type suitable for use in dictionaries, sorting, spatial
+	/// hashing, and compute pipelines.
+	/// </para>
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
     [HashAlgorithm(typeof(BernsteinHash), Endian.System)]
     public struct Vec4hb : IComparable, IComparableEx<Vec4hb>, IComparable<Vec4hb>, IEquatable<Vec4hb>, IHashable<Vec4hb> {
         private Half16b m_x;

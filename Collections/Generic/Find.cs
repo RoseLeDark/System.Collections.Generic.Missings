@@ -18,40 +18,40 @@
 
 using System.Numerics;
 using System.Runtime.InteropServices;
-using SystemEx.Algorithms.Interfaces;
+using SystemEx.Algorithms;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Provides search operations over a container implementing <see cref="IVector{T}"/>.
-    /// This struct performs non‑modifying lookups such as first/last occurrence,
-    /// existence checks and counting matches.
-    /// 
-    /// <example>
-    /// Example usage with a vector:
-    /// <code>
-    /// // Create a vector of int with initial values and auto grow enabled
-    /// // AutoGrow is controlled by the second parameter:
-    /// // growSize > 0  -> AutoGrow ON
-    /// // growSize == 0 -> AutoGrow OFF
-    /// var vec = new vector&lt;int&gt;( new int[]{10, 20, 30, 40 } );
-    ///
-    /// var finder = new Find&lt;int, vector&lt;int&gt;&gt;(ref vec);
-    ///
-    /// long first20 = finder.First(20);   // returns 1
-    /// long last20  = finder.Last(20);    // returns 2
-    /// int count20  = finder.Of(20);      // returns 2
-    /// bool exists30 = finder.Exists(30); // returns true
-    /// </code>
-    /// </example>
-    /// </summary>
-    /// <typeparam name="T">The element type stored inside the container.</typeparam>
-    /// <typeparam name="TContainer">
-    /// The container type implementing <see cref="IVector{T}"/> used as the search target.
-    /// </typeparam>
-    public ref struct Find<T, TContainer> where TContainer : IVector<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Provides search operations over a container implementing <see cref="IVector{T}"/>.
+	/// This struct performs non‑modifying lookups such as first/last occurrence,
+	/// existence checks and counting matches.
+	/// 
+	/// <example>
+	/// Example usage with a vector:
+	/// <code>
+	/// // Create a vector of int with initial values and auto grow enabled
+	/// // AutoGrow is controlled by the second parameter:
+	/// // growSize > 0  -> AutoGrow ON
+	/// // growSize == 0 -> AutoGrow OFF
+	/// var vec = new vector&lt;int&gt;( new int[]{10, 20, 30, 40 } );
+	///
+	/// var finder = new Find&lt;int, vector&lt;int&gt;&gt;(ref vec);
+	///
+	/// long first20 = finder.First(20);   // returns 1
+	/// long last20  = finder.Last(20);    // returns 2
+	/// int count20  = finder.Of(20);      // returns 2
+	/// bool exists30 = finder.Exists(30); // returns true
+	/// </code>
+	/// </example>
+	/// </summary>
+	/// <typeparam name="T">The element type stored inside the container.</typeparam>
+	/// <typeparam name="TContainer">
+	/// The container type implementing <see cref="IVector{T}"/> used as the search target.
+	/// </typeparam>
+	public ref struct Find<T, TContainer> where TContainer : IVector<T> {
 
         private ref TContainer m_container;
 

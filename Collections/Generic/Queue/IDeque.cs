@@ -16,14 +16,14 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
 
-    /// <summary>
-    /// Defines the non-generic base interface for double-ended queue (deque) containers.
-    /// A deque extends the basic queue interface with support for operations at both ends.
-    /// </summary>
-    public interface IDeque : IQueue {
+	/// <summary>
+	/// Defines the non-generic base interface for double-ended queue (deque) containers.
+	/// A deque extends the basic queue interface with support for operations at both ends.
+	/// </summary>
+	public interface IDeque : IQueue {
     }
 
     /// <summary>

@@ -21,29 +21,29 @@ using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-    /// \addtogroup Numeric
-    /// @{
-    /// <summary>
-    /// Represents a 16‑bit IEEE‑754 binary16 floating‑point value with full
-    /// bit‑level control over sign, exponent, and mantissa.  
-    /// 
-    /// Half16 is a deterministic, platform‑independent implementation of the
-    /// half‑precision format. Unlike <see cref="System.Half"/>, this type exposes
-    /// all internal fields, supports manual construction, and implements full
-    /// arithmetic without converting to <see cref="float"/>.
-    /// 
-    /// <para>
-    /// The struct is sequentially laid out and marked with
-    /// <see cref="HashAlgorithmAttribute"/> so that hashing can be performed
-    /// deterministically using SystemEx hashing algorithms.
-    /// </para>
-    /// <para>
-    /// Half16 also implements <see cref="IHashable{Half16}"/> so that instances
-    /// can be converted into a deterministic byte sequence for hashing or
-    /// serialization.
-    /// </para>
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+	/// \addtogroup SystemEx.Numeric
+	/// @{
+	/// <summary>
+	/// Represents a 16‑bit IEEE‑754 binary16 floating‑point value with full
+	/// bit‑level control over sign, exponent, and mantissa.  
+	/// 
+	/// Half16 is a deterministic, platform‑independent implementation of the
+	/// half‑precision format. Unlike <see cref="System.Half"/>, this type exposes
+	/// all internal fields, supports manual construction, and implements full
+	/// arithmetic without converting to <see cref="float"/>.
+	/// 
+	/// <para>
+	/// The struct is sequentially laid out and marked with
+	/// <see cref="HashAlgorithmAttribute"/> so that hashing can be performed
+	/// deterministically using SystemEx hashing algorithms.
+	/// </para>
+	/// <para>
+	/// Half16 also implements <see cref="IHashable{Half16}"/> so that instances
+	/// can be converted into a deterministic byte sequence for hashing or
+	/// serialization.
+	/// </para>
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
     [HashAlgorithm(typeof(BernsteinHash), Endian.System)]
     public struct Half16 : IHalf<Half16> {
         private ushort m_value;

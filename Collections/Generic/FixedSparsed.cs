@@ -21,14 +21,16 @@ using SystemEx.Drawing;
 using SystemEx.Threading;
 
 namespace SystemEx.Collections.Generic {
-    /// <summary>
-    /// A sparse container that stores elements in fixed slots without enforcing
-    /// contiguous or linear placement. Slots may be empty, and operations do not
-    /// shift or compact elements. Designed for scenarios where random-access
-    /// sparse storage is required without the overhead of dynamic resizing.
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the container.</typeparam>
-    public struct FixedSparsed<T> : IContainer<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A sparse container that stores elements in fixed slots without enforcing
+	/// contiguous or linear placement. Slots may be empty, and operations do not
+	/// shift or compact elements. Designed for scenarios where random-access
+	/// sparse storage is required without the overhead of dynamic resizing.
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the container.</typeparam>
+	public struct FixedSparsed<T> : IContainer<T> {
         private Optional<T>[] m_elements;
         private long m_index;
 

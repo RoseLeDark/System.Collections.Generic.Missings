@@ -17,21 +17,20 @@
 
 using System.Runtime.CompilerServices;
 using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines a sorting action used by the Set wrapper. 
-    /// The delegate receives the underlying container and its comparer and performs 
-    /// a complete sort operation on the container's elements.
-    /// </summary>
-    /// <typeparam name="TCompare">Comparer type used to compare two elements.</typeparam>
-    /// <typeparam name="TContainer">Container type implementing IContainerEx for T.</typeparam>
-    /// <param name="container">Reference to the container whose elements should be sorted.</param>
-    /// <param name="comparer">Comparer used to determine the ordering of elements.</param>
-    public delegate void SortAction<TCompare, TContainer> ( ref TContainer container, TCompare comparer ) ;
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines a sorting action used by the Set wrapper. 
+	/// The delegate receives the underlying container and its comparer and performs 
+	/// a complete sort operation on the container's elements.
+	/// </summary>
+	/// <typeparam name="TCompare">Comparer type used to compare two elements.</typeparam>
+	/// <typeparam name="TContainer">Container type implementing IContainerEx for T.</typeparam>
+	/// <param name="container">Reference to the container whose elements should be sorted.</param>
+	/// <param name="comparer">Comparer used to determine the ordering of elements.</param>
+	public delegate void SortAction<TCompare, TContainer> ( ref TContainer container, TCompare comparer ) ;
 
     /// <summary>
     /// Equivalent to a std::flat_set, but implemented as an open, non-owning sorted view 

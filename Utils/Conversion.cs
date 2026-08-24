@@ -17,35 +17,136 @@
 using System.Numerics;
 using SystemEx.Collections.Generic;
 using SystemEx.IO.Provider;
+using SystemEx.Numeric;
 
 namespace SystemEx {
-    /// <summary>
-    /// Specifies the byte order used when converting values to and from raw byte
-    /// sequences.
-    /// </summary>
-    public enum Endian {
-        /// <summary>
-        /// Least significant byte first.
-        /// </summary>
-        LittleEndian,
+	// addtogroup SystemEx
+	/// @{
 
-        /// <summary>
-        /// Most significant byte first.
-        /// </summary>
-        BigEndian,
+	/// <summary>
+	/// Specifies the byte order used when converting values to and from raw byte
+	/// sequences.
+	/// 
+	/// <para>
+	/// Endianness determines how multi‑byte numeric values are represented in
+	/// memory and serialized into byte arrays. All conversion methods in
+	/// <see cref="SystemEx.Utils.Conversion"/> support explicit endianness to
+	/// ensure deterministic binary layouts across platforms.
+	/// </para>
+	/// 
+	/// <para>
+	/// The enumeration provides three modes:
+	/// <list type="bullet">
+	/// <item>
+	/// <description>
+	/// <see cref="Endian.LittleEndian"/> — least significant byte first.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// <see cref="Endian.BigEndian"/> — most significant byte first.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// <see cref="Endian.System"/> — use the native endianness of the current
+	/// machine as detected by <see cref="SystemEx.Utils.Conversion.GetEndian"/>.
+	/// </description>
+	/// </item>
+	/// </list>
+	/// </para>
+	/// 
+	/// <para>
+	/// <b>Note:</b> When <see cref="Endian.System"/> is specified, conversion
+	/// methods do not perform byte‑swapping. They serialize values exactly as the
+	/// CPU represents them in memory. This is typically little‑endian on modern
+	/// x86/x64 systems.
+	/// </para>
+	/// </summary>
+	public enum Endian {
 
-        /// <summary>
-        /// 
-        /// </summary>
-        System
+		/// <summary>
+		/// Least significant byte first (little‑endian). This is the native format
+		/// on most modern architectures including x86 and x64.
+		/// </summary>
+		LittleEndian,
+
+		/// <summary>
+		/// Most significant byte first (big‑endian). Common in network protocols
+		/// and some older CPU architectures.
+		/// </summary>
+		BigEndian,
+
+		/// <summary>
+		/// Uses the system’s native endianness as detected by
+		/// <see cref="SystemEx.Utils.Conversion.GetEndian"/>. This mode ensures
+		/// that values are serialized exactly as the CPU stores them in memory,
+		/// without performing any byte‑swapping.
+		/// </summary>
+		System
+	}
 
 
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class Conversion {
+	/// <summary>
+	/// Provides low‑level numeric and binary conversion utilities, including
+	/// endian‑aware serialization, deserialization, boundary alignment, and
+	/// human‑readable size parsing.
+	/// 
+	/// <para>
+	/// The <see cref="Conversion"/> class forms the core of SystemEx's primitive
+	/// transformation layer. It exposes extension methods for converting all
+	/// built‑in numeric types (<see cref="byte"/>, <see cref="short"/>,
+	/// <see cref="int"/>, <see cref="long"/>, <see cref="float"/>, <see cref="Half16"/>,
+	/// <see cref="double"/>, <see cref="uint"/>, <see cref="ulong"/>, <see cref="Half16b"/>,
+	/// <see cref="ushort"/>) to and from byte arrays using explicit endianness.
+	/// </para>
+	/// 
+	/// <para>
+	/// All <c>ToBytes</c> methods use unsafe pointer assignment to guarantee
+	/// deterministic IEEE‑754 and two’s‑complement representation without
+	/// intermediate boxing or per‑byte arithmetic. Endianness is applied by
+	/// reversing the byte sequence when required.
+	/// </para>
+	/// 
+	/// <para>
+	/// The <c>FromBytes</c> methods perform the inverse operation and reconstruct
+	/// numeric values from byte arrays or <see cref="SystemEx.Collections.Generic.Vector{T}"/>
+	/// instances. Overloads accepting an offset allow extracting values from
+	/// structured binary buffers.
+	/// </para>
+	/// 
+	/// <para>
+	/// Additional helpers include:
+	/// <list type="bullet">
+	/// <item>
+	/// <description>
+	/// <see cref="GetEndian"/> — detects the system’s native endianness.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// <see cref="ToBoundary{T}(T, T)"/> — aligns a numeric value upward to the
+	/// nearest multiple of a boundary using generic math.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// <see cref="SizeCalc(string)"/> — parses human‑readable size strings such as
+	/// <c>"4Ki"</c>, <c>"128M"</c>, <c>"2Gi"</c>, <c>"512B"</c>, converting them
+	/// into byte counts using binary (Ki/Mi/Gi) or decimal (K/M/G) multipliers.
+	/// </description>
+	/// </item>
+	/// </list>
+	/// </para>
+	/// 
+	/// <para>
+	/// <b>Warning:</b> Many methods in this class use unsafe code and operate
+	/// directly on raw memory. They assume valid input sizes and do not perform
+	/// defensive normalization. Incorrect usage may lead to corrupted buffers or
+	/// undefined behavior.
+	/// </para>
+	/// </summary>
+	public static class Conversion {
         /// <summary>
         /// Provides low‑level conversion utilities for primitive numeric types,
         /// unmanaged structs, and arrays.  
@@ -700,7 +801,7 @@ namespace SystemEx {
             where T : IIsByteSeriablize  {
             if ( m_isLittleEndianSystem == triple.Nin ) InitEndian();
 
-            var x = provider.ToBytes<T>(value);
+            var x = provider.ToBytes(value);
             if(x == null) return new byte[]  {  0 };
             else return x.ToArray();
         }
@@ -712,13 +813,13 @@ namespace SystemEx {
         /// <param name="bytes"></param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        public static T FromBytes<T>(this byte[] bytes, ByteSeriablizeProvider provider) 
+        public static T? FromBytes<T>(this byte[] bytes, ByteSeriablizeProvider provider) 
             where T : IIsByteSeriablize {
             if ( m_isLittleEndianSystem == triple.Nin ) InitEndian();
 
             var x = new Cache(bytes, CacheType.OnlySystem);
 
-            return provider.FromBytes<T>(x)!;
+            return (T?)provider.FromBytes(x)!;
         }
 
         /// <summary>
@@ -1052,16 +1153,9 @@ namespace SystemEx {
 
 
         #region HALF
-#if HALF_READY
+
         /// <summary>
-        /// Converts a <see cref="double"/> value into an 8‑byte array using the specified endianness.
-        /// </summary>
-        public unsafe static byte[] ToBytes ( this Half value, Endian endian = Endian.System ) {
-            value.
-            return bytes;
-        }
-        /// <summary>
-        /// Converts byte array into an <see cref="double"/> using the
+        /// Converts byte array into an <see cref="Half16"/> using the
         /// specified endianness. This overload reads the value starting at the given
         /// <paramref name="offsets"/> position and delegates the actual conversion to
         /// the base <c>ToDouble(byte[], Endian)</c> method.
@@ -1083,98 +1177,101 @@ namespace SystemEx {
         /// Thrown when fewer than four bytes are available starting at
         /// <paramref name="offsets"/>.
         /// </exception>
-        public static double ToDouble ( this byte[] bytes, long offsets, Endian endian ) {
-            if ( offsets < 0 )
-                throw new ArgumentOutOfRangeException(nameof(offsets));
+        public static Half16 ToHalf16( this byte[] bytes, long offsets, Endian endian ) {
+			ushort raw = bytes.ToUShort(offsets, endian);
 
-            if ( offsets + 8 > bytes.Length )
-                throw new ArgumentException("uint requires exactly 8 bytes at the given offset");
+			return new Half16(raw);
+		}
 
-            // 8‑Byte‑Slice erzeugen
-            byte[] slice = new byte[8];
-            slice[0] = bytes[offsets + 0];
-            slice[1] = bytes[offsets + 1];
-            slice[2] = bytes[offsets + 2];
-            slice[3] = bytes[offsets + 3];
-            slice[4] = bytes[offsets + 4];
-            slice[5] = bytes[offsets + 5];
-            slice[6] = bytes[offsets + 6];
-            slice[7] = bytes[offsets + 7];
+		/// <summary>
+		/// Converts an 8‑byte array into a <see cref="Half16"/> using the specified endianness.
+		/// </summary>
+		public unsafe static Half16 ToHalf16 ( this byte[] bytes, Endian endian = Endian.System ) {
+            ushort raw = bytes.ToUShort(endian);
 
-            // Die bestehende Methode aufrufen
-            return slice.ToDouble(endian);
-        }
-
-        /// <summary>
-        /// Converts an 8‑byte array into a <see cref="double"/> using the specified endianness.
-        /// </summary>
-        public unsafe static double ToDouble ( this byte[] bytes, Endian endian = Endian.System ) {
-            if ( m_isLittleEndianSystem == triple.Nin ) InitEndian();
-
-            if ( bytes.Length < 8 ) throw new ArgumentException("Double requires at least 8 bytes");
-
-            if ( endian != Endian.System ) {
-                if ( (endian == Endian.BigEndian && m_isLittleEndianSystem == triple.True) ||
-                (endian == Endian.LittleEndian && m_isLittleEndianSystem == triple.False) ) {
-                    byte tmp;
-                    tmp = bytes[0]; bytes[0] = bytes[7]; bytes[7] = tmp;
-                    tmp = bytes[1]; bytes[1] = bytes[6]; bytes[6] = tmp;
-                    tmp = bytes[2]; bytes[2] = bytes[5]; bytes[5] = tmp;
-                    tmp = bytes[3]; bytes[3] = bytes[4]; bytes[4] = tmp;
-                }
-            }
-
-            fixed ( byte* b = bytes )
-                return *(double*)b;
+            return new Half16(raw);
         }
 
         /// <summary>
         /// Converts a Arra<paramref name="bytes"/> into an <see cref="double"/> using the
         /// specified endianness. 
         /// </summary>
-        public static double ToDouble ( this Collections.Generic.Vector<byte> bytes, int offsets = 0, Endian endian = Endian.System ) {
-            if ( offsets < 0 )
-                throw new ArgumentOutOfRangeException(nameof(offsets));
+        public static Half16 ToHalf16 ( this Collections.Generic.Vector<byte> bytes, int offsets = 0, Endian endian = Endian.System ) {
+			ushort raw = bytes.ToUShort(offsets, endian);
+			return new Half16(raw);
+		}
 
-            if ( offsets + 8 > bytes.Count )
-                throw new ArgumentException("uint requires exactly 8 bytes at the given offset");
+		#endregion
 
-            byte[] slice = new byte[8];
-            slice[0] = bytes[offsets + 0];
-            slice[1] = bytes[offsets + 1];
-            slice[2] = bytes[offsets + 2];
-            slice[3] = bytes[offsets + 3];
-            slice[4] = bytes[offsets + 4];
-            slice[5] = bytes[offsets + 5];
-            slice[6] = bytes[offsets + 6];
-            slice[7] = bytes[offsets + 7];
+		#region HALF16b
 
-            // Die bestehende Methode aufrufen
-            return slice.ToDouble(endian);
-        }
-#endif
-        #endregion
+		/// <summary>
+		/// Converts byte array into an <see cref="Half16"/> using the
+		/// specified endianness. This overload reads the value starting at the given
+		/// <paramref name="offsets"/> position and delegates the actual conversion to
+		/// the base <c>ToDouble(byte[], Endian)</c> method.
+		/// </summary>
+		/// <param name="bytes">The source byte array containing the double value.</param>
+		/// <param name="offsets">
+		/// The starting position within <paramref name="bytes"/> from which the value is read.
+		/// </param>
+		/// <param name="endian">
+		/// The endianness used to interpret the extracted the sequence.
+		/// </param>
+		/// <returns>
+		/// The converted value.
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown when <paramref name="offsets"/> is negative.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown when fewer than four bytes are available starting at
+		/// <paramref name="offsets"/>.
+		/// </exception>
+		public static Half16b ToHalf16b ( this byte[] bytes, long offsets, Endian endian ) {
+			ushort raw = bytes.ToUShort(offsets, endian);
+
+			return new Half16b(raw);
+		}
+
+		/// <summary>
+		/// Converts an 8‑byte array into a <see cref="Half16"/> using the specified endianness.
+		/// </summary>
+		public unsafe static Half16b ToHalf16b ( this byte[] bytes, Endian endian = Endian.System ) {
+			ushort raw = bytes.ToUShort(endian);
+
+			return new Half16b(raw);
+		}
+
+		/// <summary>
+		/// Converts a Arra<paramref name="bytes"/> into an <see cref="double"/> using the
+		/// specified endianness. 
+		/// </summary>
+		public static Half16b ToHalf16b ( this Collections.Generic.Vector<byte> bytes, int offsets = 0, Endian endian = Endian.System ) {
+			ushort raw = bytes.ToUShort(offsets, endian);
+			return new Half16b(raw);
+		}
+
+		#endregion
+
+		#region LONG
 
 
 
-        #region LONG
-
-        
-
-        /// <summary>
-        /// Splits a 64-bit unsigned integer into its high and low 32-bit components.
-        /// </summary>
-        /// <param name="value">
-        /// The 64-bit unsigned integer to split.
-        /// </param>
-        /// <returns>
-        /// A <see cref="Pair{T1,T2}"/> where:
-        /// <list type="bullet">
-        /// <item><description><b>Item1</b> is the high 32-bit word (unsigned).</description></item>
-        /// <item><description><b>Item2</b> is the low 32-bit word (signed).</description></item>
-        /// </list>
-        /// </returns>
-        public static Pair<uint, int> ToShort ( this ulong value ) {
+		/// <summary>
+		/// Splits a 64-bit unsigned integer into its high and low 32-bit components.
+		/// </summary>
+		/// <param name="value">
+		/// The 64-bit unsigned integer to split.
+		/// </param>
+		/// <returns>
+		/// A <see cref="Pair{T1,T2}"/> where:
+		/// <list type="bullet">
+		/// <item><description><b>Item1</b> is the high 32-bit word (unsigned).</description></item>
+		/// <item><description><b>Item2</b> is the low 32-bit word (signed).</description></item>
+		/// </list>
+		/// </returns>
+		public static Pair<uint, int> ToShort ( this ulong value ) {
             byte [] arr = value.ToBytes(Endian.LittleEndian);
 
             uint h = arr.ToUInt(4);
@@ -1507,5 +1604,5 @@ namespace SystemEx {
         }
 
     }
-
+	/// @}
 }

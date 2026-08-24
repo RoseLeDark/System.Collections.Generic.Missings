@@ -19,11 +19,13 @@ using System.Text;
 using SystemEx.Collections.Generic;
 using SystemEx.Random;
 
-namespace SystemEx {
-    /// <summary>
-    /// Specifies predefined password lengths for random password generation.
-    /// </summary>
-    public enum RandPasswordLevel {
+namespace SystemEx.Utils {
+	// addtogroup SystemEx.Utils
+	/// @{
+	/// <summary>
+	/// Specifies predefined password lengths for random password generation.
+	/// </summary>
+	public enum RandPasswordLevel {
         /// <summary>
         /// Generates a 16‑character password using the basic character set.
         /// </summary>
@@ -428,4 +430,5 @@ namespace SystemEx {
 
 
     }
+    //@}
 }

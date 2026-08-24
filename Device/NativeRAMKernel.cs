@@ -24,19 +24,21 @@ using Module = SystemEx.Runtime.Module;
 
 
 namespace SystemEx.Device {
-    /// <summary>
-    /// Provides a base implementation for RAM‑based compute kernels that operate on
-    /// <see cref="DeviceSharedBuffer{RamSharedBackend}"/> instances.  
-    /// This class handles module loading, buffer management, backend initialization,
-    /// locking/unlocking of shared buffers, and asynchronous kernel execution.  
-    /// Derived classes only need to implement backend‑specific behavior such as
-    /// buffer creation (<see cref="OnCreate"/>) and kernel invocation (<see cref="OnRun"/>).
-    /// </summary>
-    /// <typeparam name="TD">
-    /// The delegate type representing the native kernel function signature.  
-    /// Must be a <see cref="Delegate"/> compatible with the loaded module.
-    /// </typeparam>
-    public abstract class NativeRAMKernel<TD> : IKernel<RamSharedBackend> where TD : Delegate{
+	// \addtogroup SystemEx.Device
+	/// @{
+	/// <summary>
+	/// Provides a base implementation for RAM‑based compute kernels that operate on
+	/// <see cref="DeviceSharedBuffer{RamSharedBackend}"/> instances.  
+	/// This class handles module loading, buffer management, backend initialization,
+	/// locking/unlocking of shared buffers, and asynchronous kernel execution.  
+	/// Derived classes only need to implement backend‑specific behavior such as
+	/// buffer creation (<see cref="OnCreate"/>) and kernel invocation (<see cref="OnRun"/>).
+	/// </summary>
+	/// <typeparam name="TD">
+	/// The delegate type representing the native kernel function signature.  
+	/// Must be a <see cref="Delegate"/> compatible with the loaded module.
+	/// </typeparam>
+	public abstract class NativeRAMKernel<TD> : IKernel<RamSharedBackend> where TD : Delegate{
 
 
         private string m_dllPath = "";
@@ -296,4 +298,5 @@ namespace SystemEx.Device {
             
         }
     }
+    /// @}
 }

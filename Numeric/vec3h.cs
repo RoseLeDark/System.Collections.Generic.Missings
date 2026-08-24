@@ -1,4 +1,20 @@
-﻿using System;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
@@ -10,38 +26,38 @@ using SystemEx.Numeric.Utils;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-    /// \addtogroup Numeric
-    /// @{
-    /// <summary>
-    /// Represents a 3‑component Half16ing‑point vector.
-    ///
-    /// <para>
-    /// <see cref="Vec3h"/> is a lightweight numeric type used throughout SystemEx
-    /// for geometry, math utilities, device operations, and compute kernels.
-    /// It stores two <see cref="Half16"/> values (<c>X</c> and <c>Y</c>) in a
-    /// sequential memory layout, making it compatible with native interop and
-    /// high‑performance compute backends.
-    /// </para>
-    ///
-    /// <para>
-    /// The struct is annotated with <see cref="HashAlgorithmAttribute"/> to enable
-    /// attribute‑driven hashing via <see cref="HashFactory"/>.  
-    /// BernsteinHash is used because it is fast, byte‑linear, and ideal for small
-    /// fixed‑size numeric types such as vectors.
-    /// </para>
-    ///
-    /// <para>
-    /// <see cref="Vec3h"/> implements multiple comparison and hashing interfaces:
-    /// <list type="bullet">
-    /// <item><description><see cref="IComparable"/> and <see cref="IComparable{T}"/> for ordering</description></item>
-    /// <item><description><see cref="IEquatable{T}"/> for equality checks</description></item>
-    /// <item><description><see cref="IHashable{T}"/> for deterministic byte‑level hashing</description></item>
-    /// </list>
-    /// This makes the type suitable for use in dictionaries, sorting, spatial
-    /// hashing, and compute pipelines.
-    /// </para>
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+	/// \addtogroup SystemEx.Numeric
+	/// @{
+	/// <summary>
+	/// Represents a 3‑component Half16ing‑point vector.
+	///
+	/// <para>
+	/// <see cref="Vec3h"/> is a lightweight numeric type used throughout SystemEx
+	/// for geometry, math utilities, device operations, and compute kernels.
+	/// It stores two <see cref="Half16"/> values (<c>X</c> and <c>Y</c>) in a
+	/// sequential memory layout, making it compatible with native interop and
+	/// high‑performance compute backends.
+	/// </para>
+	///
+	/// <para>
+	/// The struct is annotated with <see cref="HashAlgorithmAttribute"/> to enable
+	/// attribute‑driven hashing via <see cref="HashFactory"/>.  
+	/// BernsteinHash is used because it is fast, byte‑linear, and ideal for small
+	/// fixed‑size numeric types such as vectors.
+	/// </para>
+	///
+	/// <para>
+	/// <see cref="Vec3h"/> implements multiple comparison and hashing interfaces:
+	/// <list type="bullet">
+	/// <item><description><see cref="IComparable"/> and <see cref="IComparable{T}"/> for ordering</description></item>
+	/// <item><description><see cref="IEquatable{T}"/> for equality checks</description></item>
+	/// <item><description><see cref="IHashable{T}"/> for deterministic byte‑level hashing</description></item>
+	/// </list>
+	/// This makes the type suitable for use in dictionaries, sorting, spatial
+	/// hashing, and compute pipelines.
+	/// </para>
+	/// </summary>
+	[StructLayout(LayoutKind.Sequential)]
     [HashAlgorithm(typeof(BernsteinHash), Endian.System)]
     public struct Vec3h : IComparable, IComparableEx<Vec3h>, IComparable<Vec3h>, IEquatable<Vec3h>, IHashable<Vec3h> {
         private Half16 m_x;

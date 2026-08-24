@@ -16,12 +16,12 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Represents a cluster node in a weighted graph structure.
-    /// </summary>
-    public interface ICluster {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a cluster node in a weighted graph structure.
+	/// </summary>
+	public interface ICluster {
         /// <summary>
         /// Number of direct children (outgoing edges) of this node.
         /// </summary>

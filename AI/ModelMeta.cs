@@ -17,15 +17,15 @@
 
 
 namespace SystemEx.AI {
-    /// \addtogroup AI
-    /// @{
-    /// <summary>
-    /// Defines the data format returned by a backend during model execution.
-    /// 
-    /// This enum follows the AI_FORMAT_XXX naming convention and provides
-    /// stable integer identifiers for all supported formats.
-    /// </summary>
-    public enum MetaFormat : int {
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Defines the data format returned by a backend during model execution.
+	/// 
+	/// This enum follows the AI_FORMAT_XXX naming convention and provides
+	/// stable integer identifiers for all supported formats.
+	/// </summary>
+	public enum MetaFormat : int {
         // ---------------------------------------------------------------------
         // Standard Web/API formats
         // ---------------------------------------------------------------------

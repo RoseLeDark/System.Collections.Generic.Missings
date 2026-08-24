@@ -18,33 +18,44 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TCompare"></typeparam>
-    /// <param name="container"></param>
-    /// <param name="comparer"></param>
-    public delegate void PriorityQueueAction<T, TCompare> ( ref T[] container, TCompare comparer );
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Represents a delegate that performs a sorting or rearrangement operation
+	/// on a priority‑queue container.  
+	/// The action receives the underlying array by reference and a comparison
+	/// strategy used to determine the ordering of elements.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The element type stored in the container.
+	/// </typeparam>
+	/// <typeparam name="TCompare">
+	/// The comparison strategy used to evaluate element ordering.
+	/// </typeparam>
+	/// <param name="container">
+	/// Reference to the underlying array of elements to be sorted or rearranged.
+	/// </param>
+	/// <param name="comparer">
+	/// The comparison provider used to determine the relative ordering of elements.
+	/// </param>
+	public delegate void PriorityQueueAction<T, TCompare> ( ref T[] container, TCompare comparer );
 
-    /// <summary>
-    /// A Simple priority queue implemented .  
-    /// Elements are stored as <see cref="Pair{T, TU}"/> where <c>T</c> is the value
-    /// and <c>TU</c> is the priority.  
-    /// Supports enqueue, dequeue, peek, priority updates, cloning, and median‑based
-    /// selection.
-    /// </summary>
-    /// <typeparam name="TElement">The stored value type.</typeparam>
-    /// <typeparam name="TPriority">
-    /// The priority type, must implement <see cref="INumber{TU}"/> to allow
-    /// arithmetic and comparison operations.
-    /// </typeparam>
-    public struct PriorityQueue<TElement, TPriority> : IAutoGrowe , ISwappable<long>
+
+	/// <summary>
+	/// A Simple priority queue implemented .  
+	/// Elements are stored as <see cref="Pair{T, TU}"/> where <c>T</c> is the value
+	/// and <c>TU</c> is the priority.  
+	/// Supports enqueue, dequeue, peek, priority updates, cloning, and median‑based
+	/// selection.
+	/// </summary>
+	/// <typeparam name="TElement">The stored value type.</typeparam>
+	/// <typeparam name="TPriority">
+	/// The priority type, must implement <see cref="INumber{TU}"/> to allow
+	/// arithmetic and comparison operations.
+	/// </typeparam>
+	public struct PriorityQueue<TElement, TPriority> : IAutoGrowe , ISwappable<long>
         where TPriority : INumber<TPriority>
         where TElement : notnull {
 
@@ -134,11 +145,21 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public bool AutoGrow { get => (m_growSize == 0 ? false : m_autoGrow); set => m_autoGrow = value; }
 
-        public bool AutoSort => m_autoSort;
+		/// <summary>
+		/// Indicates whether the queue automatically sorts itself after insertions.
+		/// </summary>
+		public bool AutoSort => m_autoSort;
 
-        public bool IsDirty => m_isDirty;
+		/// <summary>
+		/// Indicates whether the internal buffer has been modified without being sorted.
+		/// </summary>
+		public bool IsDirty => m_isDirty;
 
-        public PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>>? SortFunctions {
+		/// <summary>
+		/// Gets or sets the delegate used to sort the queue.
+		/// When <see cref="AutoSort"/> is enabled, assigning a new sorter triggers sorting.
+		/// </summary>
+		public PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>>? SortFunctions {
             get => m_sorter;
             set {
                 m_sorter = value;
@@ -155,15 +176,21 @@ namespace SystemEx.Collections.Generic {
             m_isDirty = false;
             m_sorter = SortActions.ShellSort< Pair<TElement, TPriority>  >;
         }
-
-        public PriorityQueue ( int size, int growSize = 2, PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>>? sorter = null) {
+		/// <summary>
+		/// Creates a priority queue 
+		/// </summary>
+		public PriorityQueue ( int size, int growSize = 2, PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>>? sorter = null) {
 
             m_map = new Pair<TElement, TPriority>[size];
             m_sorter = sorter;
             m_autoSort = true;
             m_isDirty = false;
         }
-        public PriorityQueue ( Pair<TElement, TPriority>[] elements, int growSize = 2, PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>>? sorter = null) {
+
+		/// <summary>
+		/// Creates a priority queue from given elements, with sort and custom priority comparison.
+		/// </summary>
+		public PriorityQueue ( Pair<TElement, TPriority>[] elements, int growSize = 2, PriorityQueueAction<Pair<TElement, TPriority>, ISimpleCompare<Pair<TElement, TPriority>>>? sorter = null) {
 
             m_map = new Pair<TElement, TPriority>[elements.LongLength];
             Buffer.LongCopy(elements, 0, m_map, 0, elements.LongLength);
@@ -206,7 +233,17 @@ namespace SystemEx.Collections.Generic {
             }
             return _ret;
         }
-        public bool TryPeek ( out Optional<TElement> element, out Optional<TPriority> priority ) {
+
+		/// <summary>
+		/// Attempts to retrieve the element with the smallest priority without removing it.
+		/// </summary>
+		/// <param name="element">Receives the value if available.</param>
+		/// <param name="priority">Receives the priority if available.</param>
+		/// <returns>
+		/// True if the queue contains at least one element; otherwise false.
+		/// </returns>
+
+		public bool TryPeek ( out Optional<TElement> element, out Optional<TPriority> priority ) {
             if ( IsEmpty ) {
                 element = Optional<TElement>.NONE;
                 priority = Optional<TPriority>.NONE;
@@ -236,7 +273,17 @@ namespace SystemEx.Collections.Generic {
             m_index--;
             return _ret;
         }
-        public bool TryDequeue ( out Optional<TElement> element, out Optional<TPriority> priority ) {
+
+		/// <summary>
+		/// Attempts to remove and return the element with the smallest priority.
+		/// </summary>
+		/// <param name="element">Receives the dequeued value.</param>
+		/// <param name="priority">Receives the dequeued priority.</param>
+		/// <returns>
+		/// True if an element was removed; otherwise false.
+		/// </returns>
+
+		public bool TryDequeue ( out Optional<TElement> element, out Optional<TPriority> priority ) {
             if ( IsEmpty ) {
                 element = Optional<TElement>.NONE;
                 priority = Optional < TPriority >.NONE;
@@ -253,16 +300,40 @@ namespace SystemEx.Collections.Generic {
             m_index--;
             return true;
         }
-        public Optional<TElement> DequeueEnqueue ( TElement element, TPriority priority ) {
+
+		/// <summary>
+		/// Removes the element with the smallest priority and inserts a new one.
+		/// </summary>
+		/// <param name="element">The value to insert.</param>
+		/// <param name="priority">The priority of the new value.</param>
+		/// <returns>
+		/// The value that was removed from the queue.
+		/// </returns>
+		public Optional<TElement> DequeueEnqueue ( TElement element, TPriority priority ) {
             Optional<TElement> _ret = Dequeue();
             Enqueue(element, priority);
             return _ret;
         }
-        public Optional<TElement> EnqueueDequeue ( TElement element, TPriority priority ) {
+
+		/// <summary>
+		/// Inserts a new element and then removes the element with the smallest priority.
+		/// </summary>
+		/// <param name="element">The value to insert.</param>
+		/// <param name="priority">The priority of the new value.</param>
+		/// <returns>
+		/// The value removed from the queue.
+		/// </returns>
+		public Optional<TElement> EnqueueDequeue ( TElement element, TPriority priority ) {
             Enqueue(element, priority);
             return Dequeue();
         }
-        public void EnqueueRange ( Pair<TElement, TPriority>[] items ) {
+
+		/// <summary>
+		/// Inserts a sequence of (value, priority) pairs into the queue.
+		/// Sorting is temporarily disabled for performance.
+		/// </summary>
+		/// <param name="items">The items to insert.</param>
+		public void EnqueueRange ( Pair<TElement, TPriority>[] items ) {
             bool sort_state = m_autoSort;
             m_autoSort = false;
 
@@ -284,7 +355,14 @@ namespace SystemEx.Collections.Generic {
             if ( AutoSort ) Sort();
             else m_isDirty = true;
         }
-        public void EnqueueRange ( TElement[] elements, TPriority priority ) {
+
+		/// <summary>
+		/// Inserts multiple values into the queue using the same priority for all of them.
+		/// Sorting is temporarily disabled for performance.
+		/// </summary>
+		/// <param name="elements">The values to insert.</param>
+		/// <param name="priority">The priority assigned to each value.</param>
+		public void EnqueueRange ( TElement[] elements, TPriority priority ) {
             bool sort_state = m_autoSort;
             m_autoSort = false;
 
@@ -326,8 +404,14 @@ namespace SystemEx.Collections.Generic {
             if ( AutoSort ) Sort();
             else m_isDirty = true;
         }
-
-        public long EnsureCapacity ( int capacity ) {
+		/// <summary>
+		/// Ensures that the internal buffer has at least the specified capacity.
+		/// </summary>
+		/// <param name="capacity">The minimum required capacity.</param>
+		/// <returns>
+		/// The new buffer size after resizing.
+		/// </returns>
+		public long EnsureCapacity ( int capacity ) {
             Resize(capacity);
 
             return m_map.LongLength;
@@ -362,10 +446,13 @@ namespace SystemEx.Collections.Generic {
             m_map[j] = tmp;
         }
 
-        /// <summary>
-        /// Computes the element whose priority is closest to the median priority.
-        /// </summary>
-        private Pair<TElement, TPriority>? GetClosestToMedian () {
+		/// <summary>
+		/// Computes the element whose priority is closest to the statistical median.
+		/// </summary>
+		/// <returns>
+		/// The element closest to the median priority, or null if the queue is empty.
+		/// </returns>
+		private Pair<TElement, TPriority>? GetClosestToMedian () {
             int n = m_map.Length;
             if ( n == 0 ) return null;
 
@@ -401,7 +488,12 @@ namespace SystemEx.Collections.Generic {
             return best;
         }
 
-        private static TPriority Abs ( TPriority value ) {
+		/// <summary>
+		/// Computes the absolute value of the given priority.
+		/// </summary>
+		/// <param name="value">The priority value.</param>
+		/// <returns>The absolute value.</returns>
+		private static TPriority Abs ( TPriority value ) {
             return value < TPriority.Zero ? -value : value;
         }
 

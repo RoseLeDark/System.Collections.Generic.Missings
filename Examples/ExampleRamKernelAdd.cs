@@ -242,7 +242,8 @@ namespace KernelRamExamples {
                 Console.WriteLine(" Ready");
 
                 // Read result from buffer C
-                Console.WriteLine("C is: {0}", C.ReadInt(0, Endian.System));
+                C.Seek(SeekOrigin.Begin, 0);
+                Console.WriteLine("C is: {0}", C.ReadInt( Endian.System , 0));
             }
             else {
                 Console.WriteLine(" Fail");

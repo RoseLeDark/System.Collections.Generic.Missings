@@ -16,14 +16,12 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// \addtogroup interfaces
-    /// @{
-    /// <summary>
-    /// A lightweight interface for serializable N‑element tuple consisting of strongly typed 
-    /// </summary>
-    public interface ITuple<TKey> where TKey : notnull  {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A lightweight interface for serializable N‑element tuple consisting of strongly typed 
+	/// </summary>
+	public interface ITuple<TKey> where TKey : notnull  {
         /// <summary>
         /// Gets or sets the first element of the pair.
         /// </summary>
@@ -55,7 +53,6 @@ namespace SystemEx.Collections.Generic {
         Optional<object> Get (int index);
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+	/// @}
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

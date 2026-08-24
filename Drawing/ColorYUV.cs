@@ -16,13 +16,13 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a YUV color using floating‑point components.
-    /// Provides basic construction, comparison, and string formatting.
-    /// </summary>
-    public struct ColorYUV : IEquatable<ColorYUV> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a YUV color using floating‑point components.
+	/// Provides basic construction, comparison, and string formatting.
+	/// </summary>
+	public struct ColorYUV : IEquatable<ColorYUV> {
         private float m_y;
         private float m_u;
         private float m_v;

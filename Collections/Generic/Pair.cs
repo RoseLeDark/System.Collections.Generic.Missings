@@ -16,16 +16,16 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A lightweight, serializable two‑element tuple consisting of a strongly typed
-    /// key and value. Implements <see cref="IPair{T, TU}"/> and provides typed
-    /// comparison helpers as well as <see cref="ITuple"/> compatibility.
-    /// </summary>
-    /// <typeparam name="T">The type of the first element (key).</typeparam>
-    /// <typeparam name="TU">The type of the second element (value).</typeparam>
-    [Serializable]
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A lightweight, serializable two‑element tuple consisting of a strongly typed
+	/// key and value. Implements <see cref="IPair{T, TU}"/> and provides typed
+	/// comparison helpers as well as <see cref="ITuple"/> compatibility.
+	/// </summary>
+	/// <typeparam name="T">The type of the first element (key).</typeparam>
+	/// <typeparam name="TU">The type of the second element (value).</typeparam>
+	[Serializable]
     public struct Pair<T, TU> : IPair<T, TU>, IComparable<Pair<T, TU> > where T : notnull {
 
         /// <summary>
@@ -113,6 +113,7 @@ namespace SystemEx.Collections.Generic {
             return index == 0 ? m_key : m_value;
         }
 
+        /// <inheritdoc/>
         public int CompareTo ( Pair<T, TU> other ) {
             return Comparer<T>.Default.Compare(First, other.First);
         }

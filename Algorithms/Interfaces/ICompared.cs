@@ -17,21 +17,20 @@
 
 using SystemEx.Utils;
 
-namespace SystemEx.Algorithms.Interfaces {
-    /// \addtogroup Algorithms
-    /// @{
-    /// \addtogroup interfaces
-    /// @{
-    /// <summary>
-    /// Defines a comparison interface for types that support custom ordering.
-    /// Implementations return a <see cref="CompareResult"/> describing the
-    /// relationship between two values.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The type being compared. The constraint allows <c>ref struct</c> types,
-    /// enabling high‑performance stack‑only comparisons.
-    /// </typeparam>
-    public interface ICompared<T> {
+namespace SystemEx.Algorithms {
+	/// \addtogroup SystemEx.Algorithms
+	/// @{
+
+	/// <summary>
+	/// Defines a comparison interface for types that support custom ordering.
+	/// Implementations return a <see cref="CompareResult"/> describing the
+	/// relationship between two values.
+	/// </summary>
+	/// <typeparam name="T">
+	/// The type being compared. The constraint allows <c>ref struct</c> types,
+	/// enabling high‑performance stack‑only comparisons.
+	/// </typeparam>
+	public interface ICompared<T> {
 
         /// <summary>
         /// Compares two values and returns a <see cref="CompareResult"/> indicating

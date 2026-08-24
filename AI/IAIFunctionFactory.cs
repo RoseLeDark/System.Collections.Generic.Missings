@@ -17,20 +17,45 @@
 
 
 namespace SystemEx.AI {
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Converts an <see cref="IModelTool{T}"/> definition into a backend‑specific 
+	/// function object that can be exposed to an AI model.  
+	/// 
+	/// <para>
+	/// A factory implementing <see cref="IAIFunctionFactory{T, TAITOOL}"/> is used 
+	/// by model backends to translate internal tool definitions into the concrete 
+	/// function format required by the underlying AI runtime.  
+	/// This enables consistent tool‑exposure across different model backends, 
+	/// runtimes, and execution environments.
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">
+	/// The prompt type used by the model backend.
+	/// </typeparam>
+	/// <typeparam name="TAITOOL">
+	/// The backend‑specific function type produced by the factory.
+	/// </typeparam>
+	public interface IAIFunctionFactory<T, TAITOOL> {
 
-    /// <summary>
-    /// Converts the <see cref="IModelTool{T}"/> definitions into a compatible Object for the usend Backend
-    /// 
-    /// This factory is used by the backend to expose tools to the AI model.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The prompt type used by the model.
-    /// </typeparam>
-    /// <typeparam name="TAITOOL">
-    /// 
-    /// </typeparam>
-    public interface IAIFunctionFactory<T, TAITOOL> {
-        
-        bool Convert ( IModelTool<T> tool, out TAITOOL converted );
-    }
+		/// <summary>
+		/// Converts the given <see cref="IModelTool{T}"/> into a backend‑compatible 
+		/// function object.  
+		/// Returns <c>true</c> if conversion succeeded; otherwise <c>false</c>.
+		/// </summary>
+		/// <param name="tool">
+		/// The model tool definition to convert.
+		/// </param>
+		/// <param name="converted">
+		/// When the method returns, contains the converted backend‑specific tool 
+		/// object if conversion succeeded; otherwise <c>null</c>.
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if the tool was successfully converted; otherwise <c>false</c>.
+		/// </returns>
+		bool Convert ( IModelTool<T> tool, out TAITOOL converted );
+	}
+	/// @}
+
 }

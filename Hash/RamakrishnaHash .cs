@@ -19,12 +19,12 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Implements the Ramakrishna hash algorithm.
-    /// </summary>
-    public sealed class RamakrishnaHash : IHash {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Implements the Ramakrishna hash algorithm.
+	/// </summary>
+	public sealed class RamakrishnaHash : IHash {
 
         Endian m_endian;
         /// <summary>

@@ -16,13 +16,13 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines the non-generic base interface for queue-like containers.
-    /// Provides size information, capacity checks, and a method to clear the queue.
-    /// </summary>
-    public interface IQueue {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines the non-generic base interface for queue-like containers.
+	/// Provides size information, capacity checks, and a method to clear the queue.
+	/// </summary>
+	public interface IQueue {
         /// <summary>
         /// Gets the number of elements currently stored in the queue.
         /// </summary>

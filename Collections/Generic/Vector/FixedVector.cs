@@ -18,17 +18,16 @@
 using System.Collections;
 using System.Drawing;
 using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A fixed-size array container that provides indexed access, insertion,
-    /// traversal, and basic search operations. Unlike dynamic arrays, this
-    /// structure never grows and always maintains a constant capacity.
-    /// </summary>
-    public struct FixedVector<T> : IVector<T>, ISwappable<long>, IUsedIterrator<T, RandomAccessIterator<T, FixedVector<T>>> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A fixed-size array container that provides indexed access, insertion,
+	/// traversal, and basic search operations. Unlike dynamic arrays, this
+	/// structure never grows and always maintains a constant capacity.
+	/// </summary>
+	public struct FixedVector<T> : IVector<T>, ISwappable<long>, IUsedIterrator<T, RandomAccessIterator<T, FixedVector<T>>> {
         /// <summary>
         /// Internal storage buffer for Vector elements.
         /// </summary>
@@ -41,7 +40,9 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// The real size
         /// </summary>
-        public long Length => m_elements.LongLength;
+        public long Length {
+            get => m_elements.LongLength;
+        }
 
         /// <summary>
         /// Gets the first element of the Vector.

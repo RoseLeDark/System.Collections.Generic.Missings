@@ -17,15 +17,17 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-    /// <summary>
-    /// A container-backed span-like view over any <see cref="IVector{T}"/> .
-    /// Unlike System.Span, this type provides mode-based indexing
-    /// (System, Reverse, Ring) and supports mutable access through Replace().
-    /// 
-    /// This is a ref struct because it holds a ref to the underlying container.
-    /// No copying, no heap allocation, no ownership.
-    /// </summary>
-    public ref struct VectorFlexSpan<T, TContainer> where TContainer : IVector<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A container-backed span-like view over any <see cref="IVector{T}"/> .
+	/// Unlike System.Span, this type provides mode-based indexing
+	/// (System, Reverse, Ring) and supports mutable access through Replace().
+	/// 
+	/// This is a ref struct because it holds a ref to the underlying container.
+	/// No copying, no heap allocation, no ownership.
+	/// </summary>
+	public ref struct VectorFlexSpan<T, TContainer> where TContainer : IVector<T> {
 
         /// <summary>
         /// Enumerator for ContainerExFlexSpan.
@@ -340,4 +342,5 @@ namespace SystemEx.Collections.Generic {
             return m_pReference.Replace(pos, value);
         }
     }
+    ///@}
 }

@@ -21,20 +21,21 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Numeric {
-
-    /// <summary>
-    /// Represents an 16‑bit fast bit‑manipulation type. 
-    /// This struct provides low‑level operations for inspecting, modifying,
-    /// rotating, masking, and counting bits inside a single ushort.
-    /// 
-    /// Fast_Short is intended for systems that require precise bit control,
-    /// such as event groups, flag sets, embedded‑style logic, or any 
-    /// performance‑critical bitmask operations. 
-    /// 
-    /// Users must understand bitwise operations, as incorrect usage can 
-    /// intentionally overwrite or corrupt the underlying value.
-    /// </summary>
-    public struct Fast_Short : IFastType<ushort> {
+	/// \addtogroup SystemEx.Numeric
+	/// @{
+	/// <summary>
+	/// Represents an 16‑bit fast bit‑manipulation type. 
+	/// This struct provides low‑level operations for inspecting, modifying,
+	/// rotating, masking, and counting bits inside a single ushort.
+	/// 
+	/// Fast_Short is intended for systems that require precise bit control,
+	/// such as event groups, flag sets, embedded‑style logic, or any 
+	/// performance‑critical bitmask operations. 
+	/// 
+	/// Users must understand bitwise operations, as incorrect usage can 
+	/// intentionally overwrite or corrupt the underlying value.
+	/// </summary>
+	public struct Fast_Short : IFastType<ushort> {
         private ushort m_value;
         private byte m_size;
 
@@ -231,4 +232,5 @@ namespace SystemEx.Numeric {
             return _set;
         }
     }
+    //@}
 }

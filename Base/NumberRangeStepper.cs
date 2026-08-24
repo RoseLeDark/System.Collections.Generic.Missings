@@ -20,12 +20,14 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Base {
-    /// <summary>
-    /// Provides a cursor-based stepper over a normalized numeric range.
-    /// The stepper moves from Start to End in fixed increments and exposes
-    /// forward/backward stepping, reset, and enumeration.
-    /// </summary>
-    public struct NumberRangeStepper : IRange<long>, IEquatable<NumberRangeStepper>, IEnumerable<long> {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Provides a cursor-based stepper over a normalized numeric range.
+	/// The stepper moves from Start to End in fixed increments and exposes
+	/// forward/backward stepping, reset, and enumeration.
+	/// </summary>
+	public struct NumberRangeStepper : IRange<long>, IEquatable<NumberRangeStepper>, IEnumerable<long> {
 
         /// <summary>From value of the range.</summary>
         public long From { get; set; }
@@ -207,4 +209,5 @@ namespace SystemEx.Base {
             return GetEnumerator();
         }
     }
+	//@}
 }

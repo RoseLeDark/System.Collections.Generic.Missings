@@ -16,14 +16,20 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IContainer<T> : IReadOnlyContainer<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines the core mutation operations for a writable container.
+	/// 
+	/// <para>
+	/// <see cref="IContainer{T}"/> extends <see cref="IReadOnlyContainer{T}"/> by
+	/// providing insertion, replacement, removal, and clearing capabilities.
+	/// Implementations may support automatic growth through
+	/// <see cref="IAutoGrowe"/> or enforce fixed‑capacity semantics.
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the container.</typeparam>
+	public interface IContainer<T> : IReadOnlyContainer<T> {
 
         /// <summary>
         /// Inserts an element at the specified index, shifting elements to the right.
@@ -82,8 +88,18 @@ namespace SystemEx.Collections.Generic {
 
     }
 
-
-    public interface ILinearContainer<T> : IContainer<T> {
+	/// <summary>
+	/// Extends <see cref="IContainer{T}"/> with linear append semantics.
+	/// 
+	/// <para>
+	/// A linear container supports efficient push‑back operations and may
+	/// automatically grow its internal storage when <see cref="IAutoGrowe.AutoGrow"/>
+	/// is enabled. This interface is typically implemented by dynamic arrays,
+	/// ring buffers, and other sequential data structures.
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the container.</typeparam>
+	public interface ILinearContainer<T> : IContainer<T> {
         /// <summary>
         /// Appends an element to the end of the container.
         /// Automatically grows the buffer if AutoGrow is enabled.

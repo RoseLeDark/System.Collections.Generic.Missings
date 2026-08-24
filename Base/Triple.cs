@@ -17,11 +17,12 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace SystemEx {
-    
-    /// <summary>
-    /// Represents a three-valued logic value.
-    /// </summary>
-    public readonly struct Triple : IEquatable<triple> {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Represents a three-valued logic value.
+	/// </summary>
+	public readonly struct Triple : IEquatable<triple> {
         /// <summary>
         /// Gets the underlying value of the current instance.
         /// </summary>
@@ -395,4 +396,5 @@ namespace SystemEx {
                                         t.Equals(triple.False) ? triple.False :
                                         triple.Nin;
     }
+	//@}
 }

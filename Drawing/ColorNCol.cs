@@ -16,14 +16,14 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a compact N‑Color classification based on the HWB color model.
-    /// The color is expressed using a hue segment index (0–5), a percentage
-    /// within that segment (0–100), and the whiteness/blackness components.
-    /// </summary>
-    public class ColorNCol : IEquatable<ColorNCol> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a compact N‑Color classification based on the HWB color model.
+	/// The color is expressed using a hue segment index (0–5), a percentage
+	/// within that segment (0–100), and the whiteness/blackness components.
+	/// </summary>
+	public struct ColorNCol : IEquatable<ColorNCol> {
         /// <summary>
         /// Hue name mapping for the six primary hue segments:
         /// R = Red, Y = Yellow, G = Green, C = Cyan, B = Blue, M = Magenta.
@@ -76,10 +76,8 @@ namespace SystemEx.Drawing {
         /// <returns>
         /// <c>true</c> if the components match; otherwise <c>false</c>.
         /// </returns>
-        public bool Equals(ColorNCol? other) {
-            if ( other == null )
-                return false;
-
+        public bool Equals(ColorNCol other) {
+       
             return m_c.Equals(other.m_c) &&
                    m_l.Equals(other.m_l) &&
                    m_n == (other.m_n);
@@ -88,8 +86,7 @@ namespace SystemEx.Drawing {
         /// Determines whether this instance is equal to another object.
         /// </summary>
         public override bool Equals(object? obj) {
-            if ( obj == null ) return false;
-            if ( obj is ColorNCol ) return Equals(obj as ColorNCol);
+            if ( obj is ColorNCol obc ) return Equals(obc);
             return false;
         }
         /// <summary>

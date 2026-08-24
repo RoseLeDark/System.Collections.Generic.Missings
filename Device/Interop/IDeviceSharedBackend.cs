@@ -16,15 +16,17 @@
  */
 
 namespace SystemEx.Device.Intertropt {
-    /// <summary>
-    /// Defines the low‑level backend interface used by <c>DeviceSharedBuffer</c>
-    /// and related shared‑memory abstractions.  
-    /// A backend represents a hardware‑specific buffer implementation such as
-    /// RAM, OpenCL, Vulkan, CUDA, or any custom device memory.  
-    /// Each backend is responsible for creating, writing, reading, and closing
-    /// its own hardware buffer handle.
-    /// </summary>
-    public interface IDeviceSharedBackend {
+	// \addtogroup SystemEx.Device.Intertropt 
+	/// @{
+	/// <summary>
+	/// Defines the low‑level backend interface used by <c>DeviceSharedBuffer</c>
+	/// and related shared‑memory abstractions.  
+	/// A backend represents a hardware‑specific buffer implementation such as
+	/// RAM, OpenCL, Vulkan, CUDA, or any custom device memory.  
+	/// Each backend is responsible for creating, writing, reading, and closing
+	/// its own hardware buffer handle.
+	/// </summary>
+	public interface IDeviceSharedBackend {
         /// <summary>
         /// Creates a hardware buffer intended for reading operations.  
         /// The backend allocates a device‑specific buffer of the given size and
@@ -70,5 +72,5 @@ namespace SystemEx.Device.Intertropt {
         void CloseHardwareBuffer(ref object hardwareBuffer);
     }
 
-
+	/// @}
 }

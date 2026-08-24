@@ -20,13 +20,15 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx {
-    /// <summary>
-    /// Represents a numeric range defined by a start and end value.
-    /// Provides range validation, containment checks, normalization,
-    /// intersection, adjacency, union, and enumeration.
-    /// </summary>
-    /// <typeparam name="T">Numeric type implementing <see cref="INumber{T}"/>.</typeparam>
-    public struct NumberRange : IRange<long>, IEquatable<NumberRange>, IEnumerable<long> {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Represents a numeric range defined by a start and end value.
+	/// Provides range validation, containment checks, normalization,
+	/// intersection, adjacency, union, and enumeration.
+	/// </summary>
+	/// <typeparam name="T">Numeric type implementing <see cref="INumber{T}"/>.</typeparam>
+	public struct NumberRange : IRange<long>, IEquatable<NumberRange>, IEnumerable<long> {
         /// <summary>From value of the range.</summary>
         public long From { get; set; }
         /// <summary>End value of the range.</summary>
@@ -204,5 +206,6 @@ namespace SystemEx {
             return m_range.GetEnumerator();
         }
     }
+	//@}
 }
 

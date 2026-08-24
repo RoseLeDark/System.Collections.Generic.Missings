@@ -17,29 +17,31 @@
 
 
 namespace SystemEx.AI {
-    /// <summary>
-    /// Defines capability flags for AI backends.
-    /// 
-    /// Naming follows the AI_BACKEND_CAPS_XXX convention.
-    /// These flags describe what features a backend supports, such as
-    /// text generation, audio processing, vision models, tool execution,
-    /// platform integration, and hardware acceleration.
-    /// </summary>
-    /// <summary>
-    /// Describes capabilities supported by an AI backend.
-    /// 
-    /// This enum is intentionally broad and future-proof. It covers:
-    /// - Local and remote execution
-    /// - GPU/CPU/WASM/native runtimes
-    /// - Text, chat, audio, vision, video, multimodal
-    /// - Tools, agents, function calling
-    /// - Embeddings, vector search, batch processing
-    /// - Platform-specific capabilities (Windows, Web, Mobile)
-    /// - Custom developer-defined capabilities
-    /// 
-    /// Naming follows AI_BACKEND_CAPS_XXX.
-    /// </summary>
-    public enum BackendCapabilities : int {
+	/// \addtogroup SystemEx.AI
+	/// @{
+	/// <summary>
+	/// Defines capability flags for AI backends.
+	/// 
+	/// Naming follows the AI_BACKEND_CAPS_XXX convention.
+	/// These flags describe what features a backend supports, such as
+	/// text generation, audio processing, vision models, tool execution,
+	/// platform integration, and hardware acceleration.
+	/// </summary>
+	/// <summary>
+	/// Describes capabilities supported by an AI backend.
+	/// 
+	/// This enum is intentionally broad and future-proof. It covers:
+	/// - Local and remote execution
+	/// - GPU/CPU/WASM/native runtimes
+	/// - Text, chat, audio, vision, video, multimodal
+	/// - Tools, agents, function calling
+	/// - Embeddings, vector search, batch processing
+	/// - Platform-specific capabilities (Windows, Web, Mobile)
+	/// - Custom developer-defined capabilities
+	/// 
+	/// Naming follows AI_BACKEND_CAPS_XXX.
+	/// </summary>
+	public enum BackendCapabilities : int {
         // ---------------------------------------------------------------------
         // Core Text & Chat Capabilities (0x1000 - 0x10FF)
         // ---------------------------------------------------------------------
@@ -314,6 +316,6 @@ namespace SystemEx.AI {
         /// </summary>
         AI_BACKEND_CAPS_CUSTOM = 0x1FFF
     }
-
+	///@}
 
 }

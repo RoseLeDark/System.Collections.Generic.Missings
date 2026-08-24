@@ -19,12 +19,12 @@ using SystemEx.Collections.Generic;
 using SystemEx.IO.Provider;
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    ///  <summary>
-    /// A Scbema is used to serialize and deserialize a ColorR10G10B10A2 color to and from a binary representation.
-    /// </summary>
-    public struct ColorR10G10B10FormatSchema : IByteFormatSchema {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	///  <summary>
+	/// A Scbema is used to serialize and deserialize a ColorR10G10B10A2 color to and from a binary representation.
+	/// </summary>
+	public struct ColorR10G10B10FormatSchema : IByteFormatSchema {
 
         /// <summary>
         /// The total number of bytes required to represent a ColorR10G10B10A2 color in its packed binary form.
@@ -75,48 +75,51 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Gets the byte representation of the specified object for the given field name.
         /// /// </summary>
-        /// <param name="obj">The object to serialize.</param>
+        /// <param name="objx">The object to serialize.</param>
         /// <param name="name">The name of the field to serialize.</param>
         /// <param name="endian">The endianness for the binary representation.</param>
         /// <returns>The byte array representing the serialized field, or null if not found.</returns>
-        protected override FixedVector<byte> GetBytesForEntry(object obj, string name, Endian endian) {
-            var objx = obj as ColorR10G10B10A2;
-            if ( objx == null ) throw new InvalidCastException();
+        protected override FixedVector<byte> GetBytesForEntry( object obj, string name, Endian endian) {
+            if ( obj is ColorR10G10B10A2 objx ) {
 
-            Cache _ret = new Cache(4, CacheType.Both);
+                Cache _ret = new Cache(4, CacheType.Both);
 
-            if ( name == "DEFAULT") {
-                
-                int red = (int)(objx.R * 1023.0f + 0.5f); // 16
-                int green = (int)(objx.G * 1023.0f + 0.5f);// 16
-                int blue = (int)(objx.B * 1023.0f + 0.5f);// 16
-                int alpha = (int)(objx.A * 3.0f + 0.5f);
+                if ( name == "DEFAULT" ) {
+
+                    int red = (int)(objx.R * 1023.0f + 0.5f); // 16
+                    int green = (int)(objx.G * 1023.0f + 0.5f);// 16
+                    int blue = (int)(objx.B * 1023.0f + 0.5f);// 16
+                    int alpha = (int)(objx.A * 3.0f + 0.5f);
 
 
-                int packed =  (alpha << 30) | (blue << 20) | (green << 10) | red;
-                byte[] raw = packed.ToBytes(endian);
+                    int packed =  (alpha << 30) | (blue << 20) | (green << 10) | red;
+                    byte[] raw = packed.ToBytes(endian);
 
-                _ret.WriteRange(0, raw);
+                    _ret.WriteRange(0, raw);
 
+                }
+                return _ret.ToArrayEx();
             }
-            return _ret.ToArrayEx();
-        }
-        /// <summary>
-        /// Gets the size of the specified entry in the cache.
-        /// /// </summary>
-        /// <param name="obj">The cache object.</param>
-        /// <param name="name">The name of the entry.</param>
-        /// <param name="endian">The endianness for the binary representation.</param>
-        /// <returns>The size of the entry, or -1 if not found.</returns>
+			throw new InvalidCastException();
+		}
+		/// <summary>
+		/// Gets the size of the specified entry in the cache.
+		/// /// </summary>
+		/// <param name="obj">The cache object.</param>
+		/// <param name="name">The name of the entry.</param>
+		/// <param name="endian">The endianness for the binary representation.</param>
+		/// <returns>The size of the entry, or -1 if not found.</returns>
 
-        protected override long GetEntrySize(Cache obj, string name, Endian endian) => ( name == "COLOR" || name == "DEFAULT" ) ? 4 : -1;
-        /// <summary>
-        /// Get the object from the given entries and endianness.
-        /// </summary>
-        /// <param name="entries">The map of entries.</param>
-        /// <param name="endian">The endianness for the binary representation.</param>
-        /// <returns>The created object, or null if not found.</returns>
-        protected override ColorR10G10B10A2? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian) {
+		protected override long GetEntrySize(Cache obj, string name, Endian endian) 
+            => ( name == "COLOR" || name == "DEFAULT" ) ? 4 : -1;
+
+		/// <summary>
+		/// Get the object from the given entries and endianness.
+		/// </summary>
+		/// <param name="entries">The map of entries.</param>
+		/// <param name="endian">The endianness for the binary representation.</param>
+		/// <returns>The created object, or null if not found.</returns>
+		protected override object? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian) {
 
             if ( entries.ContainsKey("DEFAULT") ) {
                 byte[] raw = entries["DEFAULT"].Value!;
@@ -128,7 +131,8 @@ namespace SystemEx.Drawing {
                 uint ai = packed >> 30;
 
 
-                return new ColorR10G10B10A2( ri / 1023.0f, gi / 1023.0f, bi / 1023.0f, ai /3.0f);
+                var _Ret = new ColorR10G10B10A2( ri / 1023.0f, gi / 1023.0f, bi / 1023.0f, ai /3.0f);
+                return (object)_Ret;
             }
 
 
@@ -140,7 +144,7 @@ namespace SystemEx.Drawing {
     /// Represents a 10‑bit per channel RGB color (R10G10B10A2),
     /// stored internally as normalized floating‑point values (0–1).
     /// </summary>
-    public class ColorR10G10B10A2 : IEquatable<ColorR10G10B10A2>, IIsByteSeriablize  {
+    public struct ColorR10G10B10A2 : IEquatable<ColorR10G10B10A2>, IIsByteSeriablize  {
         private float m_r;
         private float m_g;
         private float m_b;
@@ -198,9 +202,8 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Determines whether this instance is equal to another R10G10B10A2 color.
         /// </summary>
-        public bool Equals(ColorR10G10B10A2? other) {
-            if ( other == null ) return false;
-
+        public bool Equals(ColorR10G10B10A2 other) {
+   
             return m_r.Equals(other.m_r) &&
                    m_g.Equals(other.m_g) &&
                    m_b.Equals(other.m_b) &&

@@ -20,16 +20,16 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Implements the Adler hash algorithm.
-    /// </summary>
-    /// <remarks>
-    /// The Adler hash algorithm is a checksum algorithm which was invented by Mark Adler in 1995.
-    ///  It is a modification of the Fletcher checksum, which was invented by John G. Fletcher in 1982.
-    /// </remarks>
-    public sealed class AdlerHash : IHash {
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Implements the Adler hash algorithm.
+	/// </summary>
+	/// <remarks>
+	/// The Adler hash algorithm is a checksum algorithm which was invented by Mark Adler in 1995.
+	///  It is a modification of the Fletcher checksum, which was invented by John G. Fletcher in 1982.
+	/// </remarks>
+	public sealed class AdlerHash : IHash {
         private const uint Mod = 65521;
         private const ulong Mod64 = 4294967291UL; // großer Prim
 

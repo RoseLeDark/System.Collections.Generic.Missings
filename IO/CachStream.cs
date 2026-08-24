@@ -22,18 +22,19 @@ using SystemEx.Utils;
 
 
 namespace SystemEx.IO {
-    
-    /// <summary>
-    /// A <see cref="Stream"/> wrapper around a <see cref="Cache"/> instance.  
-    /// Provides sequential read/write access to a cache, including endian‑aware
-    /// primitive serialization, range operations, and chunked asynchronous
-    /// copy methods.  
-    /// Seeking is supported only through the underlying cache.
-    /// </summary>
-    /// <typeparam name="TCache">
-    /// The cache type used as the backing store. Must derive from <see cref="Cache"/>.
-    /// </typeparam>
-    public class CacheStream<TCache> : Stream where TCache : Cache {
+	// \addtogroup SystemEx.IO
+	/// @{
+	/// <summary>
+	/// A <see cref="Stream"/> wrapper around a <see cref="Cache"/> instance.  
+	/// Provides sequential read/write access to a cache, including endian‑aware
+	/// primitive serialization, range operations, and chunked asynchronous
+	/// copy methods.  
+	/// Seeking is supported only through the underlying cache.
+	/// </summary>
+	/// <typeparam name="TCache">
+	/// The cache type used as the backing store. Must derive from <see cref="Cache"/>.
+	/// </typeparam>
+	public class CacheStream<TCache> : Stream, IValueWriter, IValueReader where TCache : Cache {
         /// <summary>
         /// The underlying cache used for all read/write operations.
         /// </summary>
@@ -139,57 +140,70 @@ namespace SystemEx.IO {
         public override void SetLength(long value) {
            
         }
-
-        public int Write(char value) => m_cache.Write((byte)value);
-        public int Write(byte value) => m_cache.Write((byte)value);
-
-        public int Write(uint value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
+		/// <summary>
+		/// Writes a typed value at the specified position using endian‑aware
+		/// </summary>
+		public void Write (char value) => m_cache.WriteByte((byte)value);
+		/// <summary>
+		/// Writes a typed value at the specified position using endian‑aware
+		/// </summary>
+		public void Write ( byte value ) => m_cache.WriteByte(value);
+		/// <inheritdoc/>
+		public void Write (uint value, Endian endian) {
+			m_cache.Write(value, endian);
+		}
+		/// <inheritdoc/>
+		public void Write(int value, Endian endian) {
+			m_cache.Write(value, endian);
+		}
+		/// <inheritdoc/>
+		public void Write (short value, Endian endian) {
+			m_cache.Write(value, endian);
+		}
+		/// <inheritdoc/>
+		public void Write (ushort value, Endian endian) {
+			m_cache.Write(value, endian);
+		}
+		/// <inheritdoc/>
+		public void Write (long value, Endian endian) {
+			m_cache.Write(value, endian);
+		}
+		/// <inheritdoc/>
+		public void Write (ulong value, Endian endian) {
+            m_cache.Write(value, endian);
         }
-        public int Write(int value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
-        }
-        public int Write(short value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
-        }
-        public int Write(ushort value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
-        }
-        public int Write(long value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
-        }
-        public int Write(ulong value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
-        }
-        public int Write(float value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
-        }
-        public int Write(double value, Endian endian) {
-            byte[] _buffer = value.ToBytes(endian);
-            return m_cache.Write(_buffer, 0, _buffer.Length);
-        }
-
-        public uint ReadUInt(Endian endian) => m_cache.ReadUInt((ulong)Position, endian);
-        public int ReadInt(Endian endian) => m_cache.ReadInt((ulong)Position, endian);
-        public short ReadShort(Endian endian) => m_cache.ReadShort((ulong)Position, endian);
-        public ushort ReadUShort(Endian endian) => m_cache.ReadUShort((ulong)Position, endian);
-        public long ReadLong(Endian endian) => m_cache.ReadLong((ulong)Position, endian);
-        public ulong ReadULong(Endian endian) => m_cache.ReadULong((ulong)Position, endian);
-        public char ReadChar(ulong position) => m_cache.ReadChar((ulong)Position);
-        public float ReadFloat(Endian endian) => m_cache.ReadFloat((ulong)Position, endian);
-        public double ReadDouble(Endian endian) => m_cache.ReadDouble((ulong)Position, endian);
+		/// <inheritdoc/>
+		public void Write (float value, Endian endian) {
+			m_cache.Write(value, endian);
+		}
+		/// <inheritdoc/>
+		public void Write (double value, Endian endian) {
+			m_cache.Write(value, endian);
+		}
+		/// <inheritdoc/>
+		public uint ReadUInt(Endian endian, uint errval) => m_cache.ReadUInt(endian, errval);
+		/// <inheritdoc/>
+		public int ReadInt(Endian endian, int errval ) => m_cache.ReadInt(endian, errval);
+		/// <inheritdoc/>
+		public short ReadShort(Endian endian, short errval ) => m_cache.ReadShort(endian, errval);
+		/// <inheritdoc/>
+		public ushort ReadUShort(Endian endian, ushort errval ) => m_cache.ReadUShort(endian, errval);
+		/// <inheritdoc/>
+		public long ReadLong(Endian endian, long errval ) => m_cache.ReadLong(endian, errval);
+		/// <inheritdoc/>
+		public ulong ReadULong(Endian endian, ulong errval ) => m_cache.ReadULong(endian, errval);
+		/// <inheritdoc/>
+		public char ReadChar(ulong position) => (char)m_cache.ReadByte((ulong)Position);
+		/// <inheritdoc/>
+		public float ReadFloat(Endian endian, float errval ) => m_cache.ReadFloat(endian, errval);
+		/// <inheritdoc/>
+		public double ReadDouble(Endian endian, double errval ) => m_cache.ReadDouble(endian, errval);
 
         public ulong WriteRange(byte[] data)
         => m_cache.WriteRange((ulong)Position, data);
 
-        public ulong WriteRange(ulong iend, byte[] data)
+		/// <inheritdoc/>
+		public ulong WriteRange(ulong iend, byte[] data)
             => m_cache.WriteRange((ulong)Position, iend, data);
 
         public byte[]? ReadRange(uint count)
@@ -277,4 +291,5 @@ namespace SystemEx.IO {
             }
         }
     }
+	//@}
 }

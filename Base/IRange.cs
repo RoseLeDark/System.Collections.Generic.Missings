@@ -18,15 +18,15 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx {
-    /// \addtogroup STL
-    /// @
-    /// <summary>
-    /// Defines the basic contract for a numeric range with a start and end value.
-    /// Provides validation, containment checks, range slicing, merging,
-    /// adjacency detection, and intersection logic.
-    /// </summary>
-    /// <typeparam name="T">Numeric type used for the range boundaries.</typeparam>
-    public interface IRange<T>  {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Defines the basic contract for a numeric range with a start and end value.
+	/// Provides validation, containment checks, range slicing, merging,
+	/// adjacency detection, and intersection logic.
+	/// </summary>
+	/// <typeparam name="T">Numeric type used for the range boundaries.</typeparam>
+	public interface IRange<T>  {
         /// <summary>
         /// Returns an iterator positioned at the start of the range.
         /// </summary>

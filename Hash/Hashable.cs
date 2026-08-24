@@ -16,25 +16,25 @@
  */
 
 
-
+using SystemEx.Utils;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Base class for objects that can be hashed using the SystemEx hashing subsystem.
-    /// 
-    /// A <c>Hashable</c> instance provides its binary representation through
-    /// <see cref="ToBytes"/> and selects a hashing algorithm via
-    /// <see cref="HashAlgorithmAttribute"/> applied on the concrete type.
-    /// 
-    /// The class supports both 32‑bit and 64‑bit hashing.  
-    /// A per‑instance random seed is generated once and stored, ensuring
-    /// stable hashing for the lifetime of the object while preventing
-    /// predictable hash streams.
-    /// </summary>
-    [Obsolete("Hashable is deprecated. Use IHashable<T> with HashFactory instead. See Example: Examples/ExampleHasher.cs")]
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Base class for objects that can be hashed using the SystemEx hashing subsystem.
+	/// 
+	/// A <c>Hashable</c> instance provides its binary representation through
+	/// <see cref="ToBytes"/> and selects a hashing algorithm via
+	/// <see cref="HashAlgorithmAttribute"/> applied on the concrete type.
+	/// 
+	/// The class supports both 32‑bit and 64‑bit hashing.  
+	/// A per‑instance random seed is generated once and stored, ensuring
+	/// stable hashing for the lifetime of the object while preventing
+	/// predictable hash streams.
+	/// </summary>
+	[Obsolete("Hashable is deprecated. Use IHashable<T> with HashFactory instead. See Example: Examples/ExampleHasher.cs")]
     public abstract class Hashable {
         /// <summary>
         /// Per‑instance random seed used for hashing.  

@@ -18,13 +18,13 @@
 
 
 namespace SystemEx.Numeric {
-    /// \addtogroup Numeric
-    /// @{
+	/// \addtogroup SystemEx.Numeric
+	/// @{
 
-    /// <summary>
-    /// Represents a rotation in 3D space using an axis‑angle pair.
-    /// </summary>
-    public struct AxisAngle<TV, T> {
+	/// <summary>
+	/// Represents a rotation in 3D space using an axis‑angle pair.
+	/// </summary>
+	public struct AxisAngle<TV, T> {
         /// <summary>
         /// The rotation axis. Does not need to be normalized.
         /// </summary>

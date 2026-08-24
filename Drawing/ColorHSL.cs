@@ -16,15 +16,15 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a color in the HSL (Hue–Saturation–Lightness) color space using
-    /// floating‑point components.  
-    /// Provides hue‑aware interpolation, component manipulation, arithmetic
-    /// operations, and normalization utilities.
-    /// </summary>
-    public class ColorHSL : IEquatable<ColorHSL> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a color in the HSL (Hue–Saturation–Lightness) color space using
+	/// floating‑point components.  
+	/// Provides hue‑aware interpolation, component manipulation, arithmetic
+	/// operations, and normalization utilities.
+	/// </summary>
+	public class ColorHSL : IEquatable<ColorHSL> {
         private float m_h;
         private float m_s;
         private float m_l;

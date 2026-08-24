@@ -20,11 +20,12 @@ using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx {
-
-    /// <summary>
-    /// Defines how FlexSpan indexes its underlying array.
-    /// </summary>
-    public enum FlexSpanMode {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Defines how FlexSpan indexes its underlying array.
+	/// </summary>
+	public enum FlexSpanMode {
         /// <summary> circular indexing (wrap-around)</summary>
         Ring,
         /// <summary> reverse indexing </summary>
@@ -346,4 +347,5 @@ namespace SystemEx {
             }
         }
     }
+	//@}
 }

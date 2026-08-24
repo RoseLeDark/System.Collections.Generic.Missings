@@ -19,16 +19,16 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Specifies the mathematical blend operation used when combining a layer
-    /// with the layers beneath it. These modes do not perform graphical drawing;
-    /// instead, each mode defines a deterministic color transformation applied
-    /// during layer composition when <see cref="ICanvasList{T}.GetPixels"/> or
-    /// <see cref="ICanvasList{T}.SwapIn"/> is invoked.
-    /// </summary>
-    public enum BlendMode
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Specifies the mathematical blend operation used when combining a layer
+	/// with the layers beneath it. These modes do not perform graphical drawing;
+	/// instead, each mode defines a deterministic color transformation applied
+	/// during layer composition when <see cref="ICanvasList{T}.GetPixels"/> or
+	/// <see cref="ICanvasList{T}.SwapIn"/> is invoked.
+	/// </summary>
+	public enum BlendMode
     {
         /// <summary>
         /// Adds the layer’s color value to the underlying color. Useful for

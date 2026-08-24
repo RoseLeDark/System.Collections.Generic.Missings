@@ -22,12 +22,12 @@ using System.Xml.Linq;
 
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// Defines the supported traversal orders for <see cref="Node{T}"/> structures.
-    /// </summary>
-    public enum TraversOrder {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// Defines the supported traversal orders for <see cref="Node{T}"/> structures.
+	/// </summary>
+	public enum TraversOrder {
         /// <summary>Visit the current node before its children and siblings.</summary>
         Preorder,
 

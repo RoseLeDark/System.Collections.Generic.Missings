@@ -19,13 +19,13 @@
 using SystemEx.Base;
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Provides conversion utilities between different color spaces such as
-    /// RGB, Linear RGB, XYZ, HSV, HSL, YUV, CMY and HDR.
-    /// </summary>
-    public static class ColorConverter {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Provides conversion utilities between different color spaces such as
+	/// RGB, Linear RGB, XYZ, HSV, HSL, YUV, CMY and HDR.
+	/// </summary>
+	public static class ColorConverter {
         /// <summary>
         /// Converts an sRGB color to CIE XYZ using the D65 reference white.
         /// </summary>

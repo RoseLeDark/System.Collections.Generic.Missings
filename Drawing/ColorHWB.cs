@@ -16,12 +16,12 @@
  */
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a color in the HWB (Hue, Whiteness, Blackness)
-    /// </summary>
-    public class ColorHWB : IEquatable<ColorHWB> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a color in the HWB (Hue, Whiteness, Blackness)
+	/// </summary>
+	public struct ColorHWB : IEquatable<ColorHWB> {
         private float m_hue;
         private float m_whiteness;
         private float m_blackness;
@@ -29,7 +29,7 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// The hue component of the color, in degrees (0–360).
         /// </summary>
-        public virtual float H { get => m_hue; set => m_hue = ClampHue(value); }
+        public float H { get => m_hue; set => m_hue = ClampHue(value); }
         /// <summary>
         /// The whiteness component of the color, in the range [0, 1].
         /// </summary>
@@ -69,9 +69,8 @@ namespace SystemEx.Drawing {
         /// <returns>
         /// <c>true</c> if the components match; otherwise <c>false</c>.
         /// </returns>
-        public bool Equals(ColorHWB? other) {
-            if ( other == null ) return false;
-
+        public bool Equals(ColorHWB other) {
+            
             return m_hue == other.m_hue && m_blackness == other.m_blackness && m_whiteness == other.m_whiteness;
         }
         /// <summary>
@@ -97,7 +96,7 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Wraps a hue value into the range 0–360 degrees.
         /// </summary>
-        protected static float ClampHue(float h) {
+        private static float ClampHue(float h) {
             h %= 360f;
             return h < 0f ? h + 360f : h;
         }

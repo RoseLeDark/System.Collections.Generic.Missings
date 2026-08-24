@@ -18,12 +18,12 @@
 using System.Runtime.InteropServices;
 
 namespace SystemEx.Drawing {
-    /// \addtogroup color
-    /// @{
-    /// <summary>
-    /// Represents a color in a specific color space and provides methods for color manipulation.
-    /// </summary>
-    public interface IColor<T> {
+	/// \addtogroup SystemEx.Drawing
+	/// @{
+	/// <summary>
+	/// Represents a color in a specific color space and provides methods for color manipulation.
+	/// </summary>
+	public interface IColor<T> {
         /// <summary>
         /// Adjusts the saturation of the color.
         /// </summary>

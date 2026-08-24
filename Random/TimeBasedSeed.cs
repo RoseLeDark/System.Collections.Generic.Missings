@@ -17,13 +17,14 @@
 using SystemEx.Hash;
 
 namespace SystemEx.Random {
-
-    /// <summary>
-    /// Provides a time‑based seed implementation using <see cref="DateTime"/> as
-    /// the update source. The seed consists of multiple 32‑bit values derived from
-    /// the current timestamp, system tick count, and optionally a GUID hash.
-    /// </summary>
-    public struct TimeBasedSeed : ISeed<DateTime> {
+	/// \addtogroup SystemEx.Random
+	/// @{
+	/// <summary>
+	/// Provides a time‑based seed implementation using <see cref="DateTime"/> as
+	/// the update source. The seed consists of multiple 32‑bit values derived from
+	/// the current timestamp, system tick count, and optionally a GUID hash.
+	/// </summary>
+	public struct TimeBasedSeed : ISeed<DateTime> {
         private uint[] m_seed;
         /// <summary>
         /// Gets the number of 32‑bit values contained in the seed.
@@ -75,4 +76,5 @@ namespace SystemEx.Random {
             if ( m_seed.Length > 3 ) m_seed[3] = (uint)Guid.NewGuid().GetHashCode();
         }
     }
+	///@}
 }

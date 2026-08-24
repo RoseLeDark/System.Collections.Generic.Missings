@@ -14,24 +14,24 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+using SystemEx.Collections.Generic;
+
 namespace SystemEx.AI.Tools {
-    // \addtogroup AI
-    /// @{
-    /// \addtogroup Tools
-    /// @{
-    /// <summary>
-    /// A basic arithmetic calculator tool.
-    /// 
-    /// This tool performs simple mathematical operations such as:
-    /// - Addition
-    /// - Subtraction
-    /// - Multiplication
-    /// - Division
-    /// 
-    /// It is intended for use by AI models that should not invent
-    /// numerical results but instead rely on deterministic tool output.
-    /// </summary>
-    public sealed class CalculatorTool : IModelTool<string> {
+	// \addtogroup SystemEx.AI.Tools 
+	/// @{
+	/// <summary>
+	/// A basic arithmetic calculator tool.
+	/// 
+	/// This tool performs simple mathematical operations such as:
+	/// - Addition
+	/// - Subtraction
+	/// - Multiplication
+	/// - Division
+	/// 
+	/// It is intended for use by AI models that should not invent
+	/// numerical results but instead rely on deterministic tool output.
+	/// </summary>
+	public sealed class CalculatorTool : IModelTool<string> {
         /// <summary>
         /// Gets the unique tool name used by the AI runtime.
         /// </summary>
@@ -68,26 +68,26 @@ namespace SystemEx.AI.Tools {
             );
         }
 
-        /// <summary>
-        /// Executes the calculator logic.
-        /// </summary>
-        /// <param name="args">Dictionary containing tool arguments.</param>
-        /// <param name="ct">Cancellation token.</param>
-        /// <returns>
-        /// A numeric result of the requested operation.
-        /// </returns>
-        /// <exception cref="DivideByZeroException">
-        /// Thrown when attempting to divide by zero.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown when an unknown operation is requested.
-        /// </exception>
-        public async Task<object?> ExecuteAsync (
-            Dictionary<string, object?> args,
+		/// <summary>
+		/// Executes the calculator logic.
+		/// </summary>
+		/// <param name="args">Map containing tool arguments.</param>
+		/// <param name="ct">Cancellation token.</param>
+		/// <returns>
+		/// A numeric result of the requested operation.
+		/// </returns>
+		/// <exception cref="DivideByZeroException">
+		/// Thrown when attempting to divide by zero.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown when an unknown operation is requested.
+		/// </exception>
+		public async Task<object?> ExecuteAsync (
+            Map<string, object?> args,
             CancellationToken ct ) {
             double a = Convert.ToDouble(args["a"]);
             double b = Convert.ToDouble(args["b"]);
-            string op = args["op"]?.ToString() ?? "add";
+            string op = args["op"].ToString() ?? "add";
 
             return op switch
             {
@@ -99,6 +99,5 @@ namespace SystemEx.AI.Tools {
             };
         }
     }
-    /// @}
     /// @}
 }

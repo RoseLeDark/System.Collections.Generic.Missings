@@ -16,14 +16,14 @@
  */
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A specialized <see cref="Node{T}"/> that represents a star‑shaped structure,
-    /// where the node may have an arbitrary number of child nodes.
-    /// </summary>
-    /// <typeparam name="T">The value type stored in the node.</typeparam>
-    public class StarNode<T> : Node<T> {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A specialized <see cref="Node{T}"/> that represents a star‑shaped structure,
+	/// where the node may have an arbitrary number of child nodes.
+	/// </summary>
+	/// <typeparam name="T">The value type stored in the node.</typeparam>
+	public class StarNode<T> : Node<T> {
 
         public StarNode ( int nChilds, T value ) 
             : base(nChilds) {  base.Value = value;  }

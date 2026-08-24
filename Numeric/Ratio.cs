@@ -1,16 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using SystemEx.Collections.Generic;
 using SystemEx.Hash;
 using SystemEx.Utils;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SystemEx.Numeric {
-
+	/// \addtogroup SystemEx.Numeric
+	/// @{
 	/// <summary>
 	/// Represents a rational number using a signed 64‑bit numerator and denominator.
 	/// <para>
@@ -495,6 +508,6 @@ namespace SystemEx.Numeric {
 			return m_numerator.GetHashCode() ^ m_denominator.GetHashCode();
 		}
 
-		
+		//@}
 	}
 }

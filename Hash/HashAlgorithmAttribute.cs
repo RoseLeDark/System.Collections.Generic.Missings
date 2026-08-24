@@ -16,20 +16,20 @@
  */
 
 namespace SystemEx.Hash {
-    /// \addtogroup hash
-    /// @{
-    /// <summary>
-    /// Declares which hashing algorithm a <c>Hashable</c> type should use.
-    /// 
-    /// The attribute binds a concrete hasher implementation (<see cref="IHash"/>)
-    /// to a class or struct and specifies the byte‑order (<see cref="Endian"/>)
-    /// used when interpreting the binary representation returned by
-    /// <see cref="Hashable.ToBytes"/>.
-    /// 
-    /// The SystemEx hashing subsystem reads this attribute at runtime to
-    /// instantiate the correct hasher and compute 32‑bit or 64‑bit hashes.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+	/// \addtogroup SystemEx.Hash
+	/// @{
+	/// <summary>
+	/// Declares which hashing algorithm a <c>Hashable</c> type should use.
+	/// 
+	/// The attribute binds a concrete hasher implementation (<see cref="IHash"/>)
+	/// to a class or struct and specifies the byte‑order (<see cref="Endian"/>)
+	/// used when interpreting the binary representation returned by
+	/// <see cref="Hashable.ToBytes"/>.
+	/// 
+	/// The SystemEx hashing subsystem reads this attribute at runtime to
+	/// instantiate the correct hasher and compute 32‑bit or 64‑bit hashes.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public sealed class HashAlgorithmAttribute : Attribute {
 
         /// <summary>

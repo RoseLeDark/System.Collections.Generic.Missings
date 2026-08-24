@@ -1,6 +1,4 @@
-﻿// SPDX-License-Identifier: EUPL-1.2
-
-/* 
+﻿/* 
  * SPDX-License-Identifier: EUPL-1.2
  *
  * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
@@ -20,27 +18,27 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
 
-    /// <summary>
-    /// Represents a chained view over multiple <see cref="NodeRange{T}"/> segments,
-    /// similar to <c>std::views::concat</c> in C++.  
-    /// A <see cref="NodeChain{T}"/> allows iteration across several disjoint
-    /// ranges of a linked <see cref="Node{T}"/> structure as if they formed
-    /// one continuous sequence.
-    /// </summary>
-    /// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
-    /// <example>
-    /// var chain = new NodeChain&lt;int&gt;()
-    ///     .Add(node.First(), node.At(5))
-    ///     .Add(node.At(10), node.At(20))
-    ///     .Add(node.At(30), node.End());
-    ///
-    /// foreach (var x in chain)
-    ///     Console.WriteLine(x);
-    /// </example>
-    public sealed class NodeChain<T> : IEnumerable<T> {
+	/// <summary>
+	/// Represents a chained view over multiple <see cref="NodeRange{T}"/> segments,
+	/// similar to <c>std::views::concat</c> in C++.  
+	/// A <see cref="NodeChain{T}"/> allows iteration across several disjoint
+	/// ranges of a linked <see cref="Node{T}"/> structure as if they formed
+	/// one continuous sequence.
+	/// </summary>
+	/// <typeparam name="T">The value type stored in the underlying nodes.</typeparam>
+	/// <example>
+	/// var chain = new NodeChain&lt;int&gt;()
+	///     .Add(node.First(), node.At(5))
+	///     .Add(node.At(10), node.At(20))
+	///     .Add(node.At(30), node.End());
+	///
+	/// foreach (var x in chain)
+	///     Console.WriteLine(x);
+	/// </example>
+	public sealed class NodeChain<T> : IEnumerable<T> {
 
         /// <summary>
         /// Internal list of ranges that make up the chain.

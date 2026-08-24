@@ -19,48 +19,50 @@ using SystemEx.Numeric;
 using SystemEx.Utils;
 
 namespace SystemEx {
-    /// <summary>
-    /// Provides an extended and strongly typed comparison contract for SystemEx.
-    /// 
-    /// Unlike <see cref="System.IComparable{T}"/>, which returns an integer
-    /// (-1, 0, +1), this interface uses the explicit <see cref="CompareResult"/>
-    /// enumeration. This makes comparison outcomes easier to interpret and avoids
-    /// ambiguity, especially in low‑level or domain‑specific types.
-    /// 
-    /// <para>
-    /// <b>Compatibility with IComparable&lt;T&gt;:</b><br/>
-    /// Since <see cref="CompareResult"/> is backed by an integer, any type can
-    /// implement both interfaces simultaneously. The standard CompareTo method
-    /// can simply cast the extended result:
-    /// </para>
-    /// 
-    /// <code>
-    /// public sealed class Foo : IComparableEx&lt;Foo&gt;, IComparable&lt;Foo&gt;
-    /// {
-    ///     public CompareResult CompareTo(Foo other)
-    ///     {
-    ///         // Custom comparison logic...
-    ///         return CompareResult.Equal;
-    ///     }
-    ///
-    ///     int IComparable&lt;Foo&gt;.CompareTo(Foo other)
-    ///     {
-    ///         // Cast the extended comparison result to an int.
-    ///         return (int)CompareTo(other);
-    ///     }
-    /// }
-    /// </code>
-    /// 
-    /// <para>
-    /// This interface is intentionally generic and can be implemented by any type:
-    /// numeric primitives, geometric structures, colors, states, or any other
-    /// domain‑specific objects requiring deterministic comparison semantics.
-    /// </para>
-    /// </summary>
-    /// <typeparam name="T">
-    /// The type that this instance can be compared against.
-    /// </typeparam>
-    public interface IComparableEx<T> {
+	/// \addtogroup SystemEx
+	/// @
+	/// <summary>
+	/// Provides an extended and strongly typed comparison contract for SystemEx.
+	/// 
+	/// Unlike <see cref="System.IComparable{T}"/>, which returns an integer
+	/// (-1, 0, +1), this interface uses the explicit <see cref="CompareResult"/>
+	/// enumeration. This makes comparison outcomes easier to interpret and avoids
+	/// ambiguity, especially in low‑level or domain‑specific types.
+	/// 
+	/// <para>
+	/// <b>Compatibility with IComparable&lt;T&gt;:</b><br/>
+	/// Since <see cref="CompareResult"/> is backed by an integer, any type can
+	/// implement both interfaces simultaneously. The standard CompareTo method
+	/// can simply cast the extended result:
+	/// </para>
+	/// 
+	/// <code>
+	/// public sealed class Foo : IComparableEx&lt;Foo&gt;, IComparable&lt;Foo&gt;
+	/// {
+	///     public CompareResult CompareTo(Foo other)
+	///     {
+	///         // Custom comparison logic...
+	///         return CompareResult.Equal;
+	///     }
+	///
+	///     int IComparable&lt;Foo&gt;.CompareTo(Foo other)
+	///     {
+	///         // Cast the extended comparison result to an int.
+	///         return (int)CompareTo(other);
+	///     }
+	/// }
+	/// </code>
+	/// 
+	/// <para>
+	/// This interface is intentionally generic and can be implemented by any type:
+	/// numeric primitives, geometric structures, colors, states, or any other
+	/// domain‑specific objects requiring deterministic comparison semantics.
+	/// </para>
+	/// </summary>
+	/// <typeparam name="T">
+	/// The type that this instance can be compared against.
+	/// </typeparam>
+	public interface IComparableEx<T> {
         /// <summary>
         /// Compares this instance with the specified value and returns a
         /// <see cref="CompareResult"/> describing the relationship between them.
@@ -83,5 +85,5 @@ namespace SystemEx {
         /// </returns>
         CompareResult CompareTo ( T a );
     }
-
+	//@}
 }

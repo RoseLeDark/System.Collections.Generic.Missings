@@ -19,18 +19,18 @@ using System.Runtime.InteropServices;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Runtime.InteropServices {
-    /// \addtogroup Runtime
-    /// @{
-    /// <summary>
-    /// Provides a high‑level management layer for native modules and their exported
-    /// functions.  
-    /// <see cref="NativeHost"/> maintains an internal cache of loaded modules to
-    /// avoid redundant loading operations and to ensure that multiple components
-    /// referencing the same library share a single module instance.  
-    /// It also provides helper methods for resolving native function pointers and
-    /// converting them into managed delegates.
-    /// </summary>
-    public static class NativeHost {
+	/// \addtogroup SystemEx.Runtime.InteropServices
+	/// @{
+	/// <summary>
+	/// Provides a high‑level management layer for native modules and their exported
+	/// functions.  
+	/// <see cref="NativeHost"/> maintains an internal cache of loaded modules to
+	/// avoid redundant loading operations and to ensure that multiple components
+	/// referencing the same library share a single module instance.  
+	/// It also provides helper methods for resolving native function pointers and
+	/// converting them into managed delegates.
+	/// </summary>
+	public static class NativeHost {
         /// <summary>
         /// Stores all modules loaded through <see cref="LoadModule(string)"/>.  
         /// The key is the module path, and the value is the corresponding

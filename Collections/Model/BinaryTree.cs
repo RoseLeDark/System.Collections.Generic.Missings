@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using SystemEx.Algorithms;
-using SystemEx.Algorithms.Interfaces;
 
 #if USE_DEVBUILD_UNSTABLE
 namespace SystemEx.Collections.Model {

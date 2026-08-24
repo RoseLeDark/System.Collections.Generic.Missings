@@ -18,15 +18,15 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A random‑access iterator for <see cref="List{T}"/> that also implements
-    /// <see cref="Iterrator{T}"/> to support foreach‑style enumeration.
-    /// Provides forward, backward, and offset‑based movement.
-    /// </summary>
-    /// <typeparam name="T">The element type stored in the list.</typeparam>
-    public struct ListIterator<T> : Iterrator<T>, IEnumerator {
+	/// \addtogroup SystemEx.Collections.Generic 
+	/// @{
+	/// <summary>
+	/// A random‑access iterator for <see cref="List{T}"/> that also implements
+	/// <see cref="Iterrator{T}"/> to support foreach‑style enumeration.
+	/// Provides forward, backward, and offset‑based movement.
+	/// </summary>
+	/// <typeparam name="T">The element type stored in the list.</typeparam>
+	public struct ListIterator<T> : Iterrator<T>, IEnumerator {
         /// <summary>
         /// The underlying list being iterated over.
         /// </summary>

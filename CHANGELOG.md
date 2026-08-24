@@ -1,14 +1,36 @@
 # Changelog
-## [0.91.1823] 18.08.2026 intern Preview for 1.0 -> Lacking
+
+## [0.92.1902] 24.08.2026 intern Preview for 1.0 -> Lacking
 ### Correcture
 - Remove from ILock.TryLock the argument TimeSpan. Now ist TryLock != Lock 
+- Update Result, can nocw habdle null. `this [int index]` return object? and add function `Get(int index = 0)` return object?
 
 ### Added
-- Added 
+- Added in SystemEx.Threading
     - `Latch`: A one‑shot countdown synchronization primitive that releases all 
        waiting threads once its counter reaches zero and remains permanently open afterward.
     - `Barrier`: A reusable multi‑phase synchronization barrier that blocks threads until 
      a specified number of arrivals is reached, then executes a completion step and advances to the next phase.
+    - `RCUObject<T>`: Represents a minimal Read-Copy-Update (RCU) container that provides lock-free read 
+       access and exclusive write access to a protected value.
+    
+- Added in SystemEx:
+    - `IValueWriter` & `IValueWriter<T>`: Provides endian-aware write operations for genric/primitive numeric types.
+    - `IValueReader` & `IValueReader<T>`: Provides endian-aware reader operations for genric/primitive numeric types
+- Added in SystemEx.IO: 
+    - `RCUStream<TStream>`:A Read-Copy-Update (RCU) wrapper around a System.IO.Stream that provides 
+       lock-free read operations and exclusive write operations. `RCUStream<TStream>` implt `IValueWriter` and
+       `IValueReader`. 
+- Added in SystemEx.Collections.Generic:
+    - `RCUCache`: Provides a Read‑Copy‑Update (RCU) wrapper around a <see cref="Cache"/> instance.
+    
+### Remove
+- Remove `LongLenght` from Cache - redudance with `long Lenght`
+- Remove `Write(value ... )` and `Read{Uint, int ....}` from ICache and Cache and RCUCache implt now `ICache`, `IValueWriter` and
+  `IValueReader`. 
+### Update Coution
+- namespace `SystemEx.Algorithms.Interfaces` and `SystemEx.Algorithms` are marged to `SystemEx.Algorithms`. !!
+
 
 ## [0.90.1785] 18.08.2026 intern Preview for 1.0 -> Lacking
 ### Added

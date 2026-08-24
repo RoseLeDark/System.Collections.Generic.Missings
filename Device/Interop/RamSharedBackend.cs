@@ -1,38 +1,55 @@
-﻿using System.Runtime.InteropServices;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+using System.Runtime.InteropServices;
 
 namespace SystemEx.Device.Intertropt {
 
-
-    /// <summary>
-    /// Represents a pinned unmanaged memory block used by SystemEx backends.
-    ///
-    /// <para>
-    /// This structure is essential for passing raw pointers to native code.
-    /// When a byte array is pinned using <see cref="GCHandle"/>, the garbage
-    /// collector is prevented from relocating it. This guarantees that the
-    /// unmanaged pointer (<see cref="Point"/>) remains stable for the entire
-    /// duration of the native kernel execution.
-    /// </para>
-    ///
-    /// <para>
-    /// SystemEx uses <see cref="UnmanagedObject"/> as the bridge between
-    /// managed buffers (<c>byte[]</c>) and native compute kernels.  
-    /// It provides:
-    /// <list type="bullet">
-    /// <item><description>A stable unmanaged pointer</description></item>
-    /// <item><description>The raw byte data</description></item>
-    /// <item><description>The size of the memory block</description></item>
-    /// <item><description>Automatic cleanup via <see cref="Dispose"/></description></item>
-    /// </list>
-    /// </para>
-    ///
-    /// <para>
-    /// This type is lightweight and disposable. Backends create it when a
-    /// buffer is shared with native code and release it once the kernel
-    /// finishes execution.
-    /// </para>
-    /// </summary>
-    public struct UnmanagedObject : IDisposable {
+	// \addtogroup SystemEx.Device.Intertropt 
+	/// @{
+	/// <summary>
+	/// Represents a pinned unmanaged memory block used by SystemEx backends.
+	///
+	/// <para>
+	/// This structure is essential for passing raw pointers to native code.
+	/// When a byte array is pinned using <see cref="GCHandle"/>, the garbage
+	/// collector is prevented from relocating it. This guarantees that the
+	/// unmanaged pointer (<see cref="Point"/>) remains stable for the entire
+	/// duration of the native kernel execution.
+	/// </para>
+	///
+	/// <para>
+	/// SystemEx uses <see cref="UnmanagedObject"/> as the bridge between
+	/// managed buffers (<c>byte[]</c>) and native compute kernels.  
+	/// It provides:
+	/// <list type="bullet">
+	/// <item><description>A stable unmanaged pointer</description></item>
+	/// <item><description>The raw byte data</description></item>
+	/// <item><description>The size of the memory block</description></item>
+	/// <item><description>Automatic cleanup via <see cref="Dispose"/></description></item>
+	/// </list>
+	/// </para>
+	///
+	/// <para>
+	/// This type is lightweight and disposable. Backends create it when a
+	/// buffer is shared with native code and release it once the kernel
+	/// finishes execution.
+	/// </para>
+	/// </summary>
+	public struct UnmanagedObject : IDisposable {
         /// <summary>
         /// The pinned data 
         /// </summary>
@@ -181,4 +198,5 @@ namespace SystemEx.Device.Intertropt {
             return m_Buffer.Length;
         }
     }
+	/// @}
 }

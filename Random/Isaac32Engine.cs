@@ -17,10 +17,12 @@
 using System;
 
 namespace SystemEx.Random {
-    /// <summary>
-    /// Represents the ISAAC 32-bit random number generator.
-    /// </summary>
-    public sealed class Isaac32Engine {
+	/// \addtogroup SystemEx.Random
+	/// @{
+	/// <summary>
+	/// Represents the ISAAC 32-bit random number generator.
+	/// </summary>
+	public sealed class Isaac32Engine {
         private const uint GoldenRatio = 0x9e3779b9u; // dein TGoldenRatio für 32 Bit
         private const int Size = 256;
 
@@ -214,5 +216,5 @@ namespace SystemEx.Random {
             m_a = a;
         }
     }
-
+	///@}
 }
