@@ -1,31 +1,100 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.Metrics;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 
 namespace SystemEx.Threading {
+	// \addtogroup SystemEx.Threading
+	/// @{
 
-
+	/// <summary>
+	/// Exception thrown when a barrier phase transition fails due to an invalid
+	/// lock state or an inconsistent phase update.
+	/// 
+	/// <para>
+	/// This exception is raised when the barrier attempts to enter a new phase
+	/// but the writer lock cannot be reacquired, or when the number of dropped
+	/// participants exceeds the allowed threshold.
+	/// </para>
+	/// 
+	/// <para>
+	/// Typical failure scenarios include:
+	/// <list type="bullet">
+	/// <item>
+	/// <description>
+	/// The barrier cannot reacquire its internal lock after releasing it for
+	/// phase completion.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// A phase drop count results in an invalid new maximum participant count.
+	/// </description>
+	/// </item>
+	/// </list>
+	/// </para>
+	/// </summary>
 	public class BarrierNewPhaseLockException : Exception {
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BarrierNewPhaseLockException"/>
+		/// class with no message or inner exception.
+		/// </summary>
 		public BarrierNewPhaseLockException ()
 			: base(null) {
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BarrierNewPhaseLockException"/>
+		/// class with the specified inner exception.
+		/// </summary>
+		/// <param name="innerException">
+		/// The exception that caused the barrier phase transition to fail.
+		/// </param>
 		public BarrierNewPhaseLockException ( Exception? innerException )
 			: base(null, innerException) {
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BarrierNewPhaseLockException"/>
+		/// class with a custom error message.
+		/// </summary>
+		/// <param name="message">
+		/// The message describing the reason for the failure.
+		/// </param>
 		public BarrierNewPhaseLockException ( string? message )
 			: base(message, null) {
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BarrierNewPhaseLockException"/>
+		/// class with a custom error message and an inner exception.
+		/// </summary>
+		/// <param name="message">
+		/// The message describing the reason for the failure.
+		/// </param>
+		/// <param name="innerException">
+		/// The exception that caused the barrier phase transition to fail.
+		/// </param>
 		public BarrierNewPhaseLockException ( string? message, Exception? innerException )
 			: base(message, innerException) {
 		}
 	}
+
+
+
 	/// <summary>
 	/// Represents a reusable multi‑phase synchronization barrier.
 	/// Threads call <see cref="Arrive"/> or <see cref="ArriveAndWait"/> to
@@ -204,4 +273,5 @@ namespace SystemEx.Threading {
 #endif
 		}
 	}
+	/// @}
 }
