@@ -19,13 +19,14 @@ using SystemEx.Collections.Generic;
 using SystemEx.Numeric;
 
 namespace SystemEx.Threading {
-
-    /// <summary>
-    /// Represents the lifecycle states used by <see cref="ThreadEx"/> and
-    /// lightweight thread implementations. These states describe creation, startup,
-    /// execution, pausing, and termination requests in a minimal and predictable manner.
-    /// </summary>
-    public enum ThreadExState {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// Represents the lifecycle states used by <see cref="ThreadEx"/> and
+	/// lightweight thread implementations. These states describe creation, startup,
+	/// execution, pausing, and termination requests in a minimal and predictable manner.
+	/// </summary>
+	public enum ThreadExState {
 
         /// <summary>
         /// The thread object is being constructed and has not yet been started.
@@ -102,7 +103,6 @@ namespace SystemEx.Threading {
     /// 
     /// Custom events may use bits ≥ 4.
     /// </remarks>
-
     public class ThreadEx  {
         private const byte EVENTGROUP_BIT_JOINABLE = 0;
         private const byte EVENTGROUP_BIT_STARTED =  1;
@@ -593,4 +593,5 @@ namespace SystemEx.Threading {
             }
         }
     }
+	/// @}
 }

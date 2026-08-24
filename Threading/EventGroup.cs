@@ -17,22 +17,23 @@
 using SystemEx.Numeric;
 
 namespace SystemEx.Threading {
-
-    /// <summary>
-    /// Represents a lightweight event group based on a fast bit‑storage type.
-    /// <see cref="EventGroup{TFastType}"/> allows individual bit positions to be
-    /// set, cleared, flipped, queried, or waited on. The underlying bit container
-    /// is provided by <typeparamref name="TFastType"/>, which must implement
-    /// <see cref="IFastType"/>.
-    /// 
-    /// This class is thread‑safe and uses <see cref="LightLock"/> to synchronize
-    /// access to the bit field.
-    /// </summary>
-    /// <typeparam name="TFastType">
-    /// A fast bit‑storage type implementing <see cref="IFastType"/>. The type must
-    /// provide methods for reading, writing, and flipping individual bit positions.
-    /// </typeparam>
-    public class EventGroup<TFastType> where TFastType : IFastType {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// Represents a lightweight event group based on a fast bit‑storage type.
+	/// <see cref="EventGroup{TFastType}"/> allows individual bit positions to be
+	/// set, cleared, flipped, queried, or waited on. The underlying bit container
+	/// is provided by <typeparamref name="TFastType"/>, which must implement
+	/// <see cref="IFastType"/>.
+	/// 
+	/// This class is thread‑safe and uses <see cref="LightLock"/> to synchronize
+	/// access to the bit field.
+	/// </summary>
+	/// <typeparam name="TFastType">
+	/// A fast bit‑storage type implementing <see cref="IFastType"/>. The type must
+	/// provide methods for reading, writing, and flipping individual bit positions.
+	/// </typeparam>
+	public class EventGroup<TFastType> where TFastType : IFastType {
 
         private TFastType m_bits;
         private LightLock m_lock;
@@ -115,4 +116,5 @@ namespace SystemEx.Threading {
             }
         }
     }
+	/// @}
 }

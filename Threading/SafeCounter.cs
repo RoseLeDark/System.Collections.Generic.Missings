@@ -1,20 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
 
 namespace SystemEx.Threading {
-
-    /// <summary>
-    /// Provides a lightweight atomic counter with increment, decrement and assignment
-    /// </summary>
-    public class SafeCounter : IEquatable<SafeCounter> {
+	/// addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// Provides a lightweight atomic counter with increment, decrement and assignment
+	/// </summary>
+	public class SafeCounter : IEquatable<SafeCounter> {
         private long m_value;
         private long m_startValue;
 
         /// <summary>
         /// Gets the current value.
         /// </summary>
-        public long Value => Volatile.Read(ref m_value);
+        public long Value {
+            get => Volatile.Read(ref m_value);
+            internal set => Volatile.Write(ref m_value, value);
+        }
 
         /// <summary>
         /// Returns true if the counter is zero.
@@ -84,13 +101,13 @@ namespace SystemEx.Threading {
         /// Postfix increment.
         /// </summary>
         public long IncrementPost ()
-            => Interlocked.Exchange(ref m_value, m_value + 1);
+            => Interlocked.Exchange(ref m_value, Volatile.Read(ref m_value) + 1);
 
         /// <summary>
         /// Postfix decrement.
         /// </summary>
         public long DecrementPost ()
-            => Interlocked.Exchange(ref m_value, m_value - 1);
+            => Interlocked.Exchange(ref m_value, Volatile.Read(ref m_value) - 1);
 
 
         /// <summary>
@@ -200,4 +217,5 @@ namespace SystemEx.Threading {
             Assign(m_startValue);
         }
 	}
+	/// @}
 }

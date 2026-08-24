@@ -17,14 +17,15 @@
 
 
 namespace SystemEx.Threading {
-
-    /// <summary>
-    /// Defines the minimal contract for a synchronization primitive capable of
-    /// providing mutual exclusion. Implementations of <see cref="ILock"/> may wrap
-    /// lightweight in‑process mechanisms (such as <see cref="Monitor"/>) or
-    /// heavier inter‑process constructs (such as <see cref="Mutex"/>).
-    /// </summary>
-    public interface ILock {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// Defines the minimal contract for a synchronization primitive capable of
+	/// providing mutual exclusion. Implementations of <see cref="ILock"/> may wrap
+	/// lightweight in‑process mechanisms (such as <see cref="Monitor"/>) or
+	/// heavier inter‑process constructs (such as <see cref="Mutex"/>).
+	/// </summary>
+	public interface ILock {
         /// <summary>
         /// Attempts to acquire the lock using a millisecond timeout. A negative value
         /// indicates an immediate, non‑blocking attempt. Positive values specify the
@@ -200,4 +201,5 @@ namespace SystemEx.Threading {
             return slock.m_lock.IsLocked;
         }
     }
+	/// @}
 }

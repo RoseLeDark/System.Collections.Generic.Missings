@@ -14,26 +14,25 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-
-
-using System.Reflection.Metadata;
 using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Threading {
-    /// <summary>
-    /// A lightweight and minimal condition variable designed for simple thread
-    /// synchronization scenarios. Unlike the heavy and business‑oriented primitives
-    /// in .NET, <see cref="LightConditionVariable"/> provides a straightforward
-    /// FIFO wait‑list and wake‑up mechanism suitable for most everyday use cases.
-    /// <para>
-    /// Threads can register themselves using <see cref="Add(LightThread)"/> and
-    /// will be resumed explicitly through <see cref="Signal"/> or
-    /// <see cref="Broadcast"/>. No complex monitor logic or advanced runtime
-    /// scheduling is involved.
-    /// </para>
-    /// </summary>
-    public struct LightConditionVariable {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// A lightweight and minimal condition variable designed for simple thread
+	/// synchronization scenarios. Unlike the heavy and business‑oriented primitives
+	/// in .NET, <see cref="LightConditionVariable"/> provides a straightforward
+	/// FIFO wait‑list and wake‑up mechanism suitable for most everyday use cases.
+	/// <para>
+	/// Threads can register themselves using <see cref="Add(LightThread)"/> and
+	/// will be resumed explicitly through <see cref="Signal"/> or
+	/// <see cref="Broadcast"/>. No complex monitor logic or advanced runtime
+	/// scheduling is involved.
+	/// </para>
+	/// </summary>
+	public struct LightConditionVariable {
         private Deque<LightThread> m_waits;
         private readonly LightLock m_lockable;
         private string m_strName;
@@ -217,4 +216,5 @@ namespace SystemEx.Threading {
 #endif
 
 	}
+	/// @}
 }

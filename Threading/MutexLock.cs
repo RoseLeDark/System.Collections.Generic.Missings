@@ -1,26 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
 
 namespace SystemEx.Threading {
-    /// <summary>
-    /// A thin wrapper around operating‑system synchronization primitives
-    /// (<see cref="Mutex"/> and <see cref="EventWaitHandle"/>).
-    /// 
-    /// <para>
-    /// This class provides a blocking, kernel‑managed mutex lock.  
-    /// It is fundamentally different from <see cref="LightMutex{T}"/>, which is a 
-    /// non‑blocking, atomic spinlock‑based mutex implemented entirely in user space.
-    /// </para>
-    /// 
-    /// <para>
-    /// <b>Important:</b> This OS‑level mutex performs kernel transitions, may block
-    /// threads, and does not use atomic operations. It should not be mixed or 
-    /// substituted with <see cref="LightMutex{T}"/> or <see cref="LightCountingSpinlock{T}"/> 
-    /// unless the synchronization model explicitly requires blocking behavior.
-    /// </para>
-    /// </summary>
-    public sealed class MutexLock : ILock<Mutex> {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// A thin wrapper around operating‑system synchronization primitives
+	/// (<see cref="Mutex"/> and <see cref="EventWaitHandle"/>).
+	/// 
+	/// <para>
+	/// This class provides a blocking, kernel‑managed mutex lock.  
+	/// It is fundamentally different from <see cref="LightMutex{T}"/>, which is a 
+	/// non‑blocking, atomic spinlock‑based mutex implemented entirely in user space.
+	/// </para>
+	/// 
+	/// <para>
+	/// <b>Important:</b> This OS‑level mutex performs kernel transitions, may block
+	/// threads, and does not use atomic operations. It should not be mixed or 
+	/// substituted with <see cref="LightMutex{T}"/> or <see cref="LightCountingSpinlock{T}"/> 
+	/// unless the synchronization model explicitly requires blocking behavior.
+	/// </para>
+	/// </summary>
+	public sealed class MutexLock : ILock<Mutex> {
         /// <summary>
         /// The underlying operating‑system mutex object.
         /// This mutex is managed by the Windows kernel and may cause blocking
@@ -142,5 +158,5 @@ namespace SystemEx.Threading {
         }
 
     }
-
+	/// @}
 }

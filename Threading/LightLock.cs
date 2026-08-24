@@ -16,12 +16,14 @@
  */
 
 namespace SystemEx.Threading {
-    /// <summary>
-    /// Provides a minimal wrapper around <see cref="Monitor"/> to offer lightweight
-    /// mutual exclusion. <see cref="LightLock"/> is intended for short, low‑overhead
-    /// critical sections where a full synchronization primitive would be unnecessary.
-    /// </summary>
-    public struct LightLock : ILock<object> {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// Provides a minimal wrapper around <see cref="Monitor"/> to offer lightweight
+	/// mutual exclusion. <see cref="LightLock"/> is intended for short, low‑overhead
+	/// critical sections where a full synchronization primitive would be unnecessary.
+	/// </summary>
+	public struct LightLock : ILock<object> {
         private readonly object m_lock;
         private string m_strName;
         private bool m_bLocked;
@@ -121,4 +123,5 @@ namespace SystemEx.Threading {
         public bool TryLock (  ) => (m_bLocked = Monitor.TryEnter(m_lock));
 
     }
+	/// @}
 }

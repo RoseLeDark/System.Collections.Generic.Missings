@@ -16,66 +16,65 @@
  */
 
 
-
-using System.Xml.Linq;
-
 namespace SystemEx.Threading {
-    /// <summary>
-    /// Implements a counting spinlock, a non‑blocking synchronization primitive that
-    /// allows a bounded number of threads to enter a critical section concurrently.
-    /// Unlike traditional binary spinlocks, which permit only a single thread at a
-    /// time, a counting spinlock maintains an atomic counter representing the current
-    /// available capacity.
-    /// 
-    /// <para>
-    /// The lock is initialized with a minimum and maximum capacity. Each thread
-    /// attempting to enter performs an atomic decrement on the counter:
-    /// </para>
-    /// 
-    /// <list type="bullet">
-    /// <item>
-    /// <description>
-    /// If the resulting value is greater than or equal to <c>minCapacity</c>,
-    /// the thread successfully enters the critical section.
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <description>
-    /// If the value drops below <c>minCapacity</c>, the thread is denied access and
-    /// must spin‑wait until capacity becomes available again.
-    /// </description>
-    /// </item>
-    /// </list>
-    /// 
-    /// <para>
-    /// When a thread exits the critical section, it performs an atomic increment,
-    /// returning capacity to the lock and allowing waiting threads to proceed.
-    /// </para>
-    /// 
-    /// <para>
-    /// Counting spinlocks are strictly non‑blocking and do not yield or sleep while
-    /// waiting. This makes them suitable for extremely short critical sections,
-    /// high‑performance kernel operations, interrupt handlers, and other environments
-    /// where blocking is forbidden.
-    /// </para>
-    /// 
-    /// <para>
-    /// Typical use cases include:
-    /// </para>
-    /// <list type="bullet">
-    /// <item><description>Bounded resource pools</description></item>
-    /// <item><description>Fixed‑size worker queues</description></item>
-    /// <item><description>Throttling parallel operations</description></item>
-    /// <item><description>High‑frequency CPU‑bound tasks</description></item>
-    /// </list>
-    /// 
-    /// <para>
-    /// Because waiting threads actively spin, excessive contention can degrade system
-    /// performance. Counting spinlocks should therefore be used only when critical
-    /// sections are extremely short and contention is expected to be low.
-    /// </para>
-    /// </summary>
-    public class LightCountingSpinlock<T> : ISpinlock<bool> {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// Implements a counting spinlock, a non‑blocking synchronization primitive that
+	/// allows a bounded number of threads to enter a critical section concurrently.
+	/// Unlike traditional binary spinlocks, which permit only a single thread at a
+	/// time, a counting spinlock maintains an atomic counter representing the current
+	/// available capacity.
+	/// 
+	/// <para>
+	/// The lock is initialized with a minimum and maximum capacity. Each thread
+	/// attempting to enter performs an atomic decrement on the counter:
+	/// </para>
+	/// 
+	/// <list type="bullet">
+	/// <item>
+	/// <description>
+	/// If the resulting value is greater than or equal to <c>minCapacity</c>,
+	/// the thread successfully enters the critical section.
+	/// </description>
+	/// </item>
+	/// <item>
+	/// <description>
+	/// If the value drops below <c>minCapacity</c>, the thread is denied access and
+	/// must spin‑wait until capacity becomes available again.
+	/// </description>
+	/// </item>
+	/// </list>
+	/// 
+	/// <para>
+	/// When a thread exits the critical section, it performs an atomic increment,
+	/// returning capacity to the lock and allowing waiting threads to proceed.
+	/// </para>
+	/// 
+	/// <para>
+	/// Counting spinlocks are strictly non‑blocking and do not yield or sleep while
+	/// waiting. This makes them suitable for extremely short critical sections,
+	/// high‑performance kernel operations, interrupt handlers, and other environments
+	/// where blocking is forbidden.
+	/// </para>
+	/// 
+	/// <para>
+	/// Typical use cases include:
+	/// </para>
+	/// <list type="bullet">
+	/// <item><description>Bounded resource pools</description></item>
+	/// <item><description>Fixed‑size worker queues</description></item>
+	/// <item><description>Throttling parallel operations</description></item>
+	/// <item><description>High‑frequency CPU‑bound tasks</description></item>
+	/// </list>
+	/// 
+	/// <para>
+	/// Because waiting threads actively spin, excessive contention can degrade system
+	/// performance. Counting spinlocks should therefore be used only when critical
+	/// sections are extremely short and contention is expected to be low.
+	/// </para>
+	/// </summary>
+	public class LightCountingSpinlock<T> : ISpinlock<bool> {
         private readonly int m_min;
         private readonly int m_max;
         private SafeCounter m_counter;
@@ -277,5 +276,5 @@ namespace SystemEx.Threading {
             return false;
         }
     }
-
+	/// @}
 }

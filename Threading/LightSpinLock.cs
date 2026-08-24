@@ -1,15 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
 
 namespace SystemEx.Threading {
-    /// <summary>
-    /// Provides a lightweight atomic spinlock that protects a single value.
-    /// <see cref="LightSpinlock{T}"/> uses pure atomic operations and busy‑wait
-    /// acquisition, making it suitable for extremely short critical sections.
-    /// </summary>
-    /// <typeparam name="T">The type of the protected value.</typeparam>
-    public struct LightSpinlock<T> : ISpinlock<bool> {
+	// \addtogroup SystemEx.Threading
+	/// @{
+	/// <summary>
+	/// Provides a lightweight atomic spinlock that protects a single value.
+	/// <see cref="LightSpinlock{T}"/> uses pure atomic operations and busy‑wait
+	/// acquisition, making it suitable for extremely short critical sections.
+	/// </summary>
+	/// <typeparam name="T">The type of the protected value.</typeparam>
+	public struct LightSpinlock<T> : ISpinlock<bool> {
         private int m_locked;
         private T? m_value;
         private readonly string m_name;
@@ -124,10 +140,6 @@ namespace SystemEx.Threading {
             if(_x) m_owner = System.Threading.Thread.CurrentThread.ManagedThreadId;
             return _x;
         }
-
-        
-
-        
     }
-
+	/// @}
 }
