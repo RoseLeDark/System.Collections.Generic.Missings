@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A lightweight, serializable two‑element tuple consisting of a strongly typed
 	/// key and value. Implements <see cref="IPair{T, TU}"/> and provides typed

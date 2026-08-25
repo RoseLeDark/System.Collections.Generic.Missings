@@ -17,7 +17,8 @@
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Provides endian-aware write operations for primitive numeric types.
 	/// Implementations convert the specified value into a byte sequence using

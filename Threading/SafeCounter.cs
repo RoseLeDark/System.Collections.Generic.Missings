@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Threading {
-	/// addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Provides a lightweight atomic counter with increment, decrement and assignment
 	/// </summary>

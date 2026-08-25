@@ -19,8 +19,9 @@ using SystemEx.Collections.Generic;
 using SystemEx.Numeric;
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Represents the lifecycle states used by <see cref="ThreadEx"/> and
 	/// lightweight thread implementations. These states describe creation, startup,

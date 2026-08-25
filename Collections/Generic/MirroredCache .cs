@@ -18,8 +18,9 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A cache that maintains a mirrored copy of all written data.  
 	/// Every write operation is performed on the primary cache and a reversed

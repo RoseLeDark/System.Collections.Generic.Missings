@@ -20,8 +20,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Algorithms.Compute {
-	/// \addtogroup SystemEx.Algorithms.Compute
+	/// \addtogroup AlgorithmsCompute
 	/// @{
+
 	/// <summary>
 	/// Implements a threshold‑based classifier using two boundaries:  
 	/// - Values above the true threshold → <see cref="triple.True"/>  
@@ -48,5 +49,5 @@ namespace SystemEx.Algorithms.Compute {
             return triple.Nin;
         }
     }
-	///@}
+	/// @}
 }

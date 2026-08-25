@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Defines the minimal contract for a synchronization primitive capable of
 	/// providing mutual exclusion. Implementations of <see cref="ILock"/> may wrap

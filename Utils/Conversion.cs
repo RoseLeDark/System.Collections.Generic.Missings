@@ -20,7 +20,7 @@ using SystemEx.IO.Provider;
 using SystemEx.Numeric;
 
 namespace SystemEx {
-	// addtogroup SystemEx
+	/// \addtogroup Utils
 	/// @{
 
 	/// <summary>

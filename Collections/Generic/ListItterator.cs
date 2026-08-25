@@ -18,8 +18,9 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A random‑access iterator for <see cref="List{T}"/> that also implements
 	/// <see cref="Iterrator{T}"/> to support foreach‑style enumeration.

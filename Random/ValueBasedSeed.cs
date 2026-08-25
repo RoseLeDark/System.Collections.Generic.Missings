@@ -20,8 +20,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Random {
-	/// \addtogroup SystemEx.Random
+	/// \addtogroup Random
 	/// @{
+
 	/// <summary>
 	/// Provides a seed implementation based on a simple integer value. The input
 	/// integer is expanded into multiple 32‑bit components using bitwise and
@@ -85,5 +86,5 @@ namespace SystemEx.Random {
             Update(value);
         }
     }
-	///@}
+	/// @}
 }

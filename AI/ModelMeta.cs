@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Defines the data format returned by a backend during model execution.
 	/// 

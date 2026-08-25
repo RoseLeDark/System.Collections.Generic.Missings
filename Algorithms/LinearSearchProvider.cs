@@ -19,8 +19,9 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup SystemEx.Algorithms
+	/// \addtogroup Algorithms
 	/// @{
+
 	/// <summary>
 	/// A simple fallback search provider that performs a linear scan over the
 	/// container and counts how many elements match the given condition.

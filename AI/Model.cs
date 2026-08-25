@@ -24,8 +24,9 @@ using SystemEx.Collections.Generic;
 using AIEnv = SystemEx.AI.Environment;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Represents a generic AI model instance within the SystemEX framework.
 	/// 

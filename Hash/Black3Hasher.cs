@@ -21,8 +21,9 @@ using SystemEx.Collections.Generic;
 using SystemEx.Hash.Black;
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Public BLAKE3 hasher implementation used by the SystemEx hashing subsystem.
 	/// 

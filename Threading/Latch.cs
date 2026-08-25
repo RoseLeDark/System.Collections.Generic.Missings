@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// A one-shot countdown synchronization primitive.
 	/// The latch starts in the locked state and releases all waiting threads

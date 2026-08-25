@@ -22,8 +22,9 @@ using System.Text;
 using SystemEx.Numeric;
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Base light class used for all light types in the SystemEx.Drawing namespace.
 	/// Provides shared parameters such as position, direction, diffuse/ambient color

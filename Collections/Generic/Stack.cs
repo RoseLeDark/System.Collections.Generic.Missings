@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a logical sub‑stack inside a shared stack buffer.
 	/// A layer defines its own independent boundaries and a current pointer,

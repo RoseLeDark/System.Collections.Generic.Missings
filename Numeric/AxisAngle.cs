@@ -18,7 +18,7 @@
 
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
 
 	/// <summary>
@@ -35,5 +35,5 @@ namespace SystemEx.Numeric {
         /// </summary>
         public T Angle;
     }
-    // @}
+	/// @}
 }

@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A lightweight, serializable four‑element tuple consisting of strongly typed
 	/// first, second, third, and fourth values.  

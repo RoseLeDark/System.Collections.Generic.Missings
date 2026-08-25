@@ -17,8 +17,9 @@
 
 namespace SystemEx.Collections.Generic {
 
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A dynamically sized tuple storing elements as <see cref="object"/> values.
 	/// Provides indexed access, mutation, and compatibility with the <see cref="ITuple"/>

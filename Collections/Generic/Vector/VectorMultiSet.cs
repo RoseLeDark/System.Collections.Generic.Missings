@@ -19,8 +19,9 @@ using SystemEx.Algorithms;
 
 namespace SystemEx.Collections.Generic {
 
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Equivalent to a std::flat_multiset, but implemented as an open, non-owning sorted view 
 	/// over any IContainerEx instance. The MultiSet struct does not store elements itself; 
@@ -453,5 +454,5 @@ namespace SystemEx.Collections.Generic {
         }
 
     }
-    ///@}
+    /// @}
 }

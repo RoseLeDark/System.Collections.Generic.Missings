@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a 256‑bit unsigned integer composed of two 128‑bit halves.
 	/// 
@@ -139,5 +140,5 @@ namespace SystemEx.Numeric {
 	}
 
 
-	//@}
+	/// @}
 }

@@ -23,8 +23,9 @@ using SystemEx.Numeric.Utils;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a 2‑component floating‑point vector.
 	///

@@ -19,8 +19,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Generic interface for dual quaternions.
 	/// TQ represents the quaternion type (rotation + dual part),
@@ -308,4 +309,5 @@ namespace SystemEx.Numeric {
 }
 */
     }
+	/// @}
 }

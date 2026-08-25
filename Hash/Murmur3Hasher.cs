@@ -20,8 +20,9 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
 #if TESTING
-    /// \addtogroup SystemEx.Hash
+    /// \addtogroup Hash
 	/// @{
+
     /// <summary>
     /// Implements the Murmur3 hashing algorithm (32‑bit and 64‑bit)   
     /// 

@@ -21,7 +21,8 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Defines how FlexSpan indexes its underlying array.
 	/// </summary>

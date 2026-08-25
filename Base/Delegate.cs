@@ -23,7 +23,8 @@ using SystemEx.Utils;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Represents a delegate container that can hold multiple callback functions.
 	/// Each callback receives the delegate instance itself and an argument of type <typeparamref name="T"/>.

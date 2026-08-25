@@ -21,7 +21,8 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.Base {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Provides a cursor-based stepper over a normalized numeric range.
 	/// The stepper moves from Start to End in fixed increments and exposes
@@ -209,5 +210,5 @@ namespace SystemEx.Base {
             return GetEnumerator();
         }
     }
-	//@}
+	/// @}
 }

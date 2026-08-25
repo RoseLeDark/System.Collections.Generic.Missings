@@ -21,7 +21,8 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Represents a numeric range defined by a start and end value.
 	/// Provides range validation, containment checks, normalization,
@@ -206,6 +207,6 @@ namespace SystemEx {
             return m_range.GetEnumerator();
         }
     }
-	//@}
+	/// @}
 }
 

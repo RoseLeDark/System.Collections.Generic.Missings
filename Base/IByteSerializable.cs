@@ -18,7 +18,8 @@
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Provides binary serialization and deserialization capabilities for a type.
 	/// Implementations define how an instance is encoded into a byte sequence and

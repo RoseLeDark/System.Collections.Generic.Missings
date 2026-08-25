@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Represents the qualitative contrast level between two colors.
 	/// </summary>

@@ -22,9 +22,9 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
-	/// 
+
 	/// <summary>
 	/// Represents the result of an AI model execution.
 	/// 

@@ -16,8 +16,8 @@
  */
 
 
-namespace SystemEx.Numeric.Utils {
-	/// \addtogroup SystemEx.Numeric.Utils
+namespace SystemEx.Numeric {
+	/// \addtogroup Numeric
 	/// @{
 
 	/// <summary>

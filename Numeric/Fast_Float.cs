@@ -18,8 +18,9 @@
 using System.Runtime.InteropServices;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Provides low-level IEEE‑754 bit inspection and manipulation for 32‑bit floating-point values.
 	/// This type follows the naming and structural conventions of the Fast_Type family, but is
@@ -173,5 +174,5 @@ namespace SystemEx.Numeric {
             return exponent == 0 && mantissa != 0;
         }
     }
-    //@}
+	/// @}
 }

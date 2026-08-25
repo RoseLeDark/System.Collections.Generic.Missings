@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Represents a compact N‑Color classification based on the HWB color model.
 	/// The color is expressed using a hue segment index (0–5), a percentage

@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Runtime.InteropServices.Platform {
-	/// \addtogroup SystemEx.Runtime.InteropServices.Platform
+	/// \addtogroup InteropServices
 	/// @{
+
 	/// <summary>
 	/// Provides a fallback implementation for platforms that do not support
 	/// native module loading or symbol resolution.  

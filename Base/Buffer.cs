@@ -19,7 +19,8 @@
 #pragma warning disable CS8500 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Performs a raw, pointer‑based copy operation between two managed arrays.
 	/// 

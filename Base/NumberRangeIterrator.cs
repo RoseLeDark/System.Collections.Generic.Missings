@@ -19,7 +19,8 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Forward iterator over a normalized numeric range. Supports stepping
 	/// by one unit and exposes the current value and end-of-range state.
@@ -71,5 +72,5 @@ namespace SystemEx {
             }
         }
     }
-	//@}
+	/// @}
 }

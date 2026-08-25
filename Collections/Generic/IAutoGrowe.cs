@@ -19,8 +19,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines a contract for collections that can automatically grow their
 	/// internal storage when additional capacity is required.

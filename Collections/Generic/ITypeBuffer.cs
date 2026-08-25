@@ -19,8 +19,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines a typed, fixed‑stride buffer abstraction for unmanaged element types.
 	/// </summary>

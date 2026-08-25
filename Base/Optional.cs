@@ -20,7 +20,8 @@ using SystemEx.Utils;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Represents a optional value container that stores a value only when
 	/// <see cref="HasValue"/> is true. Unlike <see cref="Nullable{T}"/>, this type does not
@@ -318,5 +319,5 @@ namespace SystemEx {
 		}
 	}
 
-	//@}
+	/// @}
 }

@@ -19,8 +19,9 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a sparse, linear key–value container.
 	/// 

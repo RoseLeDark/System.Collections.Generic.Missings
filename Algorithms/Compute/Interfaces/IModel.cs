@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Algorithms.Compute {
-	/// \addtogroup SystemEx.Algorithms.Compute
+	/// \addtogroup AlgorithmsCompute
 	/// @{
+
 	/// <summary>
 	/// Represents a generic computational model that transforms an input value 
 	/// into an output value.  
@@ -35,5 +36,5 @@ namespace SystemEx.Algorithms.Compute {
 		TOutput Evaluate ( TInput input );
 	}
 
-	///@}
+	/// @}
 }

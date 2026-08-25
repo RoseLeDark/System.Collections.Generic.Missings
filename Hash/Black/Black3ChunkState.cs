@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash.Black {
-	/// \addtogroup SystemEx.Hash.Black
+	/// \addtogroup HashBlack
 	/// @{
 	/// <summary>
 	/// Internal state manager for a single BLAKE3 chunk.
@@ -203,5 +203,5 @@ namespace SystemEx.Hash.Black {
             return output;
         }
     }
-    ///@}
+    /// @}
 }

@@ -18,7 +18,7 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
 
 	/// <summary>

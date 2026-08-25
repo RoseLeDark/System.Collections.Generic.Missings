@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Extends <see cref="ILock{T}"/> with spin‑lock‑specific diagnostics and metadata.
 	/// Implementations of <see cref="ISpinlock{T}"/> represent busy‑wait mutual exclusion

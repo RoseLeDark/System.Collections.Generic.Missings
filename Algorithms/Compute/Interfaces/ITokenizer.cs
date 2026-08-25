@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Algorithms.Compute {
-	/// \addtogroup SystemEx.Algorithms.Compute
+	/// \addtogroup AlgorithmsCompute
 	/// @{
+
 	/// <summary>
 	/// Represents a tokenizer capable of splitting text into tokens.  
 	/// (Currently not implemented.)
@@ -26,6 +27,6 @@ namespace SystemEx.Algorithms.Compute {
 		//IReadOnlyVector<string> Tokenize(string text);
 	}
 
-	///@}
+	/// @}
 }
 

@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Describes the runtime environment required or used by an AI backend.
 	/// This enum is intentionally broad and future-proof.
@@ -73,6 +74,6 @@ namespace SystemEx.AI {
         // Custom
         AI_ENV_CUSTOM            = 0x3FFF
     }
-	///@}
+	/// @}
 
 }

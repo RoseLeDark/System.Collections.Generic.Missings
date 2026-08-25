@@ -20,8 +20,9 @@ using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// This value type represents A Half16b value.
 	/// See https://cloud.google.com/blog/products/ai-machine-learning/bfloat16-the-secret-to-high-performance-on-cloud-tpus
@@ -671,5 +672,5 @@ namespace SystemEx.Numeric {
             return (mant >> 3) + add;
         }
     }
-    //@}
+	/// @}
 }

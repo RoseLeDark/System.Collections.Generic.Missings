@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Algorithms.Compute {
-	/// \addtogroup SystemEx.Algorithms.Compute
+	/// \addtogroup AlgorithmsCompute
 	/// @{
+
 	/// <summary>
 	/// Represents a computational distance metric operating on 
 	/// <see cref="ICVector"/> instances.
@@ -31,6 +32,6 @@ namespace SystemEx.Algorithms.Compute {
 		float Compute ( ICVector a, ICVector b );
 	}
 
-	///@}
+	/// @}
 }
 

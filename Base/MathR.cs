@@ -21,7 +21,8 @@ using SystemEx.Numeric;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Provides exact rational mathematics for the <see cref="Ratio"/> type,
 	/// following the structural pattern of <see cref="System.MathF"/> but without
@@ -242,5 +243,5 @@ namespace SystemEx {
 
 		}
 	}
-	//@}
+	/// @}
 }

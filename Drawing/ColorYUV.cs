@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Represents a YUV color using floating‑point components.
 	/// Provides basic construction, comparison, and string formatting.
@@ -94,5 +95,5 @@ namespace SystemEx.Drawing {
             return string.Create(null, stackalloc char[256], $"[{m_y}, {m_u}, {m_v}]");
         }
     }
-    //@}
+	/// @}
 }

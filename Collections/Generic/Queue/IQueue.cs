@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines the non-generic base interface for queue-like containers.
 	/// Provides size information, capacity checks, and a method to clear the queue.

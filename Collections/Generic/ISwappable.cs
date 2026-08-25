@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines a container capability for swapping two elements.
 	/// 

@@ -20,8 +20,9 @@ using SystemEx.Utils;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a 2‑component inting‑point vector.
 	///

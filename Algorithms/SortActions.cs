@@ -1,4 +1,4 @@
-﻿/* 
+﻿AlgorithmsAlgorithmsAlgorithmsAlgorithms/* 
  * SPDX-License-Identifier: EUPL-1.2
  *
  * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
@@ -22,6 +22,7 @@ namespace SystemEx.Algorithms {
 
     /// \addtogroup Algorithms
     /// @{
+    
     /// <summary>
     /// Provides a set of sorting algorithms that operate on any container
     /// implementing <see cref="IVector{T}"/>.  

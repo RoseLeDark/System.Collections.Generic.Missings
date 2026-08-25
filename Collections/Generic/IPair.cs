@@ -15,8 +15,9 @@
  * changes and the date.
  */
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a two‑element tuple consisting of a key and a value.
 	/// Extends <see cref="ITuple"/> with strongly typed accessors and

@@ -18,8 +18,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Represents the result produced by a model execution.  
 	/// Provides access to the final output, metadata, raw backend information,
@@ -75,5 +76,5 @@ namespace SystemEx.AI {
 		DateTime Timestamp { get; }
 	}
 
-	///@}
+	/// @}
 }

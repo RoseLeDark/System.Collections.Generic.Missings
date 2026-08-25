@@ -18,7 +18,8 @@ using SystemEx.Numeric;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Provides mathematical helper functions that are not included in
 	/// <see cref="System.Math"/>.  
@@ -241,5 +242,5 @@ namespace SystemEx {
      
        
     }
-
+	/// @}
 }

@@ -16,7 +16,7 @@
  */
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
 
 	/// <summary>

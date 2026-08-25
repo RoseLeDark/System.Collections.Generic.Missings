@@ -22,8 +22,9 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Numeric {
-	// \addtogroup SystemEx.Numeric
+	// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Provides a low‑level, bit‑precise manipulation interface for any value
 	/// that can be interpreted as a contiguous sequence of bits. Implementations
@@ -208,5 +209,5 @@ namespace SystemEx.Numeric {
 		public IFastType<T> Combine ( IFastType<T> other );
 	}
 
-	//@}
+	/// @}
 }

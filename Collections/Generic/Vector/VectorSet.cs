@@ -19,8 +19,9 @@ using System.Runtime.CompilerServices;
 using SystemEx.Algorithms;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines a sorting action used by the Set wrapper. 
 	/// The delegate receives the underlying container and its comparer and performs 

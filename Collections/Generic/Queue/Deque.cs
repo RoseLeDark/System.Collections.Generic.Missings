@@ -23,8 +23,9 @@ namespace SystemEx.Collections.Generic {
 
 
 
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A simple fixed‑size double‑ended queue (deque) implemented using a linear array.
 	/// Supports pushing and popping at both the front and the back.  

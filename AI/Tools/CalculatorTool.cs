@@ -17,8 +17,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI.Tools {
-	// \addtogroup SystemEx.AI.Tools 
+	/// \addtogroup AI::Tools 
 	/// @{
+
 	/// <summary>
 	/// A basic arithmetic calculator tool.
 	/// 

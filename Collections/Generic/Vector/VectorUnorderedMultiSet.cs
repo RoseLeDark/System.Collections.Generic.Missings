@@ -19,8 +19,9 @@ using System.Runtime.CompilerServices;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents an unordered set view over an underlying container.
 	/// Elements are not sorted and no ordering guarantees are provided.

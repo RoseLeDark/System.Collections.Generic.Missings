@@ -17,8 +17,9 @@
 
 namespace SystemEx.Collections.Generic {
 
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Specifies the traversal direction for iterating over a sequence.
 	/// </summary>

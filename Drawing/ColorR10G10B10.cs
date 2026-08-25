@@ -19,8 +19,9 @@ using SystemEx.Collections.Generic;
 using SystemEx.IO.Provider;
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	///  <summary>
 	/// A Scbema is used to serialize and deserialize a ColorR10G10B10A2 color to and from a binary representation.
 	/// </summary>

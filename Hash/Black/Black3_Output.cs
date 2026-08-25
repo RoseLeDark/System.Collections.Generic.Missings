@@ -26,7 +26,7 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash.Black {
-	/// \addtogroup SystemEx.Hash.Black
+	/// \addtogroup HashBlack
 	/// @{
 
 	/// <summary>
@@ -109,6 +109,6 @@ namespace SystemEx.Hash.Black {
             Black3Utils.StoreCVWords(cv, cv_words);
         }
     }
-	///@}
+	/// @}
 
 }

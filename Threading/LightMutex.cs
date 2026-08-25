@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// A lightweight non‑blocking mutex built on top of <see cref="LightCountingSpinlock{T}"/>.
 	/// This mutex provides binary spinlock semantics (capacity 1) combined with strict

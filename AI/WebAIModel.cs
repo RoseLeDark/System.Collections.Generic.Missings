@@ -20,8 +20,9 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
 
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Provides a basic implementation of a web‑based AI model wrapper.  
 	/// 
@@ -154,5 +155,5 @@ namespace SystemEx.AI {
         }
          
     }
-	///@}
+	/// @}
 }

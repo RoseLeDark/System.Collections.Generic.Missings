@@ -19,8 +19,9 @@ using System.Drawing;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Represents a 32‑bit hash value produced by a SystemEx hashing algorithm.
 	/// 

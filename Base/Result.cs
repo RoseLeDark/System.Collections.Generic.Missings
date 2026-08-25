@@ -17,7 +17,8 @@
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Represents a flexible multi-value result container that can hold
 	/// successful values, multiple return objects, assertion messages,
@@ -238,5 +239,5 @@ namespace SystemEx {
 		/// </summary>
 		private void AssertHandler ( bool condition, Result sender ) { }
 	}
-	//@}
+	/// @}
 }

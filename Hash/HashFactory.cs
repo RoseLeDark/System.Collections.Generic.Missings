@@ -21,8 +21,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Defines a contract for objects that can be converted into a raw byte
 	/// representation suitable for hashing, serialization, or low‑level
@@ -204,5 +205,5 @@ namespace SystemEx.Hash {
             return _hash.Value;
         }
     }
-    ///@}
-}
+    /// @}
+} 

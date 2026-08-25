@@ -19,8 +19,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Random {
-	/// \addtogroup SystemEx.Random
+	/// \addtogroup Random
 	/// @{
+
 	/// <summary>
 	/// Provides a simple interface for generating random numbers using the ISAAC algorithm.
 	/// </summary>
@@ -120,5 +121,5 @@ namespace SystemEx.Random {
             return Next64();
         }
     }
-	///@}
+	/// @}
 }

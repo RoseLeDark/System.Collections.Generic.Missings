@@ -19,7 +19,7 @@ using SystemEx.Collections.Generic;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup SystemEx.Algorithms
+	/// \addtogroup Algorithms
 	/// @{
 	/// <summary>
 	/// Defines a pluggable search strategy for use with the <c>Search</c> object.

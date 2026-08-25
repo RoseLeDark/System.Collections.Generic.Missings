@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Converts an <see cref="IModelTool{T}"/> definition into a backend‑specific 
 	/// function object that can be exposed to an AI model.  

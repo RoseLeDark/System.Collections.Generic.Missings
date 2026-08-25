@@ -20,8 +20,9 @@ using System.Net.Http.Headers;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines the minimal functionality required for a generic vextzu
 	/// used by the SystemEx collection framework. Implementations provide

@@ -17,7 +17,7 @@
 
 
 namespace SystemEx.Hash.Black {
-	/// \addtogroup SystemEx.Hash.Black
+	/// \addtogroup HashBlack
 	/// @{
 	/// <summary>
 	/// Internal BLAKE3 flag definitions used during chunk and tree hashing.
@@ -64,5 +64,5 @@ namespace SystemEx.Hash.Black {
 		DERIVE_KEY_MATERIAL = 1 << 6,
     };
 
-	///@}
+	/// @}
 }

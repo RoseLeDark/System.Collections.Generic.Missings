@@ -18,8 +18,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Represents a model‑agnostic prompt container used by all 
 	/// <see cref="IModelBackend"/> implementations and embedded models.

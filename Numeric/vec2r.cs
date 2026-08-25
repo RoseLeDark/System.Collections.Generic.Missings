@@ -25,8 +25,9 @@ using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
 
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a 2‑component Ratio vector.
 	///

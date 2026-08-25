@@ -22,8 +22,9 @@ using SystemEx.Algorithms;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Provides search operations over a container implementing <see cref="IVector{T}"/>.
 	/// This struct performs non‑modifying lookups such as first/last occurrence,

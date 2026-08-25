@@ -19,8 +19,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	internal interface IUsedIterrator<T, TItterator>  where TItterator : Iterrator<T> {
 
         /// <summary>

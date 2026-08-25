@@ -20,8 +20,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Implements the FNV-1a hash algorithm.
 	/// </summary> 

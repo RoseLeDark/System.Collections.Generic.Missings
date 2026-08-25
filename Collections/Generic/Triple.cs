@@ -15,8 +15,9 @@
  * changes and the date.
  */
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A lightweight, serializable three‑element tuple consisting of strongly typed
 	/// first, second, and third values. Implements <see cref="ITuple"/> and

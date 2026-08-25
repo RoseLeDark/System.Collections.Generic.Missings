@@ -18,7 +18,7 @@
 using System.Numerics;
 
 namespace SystemEx.Hash.Black {
-	/// \addtogroup SystemEx.Hash.Black
+	/// \addtogroup HashBlack
 	/// @{
 	/// <summary>
 	/// Internal utility helpers for the BLAKE3 hashing subsystem.

@@ -20,8 +20,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Collections.Generic.Queue {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a deque that only accepts unique elements.
 	/// Attempts to insert a value already contained in the queue will fail.
@@ -116,4 +117,5 @@ namespace SystemEx.Collections.Generic.Queue {
             return _ret;
         }
     }
+    /// @}
 }

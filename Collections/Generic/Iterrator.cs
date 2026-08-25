@@ -19,8 +19,9 @@ using SystemEx.Algorithms;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a generic iterator over a collection.
 	/// Provides access to the current element and supports advancing the iterator.

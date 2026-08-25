@@ -18,8 +18,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Represents a model‑executable tool that can be exposed to AI backends
 	/// through an <see cref="IAIFunctionFactory"/>.  
@@ -72,5 +73,5 @@ namespace SystemEx.AI {
 		Task<object?> ExecuteAsync ( Map<string, object?> args, CancellationToken ct );
 	}
 
-	///@}
+	/// @}
 }

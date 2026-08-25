@@ -20,8 +20,9 @@ using SystemEx.Collections.Generic;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup SystemEx.Algorithms
+	/// \addtogroup Algorithms
 	/// @{
+
 	/// <summary>
 	/// Provides a Fibonacci‑based search strategy for containers implementing
 	/// <see cref="IContainer{T}"/>.  

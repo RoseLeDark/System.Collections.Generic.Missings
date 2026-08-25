@@ -18,8 +18,9 @@
 using SystemEx.Hash;
 
 namespace SystemEx.Random {
-	/// \addtogroup SystemEx.Random
+	/// \addtogroup Random
 	/// @{
+    
 	/// <summary>
 	/// Provides a seed implementation based on a 32‑bit hash value. The hash may
 	/// originate from any hashing algorithm available in SystemEx, including
@@ -70,5 +71,5 @@ namespace SystemEx.Random {
             Update(hash);
         }
     }
-    ///@}
+    /// @}
 }

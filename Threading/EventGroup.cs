@@ -17,8 +17,9 @@
 using SystemEx.Numeric;
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Represents a lightweight event group based on a fast bit‑storage type.
 	/// <see cref="EventGroup{TFastType}"/> allows individual bit positions to be

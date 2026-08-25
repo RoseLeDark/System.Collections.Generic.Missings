@@ -19,8 +19,9 @@ using SystemEx.Algorithms;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Provides an extensible search wrapper over a container using a configurable
 	/// <see cref="ISearchProvider{TContainer, T}"/> strategy.
@@ -150,5 +151,5 @@ namespace SystemEx.Collections.Generic {
             return m_container.GetHashCode();
         }
     }
-    ///@}
+    /// @}
 }

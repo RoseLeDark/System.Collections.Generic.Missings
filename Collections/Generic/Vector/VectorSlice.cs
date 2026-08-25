@@ -18,8 +18,9 @@
 using SystemEx.Threading;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// SubSlice describes a mathematical range and ownership state.
 	/// </summary>
@@ -252,5 +253,5 @@ namespace SystemEx.Collections.Generic {
                 m_subSlices.Equals(other.m_subSlices);
         }
     }
-    ///@}
+    /// @}
 }

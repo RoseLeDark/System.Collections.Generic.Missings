@@ -19,8 +19,9 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 namespace SystemEx.Runtime.InteropServices.Platform {
-	/// \addtogroup SystemEx.Runtime.InteropServices.Platform
+	/// \addtogroup InteropServices
 	/// @{
+
 	/// <summary>
 	/// Provides macOS-specific native module loading and symbol resolution
 	/// using the <c>libdl</c> API.  

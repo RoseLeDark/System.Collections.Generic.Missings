@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a basic geometric projection descriptor containing field‑of‑view,
 	/// aspect ratio, and near/far clipping planes.
@@ -74,5 +75,5 @@ namespace SystemEx.Numeric {
 			m_fFarPlane = fFarPlane;
 		}
 	}
-	//@}
+	/// @}
 }

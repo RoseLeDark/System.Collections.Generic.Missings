@@ -21,8 +21,9 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents an 64‑bit fast bit‑manipulation type. 
 	/// This struct provides low‑level operations for inspecting, modifying,
@@ -243,5 +244,5 @@ namespace SystemEx.Numeric {
             return _set;
         }
     }
-    //@}
+	/// @}
 }

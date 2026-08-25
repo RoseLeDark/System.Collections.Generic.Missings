@@ -22,8 +22,9 @@ using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a rational number using a signed 64‑bit numerator and denominator.
 	/// <para>
@@ -508,6 +509,7 @@ namespace SystemEx.Numeric {
 			return m_numerator.GetHashCode() ^ m_denominator.GetHashCode();
 		}
 
-		//@}
+		
 	}
+	/// @}
 }

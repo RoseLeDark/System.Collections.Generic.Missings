@@ -18,7 +18,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Represents a three-valued logic value.
 	/// </summary>
@@ -396,5 +397,5 @@ namespace SystemEx {
                                         t.Equals(triple.False) ? triple.False :
                                         triple.Nin;
     }
-	//@}
+	/// @}
 }

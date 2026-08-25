@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A typed view over a raw <c>Cache</c> that exposes elements of an unmanaged type <typeparamref name="T"/>.
 	/// </summary>

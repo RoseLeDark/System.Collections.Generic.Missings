@@ -17,8 +17,9 @@
 using System;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines the minimal read‑only functionality required for a generic
 	/// container used by the SystemEx collection framework. Implementations

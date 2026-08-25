@@ -22,8 +22,9 @@ using SystemEx.Collections.Generic;
 using SystemEx.Drawing;
 
 namespace SystemEx.IO.Provider {
-	// \addtogroup SystemEx.IO.Provider
+	// \addtogroup IO.Provider
 	/// @{
+
 	/// <summary>
 	/// Provides a base implementation for serializing objects to and from byte arrays.
 	/// </summary>
@@ -109,5 +110,5 @@ namespace SystemEx.IO.Provider {
         protected abstract object? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian);
 
     }
-	//@}
+	/// @}
 }

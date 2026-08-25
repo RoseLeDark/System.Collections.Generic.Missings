@@ -22,8 +22,9 @@ using System.Xml.Linq;
 
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines the supported traversal orders for <see cref="Node{T}"/> structures.
 	/// </summary>

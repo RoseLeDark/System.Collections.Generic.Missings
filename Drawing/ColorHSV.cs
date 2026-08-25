@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Represents a color in the HSV (Hue–Saturation–Value) color space using
 	/// floating‑point components.  

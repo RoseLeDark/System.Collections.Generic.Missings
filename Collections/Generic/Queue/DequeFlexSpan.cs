@@ -18,10 +18,11 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
-	/// 
+	/// FlexSpan fpr Dequeue
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public ref struct DequeFlexSpan<T> {
@@ -332,6 +333,6 @@ namespace SystemEx.Collections.Generic {
 
             return m_pReference.Replace(pos, value);
         }
-    } 
-    //@}
+    }
+	/// @}
 }

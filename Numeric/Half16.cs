@@ -21,8 +21,9 @@ using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a 16‑bit IEEE‑754 binary16 floating‑point value with full
 	/// bit‑level control over sign, exponent, and mantissa.  

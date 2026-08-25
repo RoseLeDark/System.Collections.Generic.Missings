@@ -17,21 +17,22 @@
 using SystemEx.Base;
 
 namespace SystemEx.Collections.Generic {
-    /// \addtogroup collections
-    /// @{
-    /// <summary>
-    /// A segmented cache implementation that splits a large logical address space
-    /// into multiple fixed-size cache segments.  
-    /// The first segment is the base <see cref="Cache"/> instance, while all
-    /// additional segments are stored in an internal array of <see cref="ICache"/>.
-    /// </summary>
-    /// <remarks>
-    /// This class supports large continuous write operations by automatically
-    /// determining the correct segment and offset for each write.  
-    /// Writes may span multiple segments, and data is written chunk-by-chunk
-    /// using a temporary <see cref="FixedVector{T}"/> buffer.
-    /// </remarks>
-    public class StrippedCache : Cache {
+	/// \addtogroup Collections
+	/// @{
+
+	/// <summary>
+	/// A segmented cache implementation that splits a large logical address space
+	/// into multiple fixed-size cache segments.  
+	/// The first segment is the base <see cref="Cache"/> instance, while all
+	/// additional segments are stored in an internal array of <see cref="ICache"/>.
+	/// </summary>
+	/// <remarks>
+	/// This class supports large continuous write operations by automatically
+	/// determining the correct segment and offset for each write.  
+	/// Writes may span multiple segments, and data is written chunk-by-chunk
+	/// using a temporary <see cref="FixedVector{T}"/> buffer.
+	/// </remarks>
+	public class StrippedCache : Cache {
         /// <summary>
         /// Temporary buffer used for chunked writes when data does not align
         /// perfectly with segment boundaries.

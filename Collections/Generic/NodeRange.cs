@@ -19,8 +19,9 @@ using System.Collections;
 
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a simple range defined by a begin and end iterator over
 	/// intrusive <see cref="Node{T}"/> structures.  

@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Implements a counting spinlock, a non‑blocking synchronization primitive that
 	/// allows a bounded number of threads to enter a critical section concurrently.

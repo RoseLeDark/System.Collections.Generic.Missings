@@ -15,8 +15,9 @@
  * changes and the date.
  */
 namespace SystemEx.Utils {
-	// \addtogroup SystemEx.Utils
+	/// \addtogroup Utils
 	/// @{
+
 	/// <summary>
 	/// Provides low‑level bit manipulation utilities for all primitive integer types.  
 	/// Includes bit extraction, bit setting, bit flipping, bit masks, and bit rotation
@@ -301,5 +302,5 @@ namespace SystemEx.Utils {
 		public static ulong FlipBit(this ulong value, int pos)
             => value ^ (1UL << pos);
     }
-
+	/// @}
 }

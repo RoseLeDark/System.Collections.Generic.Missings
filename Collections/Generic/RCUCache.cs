@@ -17,8 +17,9 @@
 using SystemEx.Threading;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Provides a Read‑Copy‑Update (RCU) wrapper around a <see cref="Cache"/> instance.
 	/// Readers operate lock‑free using epoch tracking, while writers acquire an

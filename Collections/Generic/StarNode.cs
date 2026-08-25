@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A specialized <see cref="Node{T}"/> that represents a star‑shaped structure,
 	/// where the node may have an arbitrary number of child nodes.

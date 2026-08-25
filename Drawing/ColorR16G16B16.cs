@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Represents a color with 16‑bit precision per channel (R16G16B16),
 	/// stored internally as normalized floating‑point values (0–1).

@@ -20,8 +20,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Algorithms.Compute {
-	/// \addtogroup SystemEx.Algorithms.Compute
+	/// \addtogroup AlgorithmsCompute
 	/// @{
+
 	/// <summary>
 	/// Represents a read‑only computational vector with a fixed dimension.  
 	/// Provides indexed access to floating‑point components.
@@ -39,5 +40,5 @@ namespace SystemEx.Algorithms.Compute {
 		float this[int index] { get; }
 	}
 
-	///@}
+	/// @}
 }

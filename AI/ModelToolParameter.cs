@@ -18,10 +18,9 @@
 
 namespace SystemEx.AI {
 
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
-	/// \addtogroup SystemEx.AI
-	/// @{
+
 	/// <summary>
 	/// Represents a single parameter definition used by an 
 	/// <see cref="IModelTool{T}"/>.  

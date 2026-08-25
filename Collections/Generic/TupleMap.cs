@@ -22,8 +22,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A sparse, linear container that stores elements as <see cref="Tuple{T}"/> 
 	/// objects, each consisting of a single key of type <typeparamref name="T"/> 

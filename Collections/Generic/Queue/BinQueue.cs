@@ -19,8 +19,9 @@ using System.Collections;
 
 namespace SystemEx.Collections.Generic {
 
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A fixed-size queue that stores up to two elements. When full, the oldest
 	/// element is automatically removed to make room for a new one.

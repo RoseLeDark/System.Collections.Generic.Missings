@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Defines capability flags for AI backends.
 	/// 
@@ -316,6 +317,6 @@ namespace SystemEx.AI {
         /// </summary>
         AI_BACKEND_CAPS_CUSTOM = 0x1FFF
     }
-	///@}
+	/// @}
 
 }

@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Declares which hashing algorithm a <c>Hashable</c> type should use.
 	/// 

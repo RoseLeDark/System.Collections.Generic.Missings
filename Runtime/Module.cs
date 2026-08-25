@@ -22,7 +22,8 @@ using SystemEx.Runtime.InteropServices;
 
 
 
-
+/// \addtogroup  Runtime
+/// @{
 
 #if DOXYGEN
 
@@ -50,8 +51,7 @@ using ProcLoader = SystemEx.Runtime.InteropServices.Platform.NoSupportProcLoader
 #endif
 
 namespace SystemEx.Runtime {
-	/// \addtogroup SystemEx.Runtime
-	/// @{
+	
 	/// <summary>
 	/// Represents a loaded native module (DLL, SO, or DYLIB).  
 	/// A <see cref="Module"/> encapsulates the operating system handle of the

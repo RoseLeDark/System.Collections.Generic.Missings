@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Utils {
-	// \addtogroup SystemEx.Utils
+	/// \addtogroup Utils
 	/// @{
+
 	/// <summary>
 	/// Provides factory methods for creating bit‑level span views over primitive
 	/// integer types. Each method returns a windowed, mutable bit span that
@@ -134,5 +135,5 @@ namespace SystemEx.Utils {
             return new BitULongSpan(ref value, start, send, mode);
         }
     }
-    //@}
+	/// @}
 }

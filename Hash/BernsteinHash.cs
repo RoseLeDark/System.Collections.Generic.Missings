@@ -21,8 +21,9 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Simple non‑cryptographic hash function based on the Bernstein family of hash algorithms.
 	/// 

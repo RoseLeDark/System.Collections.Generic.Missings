@@ -17,8 +17,9 @@
 using SystemEx.Hash;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Defines the structural layout and behavioral contract of a custom
 	/// floating‑point format. Implementations describe how a binary floating‑point

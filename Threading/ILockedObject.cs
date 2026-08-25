@@ -18,8 +18,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Defines a minimal lock‑protected value container interface. Implementations
 	/// provide controlled read and write access to a value of type

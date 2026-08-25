@@ -18,8 +18,9 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// A lightweight and minimal condition variable designed for simple thread
 	/// synchronization scenarios. Unlike the heavy and business‑oriented primitives

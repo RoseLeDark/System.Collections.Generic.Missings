@@ -18,8 +18,9 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a grouping node that stores an arbitrary number of intrusive
 	/// <see cref="Node{T}"/> instances inside a standard <see cref="List{T}"/>.  

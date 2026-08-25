@@ -20,7 +20,8 @@ using System.Text;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Base class that strictly forbids any form of copying.
 	/// Pedantisch safe: no cloning, no copy constructor, no MemberwiseClone.
@@ -52,5 +53,5 @@ namespace SystemEx {
 		protected new object MemberwiseClone ()
 			=> throw new NotSupportedException("MemberwiseClone is disabled.");
 	}
-	//@}
+	/// @}
 }

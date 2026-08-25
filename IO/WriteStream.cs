@@ -191,5 +191,6 @@ namespace SystemEx.IO {
             OnIsCommit.Invoke(this, entries.Count);
         }
     }
+    /// @}
 }
 #endif

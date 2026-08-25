@@ -19,7 +19,7 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI.Backend {
-	/// \addtogroup SystemEx.AI.Backend
+	/// \addtogroup AI::Backend
 	/// @{
 	/// 
 
@@ -88,5 +88,5 @@ namespace SystemEx.AI.Backend {
         public Map<string, object> Metadata { get; set; }
     }
 
-    ///@}
+    /// @}
 }

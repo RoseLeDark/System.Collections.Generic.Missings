@@ -19,8 +19,9 @@
 using SystemEx.Base;
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Provides conversion utilities between different color spaces such as
 	/// RGB, Linear RGB, XYZ, HSV, HSL, YUV, CMY and HDR.

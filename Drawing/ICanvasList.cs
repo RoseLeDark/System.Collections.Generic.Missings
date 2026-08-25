@@ -19,17 +19,17 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
-	/// @{
-	/// <summary>
-	/// Specifies the mathematical blend operation used when combining a layer
-	/// with the layers beneath it. These modes do not perform graphical drawing;
-	/// instead, each mode defines a deterministic color transformation applied
-	/// during layer composition when <see cref="ICanvasList{T}.GetPixels"/> or
-	/// <see cref="ICanvasList{T}.SwapIn"/> is invoked.
-	/// </summary>
-	public enum BlendMode
-    {
+    /// \addtogroup Drawing
+    /// @{
+
+    /// <summary>
+    /// Specifies the mathematical blend operation used when combining a layer
+    /// with the layers beneath it. These modes do not perform graphical drawing;
+    /// instead, each mode defines a deterministic color transformation applied
+    /// during layer composition when <see cref="ICanvasList{T}.GetPixels"/> or
+    /// <see cref="ICanvasList{T}.SwapIn"/> is invoked.
+    /// </summary>
+    public enum BlendMode {
         /// <summary>
         /// Adds the layer’s color value to the underlying color. Useful for
         /// additive accumulation or brightness‑increasing transformations.
@@ -98,8 +98,7 @@ namespace SystemEx.Drawing {
     /// no pixels are rendered until the composition pipeline is evaluated.
     /// </summary>
     /// <typeparam name="T">The color type used by the canvas.</typeparam>
-    public interface ISubCanvas<T> : ICanvas<T>
-    {
+    public interface ISubCanvas<T> : ICanvas<T> {
         /// <summary>
         /// Gets or sets whether this sub‑canvas is enabled. Disabled sub‑canvases
         /// do not participate in mathematical composition and behave as if they
@@ -180,7 +179,7 @@ namespace SystemEx.Drawing {
         /// Layers do not contain rendered pixel data; they define transformation
         /// rules that are applied when the composed buffer is requested.
         /// </summary>
-        Map<ISubCanvas<T>, BlendMode>  Layers {  get;  }
+        Map<ISubCanvas<T>, BlendMode> Layers { get; }
 
         /// <summary>
         /// Gets the sub‑canvas at the specified index.
@@ -197,14 +196,14 @@ namespace SystemEx.Drawing {
         /// <param name="layer">The sub‑canvas to add as a layer.</param>
         /// <param name="mode">The blend mode describing how the layer interacts with lower layers.</param>
         /// <returns>The index at which the layer was added.</returns>
-        int AddLayer(ISubCanvas<T> layer, BlendMode mode);
+        int AddLayer ( ISubCanvas<T> layer, BlendMode mode );
 
         /// <summary>
         /// Removes the layer at the specified index.
         /// </summary>
         /// <param name="index">The index of the layer to remove.</param>
         /// <returns>The removed layer instance.</returns>
-        ISubCanvas<T> RemoveLayer(int index);
+        ISubCanvas<T> RemoveLayer ( int index );
 
 
         /// <summary>
@@ -212,8 +211,8 @@ namespace SystemEx.Drawing {
         /// </summary>
         /// <param name="index">The index of the layer to retrieve.</param>
         /// <returns>The sub‑canvas at the given index.</returns>
-        ISubCanvas<T> GetLayer(int index);
-    
+        ISubCanvas<T> GetLayer ( int index );
+
         /// <summary>
         /// Sets the visibility state of the specified layer.
         /// A hidden layer does not participate in the mathematical composition
@@ -227,7 +226,7 @@ namespace SystemEx.Drawing {
         /// <param name="show">Whether the layer should be included in composition.</param>
         /// <param name="index">The layer index whose visibility is being changed.</param>
         /// <returns><c>true</c> if the visibility was changed; otherwise <c>false</c>.</returns>
-        bool SetShowing(bool show, int index);
+        bool SetShowing ( bool show, int index );
 
         /// <summary>
         /// Gets the visibility state of the specified layer.
@@ -237,7 +236,7 @@ namespace SystemEx.Drawing {
         /// The layer index to query. <c>0</c> refers to the base canvas.
         /// </param>
         /// <returns><c>true</c> if the layer is visible; otherwise <c>false</c>.</returns>
-        bool IsShowing(int index = 0);
+        bool IsShowing ( int index = 0 );
 
         /// <summary>
         /// Retrieves the mathematically composed pixel value at the specified
@@ -250,7 +249,7 @@ namespace SystemEx.Drawing {
         /// <param name="x">The X coordinate.</param>
         /// <param name="y">The Y coordinate.</param>
         /// <returns>The composed pixel value at the given coordinates.</returns>
-        T GetPixel(int layer, int x, int y);
+        T GetPixel ( int layer, int x, int y );
 
         /// <summary>
         /// Returns the mathematically composed pixel buffer for the specified
@@ -294,7 +293,7 @@ namespace SystemEx.Drawing {
         /// An <see cref="FixedVector{T}"/> containing the composed pixel data for the
         /// requested layer range.
         /// </returns>
-        FixedVector<T> GetPixels(int layer); 
+        FixedVector<T> GetPixels ( int layer );
 
         /// <summary>
         /// Swaps the mathematically composed region of this canvas into another
@@ -310,7 +309,7 @@ namespace SystemEx.Drawing {
         /// <param name="height">The height of the region.</param>
         /// <param name="toDraw">The target canvas receiving the computed pixels.</param>
         /// <returns>The number of pixels swapped.</returns>
-        int SwapIn(int x, int y, int width, int height, ref ICanvas<T> toDraw);
+        int SwapIn ( int x, int y, int width, int height, ref ICanvas<T> toDraw );
 
         /// <summary>
         /// Swaps the entire mathematically composed canvas into another canvas.
@@ -318,7 +317,7 @@ namespace SystemEx.Drawing {
         /// </summary>
         /// <param name="toDraw">The target canvas receiving the composed pixel buffer.</param>
         /// <returns>The number of pixels swapped.</returns> 
-        int SwapIn(ref ICanvas<T> toDraw);
+        int SwapIn ( ref ICanvas<T> toDraw );
     }
-    // @}
+    /// @}
 }

@@ -20,8 +20,9 @@ using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Represents a concrete implementation of <see cref="IModelPromp{T}"/> used to 
 	/// encapsulate model input, contextual metadata, session information, execution 
@@ -322,5 +323,5 @@ namespace SystemEx.AI {
         }
 
     }
-	///@}
+	/// @}
 }

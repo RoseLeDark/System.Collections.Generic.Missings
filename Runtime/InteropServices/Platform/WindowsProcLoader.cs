@@ -23,8 +23,9 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Runtime.InteropServices.Platform {
-	/// \addtogroup SystemEx.Runtime.InteropServices.Platform
+	/// \addtogroup InteropServices
 	/// @{
+
 	/// <summary>
 	/// Provides Windows-specific native module loading and symbol resolution
 	/// using the <c>dll</c> API.  

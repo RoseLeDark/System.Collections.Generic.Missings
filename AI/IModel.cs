@@ -18,8 +18,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Represents a generic AI model with configuration, environment information,
 	/// backend integration, tool support, and execution capabilities.
@@ -143,5 +144,5 @@ namespace SystemEx.AI {
         void Release ();
     }
 
-	///@}
+	/// @}
 }

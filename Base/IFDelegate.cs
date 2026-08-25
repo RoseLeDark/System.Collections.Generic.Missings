@@ -20,7 +20,8 @@ using System.Text;
 
 namespace SystemEx {
 	/// \addtogroup SystemEx
-	/// @
+	/// @{
+
 	/// <summary>
 	/// Represents a conditional delegate dispatcher that routes invocation
 	/// to one of two delegate branches based on a boolean condition.

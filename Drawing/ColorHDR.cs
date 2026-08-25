@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Represents a high‑dynamic‑range color in the HSV color space,
 	/// where the value component can exceed the normalized range (0–1)

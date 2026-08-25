@@ -18,9 +18,13 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
 
+	/// <summary>
+	/// FlexSpan for the Queue
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	public ref struct QueueFlexSpan<T> {
         public ref struct Enumerator : IEnumerator<T> {
             /// <summary>
@@ -330,6 +334,6 @@ namespace SystemEx.Collections.Generic {
             return m_pReference.Replace(pos, value);
         }
     }
-    // @}
+	/// @}
 }
 

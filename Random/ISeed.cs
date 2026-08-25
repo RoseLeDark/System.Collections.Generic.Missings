@@ -17,8 +17,9 @@
 
 namespace SystemEx.Random {
 
-	/// \addtogroup SystemEx.Random
+	/// \addtogroup Random
 	/// @{
+
 	/// <summary>
 	/// Represents a generic seed source for random number generators.
 	/// Implementations provide an array of 32‑bit seed values, support
@@ -78,6 +79,6 @@ namespace SystemEx.Random {
         void Update ( T value );
     }
 
-	///@}
+	/// @}
 
 }

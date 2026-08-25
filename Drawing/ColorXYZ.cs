@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// Represents a color in the CIE XYZ color space using floating‑point components.
 	/// Provides basic construction, comparison, and string formatting utilities.
@@ -88,5 +89,5 @@ namespace SystemEx.Drawing {
             return string.Create(null, stackalloc char[256], $"[{m_x}, {m_y}, {m_z}]");
         }
     }
-    // @}
+	/// @}
 }

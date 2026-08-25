@@ -19,8 +19,9 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace SystemEx.Utils {
-	// \addtogroup SystemEx.Utils
+	/// \addtogroup Utils
 	/// @{
+
 	/// <summary>
 	/// Provides a low-level bit window over a referenced <see cref="uint"/> value.
 	/// This type exposes individual bits as a mutable span-like view with support

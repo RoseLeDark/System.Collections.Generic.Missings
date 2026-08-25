@@ -24,10 +24,10 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI.Backend {
 
-	/// \addtogroup SystemEx.AI.Backend
+	/// \addtogroup AI::Backend
 	/// @{
-	/// 
-	/// <summary>
+	
+    /// <summary>
 	/// backend implementation for AI models that communicate with
 	/// remote Web‑API services using HTTP POST requests.
 	/// 
@@ -449,5 +449,5 @@ namespace SystemEx.AI.Backend {
 
     }
 
-    ///@}
+    /// @}
 }

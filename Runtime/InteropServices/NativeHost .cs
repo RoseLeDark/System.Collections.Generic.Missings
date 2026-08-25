@@ -19,8 +19,9 @@ using System.Runtime.InteropServices;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Runtime.InteropServices {
-	/// \addtogroup SystemEx.Runtime.InteropServices
+	/// \addtogroup Runtime
 	/// @{
+
 	/// <summary>
 	/// Provides a high‑level management layer for native modules and their exported
 	/// functions.  

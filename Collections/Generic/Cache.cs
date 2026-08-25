@@ -19,8 +19,9 @@ using SystemEx.Base;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Specifies the access mode of a <see cref="Cache"/> instance.
 	/// </summary>

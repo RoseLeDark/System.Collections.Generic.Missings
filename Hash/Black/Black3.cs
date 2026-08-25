@@ -20,7 +20,7 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash.Black {
-	/// \addtogroup SystemEx.Hash.Black
+	/// \addtogroup HashBlack
 	/// @{
 	/// <summary>
 	/// Internal BLAKE3 hasher implementation. This class manages the chaining
@@ -143,4 +143,5 @@ namespace SystemEx.Hash.Black {
             }
         }
     }
+	/// @}
 }

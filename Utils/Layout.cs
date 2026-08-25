@@ -20,8 +20,9 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 namespace SystemEx.Utils {
-	// addtogroup SystemEx.Utils
+	/// \addtogroup Utils
 	/// @{
+
 	/// <summary>
 	/// Exception thrown when a struct used for unmanaged interop does not specify
 	/// <see cref="StructLayoutAttribute"/> with <see cref="LayoutKind.Sequential"/>.  
@@ -139,5 +140,5 @@ namespace SystemEx.Utils {
             return true;
         }
     }
-    ///@}
+    /// @}
 }

@@ -22,6 +22,7 @@ using SystemEx.Utils;
 namespace SystemEx.Algorithms {
     /// \addtogroup Algorithms
     /// @{
+
     /// <summary>
     /// Provides a standard comparison implementation for values wrapped in
     /// <see cref="Optional{T}"/> where <typeparamref name="T"/> implements

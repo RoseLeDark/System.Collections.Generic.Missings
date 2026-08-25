@@ -18,8 +18,9 @@
 using SystemEx.Numeric;
 
 namespace SystemEx.Algorithms.Compute {
-	/// \addtogroup SystemEx.Algorithms.Compute
+	/// \addtogroup AlgorithmsCompute
 	/// @{
+
 	/// <summary>
 	/// Implements cosine similarity for <see cref="ICVector"/> instances.  
 	/// Returns a normalized similarity score in the range [-1, 1].
@@ -43,6 +44,6 @@ namespace SystemEx.Algorithms.Compute {
             return dot / (MathF.Sqrt(magA) * MathF.Sqrt(magB));
         }
     }
-	///@}
+	/// @}
 
 }

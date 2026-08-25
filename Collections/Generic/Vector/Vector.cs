@@ -21,8 +21,9 @@ using SystemEx.Utils;
 namespace SystemEx.Collections.Generic {
 
 
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A modern, policy‑driven dynamic Vector container that provides fast indexed access,
 	/// optional auto‑growth, insertion, removal, traversal, and multiple zero‑overhead

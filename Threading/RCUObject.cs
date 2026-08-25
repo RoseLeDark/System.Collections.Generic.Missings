@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Indicates the current operational state of an <see cref="RCUObject{T}"/>.
 	/// Readers observe <see cref="Current"/> when no writer is active, and

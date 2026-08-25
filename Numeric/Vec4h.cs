@@ -25,8 +25,9 @@ using SystemEx.Numeric.Utils;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup SystemEx.Numeric
+	/// \addtogroup Numeric
 	/// @{
+
 	/// <summary>
 	/// Represents a 4‑component Half16ing‑point vector.
 	///

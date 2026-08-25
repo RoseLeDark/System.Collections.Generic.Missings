@@ -17,8 +17,9 @@
 using SystemEx.Hash;
 
 namespace SystemEx.Random {
-	/// \addtogroup SystemEx.Random
+	/// \addtogroup Random
 	/// @{
+
 	/// <summary>
 	/// Provides a time‑based seed implementation using <see cref="DateTime"/> as
 	/// the update source. The seed consists of multiple 32‑bit values derived from
@@ -76,5 +77,5 @@ namespace SystemEx.Random {
             if ( m_seed.Length > 3 ) m_seed[3] = (uint)Guid.NewGuid().GetHashCode();
         }
     }
-	///@}
+	/// @}
 }

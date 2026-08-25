@@ -18,8 +18,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Provides a minimal lock‑protected wrapper around a value of type
 	/// <typeparamref name="T"/> using a caller‑supplied lock implementation.

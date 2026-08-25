@@ -17,8 +17,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Provides a lightweight atomic spinlock that protects a single value.
 	/// <see cref="LightSpinlock{T}"/> uses pure atomic operations and busy‑wait

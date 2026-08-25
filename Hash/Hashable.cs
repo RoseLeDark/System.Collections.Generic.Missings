@@ -20,8 +20,9 @@ using SystemEx.Utils;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Base class for objects that can be hashed using the SystemEx hashing subsystem.
 	/// 

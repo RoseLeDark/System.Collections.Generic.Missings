@@ -16,7 +16,7 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
 
 	/// <summary>
@@ -365,5 +365,5 @@ namespace SystemEx.Drawing {
         /// <summary>  Black 	#000000</summary>
         public static ColorR8G8B8 Black => new ColorR8G8B8(0);
     }
-    // @}
+	/// @}
 }

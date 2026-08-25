@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup SystemEx.Drawing
+	/// \addtogroup Drawing
 	/// @{
+
 	/// <summary>
 	/// The ColorGray class represents a grayscale color using a single floating-point component.
 	/// Only V Drom HSV is used to represent the gray value, where 0 represents black and 1 represents white.

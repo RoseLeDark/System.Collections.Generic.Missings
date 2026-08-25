@@ -18,8 +18,9 @@
 
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Provides an RAII-style scoped lock for any <see cref="ILock"/> implementation.
 	/// The lock is acquired in the constructor and automatically released when the

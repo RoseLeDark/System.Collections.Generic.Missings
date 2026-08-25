@@ -20,8 +20,9 @@ using System.Drawing;
 using SystemEx.Algorithms;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A fixed-size array container that provides indexed access, insertion,
 	/// traversal, and basic search operations. Unlike dynamic arrays, this

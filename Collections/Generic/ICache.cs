@@ -17,8 +17,9 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines a typed cache a low-level byte buffer with position tracking, 
 	/// typed read/write helpers, and optional locking behavior.

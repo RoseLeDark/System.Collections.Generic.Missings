@@ -22,8 +22,9 @@ using SystemEx.Utils;
 
 
 namespace SystemEx.IO {
-	// \addtogroup SystemEx.IO
+	// \addtogroup IO
 	/// @{
+
 	/// <summary>
 	/// A <see cref="Stream"/> wrapper around a <see cref="Cache"/> instance.  
 	/// Provides sequential read/write access to a cache, including endian‑aware
@@ -291,5 +292,5 @@ namespace SystemEx.IO {
             }
         }
     }
-	//@}
+	/// @}
 }

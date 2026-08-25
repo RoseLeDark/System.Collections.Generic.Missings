@@ -21,8 +21,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Algorithms.Compute {
-	/// \addtogroup SystemEx.Algorithms.Compute
+	/// \addtogroup AlgorithmsCompute
 	/// @{
+
 	/// <summary>
 	/// Represents a simple classifier that maps an input value to a 
 	/// <see cref="Triple"/> decision (True, False, Nin).  
@@ -64,5 +65,5 @@ namespace SystemEx.Algorithms.Compute {
 		Triple Evaluate ( float value );
 	}
 
-	///@}
+	/// @}
 }

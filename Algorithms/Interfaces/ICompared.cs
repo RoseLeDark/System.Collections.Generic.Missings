@@ -18,7 +18,7 @@
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup SystemEx.Algorithms
+	/// \addtogroup Algorithms
 	/// @{
 
 	/// <summary>

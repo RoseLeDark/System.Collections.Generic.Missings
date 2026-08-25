@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Provides a minimal wrapper around <see cref="Monitor"/> to offer lightweight
 	/// mutual exclusion. <see cref="LightLock"/> is intended for short, low‑overhead

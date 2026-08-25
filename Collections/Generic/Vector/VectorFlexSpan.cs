@@ -17,8 +17,9 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A container-backed span-like view over any <see cref="IVector{T}"/> .
 	/// Unlike System.Span, this type provides mode-based indexing
@@ -342,5 +343,5 @@ namespace SystemEx.Collections.Generic {
             return m_pReference.Replace(pos, value);
         }
     }
-    ///@}
+    /// @}
 }

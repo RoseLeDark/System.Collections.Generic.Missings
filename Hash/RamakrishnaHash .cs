@@ -19,8 +19,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Hash {
-	/// \addtogroup SystemEx.Hash
+	/// \addtogroup Hash
 	/// @{
+
 	/// <summary>
 	/// Implements the Ramakrishna hash algorithm.
 	/// </summary>

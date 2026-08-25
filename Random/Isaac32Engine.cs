@@ -17,8 +17,9 @@
 using System;
 
 namespace SystemEx.Random {
-	/// \addtogroup SystemEx.Random
+	/// \addtogroup Random
 	/// @{
+
 	/// <summary>
 	/// Represents the ISAAC 32-bit random number generator.
 	/// </summary>
@@ -216,5 +217,5 @@ namespace SystemEx.Random {
             m_a = a;
         }
     }
-	///@}
+	/// @}
 }

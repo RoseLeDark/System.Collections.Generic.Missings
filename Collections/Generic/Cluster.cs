@@ -19,8 +19,9 @@ using System.Numerics;
 using System.Reflection;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Defines how the search algorithm treats edge weights during traversal.
 	/// </summary>

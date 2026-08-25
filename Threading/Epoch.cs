@@ -16,8 +16,9 @@
  */
 
 namespace SystemEx.Threading {
-	// \addtogroup SystemEx.Threading
+	/// \addtogroup  Threading
 	/// @{
+
 	/// <summary>
 	/// Represents a lightweight Read-Copy-Update (RCU) epoch counter used to
 	/// track active reader sections. Each call to <see cref="Assign"/> enters

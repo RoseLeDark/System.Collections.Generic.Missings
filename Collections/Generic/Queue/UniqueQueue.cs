@@ -21,8 +21,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a queue that only accepts unique elements.
 	/// Attempts to insert a value already contained in the queue will fail.
@@ -108,5 +109,5 @@ namespace SystemEx.Collections.Generic {
             return _ret;
         }
     }
-    //@}
+    /// @}
 }

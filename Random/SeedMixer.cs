@@ -19,8 +19,9 @@
 using SystemEx.Threading;
 
 namespace SystemEx.Random {
-	/// \addtogroup SystemEx.Random
+	/// \addtogroup Random
 	/// @{
+
 	/// <summary>
 	/// Defines the available mixing strategies used to combine two random seeds.
 	/// These operations are purely mathematical and intended for non‑cryptographic
@@ -220,5 +221,5 @@ namespace SystemEx.Random {
             return this;
         }
     }
-	///@}
+	/// @}
 }

@@ -20,8 +20,9 @@ using System.Runtime.CompilerServices;
 using SystemEx.Algorithms;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a delegate that performs a sorting or rearrangement operation
 	/// on a priority‑queue container.  

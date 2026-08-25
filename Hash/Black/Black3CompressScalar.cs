@@ -21,7 +21,7 @@ using System.Numerics;
 using System.Text;
 
 namespace SystemEx.Hash.Black {
-	/// \addtogroup SystemEx.Hash.Black
+	/// \addtogroup HashBlack
 	/// @{
 	/// <summary>
 	/// Internal scalar BLAKE3 compression implementation.

@@ -18,8 +18,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI {
-	/// \addtogroup SystemEx.AI
+	/// \addtogroup AI
 	/// @{
+
 	/// <summary>
 	/// Basic backend implementation for all using models with this framework.
 	/// </summary>
@@ -132,5 +133,5 @@ namespace SystemEx.AI {
 
     }
 
-    ///@}
+    /// @}
 }

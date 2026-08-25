@@ -18,8 +18,9 @@
 using System.Collections;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// Represents a slice over intrusive <see cref="Node{T}"/> structures,
 	/// defined by a starting iterator and a fixed length.  

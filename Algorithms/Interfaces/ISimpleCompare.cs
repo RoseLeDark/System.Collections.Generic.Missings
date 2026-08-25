@@ -16,7 +16,7 @@
  */
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup SystemEx.Algorithms
+	/// \addtogroup Algorithms
 	/// @{
 	/// <summary>
 	/// Defines a minimal comparison strategy for two values of type <typeparamref name="T"/>.

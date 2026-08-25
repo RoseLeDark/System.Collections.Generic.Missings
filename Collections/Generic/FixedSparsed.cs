@@ -21,8 +21,9 @@ using SystemEx.Drawing;
 using SystemEx.Threading;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup SystemEx.Collections.Generic 
+	/// \addtogroup Collections
 	/// @{
+
 	/// <summary>
 	/// A sparse container that stores elements in fixed slots without enforcing
 	/// contiguous or linear placement. Slots may be empty, and operations do not

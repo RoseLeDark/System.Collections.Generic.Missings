@@ -17,8 +17,9 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.AI.Tools {
-	// \addtogroup SystemEx.AI.Tools 
+	/// \addtogroup AI::Tools 
 	/// @{
+
 	/// <summary>
 	/// A tool that calculates the difference between two dates.
 	/// 

@@ -17,7 +17,7 @@
 
 
 namespace SystemEx.Hash.Black {
-	/// \addtogroup SystemEx.Hash.Black
+	/// \addtogroup HashBlack
 	/// @{
 	/// <summary>
 	/// Internal BLAKE3 constant definitions used by the hashing subsystem.
@@ -65,5 +65,5 @@ namespace SystemEx.Hash.Black {
 		/// </summary>
 		public const int BLAKE3_CV_STACK_LEN = (BLAKE3_MAX_DEPTH + 1) * BLAKE3_OUT_LEN;
 	}
-    ///@}
+    /// @}
 }
