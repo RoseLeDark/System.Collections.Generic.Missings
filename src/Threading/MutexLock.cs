@@ -92,7 +92,10 @@ namespace SystemEx.Threading {
             m_strName = name;
             m_isMutex = new Mutex(false, name + ":mutex");
             m_evntHandle = new EventWaitHandle(false, EventResetMode.AutoReset, name + ":eventhandle");
-        }
+
+			
+
+		}
         /// <summary>
         /// Attempts to acquire the OS‑level mutex within the specified timeout.
         /// This operation may block the calling thread.
