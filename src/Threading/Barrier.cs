@@ -221,7 +221,7 @@ namespace SystemEx.Threading {
 
 			m_hold.Unlock();
 
-			if ( !m_hold.IsLocked ) {
+			if ( !m_hold.IsHeld ) {
 
 				m_context.Lock(-1);
 					
@@ -270,7 +270,7 @@ namespace SystemEx.Threading {
 		/// If the barrier is already open, the call returns immediately.
 		/// </summary>
 		public void Wait () {
-			while (! m_context.IsLocked) { Thread.Yield(); }
+			while (! m_context.IsHeld) { Thread.Yield(); }
 		}
 
 		/// <summary>
