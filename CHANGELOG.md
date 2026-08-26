@@ -1,5 +1,20 @@
 # Changelog
 
+
+## [0.93.1957] 25.08.2026 intern Preview for 1.0 -> Lacking
+!! Very importend remnove AutoGrow Bug from All Collections !! PushBack and AutoGrow now Working !!
+
+### Remove
+- Marked Islocked in ILocked as Obsolete and add IsHeld in ILocked
+- Remove IsHeld from ISpinLock
+- Reomve bugs (Randown and other) 
+
+### Added
+- AtomicLock a SpinLock user mode running SpinLock with ThreadOwnerTrackingEnabled
+- Add Running Examples - see github Examples
+
+---
+
 ## [0.92.1902] 24.08.2026 intern Preview for 1.0 -> Lacking
 ### Correcture
 - Remove from ILock.TryLock the argument TimeSpan. Now ist TryLock != Lock 
