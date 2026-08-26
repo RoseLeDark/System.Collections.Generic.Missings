@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.93.1957</Version>
+    <FileVersion>0.93.1957</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+
+    <Company>Amber-Sophia Schröck</Company>
+    <Authors>Amber-Sophia Schröck</Authors>
+    <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\RoseLeDark.Collections.Missings.snk</AssemblyOriginatorKeyFile>
+
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+    <Guid>91bb9a1e-fb8a-495a-930c-b21dd201bff7</Guid>
+  </PropertyGroup>
+</Project>
