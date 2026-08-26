@@ -1,4 +1,4 @@
-# Changelog
+# 📝 SystemEx Changelog
 
 
 ## [0.93.1957] 25.08.2026 intern Preview for 1.0 -> Lacking

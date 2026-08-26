@@ -1,4 +1,4 @@
-# Code of Conduct
+# 📜 SystemEx Code of Conduct
 
 ## Overview
 

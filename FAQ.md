@@ -1,4 +1,4 @@
-# SystemEx FAQ
+# ❓SystemEx FAQ
 
 ## Why does SystemEx contain duplicated structures?
 To keep subsystems isolated and easier to debug.  

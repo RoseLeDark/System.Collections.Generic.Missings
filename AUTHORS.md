@@ -1,4 +1,4 @@
-# Authors
+# 👤 SystemEx Authors
 
 ## Maintainer
-see MAINTAINERS.md
+Amber-Sophia Schröck (divers)

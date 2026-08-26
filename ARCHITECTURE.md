@@ -1,4 +1,4 @@
-# SystemEx Architecture Overview
+# 🏛️ SystemEx Architecture Overview
 
 SystemEx is a modular, deterministic low‑level framework for .NET.  
 Its architecture is intentionally divided into isolated subsystems to ensure stability, clarity, and predictable behavior.

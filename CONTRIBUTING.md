@@ -1,4 +1,4 @@
-# Contributing to SystemEx
+# 🤝 SystemEx Contributing
 
 Thank you for your interest in contributing to SystemEx.  
 This document explains how to report issues, propose improvements, and submit pull requests.
