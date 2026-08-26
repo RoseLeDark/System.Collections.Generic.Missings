@@ -15,7 +15,6 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using System;
 using System.Diagnostics;
 using SystemEx;
 using SystemEx.Utils;

@@ -14,6 +14,7 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+using SystemEx;
 using SystemEx.Threading;
 using Barrier = SystemEx.Threading.Barrier;
 
@@ -21,30 +22,33 @@ namespace MyFirstSystemEx {
 
 	/// <summary>
 	/// Demonstrates how multiple <c>LightThread</c> workers can be synchronized using a 
-	/// user‑mode <c>Barrier</c>. The number of threads is automatically scaled to the 
-	/// number of available CPU cores, making the example suitable for both small and 
+	/// user‑mode <c>Barrier</c>. The number of worker threads is automatically scaled to 
+	/// the number of available CPU cores, making the example suitable for both small and 
 	/// large systems.
 	///
-	/// Each thread performs simulated work, arrives at the barrier, waits until all 
-	/// other threads have reached the same synchronization point, and then continues 
-	/// execution. After every completed synchronization cycle, the barrier increments 
-	/// its phase index and invokes the completion callback. Once a predefined number 
-	/// of phases has been reached, the main thread signals all workers to terminate.
+	/// Each worker thread performs simulated work, signals its arrival at the barrier, 
+	/// and then waits in a lightweight user‑mode loop until the barrier is opened. 
+	/// Unlike traditional blocking barriers, this implementation does not park threads 
+	/// in the operating system kernel. Instead, waiting threads yield execution, keeping 
+	/// synchronization fully in user space and avoiding kernel transitions.
 	///
-	/// Although the barrier guarantees correct logical synchronization, the console 
-	/// output may appear unordered or interleaved. This is expected behavior: 
-	/// <c>Console.WriteLine()</c> is not thread‑safe, and concurrent writes from 
-	/// multiple threads naturally produce non‑deterministic output. The barrier 
-	/// ensures that all threads reach and pass the synchronization point together, 
-	/// but it does not serialize or coordinate console printing.
+	/// The main thread acts as the barrier controller: it periodically checks whether all 
+	/// workers have arrived, opens the barrier, advances the phase counter, and invokes 
+	/// the completion callback. Once a predefined number of phases has been completed, 
+	/// the main thread signals all workers to terminate cleanly.
 	///
-	/// In short: the barrier is fully synchronized, but the console output is not. 
-	/// The seemingly jumbled text does not indicate any problem with the barrier or 
-	/// the thread logic.
+	/// Because <c>Console.WriteLine()</c> is not thread‑safe, the console output may 
+	/// appear unordered or interleaved. This is expected behavior and does not indicate 
+	/// any problem with the barrier or thread logic. All worker threads still synchronize 
+	/// correctly at each barrier phase.
+	///
+	/// In short: the barrier provides deterministic phase synchronization, while the 
+	/// console output remains non‑deterministic due to concurrent printing.
 	/// </summary>
 	internal class Program {
 		// Number of worker threads = number of CPU cores
-		static int NUM_THREAD = Environment.ProcessorCount;
+		static int NUM_THREAD = Environment.ProcessorCount / 2;
+		static int NUM_RUNS = 3; // 3-5
 
 		// Flag used to stop all threads after a few barrier cycles
 		static bool endMarker = false;
@@ -53,25 +57,32 @@ namespace MyFirstSystemEx {
 		static Barrier barrier = new((uint)NUM_THREAD);
 
 		static void Main ( string[] args ) {
-			Console.WriteLine("SystemEx Example 5 LightThread + Barrier Demo");
+			Console.WriteLine($"SystemEx Example 5 — LightThread + Barrier Demo ( {NUM_THREAD} Threads, {NUM_RUNS} Barrier Runs)\n\n");
 
 			// This callback runs every time all threads reach the barrier
 			barrier.OnComplition = ( index, sender ) => {
-				Console.WriteLine($"\n-- Barrier reached: all threads synchronized -- {index}\n");
+				index += 1;
+				Console.WriteLine($"\n>> Barrier: reached: all threads synchronized Run: {index} from {NUM_RUNS} \n");
 
 				// Stop after a few completed barrier phases
-				if ( index >= 3 ) endMarker = true;
+				if ( index >= NUM_RUNS ) endMarker = true;
 			};
 
 			// Create and start all worker threads
 			LightThread[] threads = new LightThread[NUM_THREAD];
-			for(int i = 0 ; i < NUM_THREAD ; i++) {
-				threads[i] = new($"Task{i}", ThreadPriority.Normal, 4096) { OnTask = Task_OnRun };
-				threads[i].Start(0);
+			int ThreadStackSize = (int)Conversion.SizeCalc("4MI");
+			for (int i = 0 ; i < NUM_THREAD ; i++) {
+
+				Console.Write($"Create Task{i} with ThreadPriority: Normal and startStackSize: {ThreadStackSize} ... ");
+				threads[i] = new($"Task{i}", ThreadPriority.Normal, ThreadStackSize) { OnTask = Task_OnRun };
+				if(threads[i].Start(0)) {
+					Console.WriteLine("Started");
+				}
+				// Small delay to ensure the thread have started
+				Thread.Sleep(10);
 			}
 
-			// Small delay to ensure all threads have started
-			Thread.Sleep(10);
+			
 
 			// Main thread waits for barrier cycles until endMarker becomes true
 			while ( !endMarker ) {
@@ -84,23 +95,23 @@ namespace MyFirstSystemEx {
 			if ( endMarker ) return 1;
 
 			// Thread begins its work
-			Console.WriteLine($"{e.Name} (ID: {e.ID}) started");
+			Console.WriteLine($">> {e.Name} (ID: {e.ID}) started");
 
 			// Simulate some random work time
 			Thread.Sleep(new Random().Next(1000, 3000));
 
 			// Thread arrives at the barrier and waits for others
-			Console.WriteLine($"{e.Name} (ID: {e.ID}) waiting at barrier");
+			Console.WriteLine($">> {e.Name} (ID: {e.ID}) waiting at barrier");
 			barrier.ArriveAndWait(1);
 
 			// All threads passed the barrier together
-			Console.WriteLine($"{e.Name} (ID: {e.ID}) passed barrier");
+			Console.WriteLine($">> {e.Name} (ID: {e.ID}) passed barrier");
 
 			// More simulated work
 			Thread.Sleep(new Random().Next(1000, 3000));
 
 			// Thread finishes its cycle
-			Console.WriteLine($"{e.Name} (ID: {e.ID}) completed");
+			Console.WriteLine($">> {e.Name} (ID: {e.ID}) completed");
 
 			return 0;
 
