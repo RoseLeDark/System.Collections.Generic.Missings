@@ -309,5 +309,5 @@ namespace SystemEx.Numeric {
 }
 */
     }
-	/// @}
+	
 }

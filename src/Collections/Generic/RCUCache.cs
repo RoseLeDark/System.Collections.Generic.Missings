@@ -171,7 +171,7 @@ namespace SystemEx.Collections.Generic {
 			m_writerLock = locker;
 		}
 		/// <summary>
-		/// Initializes a new <see cref="RCUCache"/> from a <see cref="FixedVector{byte}"/>.
+		/// Initializes a new <see cref="RCUCache"/> from a <see cref="FixedVector{T}"/>.
 		/// The underlying cache is wrapped with RCU semantics using the specified
 		/// writer lock.
 		/// </summary>
@@ -306,7 +306,7 @@ namespace SystemEx.Collections.Generic {
 			}
 		}
 		/// <summary>
-		/// Returns a <see cref="FixedVector{byte}"/> copy of the underlying cache
+		/// Returns a <see cref="FixedVector{T}"/> copy of the underlying cache
 		/// using exclusive RCU semantics.
 		/// </summary>
 		public FixedVector<byte> ToArrayEx () {
@@ -552,5 +552,5 @@ namespace SystemEx.Collections.Generic {
 			return ervlue;
 		}
 	}
-	/// @}
+	
 }

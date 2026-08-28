@@ -129,5 +129,5 @@ namespace SystemEx {
 			return m_result;
 		}
 	}
-	/// @}
+	
 }

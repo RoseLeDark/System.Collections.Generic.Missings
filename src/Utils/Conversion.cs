@@ -30,7 +30,7 @@ namespace SystemEx {
 	/// <para>
 	/// Endianness determines how multi‑byte numeric values are represented in
 	/// memory and serialized into byte arrays. All conversion methods in
-	/// <see cref="SystemEx.Utils.Conversion"/> support explicit endianness to
+	/// <see cref="SystemEx.Conversion"/> support explicit endianness to
 	/// ensure deterministic binary layouts across platforms.
 	/// </para>
 	/// 
@@ -50,7 +50,7 @@ namespace SystemEx {
 	/// <item>
 	/// <description>
 	/// <see cref="Endian.System"/> — use the native endianness of the current
-	/// machine as detected by <see cref="SystemEx.Utils.Conversion.GetEndian"/>.
+	/// machine as detected by <see cref="SystemEx.Conversion.GetEndian"/>.
 	/// </description>
 	/// </item>
 	/// </list>
@@ -79,7 +79,7 @@ namespace SystemEx {
 
 		/// <summary>
 		/// Uses the system’s native endianness as detected by
-		/// <see cref="SystemEx.Utils.Conversion.GetEndian"/>. This mode ensures
+		/// <see cref="SystemEx.Conversion.GetEndian"/>. This mode ensures
 		/// that values are serialized exactly as the CPU stores them in memory,
 		/// without performing any byte‑swapping.
 		/// </summary>
@@ -201,7 +201,7 @@ namespace SystemEx {
         /// <see cref="FlexSpanMode.Reverse"/> (reverse),
         /// <see cref="FlexSpanMode.Ring"/> (circular).
         /// </param>
-        /// <returns>A new <see cref="FlexSpan{byte}"/> instance.</returns>
+        /// <returns>A new <see cref="FlexSpan{T}"/> instance.</returns>
         public static FlexSpan<byte> AsFlexSpan ( ref byte[] value, long start, FlexSpanMode mode ) {
             return new FlexSpan<byte>(ref value, start, mode);
         }
@@ -225,7 +225,7 @@ namespace SystemEx {
         /// <see cref="FlexSpanMode.Reverse"/> (reverse),
         /// <see cref="FlexSpanMode.Ring"/> (circular).
         /// </param>
-        /// <returns>A new <see cref="FlexSpan{byte}"/> instance.</returns>
+        /// <returns>A new <see cref="FlexSpan{T}"/> instance.</returns>
         public static FlexSpan<byte> AsFlexSpan ( ref byte[] value, long start, long end, FlexSpanMode mode ) {
             return new FlexSpan<byte>(ref value, start, end, mode);
         }
@@ -1604,5 +1604,5 @@ namespace SystemEx {
         }
 
     }
-	/// @}
+	
 }

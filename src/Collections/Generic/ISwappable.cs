@@ -51,5 +51,5 @@ namespace SystemEx.Collections.Generic {
         /// <param name="j">The second index.</param>
         void Swap ( T i, T j );
     }
-	/// @}
+	
 }

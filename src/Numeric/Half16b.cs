@@ -672,5 +672,5 @@ namespace SystemEx.Numeric {
             return (mant >> 3) + add;
         }
     }
-	/// @}
+	
 }

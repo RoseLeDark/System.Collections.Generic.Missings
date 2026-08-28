@@ -20,10 +20,6 @@ using SystemEx.Algorithms;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup Algorithms
-	/// <summary>
-
-
 	/// <summary>
 	/// Provides a three-valued comparison based on standard .NET ordering.
 	/// Determines whether A is smaller, greater, or equal to B.
@@ -302,6 +298,6 @@ namespace SystemEx.Algorithms {
         }
     }
 
-    /// @}
+    
 
 }

@@ -126,5 +126,5 @@ namespace SystemEx.Drawing {
         /// <returns>The buffer index of the last match.</returns>
         int FindLast(T color);
     }
-    /// @}
+    
 }

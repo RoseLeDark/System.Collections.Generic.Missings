@@ -136,5 +136,5 @@ namespace SystemEx.Device.Memory {
     }
 
 
-	/// @}
+	
 }

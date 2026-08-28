@@ -233,5 +233,5 @@ namespace SystemEx.Numeric {
             return _set;
         }
     }
-	/// @}
+	
 }

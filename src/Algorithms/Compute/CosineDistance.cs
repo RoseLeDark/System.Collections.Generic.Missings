@@ -44,6 +44,6 @@ namespace SystemEx.Algorithms.Compute {
             return dot / (MathF.Sqrt(magA) * MathF.Sqrt(magB));
         }
     }
-	/// @}
+	
 
 }

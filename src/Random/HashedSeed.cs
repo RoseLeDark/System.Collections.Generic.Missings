@@ -71,5 +71,5 @@ namespace SystemEx.Random {
             Update(hash);
         }
     }
-    /// @}
+    
 }

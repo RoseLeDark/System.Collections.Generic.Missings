@@ -117,5 +117,5 @@ namespace SystemEx.Collections.Generic.Queue {
             return _ret;
         }
     }
-    /// @}
+    
 }

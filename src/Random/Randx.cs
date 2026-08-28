@@ -121,5 +121,5 @@ namespace SystemEx.Random {
             return Next64();
         }
     }
-	/// @}
+	
 }

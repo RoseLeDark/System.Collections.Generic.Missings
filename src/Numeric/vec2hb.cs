@@ -332,7 +332,7 @@ namespace SystemEx.Numeric {
         public static Vec2hb operator / ( Vec2hb a, Half16b b ) {
             return new Vec2hb(a.m_x / b, a.m_y / b);
         }
-        // <summary>
+        /// <summary>
         /// Multiplies both components of the vector by a scalar.
         /// </summary>
         public static Vec2hb operator * ( Vec2hb a, Half16b b ) {
@@ -344,7 +344,7 @@ namespace SystemEx.Numeric {
         public static Vec2hb operator - ( Half16b a, Vec2hb b ) {
             return new Vec2hb(a - b.m_x, a - b.m_y);
         }
-        // <summary>
+        /// <summary>
         /// Divides a scalar by each component of the vector.
         /// </summary>
         public static Vec2hb operator / ( Half16b a, Vec2hb b ) {
@@ -485,5 +485,5 @@ namespace SystemEx.Numeric {
         }
 
     }
-    /// @}
+    
 }

@@ -34,9 +34,9 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         public bool IsEmpty { get; }
 
-        //// <summary>
+        /// <summary>
         /// Gets a value indicating whether the queue has reached its maximum capacity.
-        /// </summary>
+        /// </summary> 
         public bool IsFull { get; }
 
         /// <summary>
@@ -76,6 +76,6 @@ namespace SystemEx.Collections.Generic {
         public bool PopFront ( ref Optional<T> value );
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

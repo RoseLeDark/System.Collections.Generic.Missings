@@ -66,6 +66,9 @@ namespace SystemEx {
 		/// Gets the human‑readable semantic version of the framework.
 		/// </summary>
 		public static string Version => "0.92.1902";
+		/// <summary>
+		/// Gets the current code name
+		/// </summary>
 		public static string CodeName => "Lacking";
 
 		/// <summary>
@@ -185,7 +188,7 @@ namespace SystemEx {
 		/// Determines whether the specified version is compatible with the current
 		/// SystemEx version. Compatibility is defined as:
 		/// - Same major version
-		/// - Requested minor version <= current minor version
+		/// - Requested minor version gt;= current minor version
 		/// 
 		/// This ensures backward compatibility within the same major version.
 		/// </summary>

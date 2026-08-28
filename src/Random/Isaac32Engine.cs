@@ -217,5 +217,5 @@ namespace SystemEx.Random {
             m_a = a;
         }
     }
-	/// @}
+	
 }

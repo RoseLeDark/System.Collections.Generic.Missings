@@ -79,7 +79,7 @@ namespace SystemEx.Collections.Generic {
         }
 
 
-        // <summary>
+        /// <summary>
         /// Adds a new element to the queue. If the queue is full, the oldest
         /// element is removed automatically before inserting the new one.
         /// </summary>
@@ -120,7 +120,7 @@ namespace SystemEx.Collections.Generic {
         /// <summary>
         /// Creates a FlexSpan view over the current contents of the BinQueue.
         /// The span directly references the internal array and does not allocate.
-        ///
+        ///</summary>
         /// <returns>
         /// A FlexSpan that views the range [0 .. m_count) of the internal buffer.
         /// </returns>
@@ -130,6 +130,6 @@ namespace SystemEx.Collections.Generic {
         
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

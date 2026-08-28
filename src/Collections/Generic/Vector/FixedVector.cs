@@ -97,9 +97,8 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Creates a <see cref="VectorSet{T, Vector{T}}"/> view over the given vector.
+        /// Creates a <see cref="VectorSet{T, TC}"/> view over the given vector.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
         /// <param name="vec">
         /// The vector whose contents should be interpreted as a sorted, unique set.
         /// </param>
@@ -114,7 +113,7 @@ namespace SystemEx.Collections.Generic {
         /// providing fast, predictable, non‑recursive sorting suitable for general use.
         /// </param>
         /// <returns>
-        /// A <see cref="VectorSet{T, Vector{T}}"/> that wraps the provided vector, ensuring
+        /// A <see cref="VectorSet{T, TC}"/> that wraps the provided vector, ensuring
         /// that elements are sorted according to the chosen comparer and that duplicates
         /// are handled according to the set's semantics.
         /// </returns>
@@ -135,7 +134,7 @@ namespace SystemEx.Collections.Generic {
         ///   </item>
         ///   <item>
         ///     <description>
-        ///     Constructing a <see cref="VectorSet{T, Vector{T}}"/> wrapper that interprets
+        ///     Constructing a <see cref="VectorSet{T, TC}"/> wrapper that interprets
         ///     the sorted vector as a unique, ordered collection.
         ///     </description>
         ///   </item>
@@ -166,10 +165,9 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Creates a <see cref="VectorMultiSet{T, Vector{T}}"/> view over the given vector,
+        /// Creates a <see cref="VectorMultiSet{T, TC}"/> view over the given vector,
         /// allowing duplicate elements while preserving a defined ordering.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
         /// <param name="vec">
         /// The vector whose contents should be interpreted as an ordered multiset.
         /// </param>
@@ -185,7 +183,7 @@ namespace SystemEx.Collections.Generic {
         /// fast, non‑recursive default.
         /// </param>
         /// <returns>
-        /// A <see cref="VectorMultiSet{T, Vector{T}}"/> wrapper that interprets the vector
+        /// A <see cref="VectorMultiSet{T, TC}"/> wrapper that interprets the vector
         /// as a sorted collection that may contain duplicates.
         /// </returns>
         /// <remarks>
@@ -231,20 +229,19 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Creates an <see cref="VectorUnorderedSet{T, FixedVector{T}}"/> view over the Array,
+        /// Creates an <see cref="VectorUnorderedSet{T, TC}"/> view over the Array,
         /// representing a unique collection without any defined ordering.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the Array.</typeparam>
         /// <param name="vec">
         /// The Array whose contents should be interpreted as an unordered set.
         /// </param>
         /// <returns>
-        /// An <see cref="VectorUnorderedSet{T, FixedVector{T}}"/> wrapper that treats the Array
+        /// An <see cref="VectorUnorderedSet{T, TC}"/> wrapper that treats the Array
         /// as a unique, unordered collection.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// Unlike <see cref="VectorSet{T, FixedVector{T}}"/>, this structure does not sort the Array.
+        /// Unlike <see cref="VectorSet{T, TC}"/>, this structure does not sort the Array.
         /// It simply ensures that elements are treated as unique, ignoring duplicates.
         /// </para>
         /// <para>
@@ -262,57 +259,57 @@ namespace SystemEx.Collections.Generic {
         public static VectorUnorderedSet<T, FixedVector<T>> AsUnorderedSet ( ref FixedVector<T> vec )
             => new VectorUnorderedSet<T, FixedVector<T>>(ref vec);
 
-        /// <summary>
-        /// Creates a FlexSpan view over the entire Array starting at index 0.
-        /// 
-        /// The view uses the specified indexing mode (System, Reverse, Ring) and
-        /// provides a span-like interface backed directly by this Array.
-        /// </summary>
-        /// <param name="Array">
-        /// Reference to the Array. Passed by ref to avoid copying the struct and
-        /// to ensure the FlexSpan reflects the actual container.
-        /// </param>
-        /// <param name="mode">
-        /// Indexing mode for the view:
-        /// System  = forward indexing,
-        /// Reverse = backward indexing,
-        /// Ring    = circular wrap-around indexing.
-        /// </param>
-        /// <returns>
-        /// A FlexSpan representing the full Array.
-        /// </returns>
-        public static VectorFlexSpan<T, FixedVector<T>> AsFlexSpan ( ref FixedVector<T> vector, FlexSpanMode mode = FlexSpanMode.System )
+		/// <summary>
+		/// Creates a FlexSpan view over the entire Array starting at index 0.
+		/// 
+		/// The view uses the specified indexing mode (System, Reverse, Ring) and
+		/// provides a span-like interface backed directly by this Array.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the Array. Passed by ref to avoid copying the struct and
+		/// to ensure the FlexSpan reflects the actual container.
+		/// </param>
+		/// <param name="mode">
+		/// Indexing mode for the view:
+		/// System  = forward indexing,
+		/// Reverse = backward indexing,
+		/// Ring    = circular wrap-around indexing.
+		/// </param>
+		/// <returns>
+		/// A FlexSpan representing the full Array.
+		/// </returns>
+		public static VectorFlexSpan<T, FixedVector<T>> AsFlexSpan ( ref FixedVector<T> vector, FlexSpanMode mode = FlexSpanMode.System )
             => new VectorFlexSpan<T, FixedVector<T>>(ref vector, 0, mode);
 
-            
 
-        /// <summary>
-        /// Creates a FlexSpan view over a specific range of the Array.
-        /// 
-        /// The view covers the range [start .. end) and uses the specified indexing mode.
-        /// No memory is allocated; this is a pure logical slice backed by the Array.
-        /// </summary>
-        /// <param name="Array">
-        /// Reference to the Array. Passed by ref so the FlexSpan operates on the
-        /// actual container rather than a copy.
-        /// </param>
-        /// <param name="start">
-        /// Starting index of the view. Must be within the Array's logical bounds.
-        /// </param>
-        /// <param name="end">
-        /// Exclusive end index of the view. Must be greater than or equal to start
-        /// and within the Array's logical bounds.
-        /// </param>
-        /// <param name="mode">
-        /// Indexing mode for the view:
-        /// System  = forward indexing,
-        /// Reverse = backward indexing,
-        /// Ring    = circular wrap-around indexing.
-        /// </param>
-        /// <returns>
-        /// A FlexSpan representing the specified range of the Array.
-        /// </returns>
-        public static VectorFlexSpan<T, FixedVector<T>> AsFlexSpan ( ref FixedVector<T> vector, long start, long end, FlexSpanMode mode = FlexSpanMode.System )
+
+		/// <summary>
+		/// Creates a FlexSpan view over a specific range of the Array.
+		/// 
+		/// The view covers the range [start .. end) and uses the specified indexing mode.
+		/// No memory is allocated; this is a pure logical slice backed by the Array.
+		/// </summary>
+		/// <param name="vector">
+		/// Reference to the Array. Passed by ref so the FlexSpan operates on the
+		/// actual container rather than a copy.
+		/// </param>
+		/// <param name="start">
+		/// Starting index of the view. Must be within the Array's logical bounds.
+		/// </param>
+		/// <param name="end">
+		/// Exclusive end index of the view. Must be greater than or equal to start
+		/// and within the Array's logical bounds.
+		/// </param>
+		/// <param name="mode">
+		/// Indexing mode for the view:
+		/// System  = forward indexing,
+		/// Reverse = backward indexing,
+		/// Ring    = circular wrap-around indexing.
+		/// </param>
+		/// <returns>
+		/// A FlexSpan representing the specified range of the Array.
+		/// </returns>
+		public static VectorFlexSpan<T, FixedVector<T>> AsFlexSpan ( ref FixedVector<T> vector, long start, long end, FlexSpanMode mode = FlexSpanMode.System )
             => new VectorFlexSpan<T, FixedVector<T>>(ref vector, start, end, mode);
 
         /// <summary>
@@ -356,8 +353,13 @@ namespace SystemEx.Collections.Generic {
             get => m_elements[index];
             set => Insert(index, value);
         }
-
+        /// <summary>
+        /// begin
+        /// </summary>
         public RandomAccessIterator<T, FixedVector<T>> Begin => new RandomAccessIterator<T, FixedVector<T>>(this, 0);
+        /// <summary>
+        /// end
+        /// </summary>
         public RandomAccessIterator<T, FixedVector<T>> End => new RandomAccessIterator<T, FixedVector<T>>(this, Count);
 
 
@@ -782,6 +784,6 @@ namespace SystemEx.Collections.Generic {
 
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

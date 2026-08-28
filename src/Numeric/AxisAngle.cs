@@ -35,5 +35,5 @@ namespace SystemEx.Numeric {
         /// </summary>
         public T Angle;
     }
-	/// @}
+	
 }

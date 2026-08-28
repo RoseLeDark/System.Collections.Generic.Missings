@@ -74,5 +74,5 @@ namespace SystemEx.Threading {
 		/// </returns>
 		public Result ReadValue ( int timeoutms );
 	}
-	/// @}
+	
 }

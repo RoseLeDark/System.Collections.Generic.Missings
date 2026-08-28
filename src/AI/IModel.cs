@@ -144,5 +144,5 @@ namespace SystemEx.AI {
         void Release ();
     }
 
-	/// @}
+	
 }

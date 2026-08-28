@@ -58,5 +58,5 @@ namespace SystemEx.Drawing {
             m_y = System.Math.Clamp(y, 0f, 1f);
         }
     }
-    /// @}
+    
 }

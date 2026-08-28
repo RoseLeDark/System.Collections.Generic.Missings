@@ -104,7 +104,7 @@ namespace SystemEx.Device.Memory {
             IsLocked = false;
         }
     }
-	/// @}
+	
 }
 
 

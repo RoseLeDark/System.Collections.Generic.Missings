@@ -30,7 +30,7 @@ namespace SystemEx.IO.Provider {
 	public interface IIsByteSeriablize {
 
     }
-	/// @}
+	
 
 }
 

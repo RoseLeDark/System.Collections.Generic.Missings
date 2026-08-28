@@ -314,5 +314,5 @@ namespace SystemEx.AI {
             Backend.Release(true);
         }
     }
-    /// @}
+    
 }

@@ -350,6 +350,6 @@ namespace SystemEx.Drawing {
             return new ColorHSV(color.Gray, color.Gray, color.Gray);
         }
     }
-    /// @}
+    
 
 }

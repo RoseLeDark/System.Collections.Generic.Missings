@@ -57,7 +57,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         private Node<T> m_pCurrent;
         /// <summary>
-        /// Gets the remaining offset after an <see cref="Advance(long)"/> operation.
+        /// Gets the remaining offset  operation.
         /// </summary>
         public long AdvanceRest { get; private set; }
         /// <summary>
@@ -185,7 +185,12 @@ namespace SystemEx.Collections.Generic {
         internal  T? m_value;
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public T? this[ulong index] {
             get {
 #pragma warning disable CA2201 // Keine reservierten Ausnahmetypen auslösen
@@ -547,19 +552,6 @@ namespace SystemEx.Collections.Generic {
             return newHead!;
         }
 
-
-
-        /// \deprecated Use InsertRange(ref Node<T> pFirst, ref Node<T> pFinal).
-        /// This method will be removed in the next build.
-        /// <summary>
-        /// Inserts a range of nodes before this node.
-        /// </summary>
-        /// \deprecated Use <see cref="InsertRange(ref Node{T}, ref Node{T})"/> instead.
-        /// This method will be removed in the next build.
-        [Obsolete("Use InsertRange(ref Node<T> pFirst, ref Node<T> pFinal) instead. This method will be removed in the next major release.")]
-        public void InsertRagen ( ref Node<T> pFirst, ref Node<T> pFinal )
-            => InsertRange(ref pFirst, ref  pFinal);
-
         /// <summary>
         /// Inserts a range of nodes before this node.
         /// </summary>
@@ -620,7 +612,7 @@ namespace SystemEx.Collections.Generic {
 
         /// <summary>
         /// Returns the number of steps to the beginning or ending of the chain.
-        /// <param name="ToEnd"/>if <c>true</c> then returns the number of steps to the ending of the chain </param>
+        /// <param name="ToEnd">if <c>true</c> then returns the number of steps to the ending of the chain </param>
         /// </summary>
         public ulong Distance(bool ToEnd = false) {
             ulong _temp = 0;
@@ -684,19 +676,11 @@ namespace SystemEx.Collections.Generic {
         public NodeRange<T> AsRange() {
             return new NodeRange<T>(First, End);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        //public NodeSlice<T> Slice(int start, int length) {
-          //  return new NodeSlice<T>((NodeIterrator<T>)First.Advance(start), length);
-        //}
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
         public NodeChain<T> AsChain() {
             return new NodeChain<T>().Add(First, End);
         }
@@ -771,6 +755,6 @@ namespace SystemEx.Collections.Generic {
     }
 
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

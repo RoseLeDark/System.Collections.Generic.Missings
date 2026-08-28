@@ -135,5 +135,5 @@ namespace SystemEx.Utils {
             return new BitULongSpan(ref value, start, send, mode);
         }
     }
-	/// @}
+	
 }

@@ -90,6 +90,6 @@ namespace SystemEx.IO.Provider {
         [EditorBrowsable(EditorBrowsableState.Never)]
         TSchema GetSchema();
     }
-	/// @}
+	
 }
 

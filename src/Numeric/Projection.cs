@@ -75,5 +75,5 @@ namespace SystemEx.Numeric {
 			m_fFarPlane = fFarPlane;
 		}
 	}
-	/// @}
+	
 }

@@ -73,5 +73,5 @@ namespace SystemEx.Hash {
             return new Hash64(h32.Value);
         }
     }
-    /// @}
+    
 }

@@ -32,6 +32,6 @@ namespace SystemEx.Algorithms.Compute {
 		float Compute ( ICVector a, ICVector b );
 	}
 
-	/// @}
+	
 }
 

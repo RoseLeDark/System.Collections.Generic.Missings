@@ -81,5 +81,5 @@ namespace SystemEx.Hash {
             return new Hash64(ui);
         }
     }
-    /// @}
+    
 }

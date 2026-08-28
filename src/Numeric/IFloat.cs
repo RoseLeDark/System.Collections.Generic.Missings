@@ -327,5 +327,5 @@ namespace SystemEx.Numeric {
 		static abstract bool operator != ( TSelf a, TSelf b );
 
 	}
-    /// @}
+    
 }

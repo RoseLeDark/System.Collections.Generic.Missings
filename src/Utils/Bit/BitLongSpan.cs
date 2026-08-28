@@ -336,5 +336,5 @@ namespace SystemEx.Utils {
         public override int GetHashCode () => throw new NotSupportedException();
     }
 
-	/// @}
+	
 }

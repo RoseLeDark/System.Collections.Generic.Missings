@@ -210,5 +210,5 @@ namespace SystemEx.Base {
             return GetEnumerator();
         }
     }
-	/// @}
+	
 }

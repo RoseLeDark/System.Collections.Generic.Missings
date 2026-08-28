@@ -451,5 +451,5 @@ namespace SystemEx.Numeric {
         }
 
     }
-    /// @}
+    
 }

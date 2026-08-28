@@ -36,5 +36,5 @@ namespace SystemEx.Algorithms.Compute {
 		TOutput Evaluate ( TInput input );
 	}
 
-	/// @}
+	
 }

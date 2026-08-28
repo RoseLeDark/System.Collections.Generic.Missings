@@ -218,5 +218,5 @@ namespace SystemEx.Threading {
             Assign(m_startValue);
         }
 	}
-	/// @}
+	
 }

@@ -75,5 +75,5 @@ namespace SystemEx.AI {
 		/// <returns>The associated parameter value.</returns>
 		object this[string parameter] { get; set; }
     }
-    /// @}
+    
 }

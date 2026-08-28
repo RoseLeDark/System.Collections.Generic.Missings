@@ -29,38 +29,6 @@ namespace SystemEx.Collections.Generic {
 	/// optional auto‑growth, insertion, removal, traversal, and multiple zero‑overhead
 	/// reinterpretation views.
 	///
-	/// Beyond basic dynamic array functionality, <see cref="Vector{T}"/> supports
-	/// several high‑level transformations such as:
-	/// <list type="bullet">
-	///   <item>
-	///     <description>
-	///     <see cref="AsFlexSpan"/> – a multi‑mode span view supporting forward, reverse, and ring ( circular) traversal.
-	///     </description>
-	///   </item>
-	///   <item>
-	///     <description>
-	///     <see cref="AsSet"/> / <see cref="AsMultiSet"/> – sorted views with configurable
-	///     comparison and sorting policies.
-	///     </description>
-	///   </item>
-	///   <item>
-	///     <description>
-	///     <see cref="AsUnorderedSet"/> / <see cref="AsUnorderedMultiSet"/> – unordered
-	///     unique or multi‑value views without sorting overhead.
-	///     </description>
-	///   </item>
-	///   <item>
-	///     <description>
-	///     <see cref="AsSearch"/> – a binary‑search optimized lookup view.
-	///     </description>
-	///   </item>
-	///   <item>
-	///     <description>
-	///     <see cref="AsFind"/> – a linear search view for unsorted data.
-	///     </description>
-	///   </item>
-	/// </list>
-	///
 	/// These views allow the same underlying Vector to be interpreted as a span,
 	/// a sorted set, a multiset, an unordered set, or a search helper — without copying
 	/// or allocating additional memory.
@@ -175,7 +143,12 @@ namespace SystemEx.Collections.Generic {
         public static VectorFlexSpan<T, Vector<T> > AsFlexSpan (ref Vector<T> vector, FlexSpanMode mode = FlexSpanMode.System )
             => new VectorFlexSpan<T, Vector<T>>(ref vector, 0, mode);
 
-
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="vector"></param>
+            /// <param name="devider"></param>
+            /// <returns></returns>
         public static Slices<T, Vector<T> > AsMultiSlices ( ref Vector<T> vector , int devider) {
             return new Slices<T, Vector<T>>(ref vector, (int)(vector.Count / devider));
         }
@@ -267,9 +240,8 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Creates a <see cref="VectorSet{T, Vector{T}}"/> view over the given vector.
+        /// Creates a <see cref="VectorSet{T, TC}"/> view over the given vector.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
         /// <param name="vec">
         /// The vector whose contents should be interpreted as a sorted, unique set.
         /// </param>
@@ -284,7 +256,7 @@ namespace SystemEx.Collections.Generic {
         /// providing fast, predictable, non‑recursive sorting suitable for general use.
         /// </param>
         /// <returns>
-        /// A <see cref="VectorSet{T, Vector{T}}"/> that wraps the provided vector, ensuring
+        /// A <see cref="VectorSet{T, TC}"/> that wraps the provided vector, ensuring
         /// that elements are sorted according to the chosen comparer and that duplicates
         /// are handled according to the set's semantics.
         /// </returns>
@@ -305,7 +277,7 @@ namespace SystemEx.Collections.Generic {
         ///   </item>
         ///   <item>
         ///     <description>
-        ///     Constructing a <see cref="VectorSet{T, Vector{T}}"/> wrapper that interprets
+        ///     Constructing a <see cref="VectorSet{T, TC}"/> wrapper that interprets
         ///     the sorted vector as a unique, ordered collection.
         ///     </description>
         ///   </item>
@@ -334,20 +306,21 @@ namespace SystemEx.Collections.Generic {
                 sorter == null ? SortActions.ShellSorter : sorter
             );
 
+		/// <summary> </summary>
+		public RandomAccessIterator<T, Vector<T>> Begin => new RandomAccessIterator<T, Vector<T>>(this, 0);
+		/// <summary> </summary>
+		public RandomAccessIterator<T, Vector<T>> End => new RandomAccessIterator<T, Vector<T>>(this, Count);
 
-        public RandomAccessIterator<T, Vector<T>> Begin => new RandomAccessIterator<T, Vector<T>>(this, 0);
-        public RandomAccessIterator<T, Vector<T>> End => new RandomAccessIterator<T, Vector<T>>(this, Count);
-
-
+        /// <summary> </summary>
         public RandomAccessIterator<T, Vector<T>>  ReverseBegin => End;
-        public RandomAccessIterator<T, Vector<T>> ReverseEnd => Begin;
+		/// <summary> </summary>
+		public RandomAccessIterator<T, Vector<T>> ReverseEnd => Begin;
 
 
         /// <summary>
-        /// Creates a <see cref="VectorMultiSet{T, Vector{T}}"/> view over the given vector,
+        /// Creates a <see cref="VectorMultiSet{T, TC}"/> view over the given vector,
         /// allowing duplicate elements while preserving a defined ordering.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
         /// <param name="vec">
         /// The vector whose contents should be interpreted as an ordered multiset.
         /// </param>
@@ -363,7 +336,7 @@ namespace SystemEx.Collections.Generic {
         /// fast, non‑recursive default.
         /// </param>
         /// <returns>
-        /// A <see cref="VectorMultiSet{T, Vector{T}}"/> wrapper that interprets the vector
+        /// A <see cref="VectorMultiSet{T, TC}"/> wrapper that interprets the vector
         /// as a sorted collection that may contain duplicates.
         /// </returns>
         /// <remarks>
@@ -409,20 +382,19 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Creates an <see cref="VectorUnorderedSet{T, Vector{T}}"/> view over the vector,
+        /// Creates an <see cref="VectorUnorderedSet{T, TC}"/> view over the vector,
         /// representing a unique collection without any defined ordering.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
         /// <param name="vec">
         /// The vector whose contents should be interpreted as an unordered set.
         /// </param>
         /// <returns>
-        /// An <see cref="VectorUnorderedSet{T, Vector{T}}"/> wrapper that treats the vector
+        /// An <see cref="VectorUnorderedSet{T, TC}"/> wrapper that treats the vector
         /// as a unique, unordered collection.
         /// </returns>
         /// <remarks>
         /// <para>
-        /// Unlike <see cref="VectorSet{T, Vector{T}}"/>, this structure does not sort the vector.
+        /// Unlike <see cref="VectorSet{T, TC}"/>, this structure does not sort the vector.
         /// It simply ensures that elements are treated as unique, ignoring duplicates.
         /// </para>
         /// <para>
@@ -442,17 +414,12 @@ namespace SystemEx.Collections.Generic {
 
 
         /// <summary>
-        /// Creates an <see cref="VectorUnorderedMultiSet{T, Vector{T}}"/> view over the vector,
+        /// Creates an <see cref="VectorUnorderedMultiSet{T, TC}"/> view over the vector,
         /// representing a collection that allows duplicates without enforcing any ordering.
         /// </summary>
-        /// <typeparam name="T">Element type stored in the vector.</typeparam>
         /// <param name="vec">
         /// The vector whose contents should be interpreted as an unordered multiset.
         /// </param>
-        /// <returns>
-        /// An <see cref="VectorUnorderedMultiSet{T, Vector{T}}"/> wrapper that treats the vector
-        /// as an unordered collection where duplicates are allowed.
-        /// </returns>
         /// <remarks>
         /// <para>
         /// This structure does not sort or reorder the vector.  
@@ -475,7 +442,7 @@ namespace SystemEx.Collections.Generic {
             => new VectorUnorderedMultiSet<T, Vector<T>>(ref vec);
 
         /// <summary>
-        /// Creates a <see cref="VectorSearch{U, Vector{U}}"/> wrapper for this vector,
+        /// Creates a <see cref="VectorSearch{T, TC}"/> wrapper for this vector,
         /// enabling search operations using the specified search provider.
         /// </summary>
         /// <typeparam name="U">
@@ -490,7 +457,7 @@ namespace SystemEx.Collections.Generic {
         /// Fibonacci, etc.).
         /// </param>
         /// <returns>
-        /// A <see cref="VectorSearch{U, Vector{U}}"/> bound to the given vector.
+        /// A <see cref="VectorSearch{T, TC}"/> bound to the given vector.
         /// </returns>
         public static VectorSearch<U, Vector<U>> AsSearch<U> ( ref Vector<U> vec, ISearchProvider<U, Vector<U>>? provider = null )
             where U : IComparable<U>
@@ -1032,6 +999,6 @@ namespace SystemEx.Collections.Generic {
     }
 
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

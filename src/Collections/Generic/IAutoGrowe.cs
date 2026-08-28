@@ -55,5 +55,5 @@ namespace SystemEx.Collections.Generic {
 		bool Grow ();
 
     }
-	/// @}
+	
 }

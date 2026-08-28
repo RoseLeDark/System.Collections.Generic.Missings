@@ -49,5 +49,5 @@ namespace SystemEx.Threading {
         /// </summary>
         bool IsThreadOwnerTrackingEnabled { get; }
     }
-	/// @}
+	
 }

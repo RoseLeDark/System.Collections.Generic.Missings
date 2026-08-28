@@ -364,7 +364,7 @@ namespace SystemEx.Numeric {
         public static Vec4i operator / ( Vec4i a, int b ) {
             return new Vec4i(a.m_x / b, a.m_y / b, a.m_z / b, a.m_w / b);
         }
-        // <summary>
+        /// <summary>
         /// Multiplies both components of the vector by a scalar.
         /// </summary>
         public static Vec4i operator * ( Vec4i a, int b ) {
@@ -376,10 +376,10 @@ namespace SystemEx.Numeric {
         public static Vec4i operator - ( int a, Vec4i b ) {
             return new Vec4i(a - b.m_x, a - b.m_y, a - b.m_z, a - b.m_w);
         }
-        // <summary>
-        /// Divides a scalar by each component of the vector.
-        /// </summary>
-        public static Vec4i operator / ( int a, Vec4i b ) {
+		/// <summary>
+		/// Divides a scalar by each component of the vector.
+		/// </summary>
+		public static Vec4i operator / ( int a, Vec4i b ) {
             return new Vec4i(a / b.m_x, a / b.m_y, a / b.m_z, a / b.m_w);
         }
         /// <summary>
@@ -515,5 +515,5 @@ namespace SystemEx.Numeric {
             return a.m_x > b && a.m_y > b && a.m_z > b && a.m_w > b;
         }
     }
-    /// @}
+    
 }

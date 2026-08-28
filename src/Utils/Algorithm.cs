@@ -117,7 +117,7 @@ namespace SystemEx.Utils {
 	/// </returns>
 	public delegate CompareResult CompFunc<T>(T? a, T? b);
 
-	//// <summary>
+	/// <summary>
 	/// Provides generic algorithm utilities similar to the C++ STL, including
 	/// fill, copy, move, min/max, clamp, rotation, equality, lexicographical
 	/// comparison, and several sorting algorithms for arrays.
@@ -594,6 +594,7 @@ namespace SystemEx.Utils {
 		/// <typeparam name="T">The element type.</typeparam>
 		/// <param name="items">The array to inspect.</param>
 		/// <param name="cmp">The comparison function.</param>
+		/// <param name="equalIsNot"></param>
 		/// <returns>
 		/// <c>true</c> if each element is greater than or equal to its
 		/// predecessor; otherwise <c>false</c>.
@@ -607,5 +608,5 @@ namespace SystemEx.Utils {
         }
     }
 
-    /// @}
+    
 }

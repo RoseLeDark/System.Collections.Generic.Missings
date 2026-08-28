@@ -137,5 +137,5 @@ namespace SystemEx.AI {
             m_okkay = error.IsNull;
         }
     }
-    /// @}
+    
 }

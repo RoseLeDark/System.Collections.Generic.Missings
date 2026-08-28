@@ -899,5 +899,5 @@ namespace SystemEx.Threading {
             }
         }
     }
-	/// @}
+	
 }

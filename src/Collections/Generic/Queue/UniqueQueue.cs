@@ -109,5 +109,5 @@ namespace SystemEx.Collections.Generic {
             return _ret;
         }
     }
-    /// @}
+    
 }

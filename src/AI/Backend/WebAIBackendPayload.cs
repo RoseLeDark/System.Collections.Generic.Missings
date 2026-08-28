@@ -88,5 +88,5 @@ namespace SystemEx.AI.Backend {
         public Map<string, object> Metadata { get; set; }
     }
 
-    /// @}
+    
 }

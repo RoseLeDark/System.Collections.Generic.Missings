@@ -16,9 +16,6 @@
  */
 
 namespace SystemEx.Numeric {
-	/// \addtogroup Numeric
-	/// @{
-
 	/// <summary>
 	/// Represents a 256‑bit unsigned integer composed of two 128‑bit halves.
 	/// 
@@ -50,13 +47,13 @@ namespace SystemEx.Numeric {
 
 
 	/// <summary>
-	/// Defines a 16‑bit floating‑point format based on <see cref="IFloat{TSelf, ushort}"/>.
+	/// Defines a 16‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
 	/// 
 	/// <para>
 	/// Implementations of <see cref="IHalf{TSelf}"/> represent compact floating‑point
 	/// numbers such as IEEE‑754 binary16 or custom 16‑bit formats. The exponent,
 	/// mantissa, and sign layout is determined by the underlying
-	/// <see cref="IFloat{TSelf, ushort}"/> contract.
+	/// <see cref="IFloat{TSelf, TBias}"/> contract.
 	/// </para>
 	/// 
 	/// <para>
@@ -69,13 +66,13 @@ namespace SystemEx.Numeric {
 	}
 
 	/// <summary>
-	/// Defines an 8‑bit floating‑point format based on <see cref="IFloat{TSelf, byte}"/>.
+	/// Defines an 8‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
 	/// 
 	/// <para>
 	/// <see cref="IMini{TSelf}"/> is intended for extremely compact numeric
 	/// representations such as FP8 variants used in machine learning or embedded
 	/// systems. The exact bit layout (sign, exponent, mantissa) is determined by
-	/// the <see cref="IFloat{TSelf, byte}"/> implementation.
+	/// the <see cref="IFloat{TSelf, TBias}"/> implementation.
 	/// </para>
 	/// </summary>
 	public interface IMini<TSelf> : IFloat<TSelf, byte>
@@ -83,7 +80,7 @@ namespace SystemEx.Numeric {
 	}
 
 	/// <summary>
-	/// Defines a 32‑bit floating‑point format based on <see cref="IFloat{TSelf, uint}"/>.
+	/// Defines a 32‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
 	/// 
 	/// <para>
 	/// Implementations of <see cref="ICFloat{TSelf}"/> represent custom 32‑bit
@@ -97,7 +94,7 @@ namespace SystemEx.Numeric {
 
 
 	/// <summary>
-	/// Defines a 64‑bit floating‑point format based on <see cref="IFloat{TSelf, ulong}"/>.
+	/// Defines a 64‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
 	/// 
 	/// <para>
 	/// <see cref="ICDouble{TSelf}"/> is used for custom double‑precision formats
@@ -111,7 +108,7 @@ namespace SystemEx.Numeric {
 
 
 	/// <summary>
-	/// Defines a 128‑bit floating‑point format based on <see cref="IFloat{TSelf, UInt128}"/>.
+	/// Defines a 128‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
 	/// 
 	/// <para>
 	/// Implementations of <see cref="ICQuad{TSelf}"/> represent quad‑precision
@@ -126,7 +123,7 @@ namespace SystemEx.Numeric {
 
 	/// <summary>
 	/// Defines an extended‑precision floating‑point format based on
-	/// <see cref="IFloat{TSelf, Uint256}"/>.
+	/// <see cref="IFloat{TSelf, TBias}"/>.
 	/// 
 	/// <para>
 	/// <see cref="IBigFloat{TSelf}"/> supports extremely high‑precision floating‑point
@@ -140,5 +137,5 @@ namespace SystemEx.Numeric {
 	}
 
 
-	/// @}
+	
 }

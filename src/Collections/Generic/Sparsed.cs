@@ -329,7 +329,7 @@ namespace SystemEx.Collections.Generic {
         ///
         /// Use <see cref="Insert(long, T)"/> when you want to place a new element
         /// into an empty slot *and* move the cursor to that newly occupied position.
-        /// </summary
+        /// </summary>
         public bool Replace ( long index, T entry ) {
             if ( index < 0 ) return false;
 
@@ -491,5 +491,5 @@ namespace SystemEx.Collections.Generic {
             return !(a == b);
         }
     }
-	/// @}
+	
 }

@@ -104,5 +104,5 @@ namespace SystemEx.Drawing {
             return string.Create(null, stackalloc char[16], $"[{m_n} {m_c}% {m_l}%");
         }
     }
-    /// @}
+    
 }

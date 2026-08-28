@@ -76,5 +76,5 @@ namespace SystemEx.AI {
 		DateTime Timestamp { get; }
 	}
 
-	/// @}
+	
 }

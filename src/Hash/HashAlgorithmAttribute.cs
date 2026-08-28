@@ -55,6 +55,6 @@ namespace SystemEx.Hash {
             Endian = endian;
         }
     }
-    /// @}
+    
 
 }

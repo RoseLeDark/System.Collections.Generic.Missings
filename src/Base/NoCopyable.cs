@@ -53,5 +53,5 @@ namespace SystemEx {
 		protected new object MemberwiseClone ()
 			=> throw new NotSupportedException("MemberwiseClone is disabled.");
 	}
-	/// @}
+	
 }

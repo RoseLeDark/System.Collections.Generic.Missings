@@ -319,5 +319,5 @@ namespace SystemEx.Drawing {
         /// <returns>The number of pixels swapped.</returns> 
         int SwapIn ( ref ICanvas<T> toDraw );
     }
-    /// @}
+    
 }

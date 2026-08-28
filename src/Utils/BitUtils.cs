@@ -302,5 +302,5 @@ namespace SystemEx.Utils {
 		public static ulong FlipBit(this ulong value, int pos)
             => value ^ (1UL << pos);
     }
-	/// @}
+	
 }

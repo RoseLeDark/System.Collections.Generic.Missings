@@ -85,6 +85,6 @@ namespace SystemEx.AI.Tools {
             return diff;
         }
     }
-    /// @}
-    /// @}
+    
+    
 }

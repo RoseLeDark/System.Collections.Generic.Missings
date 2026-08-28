@@ -321,7 +321,7 @@ namespace SystemEx.Numeric {
 		public static Vec3r operator / ( Vec3r a, Ratio b ) {
 			return new Vec3r(a.m_x / b, a.m_y / b, a.m_z / b);
 		}
-		// <summary>
+		/// <summary>
 		/// Multiplies both components of the vector by a scalar.
 		/// </summary>
 		public static Vec3r operator * ( Vec3r a, Ratio b ) {
@@ -333,7 +333,7 @@ namespace SystemEx.Numeric {
 		public static Vec3r operator - ( Ratio a, Vec3r b ) {
 			return new Vec3r(a - b.m_x, a - b.m_y, a - b.m_z);
 		}
-		// <summary>
+		/// <summary>
 		/// Divides a scalar by each component of the vector.
 		/// </summary>
 		public static Vec3r operator / ( Ratio a, Vec3r b ) {
@@ -472,5 +472,5 @@ namespace SystemEx.Numeric {
 			return a.m_x > b && a.m_y > b && a.m_z > b;
 		}
 	}
-	/// @}
+	
 }

@@ -363,7 +363,7 @@ namespace SystemEx.Numeric {
         public static Vec4h operator / ( Vec4h a, Half16 b ) {
             return new Vec4h(a.m_x / b, a.m_y / b, a.m_z / b, a.m_w / b);
         }
-        // <summary>
+        /// <summary>
         /// Multiplies both components of the vector by a scalar.
         /// </summary>
         public static Vec4h operator * ( Vec4h a, Half16 b ) {
@@ -375,7 +375,7 @@ namespace SystemEx.Numeric {
         public static Vec4h operator - ( Half16 a, Vec4h b ) {
             return new Vec4h(a - b.m_x, a - b.m_y, a - b.m_z, a - b.m_w);
         }
-        // <summary>
+        /// <summary>
         /// Divides a scalar by each component of the vector.
         /// </summary>
         public static Vec4h operator / ( Half16 a, Vec4h b ) {
@@ -514,5 +514,5 @@ namespace SystemEx.Numeric {
             return a.m_x > b && a.m_y > b && a.m_z > b && a.m_w > b;
         }
     }
-    /// @}
+    
 }

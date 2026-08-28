@@ -57,17 +57,18 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         [DllImport(Library, CharSet = CharSet.Unicode)]
         private static extern IntPtr LoadLibraryW ( string dllToLoad );
 
-        /// Retrieves the address of an exported function from a loaded
-        /// module using the Windows API function <c>GetProcAddress</c>.  
-        /// The returned pointer can be converted into a managed delegate.
-        /// </summary>
-        /// <param name="hModule">The handle of the loaded module.</param>
-        /// <param name="procedureName">The name of the exported function.</param>
-        /// <returns>
-        /// A raw function pointer, or <see cref="IntPtr.Zero"/> if the
-        /// function cannot be found.
-        /// </returns>
-        [DllImport(Library, CharSet = CharSet.Unicode)]
+		/// <summary>
+		/// Retrieves the address of an exported function from a loaded
+		/// module using the Windows API function <c>GetProcAddress</c>.  
+		/// The returned pointer can be converted into a managed delegate.
+		/// </summary>
+		/// <param name="hModule">The handle of the loaded module.</param>
+		/// <param name="procedureName">The name of the exported function.</param>
+		/// <returns>
+		/// A raw function pointer, or <see cref="IntPtr.Zero"/> if the
+		/// function cannot be found.
+		/// </returns>
+		[DllImport(Library, CharSet = CharSet.Unicode)]
         private static extern IntPtr GetProcAddressW ( IntPtr hModule, string procedureName );
 
         /// <summary>
@@ -135,6 +136,6 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

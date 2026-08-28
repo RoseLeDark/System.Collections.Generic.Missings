@@ -40,5 +40,5 @@ namespace SystemEx.Algorithms.Compute {
 		float this[int index] { get; }
 	}
 
-	/// @}
+	
 }

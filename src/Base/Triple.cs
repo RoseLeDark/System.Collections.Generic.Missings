@@ -246,18 +246,18 @@ namespace SystemEx {
             return value.ToBoolean();
         }
 
-        /// <summary>
-        /// Kleene three-valued logical AND.
-        /// Truth table:
-        /// T & T = T
-        /// T & F = F
-        /// T & N = N
-        /// F & X = F
-        /// N & T = N
-        /// N & F = F
-        /// N & N = N
-        /// </summary>
-        public static Triple operator & ( Triple a, Triple b ) {
+		/// <summary>
+		/// Kleene three-valued logical AND.
+		/// Truth table:
+		/// T and T = T
+		/// T and F = F
+		/// T and N = N
+		/// F and X = F
+		/// N and T = N
+		/// N and F = F
+		/// N and N = N
+		/// </summary>
+		public static Triple operator & ( Triple a, Triple b ) {
             // False dominates AND
             if ( a.m_value == triple.False || b.m_value == triple.False )
                 return triple.False;
@@ -374,11 +374,11 @@ namespace SystemEx {
 
             return triple.False;
         }
-        /// <summary>
-        /// Kleene three-valued NAND.
-        /// Defined as: !(A & B)
-        /// </summary>
-        public static Triple NAND ( Triple a, Triple b ) {
+		/// <summary>
+		/// Kleene three-valued NAND.
+		/// Defined as: !(A and B)
+		/// </summary>
+		public static Triple NAND ( Triple a, Triple b ) {
             return !( a & b);
         }
         /// <summary>
@@ -397,5 +397,5 @@ namespace SystemEx {
                                         t.Equals(triple.False) ? triple.False :
                                         triple.Nin;
     }
-	/// @}
+	
 }

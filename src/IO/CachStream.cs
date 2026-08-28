@@ -292,5 +292,5 @@ namespace SystemEx.IO {
             }
         }
     }
-	/// @}
+	
 }

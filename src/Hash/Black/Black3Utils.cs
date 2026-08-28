@@ -172,5 +172,5 @@ namespace SystemEx.Hash.Black {
             }
         }
     }
-    /// @}
+    
 }

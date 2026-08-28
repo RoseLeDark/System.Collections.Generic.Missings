@@ -174,5 +174,5 @@ namespace SystemEx.Numeric {
             return exponent == 0 && mantissa != 0;
         }
     }
-	/// @}
+	
 }

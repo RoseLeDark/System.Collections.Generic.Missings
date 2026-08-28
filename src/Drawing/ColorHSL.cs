@@ -98,6 +98,6 @@ namespace SystemEx.Drawing {
             return string.Create(null, stackalloc char[256], $"[{m_h}, {m_s}, {m_l}]");
         }
     }
-    /// @}
+    
 }
 

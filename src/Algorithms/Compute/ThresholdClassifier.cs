@@ -49,5 +49,5 @@ namespace SystemEx.Algorithms.Compute {
             return triple.Nin;
         }
     }
-	/// @}
+	
 }

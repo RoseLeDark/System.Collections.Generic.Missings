@@ -181,6 +181,6 @@ namespace SystemEx.Threading {
 			m_lock.Unlock();
 		}
 	}
-	/// @}
+	
 	
 }

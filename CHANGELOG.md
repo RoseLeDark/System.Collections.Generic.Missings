@@ -1,5 +1,67 @@
 # 📝 SystemEx Changelog
 
+## ⭐ [0.95.3545‑beta] 28.08.2026 — internal Preview for 1.0 → Lacking
+
+## Added
+- Added full generic CRC wrapper `CrC<TC32, TC64>`:
+  - Allows pairing any CRC‑32 and CRC‑64 variant in a single hasher
+  - Fully compatible with `IHash` pipeline (Compute + ComputeLong)
+  - Supports simultaneous polynomial configuration via `Pair<Optional<uint>, Optional<ulong>>`
+  - Rolling state maintained independently for both CRC engines
+
+- Added specialized CRC‑32 variants:
+  - `CRC32IEEE` (0xEDB88320)
+  - `CRC32C` (Castagnoli, 0x82F63B78)
+  - `CRC32Koopman` (0xEB31D82E)
+  - `CRC32BZip2` (0x04C11DB7)
+  - `CRC32Mpeg2` (0x04C11DB7, FinalXor = 0)
+  - `CRC32Posix` (0x04C11DB7, InitialXor = 0)
+  - All variants implemented as sealed subclasses with deterministic polynomial injection
+
+- Added specialized CRC‑64 variants:
+  - `CRC64Ecma` (0xC96C5795D7870F42)
+  - `CRC64Iso` (0x000000000000001B)
+  - `CRC64We` (0x42F0E1EBA9EA3693)
+  - `CRC64Xz` (0x42F0E1EBA9EA3693)
+  - All variants implemented as sealed subclasses with consistent rolling behavior
+
+- Added full XML documentation for:
+  - `CrC<TC32, TC64>`
+  - All CRC‑32 and CRC‑64 variant classes
+  - Missing BigDecimal members (`Precision`, tuple‑constructor, `GetHashCode`)
+  - Internal rational constructor (`BigDecimal(BigInteger numerator, BigInteger denominator)`)
+
+## Changed
+- Updated `CRC32` and `CRC64` base classes:
+  - Polynomial setter now resets rolling state deterministically
+  - Unified table generation semantics across all CRC variants
+  - Normalized documentation to match SystemEx style guidelines
+
+- Revised BigDecimal comparison logic documentation:
+  - Clarified exponent alignment behavior
+  - Added detailed explanation of precision‑based exponent adjustment
+  - Improved readability of `CompareTo(BigDecimal)` XML comments
+
+- Updated BigDecimal hashing:
+  - `GetHashCode()` now explicitly documented as normalization‑based
+  - Ensures canonical hash generation independent of mantissa/exponent representation
+
+## Improved
+- Consistent naming and documentation across all CRC variant classes
+- Unified rolling semantics for CRC‑32 and CRC‑64 engines
+- Improved clarity of BigDecimal internal constructors and normalization behavior
+- Enhanced maintainability of hash subsystem through generic CRC composition
+
+
+
+## [0.95.xxx] 26.08.2026 intern Preview for 1.0 -> Lacking
+## Rename
+- Rename Latch To LightLatch and add ConditionVariable support
+
+## Added
+- Add Thread Invoke System 
+- Add readmes at all examples
+
 
 ## [0.93.1957] 25.08.2026 intern Preview for 1.0 -> Lacking
 !! Very importend remnove AutoGrow Bug from All Collections !! PushBack and AutoGrow now Working !!

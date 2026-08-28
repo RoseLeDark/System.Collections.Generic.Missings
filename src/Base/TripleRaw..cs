@@ -38,6 +38,6 @@ namespace SystemEx {
         /// </summary>
         Nin = -1
     }
-    /// @}
+    
 #pragma warning restore CS8981 
 }

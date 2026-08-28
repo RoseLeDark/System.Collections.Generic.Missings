@@ -65,5 +65,5 @@ namespace SystemEx.Algorithms.Compute {
 		Triple Evaluate ( float value );
 	}
 
-	/// @}
+	
 }

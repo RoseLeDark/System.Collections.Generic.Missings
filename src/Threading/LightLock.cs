@@ -137,5 +137,5 @@ namespace SystemEx.Threading {
         public bool TryLock (  ) => (m_bLocked = Monitor.TryEnter(m_lock));
 
     }
-	/// @}
+	
 }

@@ -334,7 +334,7 @@ namespace SystemEx.Numeric {
         public static Vec2f operator / ( Vec2f a, float b ) {
             return new Vec2f(a.m_x / b, a.m_y / b);
         }
-        // <summary>
+        /// <summary>
         /// Multiplies both components of the vector by a scalar.
         /// </summary>
         public static Vec2f operator * ( Vec2f a, float b ) {
@@ -346,7 +346,7 @@ namespace SystemEx.Numeric {
         public static Vec2f operator - ( float a, Vec2f b ) {
             return new Vec2f(a - b.m_x, a - b.m_y);
         }
-        // <summary>
+        /// <summary>
         /// Divides a scalar by each component of the vector.
         /// </summary>
         public static Vec2f operator / ( float  a, Vec2f b ) {
@@ -487,5 +487,5 @@ namespace SystemEx.Numeric {
         }
 
     }
-    /// @}
+    
 }

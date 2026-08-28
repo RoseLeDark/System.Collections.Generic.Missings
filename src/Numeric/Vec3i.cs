@@ -358,10 +358,10 @@ namespace SystemEx.Numeric {
         public static Vec3i operator / ( Vec3i a, int b ) {
             return new Vec3i(a.m_x / b, a.m_y / b, a.m_z / b);
         }
-        // <summary>
-        /// Multiplies both components of the vector by a scalar.
-        /// </summary>
-        public static Vec3i operator * ( Vec3i a, int b ) {
+		/// <summary>
+		/// Multiplies both components of the vector by a scalar.
+		/// </summary>
+		public static Vec3i operator * ( Vec3i a, int b ) {
             return new Vec3i(a.m_x * b, a.m_y * b, a.m_z * b);
         }
         /// <summary>
@@ -370,7 +370,7 @@ namespace SystemEx.Numeric {
         public static Vec3i operator - ( int a, Vec3i b ) {
             return new Vec3i(a - b.m_x, a - b.m_y, a - b.m_z);
         }
-        // <summary>
+        /// <summary>
         /// Divides a scalar by each component of the vector.
         /// </summary>
         public static Vec3i operator / ( int a, Vec3i b ) {
@@ -509,5 +509,5 @@ namespace SystemEx.Numeric {
             return a.m_x > b && a.m_y > b && a.m_z > b;
         }
     }
-    /// @}
+    
 }

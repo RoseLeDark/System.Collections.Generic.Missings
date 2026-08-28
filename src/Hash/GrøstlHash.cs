@@ -463,5 +463,5 @@ namespace SystemEx.Hash {
             return new Hash32(value);
         }
     }
-    /// @}
+    
 }
