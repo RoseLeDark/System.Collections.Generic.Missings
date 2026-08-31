@@ -17,8 +17,6 @@
 
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Provides binary serialization and deserialization capabilities for a type.

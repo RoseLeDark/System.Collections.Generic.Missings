@@ -20,8 +20,6 @@ using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Defines how FlexSpan indexes its underlying array.
@@ -251,16 +249,19 @@ namespace SystemEx {
         /// </summary>
         public static bool operator != ( FlexSpan<T> left, FlexSpan<T> right ) => !(left == right);
 
-        [Obsolete("Equals() on FlexSpan will always throw an exception. Use the equality operator instead.")]
-        public override bool Equals ( object obj ) => throw new NotSupportedException();
+#pragma warning disable CS0809 // Veraltetes Element überschreibt nicht veraltetes Element
+		[Obsolete("Equals() on FlexSpan will always throw an exception. Use the equality operator instead.")]
+        public override bool Equals ( object? obj ) => throw new NotSupportedException();
 
         [Obsolete("GetHashCode() on FlexSpan will always throw an exception.")]
-        public override int GetHashCode () => throw new NotSupportedException();
 
-        /// <summary>
-        /// Returns an enumerator for the span.
-        /// </summary>
-        public Enumerator GetEnumerator () => new Enumerator(this);
+		public override int GetHashCode () => throw new NotSupportedException();
+#pragma warning restore CS0809 // Veraltetes Element überschreibt nicht veraltetes Element
+
+		/// <summary>
+		/// Returns an enumerator for the span.
+		/// </summary>
+		public Enumerator GetEnumerator () => new Enumerator(this);
 
 
         /// <summary>

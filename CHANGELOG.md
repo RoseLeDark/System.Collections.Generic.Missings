@@ -1,6 +1,48 @@
 # 📝 SystemEx Changelog
 
-## ⭐ [0.95.3545‑beta] 28.08.2026 — internal Preview for 1.0 → Lacking
+## ⭐ [0.95.5000‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
+
+## Added
+- Added full UE‑Float suite:
+  - `FloatUE5M2b32` — 32‑Bit UE‑Format mit 5‑Bit Exponent, 2‑Bit Mantissa, block‑kompatibel
+  - `FloatUE5M2` — kompakte UE‑Variante für Low‑Precision‑Pipelines
+  - `FloatUE4M3` — 4‑Bit Exponent, 3‑Bit Mantissa, optimiert für Embedded‑DSP
+  - `FloatUE4M3MX` — MX‑Block‑Version mit gemeinsamem Exponent
+  - `FloatE5M2` — klassisches E5M2‑Format mit deterministischer Rundung
+  - `FloatE4M3` — E4M3‑Format mit SystemEx‑konformer Normalisierung
+
+- Added full standard float suite:
+  - `Float32` — deterministische IEEE‑754‑kompatible Implementierung
+  - `Float64` — präzise 64‑Bit‑Float‑Engine mit SystemEx‑Rounding
+
+- Added generic UMX‑float:
+  - `Float8UMX<T>` — 8‑Bit MX‑Float mit generischem Basistyp und gemeinsamem Exponent
+
+- Added `INT4`:
+  - Minimaler 4‑Bit signed Zweierkomplement‑Typ
+  - Vollständig bitweise implementiert über `Fast_Byte`
+  - Add/Sub/Mul/Div rein bitlogisch (Carry in Bit 5, Temp‑Bits 6–7)
+  - Vollständige Operatorunterstützung (`+ - * / % & | ^ < > <= >= == !=`)
+
+- Added interface:
+  - `IP8UMXEnable<TBase>` — aktiviert UMX‑Block‑Funktionalität für generische Basistypen
+  
+- Added `LightFutex`: Provides a lightweight reentrant futex-like synchronization primitive.
+
+## Changed
+- Updated `IFloat`:
+  - `BiddenBit` ist jetzt vom Typ `TSelf` statt `ushort`
+  - Ermöglicht konsistente Self‑Type‑Propagation über alle Float‑Formate
+  - Verbessert generische Kompatibilität mit UMX‑Blöcken und UE‑Formaten
+
+## Improved
+- Unified naming and documentation across all UE‑Float and MX‑Float classes
+- Enhanced determinism of rounding and normalization in all new float formats
+- Improved internal consistency of exponent/mantissa handling across UE‑Suite
+- Strengthened generic compatibility for UMX‑Float‑Pipeline (`Float8UMX<T>`)
+
+
+## [0.95.3545‑rc1] 28.08.2026 — internal Preview for 1.0 → Lacking
 
 ## Added
 - Added full generic CRC wrapper `CrC<TC32, TC64>`:

@@ -25,8 +25,6 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.Versioning;
 
 namespace SystemEx.Device.Memory {
-	/// \addtogroup Device
-	/// @{
 
 	/// <summary>
 	/// Specifies how a shared cache interacts with the hardware backend.  

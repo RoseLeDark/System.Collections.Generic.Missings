@@ -1,10 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* 
+ * SPDX-License-Identifier: EUPL-1.2
+ *
+ * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
+ *
+ * This file is licensed under the European Union Public Licence (EUPL) version 1.2.
+ * You can obtain a copy of the licence at:
+ *   https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * If you modify this file, retain this notice and add a short description of your
+ * changes and the date.
+ */
+
+
 using System.Runtime.InteropServices;
-using System.Text;
 using SystemEx.Collections.Generic;
 using SystemEx.Hash;
-using SystemEx.Numeric.SystemEx.Numeric;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
@@ -43,7 +57,7 @@ namespace SystemEx.Numeric {
 		/// <summary>Total bits (8).</summary>
 		public Fast_Byte TotalBits => 8;
 		/// <summary>Hidden bit mask (1 << MantissaBits).</summary>
-		public ushort HiddenBit => (byte)(1 << 2); // 0x04
+		public Fast_Byte HiddenBit => (byte)(1 << 2); // 0x04
 
 		/// <summary>
 		/// Gets the sign bit. True indicates a negative value.
@@ -614,11 +628,28 @@ namespace SystemEx.Numeric {
 		/// Decrement operator.
 		/// </summary>
 		public static FloatE5M2 operator -- ( FloatE5M2 a ) => a - One;
+
 		/// <summary>
 		/// Encodes sign, exponent, and mantissa fields into a single FP8 byte.
 		/// </summary>
-		private static byte Encode ( byte sign, byte exponent, byte mantissa ) =>
-			(byte)(((sign & 1) << 7) | ((exponent & 0x1F) << 2) | (mantissa & 0x03));
+		internal static byte Encode ( byte sign, byte exponent, byte mantissa ) {
+			Fast_Byte b = 0;
+
+			
+			b.At(0, (byte)((mantissa >> 0) & 1));
+			b.At(1, (byte)((mantissa >> 1) & 1));
+
+			b.At(2, (byte)((exponent >> 0) & 1));
+			b.At(3, (byte)((exponent >> 1) & 1));
+			b.At(4, (byte)((exponent >> 2) & 1));
+			b.At(5, (byte)((exponent >> 3) & 1));
+			b.At(6, (byte)((exponent >> 4) & 1));
+			b.At(7, sign);           // Signbit
+
+
+
+			return b.Value;
+		}
 
 		public bool Equals ( FloatE5M2 other ) {
 			return ( this == other );

@@ -18,8 +18,6 @@
 
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Defines a minimal lock‑protected value container interface. Implementations

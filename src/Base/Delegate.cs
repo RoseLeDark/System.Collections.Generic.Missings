@@ -22,8 +22,6 @@ using SystemEx.Collections.Generic;
 using SystemEx.Utils;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Represents a delegate container that can hold multiple callback functions.

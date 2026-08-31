@@ -19,8 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Base class that strictly forbids any form of copying.

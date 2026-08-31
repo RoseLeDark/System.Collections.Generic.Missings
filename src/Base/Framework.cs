@@ -65,7 +65,7 @@ namespace SystemEx {
 		/// <summary>
 		/// Gets the human‑readable semantic version of the framework.
 		/// </summary>
-		public static string Version => "0.95.3545-rc1";
+		public static string Version => "0.95.5000-rc1";
 		/// <summary>
 		/// Gets the current code name
 		/// </summary>
@@ -101,13 +101,13 @@ namespace SystemEx {
 		/// <summary>
 		/// Gets the build number of this version.
 		/// </summary>
-		public static int Build => 3545;
+		public static int Build => 5000;
 
 		/// <summary>
 		/// Gets the integer‑encoded version number.
 		/// Useful for fast comparison and binary compatibility checks.
 		/// </summary>
-		public static uint iVersion => 0x00009503545;
+		public static uint iVersion => 0x00009505000;
 
 		/// <summary>
 		/// Indicates whether this build is a beta version.
@@ -139,7 +139,7 @@ namespace SystemEx {
 		/// If the framework is forked, contributors may set this value to identify
 		/// their fork, similar to how Linux kernel maintainers annotate their builds.
 		/// </summary>
-		public static string User => "rc1";
+		public static string User => "forked";
 
 		/// <summary>
 		/// Returns a formatted string containing framework information.

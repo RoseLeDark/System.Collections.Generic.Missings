@@ -20,8 +20,6 @@ using SystemEx.Collections.Generic;
 using SystemEx.Random;
 
 namespace SystemEx.Utils {
-	/// \addtogroup  Utils
-	/// @{
 
 	/// <summary>
 	/// Specifies predefined password lengths for random password generation.

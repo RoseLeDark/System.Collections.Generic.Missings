@@ -22,9 +22,6 @@ using SystemEx.Utils;
 
 
 namespace SystemEx.Numeric {
-	/// \addtogroup Numeric
-	/// @{
-
 	/// <summary>
 	/// Represents an 16‑bit fast bit‑manipulation type. 
 	/// This struct provides low‑level operations for inspecting, modifying,

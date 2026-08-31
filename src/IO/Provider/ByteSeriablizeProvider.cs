@@ -22,8 +22,6 @@ using SystemEx.Collections.Generic;
 using SystemEx.Drawing;
 
 namespace SystemEx.IO.Provider {
-	// \addtogroup IO.Provider
-	/// @{
 
 	/// <summary>
 	/// Provides a base implementation for serializing objects to and from byte arrays.

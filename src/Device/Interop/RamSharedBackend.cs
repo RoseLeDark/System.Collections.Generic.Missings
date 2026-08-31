@@ -18,8 +18,6 @@ using System.Runtime.InteropServices;
 
 namespace SystemEx.Device.Intertropt {
 
-	/// \addtogroup Device
-	/// @{
 
 	/// <summary>
 	/// Represents a pinned unmanaged memory block used by SystemEx backends.

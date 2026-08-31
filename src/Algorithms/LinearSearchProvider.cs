@@ -19,8 +19,6 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup Algorithms
-	/// @{
 
 	/// <summary>
 	/// A simple fallback search provider that performs a linear scan over the

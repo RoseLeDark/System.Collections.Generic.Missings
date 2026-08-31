@@ -16,9 +16,7 @@
  */
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
-	
+
 	/// <summary>
 	/// Provides endian-aware read operations for primitive numeric types.
 	/// Implementations convert the underlying byte sequence into the requested

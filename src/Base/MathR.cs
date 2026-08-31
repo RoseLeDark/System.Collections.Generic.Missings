@@ -20,8 +20,6 @@ using SystemEx.Collections.Generic;
 using SystemEx.Numeric;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Provides exact rational mathematics for the <see cref="Ratio"/> type,

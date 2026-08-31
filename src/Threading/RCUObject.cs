@@ -19,8 +19,6 @@
 using SystemEx.Threading.intern;
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Indicates the current operational state of an <see cref="RCUObject{T}"/>.

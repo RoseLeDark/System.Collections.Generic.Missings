@@ -19,8 +19,6 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.Threading {
 
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// A lightweight and minimal thread implementation designed for simple and common

@@ -17,8 +17,6 @@
 
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Implements a counting spinlock, a non‑blocking synchronization primitive that
@@ -89,15 +87,9 @@ namespace SystemEx.Threading {
         /// </summary>
         public string Name => m_name;
 
-        /// <summary>
-        /// Indicates whether the lock currently has available capacity.
-        /// </summary>
-        public bool IsLocked => m_counter.Value <= m_min;
-
 		/// <summary>
 		/// Indicates whether the lock is currently saturated (no capacity left).
 		/// </summary>
-		[Obsolete]
 		public bool IsHeld => m_counter.Value <= m_min;
 
 		/// <summary>
@@ -179,7 +171,7 @@ namespace SystemEx.Threading {
 
                     // Wenn keine Kapazität → sofort spinnen
                     if ( IsHeld ) {
-                        Thread.SpinWait(1);
+                        Thread.Yield();
                         continue;
                     }
 
@@ -195,8 +187,8 @@ namespace SystemEx.Threading {
 
                     // Unter minCapacity gerutscht → revert + spin
                     m_counter++;
-                    Thread.SpinWait(1);
-                }
+					Thread.Yield();
+				}
             } else {
 
                 while ( true ) {

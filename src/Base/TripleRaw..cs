@@ -17,8 +17,6 @@
 
 namespace SystemEx {
 #pragma warning disable CS8981
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Represents a three-valued logic type with True, False, and Nin (neither true nor false) states.

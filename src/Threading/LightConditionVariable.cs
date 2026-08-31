@@ -18,8 +18,6 @@ using System.Text;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// A lightweight and minimal condition variable designed for simple thread

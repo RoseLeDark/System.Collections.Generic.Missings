@@ -19,8 +19,6 @@
 using SystemEx.Utils;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Represents a optional value container that stores a value only when

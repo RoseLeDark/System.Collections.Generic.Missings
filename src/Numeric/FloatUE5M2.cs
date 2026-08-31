@@ -18,46 +18,47 @@
 using System.Runtime.InteropServices;
 using SystemEx.Collections.Generic;
 using SystemEx.Hash;
-using SystemEx.Numeric.SystemEx.Numeric;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
 
 	/// <summary>
-	/// Represents an FP8 value encoded in the industry‑standard E4M3 format.
+	/// Represents an unsigned FP8 floating‑point value in E5M2 format.
 	/// 
-	/// This format uses:
-	/// <para>• 1 sign bit</para>
-	/// <para>• 5 exponent bits (bias = 7)</para>
-	/// <para>• 2 mantissa bits</para>
+	/// This type has no sign bit; therefore all values are non‑negative.
+	/// <para>
+	/// • MinValue is always 0.  
+	/// • Negation is a no‑op.  
+	/// • Subtraction is saturating: results below 0 clamp to 0.  
+	/// </para>
 	/// 
-	/// The hidden bit is always 1 for normalized numbers. Subnormal numbers
-	/// use an exponent of zero and do not include the hidden bit.
-	/// 
-	/// This implementation is fully self‑contained and performs all arithmetic,
-	/// comparisons, and classifications purely on FP8 bit‑patterns without
-	/// converting to host floating‑point types.
+	/// The implementation follows strict FP8 bit‑pattern semantics and performs
+	/// all arithmetic without converting to host floating‑point types.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	[HashAlgorithm(typeof(BernsteinHash), Endian.System)]
-	public struct FloatUE5M2 : IFP8<FloatUE5M2> {
+	public struct FloatUE5M2 : IFP8<FloatUE5M2>, IP8UMXEnable<Fast_Byte> {
 		private Fast_Byte m_baseBytes;
 
 		/// <summary>Raw 8‑bit storage (FP8 E5M2 encoded).</summary>
 		public Fast_Byte ToBase => m_baseBytes;
 
 		/// <summary>Sign bits (always 1).</summary>
-		public Fast_Byte SignBits => 1;
+		public Fast_Byte SignBits => (byte)1;
 		/// <summary>Exponent bits (5).</summary>
-		public Fast_Byte ExponentBits => 5;
+		public Fast_Byte ExponentBits => (byte)5;
 		/// <summary>Mantissa bits (2).</summary>
-		public Fast_Byte MantissaBits => 2;
+		public Fast_Byte MantissaBits => (byte)2;
 		/// <summary>Exponent bias (2^(k-1)-1 = 15).</summary>
-		public Fast_Byte ExponentBias => 15;
+		public Fast_Byte ExponentBias => (byte)15;
 		/// <summary>Total bits (8).</summary>
-		public Fast_Byte TotalBits => 8;
+		public Fast_Byte TotalBits => (byte)8;
 		/// <summary>Hidden bit mask (1 << MantissaBits).</summary>
-		public ushort HiddenBit => (byte)(1 << 2); // 0x04
+		public Fast_Byte HiddenBit => (byte)(1 << 2); // 0x04
+
+		public Fast_Byte MantissaMask => (byte)0x03;
+		public Fast_Byte MaxExponent => (byte)0x1F;
+		public Fast_Byte ShiftRaster => (byte)4;
 
 		/// <summary>
 		/// Gets the sign bit. Always false
@@ -70,10 +71,10 @@ namespace SystemEx.Numeric {
 		public Fast_Byte NSign => 0;
 
 		/// <summary>Exponent field (bits 2..6).</summary>
-		public Fast_Byte Exponent => ((m_baseBytes >> 2) & 0x1F);
+		public Fast_Byte Exponent => ((m_baseBytes >> 2) & MaxExponent);
 
 		/// <summary>Mantissa field (bits 0..1).</summary>
-		public Fast_Byte Mantissa => (m_baseBytes & 0x03);
+		public Fast_Byte Mantissa => (m_baseBytes & MantissaMask);
 
 		/// <summary>
 		/// Represents the FP8 value +1.0.
@@ -186,6 +187,7 @@ namespace SystemEx.Numeric {
 		}
 
 
+		
 
 
 		/// <summary>

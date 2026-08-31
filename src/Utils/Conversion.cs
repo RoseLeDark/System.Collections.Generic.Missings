@@ -20,8 +20,6 @@ using SystemEx.IO.Provider;
 using SystemEx.Numeric;
 
 namespace SystemEx {
-	/// \addtogroup Utils
-	/// @{
 
 	/// <summary>
 	/// Specifies the byte order used when converting values to and from raw byte

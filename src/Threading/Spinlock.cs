@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Provides a thin wrapper around <see cref="System.Threading.SpinLock"/> to expose

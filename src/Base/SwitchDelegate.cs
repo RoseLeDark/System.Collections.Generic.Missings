@@ -18,8 +18,6 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Provides a multi‑branch delegate dispatcher driven by a switch‑condition.

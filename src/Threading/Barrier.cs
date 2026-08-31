@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Exception thrown when a barrier phase transition fails due to an invalid
@@ -144,7 +142,6 @@ namespace SystemEx.Threading {
 		/// </summary>
 		private uint m_max;
 
-		private uint m_maxCounts;
 		/// <summary>
 		/// The current arrival counter for the active phase.
 		/// Incremented atomically by <see cref="Arrive"/>.

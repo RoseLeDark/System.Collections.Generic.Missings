@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Represents a flexible multi-value result container that can hold

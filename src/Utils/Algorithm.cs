@@ -19,8 +19,6 @@ using SystemEx;
 using SystemEx.Collections.Generic;
 
 namespace SystemEx.Utils {
-	/// \addtogroup Utils
-	/// @{
 
 	/// <summary>
 	/// Specifies the result of a comparison between two values.

@@ -17,8 +17,6 @@
 
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Defines the minimal contract for a synchronization primitive capable of
@@ -79,14 +77,6 @@ namespace SystemEx.Threading {
         /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
         /// </returns>
         bool TryLock ( );
-
-        /// <summary>
-        /// Indicates whether the lock is currently held by the calling thread.
-        /// Implementations must update this flag whenever the lock is acquired or
-        /// released.
-        /// </summary>
-        [Obsolete("Please use IsHeld - remove in future release")]
-        bool IsLocked { get; }
 
 		/// <summary>
 		/// Indicates whether the lock is currently held by the calling thread.

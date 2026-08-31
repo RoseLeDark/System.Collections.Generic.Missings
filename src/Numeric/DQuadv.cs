@@ -14,14 +14,7 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace SystemEx.Numeric {
-	/// \addtogroup Numeric
-	/// @{
-
 	/// <summary>
 	/// Generic interface for dual quaternions.
 	/// TQ represents the quaternion type (rotation + dual part),

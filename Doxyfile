@@ -48,7 +48,7 @@ PROJECT_NAME           = SystemEX
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = Lacking
+PROJECT_NUMBER         = "0.95.5023-rc1 Lacking"
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewers a

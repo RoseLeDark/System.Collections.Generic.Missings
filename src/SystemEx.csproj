@@ -4,8 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.95.3545-rc1</Version>
-    <FileVersion>0.95.3545</FileVersion>
+    <Version>0.95.5023-rc1</Version>
+    <FileVersion>0.95.5023</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Company>Amber-Sophia Schröck</Company>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -38,6 +38,10 @@
     <OutputType>Library</OutputType>
     <ApplicationIcon>Logo_256.ico</ApplicationIcon>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <IsTrimmable>true</IsTrimmable>
+    <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+    <Deterministic>true</Deterministic>
+
     <Description># SystemEx — NuGet Package Description (copy‑ready)
 
 **SystemEx** is a modular, low‑level extension framework for .NET, developed by a single author over several months.  
@@ -130,68 +134,60 @@ Constructive feedback is welcome.
 </Description>
     <DelaySign>True</DelaySign>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageReleaseNotes>## [0.95.3545‑beta] 28.08.2026 — internal Preview for 1.0 → Lacking
+    <PackageReleaseNotes>
+## ⭐ [0.95.5000‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
 
 ## Added
-- Added full generic CRC wrapper `CrC&lt;TC32, TC64&gt;`:
-  - Allows pairing any CRC‑32 and CRC‑64 variant in a single hasher
-  - Fully compatible with `IHash` pipeline (Compute + ComputeLong)
-  - Supports simultaneous polynomial configuration via `Pair&lt;Optional&lt;uint&gt;, Optional&lt;ulong&gt;&gt;`
-  - Rolling state maintained independently for both CRC engines
+- Added full UE‑Float suite:
+  - `FloatUE5M2b32` — 32‑Bit UE‑Format mit 5‑Bit Exponent, 2‑Bit Mantissa, block‑kompatibel
+  - `FloatUE5M2` — kompakte UE‑Variante für Low‑Precision‑Pipelines
+  - `FloatUE4M3` — 4‑Bit Exponent, 3‑Bit Mantissa, optimiert für Embedded‑DSP
+  - `FloatUE4M3MX` — MX‑Block‑Version mit gemeinsamem Exponent
+  - `FloatE5M2` — klassisches E5M2‑Format mit deterministischer Rundung
+  - `FloatE4M3` — E4M3‑Format mit SystemEx‑konformer Normalisierung
 
-- Added specialized CRC‑32 variants:
-  - `CRC32IEEE` (0xEDB88320)
-  - `CRC32C` (Castagnoli, 0x82F63B78)
-  - `CRC32Koopman` (0xEB31D82E)
-  - `CRC32BZip2` (0x04C11DB7)
-  - `CRC32Mpeg2` (0x04C11DB7, FinalXor = 0)
-  - `CRC32Posix` (0x04C11DB7, InitialXor = 0)
-  - All variants implemented as sealed subclasses with deterministic polynomial injection
+- Added full standard float suite:
+  - `Float32` — deterministische IEEE‑754‑kompatible Implementierung
+  - `Float64` — präzise 64‑Bit‑Float‑Engine mit SystemEx‑Rounding
 
-- Added specialized CRC‑64 variants:
-  - `CRC64Ecma` (0xC96C5795D7870F42)
-  - `CRC64Iso` (0x000000000000001B)
-  - `CRC64We` (0x42F0E1EBA9EA3693)
-  - `CRC64Xz` (0x42F0E1EBA9EA3693)
-  - All variants implemented as sealed subclasses with consistent rolling behavior
+- Added generic UMX‑float:
+  - `Float8UMX&lt;T&gt;` — 8‑Bit MX‑Float mit generischem Basistyp und gemeinsamem Exponent
 
-- Added full XML documentation for:
-  - `CrC&lt;TC32, TC64&gt;`
-  - All CRC‑32 and CRC‑64 variant classes
-  - Missing BigDecimal members (`Precision`, tuple‑constructor, `GetHashCode`)
-  - Internal rational constructor (`BigDecimal(BigInteger numerator, BigInteger denominator)`)
+- Added `INT4`:
+  - Minimaler 4‑Bit signed Zweierkomplement‑Typ
+  - Vollständig bitweise implementiert über `Fast_Byte`
+  - Add/Sub/Mul/Div rein bitlogisch (Carry in Bit 5, Temp‑Bits 6–7)
+  - Vollständige Operatorunterstützung (`+ - * / % &amp; | ^ &lt; &gt; &lt;= &gt;= == !=`)
+
+- Added interface:
+  - `IP8UMXEnable&lt;TBase&gt;` — aktiviert UMX‑Block‑Funktionalität für generische Basistypen
+  
+- Added `LightFutex`: Provides a lightweight reentrant futex-like synchronization primitive.
 
 ## Changed
-- Updated `CRC32` and `CRC64` base classes:
-  - Polynomial setter now resets rolling state deterministically
-  - Unified table generation semantics across all CRC variants
-  - Normalized documentation to match SystemEx style guidelines
-
-- Revised BigDecimal comparison logic documentation:
-  - Clarified exponent alignment behavior
-  - Added detailed explanation of precision‑based exponent adjustment
-  - Improved readability of `CompareTo(BigDecimal)` XML comments
-
-- Updated BigDecimal hashing:
-  - `GetHashCode()` now explicitly documented as normalization‑based
-  - Ensures canonical hash generation independent of mantissa/exponent representation
+- Updated `IFloat`:
+  - `BiddenBit` ist jetzt vom Typ `TSelf` statt `ushort`
+  - Ermöglicht konsistente Self‑Type‑Propagation über alle Float‑Formate
+  - Verbessert generische Kompatibilität mit UMX‑Blöcken und UE‑Formaten
 
 ## Improved
-- Consistent naming and documentation across all CRC variant classes
-- Unified rolling semantics for CRC‑32 and CRC‑64 engines
-- Improved clarity of BigDecimal internal constructors and normalization behavior
-- Enhanced maintainability of hash subsystem through generic CRC composition
-
-
-</PackageReleaseNotes>
+- Unified naming and documentation across all UE‑Float and MX‑Float classes
+- Enhanced determinism of rounding and normalization in all new float formats
+- Improved internal consistency of exponent/mantissa handling across UE‑Suite
+- Strengthened generic compatibility for UMX‑Float‑Pipeline (`Float8UMX&lt;T&gt;`)</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>
@@ -213,10 +209,21 @@ Constructive feedback is welcome.
     </None>
     <None Update="Logo_256.ico">
       <Pack>True</Pack>
+      <PackagePath>\Content\</PackagePath>
+    </None>
+    <None Include="..\MAINTAINERS.md">
+      <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-
-      <None Include="Examples\**" Pack="true" PackagePath="Examples\" />
+    <None Include="..\CONTRIBUTING.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\ARCHITECTURE.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+      <None Include="..\Examples\*\*" Pack="true" PackagePath="\Examples\" />
   </ItemGroup>
   
 </Project>

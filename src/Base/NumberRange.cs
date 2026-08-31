@@ -20,8 +20,6 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Represents a numeric range defined by a start and end value.

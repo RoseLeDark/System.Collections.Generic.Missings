@@ -17,8 +17,6 @@
 
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// A one-shot countdown synchronization primitive.

@@ -17,8 +17,6 @@
 using System.Diagnostics.CodeAnalysis;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Represents a three-valued logic value.

@@ -18,8 +18,6 @@
 
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Provides a scoped lock mechanism for an existing <see cref="ILock"/> instance.

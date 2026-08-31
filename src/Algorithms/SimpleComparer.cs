@@ -20,8 +20,6 @@ using System.Numerics;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-    /// \addtogroup Algorithms
-    /// @{
 
     /// <summary>
     /// Provides a standard comparison implementation for values wrapped in

@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Provides a minimal wrapper around <see cref="Monitor"/> to offer lightweight

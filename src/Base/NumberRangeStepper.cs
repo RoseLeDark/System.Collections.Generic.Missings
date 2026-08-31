@@ -20,8 +20,6 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Base {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Provides a cursor-based stepper over a normalized numeric range.

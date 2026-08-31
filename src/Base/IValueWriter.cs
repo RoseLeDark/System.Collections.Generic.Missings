@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Provides endian-aware write operations for primitive numeric types.

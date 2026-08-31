@@ -20,9 +20,6 @@ using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
 
-    /// \addtogroup Algorithms
-    /// @{
-    
     /// <summary>
     /// Provides a set of sorting algorithms that operate on any container
     /// implementing <see cref="IVector{T}"/>.  

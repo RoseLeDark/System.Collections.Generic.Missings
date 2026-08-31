@@ -15,8 +15,6 @@
  * changes and the date.
  */
 namespace SystemEx.Utils {
-	/// \addtogroup Utils
-	/// @{
 
 	/// <summary>
 	/// Provides low‑level bit manipulation utilities for all primitive integer types.  

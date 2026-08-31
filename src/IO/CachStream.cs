@@ -22,8 +22,6 @@ using SystemEx.Utils;
 
 
 namespace SystemEx.IO {
-	// \addtogroup IO
-	/// @{
 
 	/// <summary>
 	/// A <see cref="Stream"/> wrapper around a <see cref="Cache"/> instance.  

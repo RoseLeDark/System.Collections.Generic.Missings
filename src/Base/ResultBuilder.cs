@@ -17,8 +17,6 @@
 
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Provides a fluent builder for constructing complex <see cref="Result"/>

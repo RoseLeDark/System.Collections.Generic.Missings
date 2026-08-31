@@ -59,7 +59,7 @@ namespace SystemEx.Numeric {
 		/// formats this is typically <c>1</c> for normalized numbers and <c>0</c>
 		/// for subnormals.
 		/// </summary>
-		public ushort HiddenBit { get; }
+		public TBias HiddenBit { get; }
 
 		/// <summary>
 		/// Gets the sign bit. <c>true</c> indicates a negative value.
@@ -196,6 +196,16 @@ namespace SystemEx.Numeric {
 		/// Represents π.
 		/// </summary>
 		static abstract TSelf Pi { get; }
+
+		/// <summary>
+		/// Smallest representable negative value.
+		/// </summary>
+		static abstract TSelf MinValue { get; }
+
+		/// <summary>
+		/// Largest representable positive value.
+		/// </summary>
+		static abstract TSelf MaxValue { get; }
 
 		// --- Static classification ---
 		/// <summary>

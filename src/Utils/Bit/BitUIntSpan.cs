@@ -19,8 +19,6 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 
 namespace SystemEx.Utils {
-	/// \addtogroup Utils
-	/// @{
 
 	/// <summary>
 	/// Provides a low-level bit window over a referenced <see cref="uint"/> value.
@@ -399,12 +397,14 @@ namespace SystemEx.Utils {
 		public static bool operator != ( BitUIntSpan left, BitUIntSpan right ) =>
             !(left == right);
 
-        [Obsolete("Equals() always throw an exception. Use the equality operator instead.")]
-        public override bool Equals ( object? obj ) => throw new NotSupportedException();
+#pragma warning disable CS0809 // Veraltetes Element überschreibt nicht veraltetes Element
+		[Obsolete("Equals() always throw an exception. Use the equality operator instead.")]
+		public override bool Equals ( object? obj ) => throw new NotSupportedException();
 
-        [Obsolete("GetHashCode() always throw an exception.")]
-        public override int GetHashCode () => throw new NotSupportedException();
-    }
+		[Obsolete("GetHashCode() always throw an exception.")]
+		public override int GetHashCode () => throw new NotSupportedException();
+#pragma warning restore CS0809 // Veraltetes Element überschreibt nicht veraltetes Element
+	}
 
-	
+
 }

@@ -20,8 +20,6 @@ using SystemEx.Collections.Generic;
 using SystemEx.Numeric;
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Represents the lifecycle states used by <see cref="ThreadEx"/> and

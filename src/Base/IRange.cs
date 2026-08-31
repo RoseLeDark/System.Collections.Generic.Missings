@@ -18,8 +18,6 @@
 using SystemEx.Collections.Generic;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Defines the basic contract for a numeric range with a start and end value.

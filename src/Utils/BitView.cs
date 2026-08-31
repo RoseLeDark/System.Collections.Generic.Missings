@@ -17,8 +17,6 @@
 
 
 namespace SystemEx.Utils {
-	/// \addtogroup Utils
-	/// @{
 
 	/// <summary>
 	/// Provides factory methods for creating bit‑level span views over primitive

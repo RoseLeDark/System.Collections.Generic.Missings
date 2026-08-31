@@ -18,8 +18,6 @@ using SystemEx.Base;
 using SystemEx.Threading;
 
 namespace SystemEx.IO {
-	// \addtogroup IO
-	/// @{
 
 	/// <summary>
 	/// Indicates the current operational state of an <see cref="RCUStream{TStream}"/>.

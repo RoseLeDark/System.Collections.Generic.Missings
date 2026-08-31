@@ -24,8 +24,6 @@ using Module = SystemEx.Runtime.Module;
 
 
 namespace SystemEx.Device {
-	// \addtogroup Device
-	/// @{
 
 	/// <summary>
 	/// Provides a base implementation for RAM‑based compute kernels that operate on

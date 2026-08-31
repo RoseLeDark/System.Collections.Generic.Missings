@@ -19,8 +19,6 @@ using SystemEx.Numeric;
 using SystemEx.Utils;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Provides an extended and strongly typed comparison contract for SystemEx.

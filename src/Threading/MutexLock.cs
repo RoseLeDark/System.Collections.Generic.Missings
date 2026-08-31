@@ -17,8 +17,6 @@
 
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// A thin wrapper around operating‑system synchronization primitives

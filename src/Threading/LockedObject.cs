@@ -18,8 +18,6 @@
 
 
 namespace SystemEx.Threading {
-	/// \addtogroup  Threading
-	/// @{
 
 	/// <summary>
 	/// Provides a minimal lock‑protected wrapper around a value of type

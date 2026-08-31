@@ -19,8 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SystemEx {
-	/// \addtogroup SystemEx
-	/// @{
 
 	/// <summary>
 	/// Represents a conditional delegate dispatcher that routes invocation

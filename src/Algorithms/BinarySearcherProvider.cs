@@ -19,8 +19,6 @@ using SystemEx.Collections.Generic;
 using SystemEx.Utils;
 
 namespace SystemEx.Algorithms {
-	/// \addtogroup Algorithms
-	/// @{
 
 	/// <summary>
 	/// A specialized search provider implementing binary-search-based probing.

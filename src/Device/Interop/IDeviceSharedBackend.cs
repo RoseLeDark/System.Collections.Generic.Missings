@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Device.Intertropt {
-	/// \addtogroup Device
-	/// @{
 
 	/// <summary>
 	/// Defines the low‑level backend interface used by <c>DeviceSharedBuffer</c>

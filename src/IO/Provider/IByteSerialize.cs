@@ -21,9 +21,7 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.IO.Provider {
 
-	// \addtogroup IO.Provider
-	/// @{
-
+	
 	/// <summary>
 	/// A schema defines total size, header size, endianness and fixed field offsets.
 	/// Implementations must be deterministic and contain no dynamic or computed layout.

@@ -19,8 +19,6 @@ using SystemEx.Device.Intertropt;
 
 namespace SystemEx.Device.Memory {
 
-	/// \addtogroup Device
-	/// @{
 
 	/// <summary>
 	/// Defines the interface for a compute kernel that operates on one or more

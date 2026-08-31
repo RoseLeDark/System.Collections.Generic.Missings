@@ -40,8 +40,6 @@ OpenCL.Run();
 
 
 namespace SystemEx.Device.Memory {
-	/// \addtogroup Device
-	/// @{
 
 	/// <summary>
 	/// Represents a cache that can be shared with a hardware backend through

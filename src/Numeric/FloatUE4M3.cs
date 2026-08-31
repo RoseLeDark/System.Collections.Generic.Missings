@@ -20,6 +20,7 @@ using SystemEx.Collections.Generic;
 using SystemEx.Hash;
 using SystemEx.Utils;
 
+
 namespace SystemEx.Numeric {
 
 	/// <summary>
@@ -39,7 +40,7 @@ namespace SystemEx.Numeric {
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	[HashAlgorithm(typeof(BernsteinHash), Endian.System)]
-	public struct FloatE4M3 : IFP8<FloatE4M3> {
+	public struct FloatUE4M3 : IFP8<FloatUE4M3>, IP8UMXEnable<Fast_Byte> {
 		private Fast_Byte m_baseBytes;
 
 		/// <summary>
@@ -108,138 +109,146 @@ namespace SystemEx.Numeric {
 		/// <summary>
 		/// Represents the FP8 value +0.0.
 		/// </summary>
-		public static FloatE4M3 Zero => new FloatE4M3(0x00);
+		public static FloatUE4M3 Zero => new FloatUE4M3(0x00);
 
 
 		/// <summary>
 		/// Represents the FP8 value +1.0.
 		/// </summary>
-		public static FloatE4M3 One => new FloatE4M3(0x38);
+		public static FloatUE4M3 One => new FloatUE4M3(0x38);
 
 		/// <summary>
-		/// Represents the FP8 value −1.0.
+		/// Represents the FP8 value +1.0.
 		/// </summary>
-		public static FloatE4M3 NegativeOne => new FloatE4M3(0xB8);
+		public static FloatUE4M3 NegativeOne => One;
 
 		/// <summary>
-		/// Represents the FP8 value −0.0.
+		/// Represents the FP8 value +0.0.
 		/// </summary>
-		public static FloatE4M3 NegativeZero => new FloatE4M3(1, 0, 0);
-
-		/// <summary>
-		/// Infinity is not supported in the E4M3 format.
-		/// </summary>
-		public static FloatE4M3 PositiveInfinity => throw new NotSupportedException();
+		public static FloatUE4M3 NegativeZero => Zero;
 
 		/// <summary>
 		/// Infinity is not supported in the E4M3 format.
 		/// </summary>
-		public static FloatE4M3 NegativeInfinity => throw new NotSupportedException();
+		public static FloatUE4M3 PositiveInfinity => throw new NotSupportedException();
+
+		/// <summary>
+		/// Infinity is not supported in the E4M3 format.
+		/// </summary>
+		public static FloatUE4M3 NegativeInfinity => throw new NotSupportedException();
 
 		/// <summary>
 		/// Represents the canonical NaN encoding (exponent = 0x0F, mantissa = 0x07).
 		/// </summary>
-		public static FloatE4M3 NaN => new FloatE4M3(0x7F);
+		public static FloatUE4M3 NaN => new FloatUE4M3(0x7F);
 
 		/// <summary>
 		/// Represents an alternative NaN encoding (sign bit set).
 		/// </summary>
-		public static FloatE4M3 NaN2 => new FloatE4M3(0xFF);
+		public static FloatUE4M3 NaN2 => NaN;
 
 		/// <summary>
 		/// Smallest positive subnormal increment.
 		/// </summary>
-		public static FloatE4M3 Epsilon => new FloatE4M3(0x01);
+		public static FloatUE4M3 Epsilon => new FloatUE4M3(0x01);
 
 		/// <summary>
 		/// Approximation of Euler’s number e.
 		/// </summary>
-		public static FloatE4M3 E => new FloatE4M3(0x43);
+		public static FloatUE4M3 E => new FloatUE4M3(0x43);
 
 		/// <summary>
 		/// Approximation of τ = 2π.
 		/// </summary>
-		public static FloatE4M3 Tau => new FloatE4M3(0x4D);
+		public static FloatUE4M3 Tau => new FloatUE4M3(0x4D);
 
 		/// <summary>
 		/// Approximation of π.
 		/// </summary>
-		public static FloatE4M3 Pi => new FloatE4M3(0x45);
+		public static FloatUE4M3 Pi => new FloatUE4M3(0x45);
 
 		/// <summary>
 		/// Smallest representable negative value.
 		/// </summary>
-		public static FloatE4M3 MinValue => new FloatE4M3(0xFE);
+		public static FloatUE4M3 MinValue => Zero;
 
 		/// <summary>
 		/// Largest representable positive value.
 		/// </summary>
-		public static FloatE4M3 MaxValue => new FloatE4M3(0x7E);
+		public static FloatUE4M3 MaxValue => new FloatUE4M3(0x7E);
 
-		public static bool IsMXSupport => false;
+		/// <inheritdoc/>
+		public static bool IsMXSupport => true;
+		/// <inheritdoc/>
+		public Fast_Byte MantissaMask => 0x07;
+		/// <inheritdoc/>
+		public Fast_Byte MaxExponent => 0x0F;
+		/// <inheritdoc/>
+		public Fast_Byte ShiftRaster => 5;
+
 		/// <summary>
 		/// Initializes a new FP8 value set to zero.
 		/// </summary>
-		public FloatE4M3 () {
+		public FloatUE4M3 () {
 			m_baseBytes = 0;
 		}
 		/// <summary>
 		/// Initializes a new FP8 value from a raw byte.
 		/// </summary>
-		public FloatE4M3 ( byte raw ) => m_baseBytes = raw;
+		public FloatUE4M3 ( byte raw ) => m_baseBytes = raw;
 
 		/// <summary>
 		/// Constructs an FP8 value from explicit sign, exponent, and mantissa fields.
 		/// </summary>
-		public FloatE4M3 ( byte sign, byte exponent, byte mantissa )
-			=> m_baseBytes = Encode(sign, exponent, mantissa);
+		public FloatUE4M3 ( byte sign, byte exponent, byte mantissa )
+			=> m_baseBytes = Encode(0, exponent, mantissa);
 
 		/// <summary>
 		/// Determines whether the value is zero (positive or negative).
 		/// </summary>
-		public static bool IsZero ( FloatE4M3 value )
+		public static bool IsZero ( FloatUE4M3 value )
 			=> (value.m_baseBytes & 0x7F) == 0;
 
 		/// <summary>
 		/// Determines whether the value is negative.
 		/// </summary>
-		public static bool IsNegative ( FloatE4M3 value )
-			=> value.Sign;
+		public static bool IsNegative ( FloatUE4M3 value )
+			=> false;
 
 		/// <summary>
 		/// Determines whether the value is a NaN.
 		/// </summary>
-		public static bool IsNaN ( FloatE4M3 value )
+		public static bool IsNaN ( FloatUE4M3 value )
 			=> value.Exponent == 0x0F && value.Mantissa == 0x07;
 
 		/// <summary>
 		/// E4M3 does not support infinity.
 		/// </summary>
-		public static bool IsInfinity ( FloatE4M3 value )
+		public static bool IsInfinity ( FloatUE4M3 value )
 			=> false;
 
 		/// <summary>
 		/// Determines whether the value is finite (not NaN).
 		/// </summary>
-		public static bool IsFinite ( FloatE4M3 value )
+		public static bool IsFinite ( FloatUE4M3 value )
 			=> !IsNaN(value);
 
 		/// <summary>
 		/// Determines whether the value is subnormal (exponent = 0 and mantissa ≠ 0).
 		/// </summary>
-		public static bool IsSubnormal ( FloatE4M3 value )
+		public static bool IsSubnormal ( FloatUE4M3 value )
 			=> value.Exponent == 0 && value.Mantissa != 0;
 
 		/// <summary>
 		/// Determines whether the value is a normalized FP8 number.
 		/// </summary>
-		public static bool IsNormal ( FloatE4M3 value )
+		public static bool IsNormal ( FloatUE4M3 value )
 			=> value.Exponent != 0 && value.Exponent != 0x0F;
 
 		/// <summary>
 		/// Determines whether the value represents an integer.
 		/// </summary>
-		public static bool IsInteger ( FloatE4M3 x ) {
+		public static bool IsInteger ( FloatUE4M3 x ) {
 			if ( IsNaN(x) ) return false;
 			if ( x.Exponent < x.ExponentBias ) return IsZero(x);
 			return x.Mantissa == 0;
@@ -248,57 +257,57 @@ namespace SystemEx.Numeric {
 		/// <summary>
 		/// Returns the absolute value of the FP8 number.
 		/// </summary>
-		public static FloatE4M3 Abs ( FloatE4M3 value )
-			=> new FloatE4M3(0, value.Exponent.Value, value.Mantissa.Value);
+		public static FloatUE4M3 Abs ( FloatUE4M3 value )
+			=> new FloatUE4M3(0, value.Exponent.Value, value.Mantissa.Value);
 
 		/// <summary>
 		/// Returns the negation of the FP8 number.
 		/// </summary>
-		public static FloatE4M3 Negate ( FloatE4M3 x )
-			=> new FloatE4M3((byte)(x.Sign ? 0 : 1), x.Exponent.Value, x.Mantissa.Value);
+		public static FloatUE4M3 Negate ( FloatUE4M3 x )
+			=> new FloatUE4M3(0, x.Exponent.Value, x.Mantissa.Value);
 
 		/// <summary>
 		/// Returns −1, 0, or +1 depending on the sign of the value.
 		/// </summary>
-		public static FloatE4M3 Signum ( FloatE4M3 x ) {
-			if ( IsNaN(x) ) return FloatE4M3.NaN;
-			if ( IsZero(x) ) return FloatE4M3.Zero;
-			return x.Sign ? FloatE4M3.NegativeOne : FloatE4M3.One;
+		public static FloatUE4M3 Signum ( FloatUE4M3 x ) {
+			if ( IsNaN(x) ) return FloatUE4M3.NaN;
+			if ( IsZero(x) ) return FloatUE4M3.Zero;
+			return FloatUE4M3.One;
 		}
 
 		/// <summary>
 		/// Returns the largest integer less than or equal to the value.
 		/// </summary>
-		public static FloatE4M3 Floor ( FloatE4M3 x ) {
+		public static FloatUE4M3 Floor ( FloatUE4M3 x ) {
 			if ( IsNaN(x) ) return x;
 			if ( x.Exponent >= x.ExponentBias ) return x;
 			if ( IsZero(x) ) return x;
-			return x.Sign ? FloatE4M3.NegativeOne : FloatE4M3.Zero;
+			return FloatUE4M3.Zero;
 		}
 
 		/// <summary>
 		/// Returns the smallest integer greater than or equal to the value.
 		/// </summary>
-		public static FloatE4M3 Ceil ( FloatE4M3 x ) {
+		public static FloatUE4M3 Ceil ( FloatUE4M3 x ) {
 			if ( IsNaN(x) ) return x;
 			if ( x.Exponent >= x.ExponentBias ) return x;
 			if ( IsZero(x) ) return x;
-			return x.Sign ? FloatE4M3.Zero : FloatE4M3.One;
+			return FloatUE4M3.One;
 		}
 
 		/// <summary>
 		/// Truncates the fractional part of the FP8 value.
 		/// </summary>
-		public static FloatE4M3 Trunc ( FloatE4M3 x ) {
+		public static FloatUE4M3 Trunc ( FloatUE4M3 x ) {
 			if ( IsNaN(x) ) return x;
 			if ( x.Exponent >= x.ExponentBias ) return x;
-			return FloatE4M3.Zero;
+			return FloatUE4M3.Zero;
 		}
 
 		/// <summary>
 		/// Clamps the value to the inclusive range [min, max].
 		/// </summary>
-		public static FloatE4M3 Clamp ( FloatE4M3 x, FloatE4M3 min, FloatE4M3 max ) {
+		public static FloatUE4M3 Clamp ( FloatUE4M3 x, FloatUE4M3 min, FloatUE4M3 max ) {
 			if ( x < min ) return min;
 			if ( x > max ) return max;
 			return x;
@@ -306,8 +315,8 @@ namespace SystemEx.Numeric {
 		/// <summary>
 		/// Adds two FP8 values using E4M3 arithmetic rules.
 		/// </summary>
-		public static FloatE4M3 Add ( FloatE4M3 a, FloatE4M3 b ) {
-			if ( IsNaN(a) || IsNaN(b) ) return FloatE4M3.NaN;
+		public static FloatUE4M3 Add ( FloatUE4M3 a, FloatUE4M3 b ) {
+			if ( IsNaN(a) || IsNaN(b) ) return FloatUE4M3.NaN;
 			if ( IsZero(a) ) return b;
 			if ( IsZero(b) ) return a;
 
@@ -328,23 +337,11 @@ namespace SystemEx.Numeric {
 			}
 
 			Fast_Int mant;
-			Fast_Byte sign;
 
-			if ( a.Sign == b.Sign ) {
-				mant = mantA + mantB;
-				sign = (byte)(a.Sign ? 1 : 0);
-			} else {
-				if ( mantA >= mantB ) {
-					mant = mantA - mantB;
-					sign = (byte)(a.Sign ? 1 : 0);
-				} else {
-					mant = mantB - mantA;
-					sign = (byte)(b.Sign ? 1 : 0);
-				}
-			}
+			mant = mantA + mantB;
 
 			if ( mant == 0 )
-				return FloatE4M3.Zero;
+				return FloatUE4M3.Zero;
 
 			while ( (mant & 0x08) == 0 ) {
 				mant <<= 1;
@@ -352,23 +349,91 @@ namespace SystemEx.Numeric {
 			}
 
 			if ( exp <= 0 )
-				return FloatE4M3.Zero;
+				return FloatUE4M3.Zero;
 
 			if ( exp >= 0x0F )
-				return FloatE4M3.NaN;
+				return FloatUE4M3.NaN;
 
 			Fast_Byte finalMant = (byte)(mant & 0x07);
 
-			return new FloatE4M3(sign.Value, (byte)exp.Value, finalMant.Value);
+			return new FloatUE4M3(0, (byte)exp.Value, finalMant.Value);
 		}
+
+		public static FloatUE4M3 Sub ( FloatUE4M3 a, FloatUE4M3 b ) {
+			// 1. Sonderfälle auf Bit-Ebene abfangen
+			if ( IsNaN(a) || IsNaN(b) ) return NaN;
+
+			// Unendlich-Regeln
+			if ( IsInfinity(a) ) return IsInfinity(b) ? NaN : PositiveInfinity;
+			if ( IsInfinity(b) ) return Zero; // Sättigung: Irgendwas minus Unendlich wird zu 0 gekappt
+			if ( IsZero(b) ) return a;
+			if ( IsZero(a) ) return Zero; // Sättigung: 0 minus Irgendwas wird zu 0 gekappt
+
+			// Wenn b größer oder gleich a ist, laufen wir garantiert unter oder gegen Null
+			if ( a <= b ) return Zero;
+
+			Fast_Byte expA = a.Exponent;
+			Fast_Byte expB = b.Exponent;
+
+			// Hidden Bit hinzufügen
+			Fast_Int mantA = (expA == 0 ? a.Mantissa : (a.Mantissa | 0x08));
+			Fast_Int mantB = (expB == 0 ? b.Mantissa : (b.Mantissa | 0x08));
+
+			Fast_Int realExpA = expA == 0 ? 1 : expA;
+			Fast_Int realExpB = expB == 0 ? 1 : expB;
+
+			Fast_Int finalExp = realExpA;
+
+			// Nutzen deines größeren Registers, damit beim Shiften nichts verloren geht
+			Fast_UShort shiftedA = (ushort)(mantA << 5);
+			Fast_UShort shiftedB = (ushort)(mantB << 5);
+			Fast_UShort resMant = 0;
+
+			// Mantissen auf denselben Exponenten ausrichten
+			if ( realExpA >= realExpB ) {
+				var shift = realExpA - realExpB;
+				shiftedB >>= (int)shift;
+				finalExp = realExpA;
+			} else {
+				var shift = realExpB - realExpA;
+				shiftedA >>= (int)shift;
+				finalExp = realExpB;
+			}
+
+			// Da a > b garantiert ist, ist shiftedA immer größer als shiftedB
+			resMant = (ushort)(shiftedA - shiftedB);
+
+			if ( resMant == 0 ) return Zero;
+
+			// Renormalisierung im Shiftraster (Wir suchen das führende Bit)
+			while ( resMant >= 0x200 ) {
+				resMant >>= 1;
+				finalExp++;
+			}
+			while ( resMant < 0x100 && finalExp > 1 ) {
+				resMant <<= 1;
+				finalExp--;
+			}
+
+			// Zurück in das 3-Bit-Raster stutzen
+			resMant >>= 5;
+			resMant &= 0x07; // Hidden Bit löschen
+
+			// Überlauf zu Infinity prüfen
+			if ( finalExp >= 0x0F ) return PositiveInfinity;
+
+			// Unterlauf zu Subnormal prüfen
+			if ( finalExp <= 0 ) return new FloatUE4M3(0, 0, (byte)resMant);
+
+			return new FloatUE4M3(0, (byte)finalExp, (byte)resMant);
+		}
+
 		/// <summary>
 		/// Multiplies two FP8 values using E4M3 arithmetic rules.
 		/// </summary>
-		public static FloatE4M3 Mul ( FloatE4M3 a, FloatE4M3 b ) {
-			if ( IsNaN(a) || IsNaN(b) ) return FloatE4M3.NaN;
-			if ( IsZero(a) || IsZero(b) ) return FloatE4M3.Zero;
-
-			Fast_Byte sign = (byte)((a.Sign ? 1 : 0) ^ (b.Sign ? 1 : 0));
+		public static FloatUE4M3 Mul ( FloatUE4M3 a, FloatUE4M3 b ) {
+			if ( IsNaN(a) || IsNaN(b) ) return FloatUE4M3.NaN;
+			if ( IsZero(a) || IsZero(b) ) return FloatUE4M3.Zero;
 
 			Fast_Byte exp = a.Exponent + b.Exponent - a.ExponentBias;
 
@@ -385,24 +450,23 @@ namespace SystemEx.Numeric {
 			mant >>= 3;
 
 			if ( exp <= 0 )
-				return FloatE4M3.Zero;
+				return FloatUE4M3.Zero;
 
 			if ( exp >= 0x0F )
-				return FloatE4M3.NaN;
+				return FloatUE4M3.NaN;
 
 			byte finalMant = (byte)(mant & 0x07);
 
-			return new FloatE4M3(sign.Value, exp.Value, finalMant);
+			return new FloatUE4M3(0, exp.Value, finalMant);
 		}
 		/// <summary>
 		/// Divides one FP8 value by another using E4M3 arithmetic rules.
 		/// </summary>
-		public static FloatE4M3 Div ( FloatE4M3 a, FloatE4M3 b ) {
-			if ( IsNaN(a) || IsNaN(b) ) return FloatE4M3.NaN;
-			if ( IsZero(b) ) return FloatE4M3.NaN;
-			if ( IsZero(a) ) return FloatE4M3.Zero;
+		public static FloatUE4M3 Div ( FloatUE4M3 a, FloatUE4M3 b ) {
+			if ( IsNaN(a) || IsNaN(b) ) return FloatUE4M3.NaN;
+			if ( IsZero(b) ) return FloatUE4M3.NaN;
+			if ( IsZero(a) ) return FloatUE4M3.Zero;
 
-			Fast_Byte sign = (byte)((a.Sign ? 1 : 0) ^ (b.Sign ? 1 : 0));
 
 			Fast_Byte exp = a.Exponent - b.Exponent + a.ExponentBias;
 
@@ -417,76 +481,77 @@ namespace SystemEx.Numeric {
 			}
 
 			if ( exp <= 0 )
-				return FloatE4M3.Zero;
+				return FloatUE4M3.Zero;
 
 			if ( exp >= 0x0F )
-				return FloatE4M3.NaN;
+				return FloatUE4M3.NaN;
 
 			byte finalMant = (byte)(mant & 0x07);
 
-			return new FloatE4M3(sign.Value, exp.Value, finalMant);
+			return new FloatUE4M3(0, exp.Value, finalMant);
 		}
 
 		// <summary>
 		/// Returns the smaller of two FP8 values.
 		/// </summary>
-		public static FloatE4M3 Min ( FloatE4M3 a, FloatE4M3 b )
+		public static FloatUE4M3 Min ( FloatUE4M3 a, FloatUE4M3 b )
 			=> a < b ? a : b;
 
 		/// <summary>
 		/// Returns the larger of two FP8 values.
 		/// </summary>
-		public static FloatE4M3 Max ( FloatE4M3 a, FloatE4M3 b )
+		public static FloatUE4M3 Max ( FloatUE4M3 a, FloatUE4M3 b )
 			=> a > b ? a : b;
 
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public bool Equals ( FloatE4M3 other ) {
+		public bool Equals ( FloatUE4M3 other ) {
 			return this == other;
 		}
 		/// <summary>
 		/// Compares this FP8 value with another using FP8 ordering rules.
 		/// </summary>
 		public int CompareTo ( object? obj ) {
-			if ( (obj is FloatE4M3 o) ) {
+			if ( (obj is FloatUE4M3 o) ) {
 				return (int)CompareTo(o);
 			}
-			throw new ArgumentException("Object is not a FloatE4M3 object");
+			throw new ArgumentException("Object is not a FloatUE4M3 object");
 		}
 
 		/// <summary>
 		/// Explicit <see cref="IComparable{T}"/> implementation that forwards
-		/// to the extended <see cref="CompareTo(FloatE4M3)"/> method and casts
+		/// to the extended <see cref="CompareTo(FloatUE4M3)"/> method and casts
 		/// the <see cref="CompareResult"/> to <see cref="int"/>.
 		/// 
 		/// This keeps the standard .NET comparison API compatible while still
 		/// exposing a strongly typed comparison result via
-		/// <see cref="IComparableEx{FloatE4M3}"/>.
+		/// <see cref="IComparableEx{FloatUE4M3}"/>.
 		/// </summary>
 		/// <param name="other">The value to compare with.</param>
 		/// <returns>
 		/// A signed integer indicating the relative order.
 		/// </returns>
-		int IComparable<FloatE4M3>.CompareTo ( FloatE4M3 other ) {
+		int IComparable<FloatUE4M3>.CompareTo ( FloatUE4M3 other ) {
 			return (int)CompareTo(other);
 		}
 
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public CompareResult CompareTo ( FloatE4M3 b ) {
+		public CompareResult CompareTo ( FloatUE4M3 a ) {
 			CompareResult _ret = CompareResult.Equal;
 
-			if ( IsNaN(this) && !IsNaN(b) ) _ret = CompareResult.AIsSmallerB;
+			if ( IsNaN(this) && !IsNaN(a) ) _ret = CompareResult.AIsSmallerB;
 
 			else {
-				if ( this < b ) _ret = CompareResult.AIsSmallerB;
-				else if ( this > b ) _ret = CompareResult.AIsLargerB;
+				if ( this < a ) _ret = CompareResult.AIsSmallerB;
+				else if ( this > a) _ret = CompareResult.AIsLargerB;
 			}
 
 			return _ret;
 		}
+
 		/// <summary>
 		/// Converts the FP8 value into a raw byte vector.
 		/// </summary>
@@ -496,8 +561,8 @@ namespace SystemEx.Numeric {
 		/// <summary>
 		/// Constructs an FP8 value from a byte array.
 		/// </summary>
-		public static FloatE4M3 FromBytes ( byte[] bytes, long offset, Endian endian ) {
-			return new FloatE4M3(bytes[0]);
+		public static FloatUE4M3 FromBytes ( byte[] bytes, long offset, Endian endian ) {
+			return new FloatUE4M3(bytes[0]);
 		}
 		/// <summary>
 		/// <inheritdoc/>
@@ -523,7 +588,7 @@ namespace SystemEx.Numeric {
 		/// <inheritdoc/>
 		/// </summary>
 		public override bool Equals ( object? obj ) {
-			if ( obj is FloatE4M3 a ) return this == a;
+			if ( obj is FloatUE4M3 a ) return this == a;
 			return false;
 		}
 		/// <summary>
@@ -535,90 +600,79 @@ namespace SystemEx.Numeric {
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public static bool operator < ( FloatE4M3 a, FloatE4M3 b ) {
+		public static bool operator < ( FloatUE4M3 a, FloatUE4M3 b ) {
 			if ( IsNaN(a) || IsNaN(b) ) return false;
 
-			bool _neg = IsNegative(a);
+			if ( IsZero(a) && IsZero(b) ) return false;
 
-			if ( _neg != IsNegative(b) ) {
-				if ( IsZero(a) && IsZero(b) )
-					return false;
-				return _neg;
-			}
-
-			return (a.m_baseBytes != b.m_baseBytes) && ((a.m_baseBytes < b.m_baseBytes) ^ _neg);
+			return (a.m_baseBytes != b.m_baseBytes) && ((a.m_baseBytes < b.m_baseBytes));
 		}
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public static bool operator <= ( FloatE4M3 a, FloatE4M3 b ) {
+		public static bool operator <= ( FloatUE4M3 a, FloatUE4M3 b ) {
 			if ( IsNaN(a) || IsNaN(b) ) return false;
+			if ( IsZero(a) && IsZero(b) ) return true;
 
-			bool _neg = IsNegative(a);
-
-			if ( _neg != IsNegative(b) ) {
-				if ( IsZero(a) && IsZero(b) )
-					return true;
-				return _neg;
-			}
-
-			return (a.m_baseBytes == b.m_baseBytes) && ((a.m_baseBytes < b.m_baseBytes) ^ _neg);
+			return (a.m_baseBytes == b.m_baseBytes) && ((a.m_baseBytes < b.m_baseBytes));
 		}
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public static bool operator >= ( FloatE4M3 a, FloatE4M3 b ) {
+		public static bool operator >= ( FloatUE4M3 a, FloatUE4M3 b ) {
 			return !(a < b);
 		}
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public static bool operator == ( FloatE4M3 a, FloatE4M3 b ) {
+		public static bool operator == ( FloatUE4M3 a, FloatUE4M3 b ) {
 			if ( IsNaN(a) || IsNaN(b) ) return false;
 			return (a.m_baseBytes == b.m_baseBytes) || (IsZero(a) && IsZero(b));
 		}
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public static bool operator != ( FloatE4M3 a, FloatE4M3 b ) {
+		public static bool operator != ( FloatUE4M3 a, FloatUE4M3 b ) {
 			return !(a == b);
 		}
 
 		/// <summary>
 		/// Greater‑than operator.
 		/// </summary>
-		public static bool operator > ( FloatE4M3 a, FloatE4M3 b ) => !(b <= a);
+		public static bool operator > ( FloatUE4M3 a, FloatUE4M3 b ) => !(b <= a);
 
 
 		/// <summary>
 		/// Addition operator.
 		/// </summary>
-		public static FloatE4M3 operator + ( FloatE4M3 a, FloatE4M3 b ) => Add(a, b);
+		public static FloatUE4M3 operator + ( FloatUE4M3 a, FloatUE4M3 b ) => Add(a, b);
 
 		/// <summary>
 		/// Subtraction operator.
 		/// </summary>
-		public static FloatE4M3 operator - ( FloatE4M3 a, FloatE4M3 b ) => a + Negate(b);
+		public static FloatUE4M3 operator - ( FloatUE4M3 a, FloatUE4M3 b ) => Sub(a, b);
 
 		/// <summary>
 		/// Multiplication operator.
 		/// </summary>
-		public static FloatE4M3 operator * ( FloatE4M3 a, FloatE4M3 b ) => Mul(a, b);
+		public static FloatUE4M3 operator * ( FloatUE4M3 a, FloatUE4M3 b ) => Mul(a, b);
 
 		/// <summary>
 		/// Division operator.
 		/// </summary>
-		public static FloatE4M3 operator / ( FloatE4M3 a, FloatE4M3 b ) => Div(a, b);
+		public static FloatUE4M3 operator / ( FloatUE4M3 a, FloatUE4M3 b ) => Div(a, b);
 
 		/// <summary>
 		/// Increment operator.
 		/// </summary>
-		public static FloatE4M3 operator ++ ( FloatE4M3 a ) => a + One;
+		public static FloatUE4M3 operator ++ ( FloatUE4M3 a ) => a + One;
 
 		/// <summary>
 		/// Decrement operator.
 		/// </summary>
-		public static FloatE4M3 operator -- ( FloatE4M3 a ) => a - One;
+		public static FloatUE4M3 operator -- ( FloatUE4M3 a ) {
+			return a - One;
+		}
 		/// <summary>
 		/// Encodes sign, exponent, and mantissa fields into a single FP8 byte.
 		/// </summary>
@@ -637,8 +691,12 @@ namespace SystemEx.Numeric {
 
 			return b.Value;
 		}
-		public static FloatE4M3 FromComponent ( Fast_Byte sign, Fast_Byte mantissa, Fast_Byte expotent ) {
-			return new FloatE4M3(Encode(sign.Value, expotent.Value, mantissa.Value));
+		public static FloatUE4M3 FromComponent ( Fast_Byte sign, Fast_Byte mantissa, Fast_Byte expotent ) {
+			return new FloatUE4M3(Encode(sign.Value, expotent.Value, mantissa.Value));
 		}
+
+		
 	}
 }
+
+
