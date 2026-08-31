@@ -328,6 +328,7 @@ namespace SystemEx.Utils {
 		/// </summary>
 		public static bool operator != ( BitULongSpan left, BitULongSpan right ) =>
             !(left == right);
+
 #pragma warning disable CS0809 // Veraltetes Element überschreibt nicht veraltetes Element
 		[Obsolete("Equals() always throw an exception. Use the equality operator instead.")]
         public override bool Equals ( object? obj ) => throw new NotSupportedException();
@@ -336,5 +337,5 @@ namespace SystemEx.Utils {
         public override int GetHashCode () => throw new NotSupportedException();
 #pragma warning restore CS0809 // Veraltetes Element überschreibt nicht veraltetes Element
 	}
-
+	
 }

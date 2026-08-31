@@ -216,9 +216,6 @@ namespace SystemEx.Numeric {
         }
 
 	
-
-
-		
-	}
+    }
     
 }

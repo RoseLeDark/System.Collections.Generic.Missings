@@ -66,6 +66,20 @@ namespace SystemEx.Numeric {
 	}
 
 	/// <summary>
+	/// Defines an 8‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
+	/// 
+	/// <para>
+	/// <see cref="IMini{TSelf}"/> is intended for extremely compact numeric
+	/// representations such as FP8 variants used in machine learning or embedded
+	/// systems. The exact bit layout (sign, exponent, mantissa) is determined by
+	/// the <see cref="IFloat{TSelf, TBias}"/> implementation.
+	/// </para>
+	/// </summary>
+	public interface IMini<TSelf> : IFloat<TSelf, byte>
+		where TSelf : struct, IMini<TSelf> {
+	}
+
+	/// <summary>
 	/// Defines a 32‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
 	/// 
 	/// <para>
@@ -93,20 +107,24 @@ namespace SystemEx.Numeric {
 	}
 
 
-	/// <summary>
-	/// Defines a 128‑bit floating‑point format based on <see cref="IFloat{TSelf, TBias}"/>.
-	/// 
-	/// <para>
-	/// Implementations of <see cref="ICQuad{TSelf}"/> represent quad‑precision
-	/// floating‑point formats. These formats are suitable for scientific computing,
-	/// high‑precision simulation, and extended numeric analysis.
-	/// </para>
-	/// </summary>
-	public interface IBigFloat<TSelf> : IFloat<TSelf, UInt128>
-		where TSelf : struct, IBigFloat<TSelf> {
+	public interface ICQuad<TSelf> : IFloat<TSelf, UInt128>
+		where TSelf : struct, ICQuad<TSelf> {
 	}
 
 
-
+	/// <summary>
+	/// Defines an extended‑precision floating‑point format based on
+	/// <see cref="IFloat{TSelf, TBias}"/>.
+	/// 
+	/// <para>
+	/// <see cref="IBigFloat{TSelf}"/> supports extremely high‑precision floating‑point
+	/// representations using a 256‑bit bias and structural layout. These formats
+	/// are suitable for arbitrary‑precision math, symbolic computation, and
+	/// advanced numeric research.
+	/// </para>
+	/// </summary>
+	public interface IBigFloat<TSelf> : IFloat<TSelf, Uint256>
+		where TSelf : struct, IBigFloat<TSelf> {
+	}
 	
 }

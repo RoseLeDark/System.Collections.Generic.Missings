@@ -420,7 +420,6 @@ namespace SystemEx.Numeric {
 			return a;
 		}
 	}
-
 }
 
 

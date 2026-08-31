@@ -335,6 +335,4 @@ namespace SystemEx.Utils {
 		public override int GetHashCode () => throw new NotSupportedException();
 #pragma warning restore CS0809 // Veraltetes Element überschreibt nicht veraltetes Element
 	}
-
-
 }

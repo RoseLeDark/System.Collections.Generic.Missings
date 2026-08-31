@@ -204,6 +204,7 @@ namespace SystemEx.Numeric {
             return _set;
         }
 
+
 		/// <summary>
 		/// Implicitly converts a byte value into an <see cref="Fast_Byte"/>.
 		/// </summary>
@@ -392,7 +393,5 @@ namespace SystemEx.Numeric {
 			a.m_value = (byte)(a.m_value >> b.m_value);
 			return a;
 		}
-
-	}
-
+    }
 }

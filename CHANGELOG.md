@@ -1,5 +1,6 @@
 # 📝 SystemEx Changelog
 
+<<<<<<< HEAD
 ## ⭐ [0.95.5000‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
 
 ## Added
@@ -43,6 +44,9 @@
 
 
 ## [0.95.3545‑rc1] 28.08.2026 — internal Preview for 1.0 → Lacking
+=======
+## ⭐ [0.95.3545‑beta] 28.08.2026 — internal Preview for 1.0 → Lacking
+>>>>>>> a9db8acbd303475c7f1c3e2e83aae168d3e7d78f
 
 ## Added
 - Added full generic CRC wrapper `CrC<TC32, TC64>`:

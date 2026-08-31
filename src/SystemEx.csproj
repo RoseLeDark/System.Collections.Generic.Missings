@@ -36,7 +36,6 @@
     <Platforms>AnyCPU</Platforms>
     <Configurations>Debug;Release</Configurations>
     <OutputType>Library</OutputType>
-    <ApplicationIcon>Logo_256.ico</ApplicationIcon>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsTrimmable>true</IsTrimmable>
     <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
@@ -195,10 +194,6 @@ Constructive feedback is welcome.
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\Logo_256.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -207,9 +202,9 @@ Constructive feedback is welcome.
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Update="Logo_256.ico">
+    <None Update="Logo_256.png">
       <Pack>True</Pack>
-      <PackagePath>\Content\</PackagePath>
+      <PackagePath>\</PackagePath>
     </None>
     <None Include="..\MAINTAINERS.md">
       <Pack>True</Pack>
