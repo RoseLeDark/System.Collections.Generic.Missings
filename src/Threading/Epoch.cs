@@ -119,5 +119,5 @@ namespace SystemEx.Threading {
 			m_epoch.Leave();
 		}
 	}
-	/// @}
+	
 }

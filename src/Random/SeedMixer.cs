@@ -221,5 +221,5 @@ namespace SystemEx.Random {
             return this;
         }
     }
-	/// @}
+	
 }

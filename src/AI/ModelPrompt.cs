@@ -323,5 +323,5 @@ namespace SystemEx.AI {
         }
 
     }
-	/// @}
+	
 }

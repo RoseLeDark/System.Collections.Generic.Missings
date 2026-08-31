@@ -22,8 +22,7 @@ using SystemEx.Hash;
 using SystemEx.Utils;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup Numeric
-	/// @{
+
 
 	/// <summary>
 	/// Represents a rational number using a signed 64‑bit numerator and denominator.
@@ -330,7 +329,7 @@ namespace SystemEx.Numeric {
 
 			return a;
 		}
-		// <summary>
+		/// <summary>
 		/// Computes the least common multiple (LCM) of two integers.
 		/// </summary>
 		private long LeastCommonDivisor ( long a, long b ) => a * (b / GreatestCommonDivisor(a, b) );
@@ -511,5 +510,5 @@ namespace SystemEx.Numeric {
 
 		
 	}
-	/// @}
+	
 }

@@ -47,7 +47,7 @@ namespace MyFirstSystemEx {
 	/// </summary>
 	internal class Program {
 		// Number of worker threads = number of CPU cores
-		static int NUM_THREAD = Environment.ProcessorCount / 2;
+		static int NUM_THREAD = Environment.ProcessorCount ;
 		static int NUM_RUNS = 3; // 3-5
 
 		// Flag used to stop all threads after a few barrier cycles

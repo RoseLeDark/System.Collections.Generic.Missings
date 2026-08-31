@@ -308,5 +308,5 @@ namespace SystemEx.Threading {
 #endif
 		}
 	}
-	/// @}
+	
 }

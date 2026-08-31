@@ -107,5 +107,5 @@ namespace SystemEx {
         public bool Overlaps ( IRange<T> other );
 
     }
-    /// @}
+    
 }

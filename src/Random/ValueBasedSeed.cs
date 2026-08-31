@@ -86,5 +86,5 @@ namespace SystemEx.Random {
             Update(value);
         }
     }
-	/// @}
+	
 }

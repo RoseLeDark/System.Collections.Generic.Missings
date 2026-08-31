@@ -297,7 +297,7 @@ namespace SystemEx.Collections.Generic {
             return a.Equals(b);
         }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-        /// @}
+        
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     }
 }

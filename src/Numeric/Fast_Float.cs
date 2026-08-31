@@ -58,8 +58,8 @@ namespace SystemEx.Numeric {
 
         }
 
-        public Fast_Int ToFastBits() {
-            return new Fast_Int(ToBits());
+        public Fast_UInt ToFastBits() {
+            return new Fast_UInt(ToBits());
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace SystemEx.Numeric {
             m_value =  _raw.ToFloat(Endian.System);
         }
 
-        public void FromFastBits ( Fast_Int bits ) {
+        public void FromFastBits ( Fast_UInt bits ) {
             FromBits(bits.Value);
         }
 
@@ -92,8 +92,8 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Gets the 23-bit mantissa field.
         /// </summary>
-        public Fast_Int GetMantissa () {
-            return new Fast_Int( ToBits() & 0x7FFFFFU );
+        public Fast_UInt GetMantissa () {
+            return new Fast_UInt( ToBits() & 0x7FFFFFU );
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Sets the mantissa field (raw 23-bit value).
         /// </summary>
-        public void SetMantissa ( Fast_Int mantissa ) {
+        public void SetMantissa ( Fast_UInt mantissa ) {
             uint bits = ToBits();
             bits = (bits & 0xFF800000) | (mantissa.Value & 0x7FFFFF);
             FromBits(bits);
@@ -174,5 +174,5 @@ namespace SystemEx.Numeric {
             return exponent == 0 && mantissa != 0;
         }
     }
-	/// @}
+	
 }

@@ -246,5 +246,5 @@ namespace SystemEx.Threading {
 			return !(a == b);
 		}
 	}
-	/// @}
+	
 }

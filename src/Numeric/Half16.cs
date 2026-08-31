@@ -390,12 +390,12 @@ namespace SystemEx.Numeric {
         /// <summary>
         /// Greater‑than operator.
         /// </summary>
-        public static bool operator > ( Half16 a, Half16 b ) => b < a;
+        public static bool operator > ( Half16 a, Half16 b ) => !(b <= a);
 
         /// <summary>
         /// Greater‑than‑or‑equal operator.
         /// </summary>
-        public static bool operator >= ( Half16 a, Half16 b ) => b <= a;
+        public static bool operator >= ( Half16 a, Half16 b ) => !(b < a);
 
         /// <summary>
         /// Inequality operator.
@@ -761,5 +761,5 @@ namespace SystemEx.Numeric {
         }
 
     }
-    /// @}
+    
 }

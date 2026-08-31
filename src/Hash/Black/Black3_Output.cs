@@ -109,6 +109,6 @@ namespace SystemEx.Hash.Black {
             Black3Utils.StoreCVWords(cv, cv_words);
         }
     }
-	/// @}
+	
 
 }

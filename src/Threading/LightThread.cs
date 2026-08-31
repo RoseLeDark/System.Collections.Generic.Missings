@@ -126,5 +126,5 @@ namespace SystemEx.Threading {
             return _ret & _os;
         }
     }
-	/// @}
+	
 }

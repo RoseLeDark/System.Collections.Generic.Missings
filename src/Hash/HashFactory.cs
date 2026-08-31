@@ -205,5 +205,5 @@ namespace SystemEx.Hash {
 			return _hash.Value;
 		}
     }
-    /// @}
+    
 } 

@@ -247,5 +247,5 @@ namespace SystemEx.Drawing {
             return left.GetHashCode() >= right.GetHashCode();
         }
     }
-    /// @}
+    
 }

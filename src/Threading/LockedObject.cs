@@ -145,6 +145,6 @@ namespace SystemEx.Threading {
 			return _ret;
 		}
 	}
-	/// @}
+	
 
 }

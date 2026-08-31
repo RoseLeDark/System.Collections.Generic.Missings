@@ -69,5 +69,5 @@ namespace SystemEx.AI.Tools {
                 : DateTime.Now.ToString("o");
         }
     }
-    /// @}
+    
 }

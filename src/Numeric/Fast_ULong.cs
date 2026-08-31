@@ -36,7 +36,7 @@ namespace SystemEx.Numeric {
 	/// Users must understand bitwise operations, as incorrect usage can 
 	/// intentionally overwrite or corrupt the underlying value.
 	/// </summary>
-	public struct Fast_Long: IFastType<ulong> {
+	public struct Fast_ULong: IFastType<ulong> {
         private ulong m_value;
         private byte m_size;
 
@@ -55,12 +55,12 @@ namespace SystemEx.Numeric {
         /// Initializes a new Fast_Long instance with an optional initial value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Fast_Long() : this(0) { }
+        public Fast_ULong() : this(0) { }
 
         /// <summary>
         /// Initializes a new Fast_Longinstance with an optional initial value.
         /// </summary>
-        public Fast_Long( ulong value ) {
+        public Fast_ULong( ulong value ) {
             m_value = value;
             m_size = sizeof(ulong) * 8;
         }
@@ -84,14 +84,14 @@ namespace SystemEx.Numeric {
         /// All bits are inverted (bitwise NOT).
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IFastType<ulong> CmpOne () => new Fast_Long((ulong)~m_value);
+        public IFastType<ulong> CmpOne () => new Fast_ULong((ulong)~m_value);
         /// <summary>
         /// Produces the two's complement of the current value.
         /// This is equivalent to (~value + 1) and is commonly used
         /// for subtraction in low‑level arithmetic.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public IFastType<ulong> CmpTwo () => new Fast_Long((ulong)(~m_value + 1));
+        public IFastType<ulong> CmpTwo () => new Fast_ULong((ulong)(~m_value + 1));
 
         /// <summary>
         /// Flips (toggles) the bit at the specified position.
@@ -244,5 +244,5 @@ namespace SystemEx.Numeric {
             return _set;
         }
     }
-	/// @}
+	
 }

@@ -45,5 +45,5 @@ namespace SystemEx.Drawing {
         /// <param name="hsv"></param> 
         public ColorGray(ColorHSV hsv) { m_v = System.Math.Clamp(hsv.V, 0f, 1f); }
     }
-    /// @}
+    
 }

@@ -100,5 +100,5 @@ namespace SystemEx.AI.Tools {
             };
         }
     }
-    /// @}
+    
 }

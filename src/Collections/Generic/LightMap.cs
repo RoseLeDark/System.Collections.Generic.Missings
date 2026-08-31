@@ -19,17 +19,13 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup Collections
-	/// @{
 
 	/// <summary>
 	/// Represents a sparse, linear key–value container.
 	/// 
 	/// <para>
 	/// The container behaves similarly to a sparse vector: inactive slots remain
-	/// allocated but are ignored during enumeration and lookup. This design
-	/// enables efficient copying, slicing, and low‑level operations without
-	/// reallocating or compacting the underlying storage.
+	/// allocated but are ignored during enumeration and lookup.
 	/// </para>
 	/// 
 	/// <para>
@@ -320,7 +316,7 @@ namespace SystemEx.Collections.Generic {
 		/// Appends a key–value pair to the end of the map.
 		/// </summary>
 		public bool PushBack ( Pair<T,TU> entry ) {
-            if ( ContainsKey(entry.First) ) return false;
+            if ( intContainsKey(entry.First) ) return false;
 
 			if ( IsFull ) {
 				if ( !AutoGrow )
@@ -345,7 +341,7 @@ namespace SystemEx.Collections.Generic {
 		/// Inserts a key–value pair at the front of the map.
 		/// </summary>
 		public bool PushFront ( Pair<T, TU> entry ) {
-            if( ContainsKey(entry.First) ) return false;
+            if( intContainsKey(entry.First) ) return false;
 
             // If full, attempt to grow
             if ( m_index + 1 >= Length ) {
@@ -378,7 +374,7 @@ namespace SystemEx.Collections.Generic {
 		/// </summary>
 		public bool Insert ( long index, Pair<T, TU> entry ) {
             if ( index < 0 ) return false;
-            if ( ContainsKey(entry.First) ) return false;
+            if ( intContainsKey(entry.First) ) return false;
 
             // Grow wie im Indexer
             if ( index >= m_elements.Length || m_index >= m_elements.Length ) {
@@ -446,7 +442,7 @@ namespace SystemEx.Collections.Generic {
 		/// <summary>
 		/// Replaces the value associated with the specified key.
 		/// </summary>
-		public bool Replace ( T key, Optional<TU> value ) {
+		public virtual bool Replace ( T key, Optional<TU> value ) {
             if ( value.IsNull ) return false;
             bool _ret = false;
 
@@ -785,21 +781,35 @@ namespace SystemEx.Collections.Generic {
 		/// Determines whether any element has the specified key.
 		/// </summary>
 		public bool ContainsKey ( T Key ) {
-            bool _ret = false;
-            for ( long i = 0 ; i < Count ; i++ ) {
-               
-                if(m_elements[i].EqualFirst(Key) && m_state[i] == 1 ) {
-                    _ret = true;
-                    break;
-                }
-            }
-            return _ret;
-        }
+			bool _ret = false;
+			for ( long i = 0 ; i < Count ; i++ ) {
 
-        /// <summary>
-        /// Determines whether any element has the specified value.
-        /// </summary>
-        public bool ContainsValue ( TU value ) {
+				if ( m_elements[i].EqualFirst(Key) && m_state[i] == 1 ) {
+					_ret = true;
+					break;
+				}
+			}
+			return _ret;
+		}
+		/// <summary>
+		/// Determines whether any element has the specified key. For PushBack and MultiMap
+		/// </summary>
+		protected virtual bool intContainsKey ( T Key ) {
+			bool _ret = false;
+			for ( long i = 0 ; i < Count ; i++ ) {
+
+				if ( m_elements[i].EqualFirst(Key) && m_state[i] == 1 ) {
+					_ret = true;
+					break;
+				}
+			}
+			return _ret;
+		}
+
+		/// <summary>
+		/// Determines whether any element has the specified value.
+		/// </summary>
+		public bool ContainsValue ( TU value ) {
             bool _ret = false;
             for ( long i = 0 ; i < Count ; i++ ) {
                 
@@ -1017,5 +1027,5 @@ namespace SystemEx.Collections.Generic {
 
 #endif
 	}
-	/// @}
+	
 }

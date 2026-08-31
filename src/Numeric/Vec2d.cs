@@ -333,7 +333,7 @@ namespace SystemEx.Numeric {
         public static Vec2d operator / ( Vec2d a, double b ) {
             return new Vec2d(a.m_x / b, a.m_y / b);
         }
-        // <summary>
+        /// <summary>
         /// Multiplies both components of the vector by a scalar.
         /// </summary>
         public static Vec2d operator * ( Vec2d a, double b ) {
@@ -345,7 +345,7 @@ namespace SystemEx.Numeric {
         public static Vec2d operator - ( double a, Vec2d b ) {
             return new Vec2d(a - b.m_x, a - b.m_y);
         }
-        // <summary>
+        /// <summary>
         /// Divides a scalar by each component of the vector.
         /// </summary>
         public static Vec2d operator / ( double a, Vec2d b ) {
@@ -484,5 +484,5 @@ namespace SystemEx.Numeric {
             return a.m_x > b && a.m_y > b;
         }
     }
-    /// @}
+    
 }

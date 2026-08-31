@@ -151,5 +151,5 @@ namespace SystemEx.Collections.Generic {
             return m_container.GetHashCode();
         }
     }
-    /// @}
+    
 }

@@ -110,5 +110,5 @@ namespace SystemEx.Drawing {
         T Lerp(T value, float amount);
 
     }
-    /// @}
+    
 }

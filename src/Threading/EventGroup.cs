@@ -117,5 +117,5 @@ namespace SystemEx.Threading {
             }
         }
     }
-	/// @}
+	
 }

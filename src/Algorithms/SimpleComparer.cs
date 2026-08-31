@@ -105,5 +105,5 @@ namespace SystemEx.Algorithms {
             return CompareResult.Equal;
         }
     }
-    /// @}
+    
 }

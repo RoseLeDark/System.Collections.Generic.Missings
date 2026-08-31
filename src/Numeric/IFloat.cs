@@ -17,8 +17,67 @@
 using SystemEx.Hash;
 
 namespace SystemEx.Numeric {
-	/// \addtogroup Numeric
-	/// @{
+
+	public interface IFloat { }
+
+	public interface IFloat<TBias> : IFloat {
+		/// <summary>
+		/// Gets the underlying raw storage type used for bit extraction.
+		/// Implementations typically return <c>ushort</c> or <c>uint</c> depending
+		/// on the float width.
+		/// </summary>
+		public TBias ToBase { get; }
+
+		/// <summary>
+		/// Number of bits used for the sign field.
+		/// </summary>
+		public TBias SignBits { get; }
+
+		/// <summary>
+		/// Number of bits used for the exponent field.
+		/// </summary>
+		public TBias ExponentBits { get; }
+
+		/// <summary>
+		/// Number of bits used for the mantissa (fraction) field.
+		/// </summary>
+		public TBias MantissaBits { get; }
+
+		/// <summary>
+		/// Exponent bias applied to the exponent field. Defines the offset used
+		/// when converting between encoded exponent and real exponent.
+		/// </summary>
+		public TBias ExponentBias { get; }
+
+		/// <summary>
+		/// Total number of bits in the floating‑point representation.
+		/// </summary>
+		public TBias TotalBits { get; }
+
+		/// <summary>
+		/// Gets the hidden bit (implicit leading mantissa bit). For IEEE‑like
+		/// formats this is typically <c>1</c> for normalized numbers and <c>0</c>
+		/// for subnormals.
+		/// </summary>
+		public ushort HiddenBit { get; }
+
+		/// <summary>
+		/// Gets the sign bit. <c>true</c> indicates a negative value.
+		/// </summary>
+		public bool Sign { get; }
+
+		/// <summary>
+		/// Gets the exponent field as stored in the encoded representation.
+		/// </summary>
+		public TBias Exponent { get; }
+
+		/// <summary>
+		/// Gets the mantissa (fraction) field as stored in the encoded
+		/// representation.
+		/// </summary>
+		public TBias Mantissa { get; }
+	}
+
 
 	/// <summary>
 	/// Defines the structural layout and behavioral contract of a custom
@@ -71,65 +130,11 @@ namespace SystemEx.Numeric {
 	/// prevents boxing during arithmetic or comparison operations.
 	/// </para>
 	/// </summary>
-	public interface IFloat<TSelf, TBias> : IEquatable<TSelf>, IComparable, IComparable<TSelf>, 
+	public interface IFloat<TSelf, TBias> : IFloat<TBias>, IEquatable<TSelf>, IComparable, IComparable<TSelf>, 
         IComparableEx<TSelf>, IHashable<TSelf>, IByteSerializable<TSelf>
 
         where TSelf : struct, IFloat<TSelf, TBias> {
-		/// <summary>
-		/// Gets the underlying raw storage type used for bit extraction.
-		/// Implementations typically return <c>ushort</c> or <c>uint</c> depending
-		/// on the float width.
-		/// </summary>
-		public TBias ToBase { get;  }
-
-		/// <summary>
-		/// Number of bits used for the sign field.
-		/// </summary>
-		public TBias SignBits { get; }
-
-		/// <summary>
-		/// Number of bits used for the exponent field.
-		/// </summary>
-		public TBias ExponentBits { get; }
-
-		/// <summary>
-		/// Number of bits used for the mantissa (fraction) field.
-		/// </summary>
-		public TBias MantissaBits { get; }
-
-		/// <summary>
-		/// Exponent bias applied to the exponent field. Defines the offset used
-		/// when converting between encoded exponent and real exponent.
-		/// </summary>
-		public TBias ExponentBias { get; }
-
-		/// <summary>
-		/// Total number of bits in the floating‑point representation.
-		/// </summary>
-		public TBias TotalBits { get; }
-
-		/// <summary>
-		/// Gets the hidden bit (implicit leading mantissa bit). For IEEE‑like
-		/// formats this is typically <c>1</c> for normalized numbers and <c>0</c>
-		/// for subnormals.
-		/// </summary>
-		public ushort HiddenBit { get; }
-
-		/// <summary>
-		/// Gets the sign bit. <c>true</c> indicates a negative value.
-		/// </summary>
-		public bool Sign { get; }
-
-		/// <summary>
-		/// Gets the exponent field as stored in the encoded representation.
-		/// </summary>
-		public TBias Exponent { get; }
-
-		/// <summary>
-		/// Gets the mantissa (fraction) field as stored in the encoded
-		/// representation.
-		/// </summary>
-		public TBias Mantissa { get; }
+		
 
 		// --- Static constants ---
 		/// <summary>
@@ -327,5 +332,5 @@ namespace SystemEx.Numeric {
 		static abstract bool operator != ( TSelf a, TSelf b );
 
 	}
-    /// @}
+    
 }

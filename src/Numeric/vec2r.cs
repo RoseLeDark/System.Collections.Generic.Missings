@@ -125,7 +125,7 @@ namespace SystemEx.Numeric {
 			m_x = _f;
 			m_y = _f;
 		}
-		// <summary>
+		/// <summary>
 		/// Initializes a new vector by copying the components of another vector.
 		/// </summary>
 		/// <param name="vec">The vector to copy.</param>
@@ -271,7 +271,10 @@ namespace SystemEx.Numeric {
 			return (MathR.Abs(v1.m_x - v2.m_x) <= epsilon) &&
 				   (MathR.Abs(v1.m_y - v2.m_y) <= epsilon);
 		}
-
+		/// <summary>
+		/// Convert To Byte
+		/// </summary>
+		/// <returns></returns>
 		public FixedVector<byte> ToBytes () {
 			Cache m = new Cache(4 * sizeof(long));
 			m.WriteRange(0, m_x.ToBytes());
@@ -322,7 +325,7 @@ namespace SystemEx.Numeric {
 		public static Vec2r operator / ( Vec2r a, Ratio b ) {
 			return new Vec2r(a.m_x / b, a.m_y / b);
 		}
-		// <summary>
+		/// <summary>
 		/// Multiplies both components of the vector by a scalar.
 		/// </summary>
 		public static Vec2r operator * ( Vec2r a, Ratio b ) {
@@ -334,7 +337,7 @@ namespace SystemEx.Numeric {
 		public static Vec2r operator - ( Ratio a, Vec2r b ) {
 			return new Vec2r(a - b.m_x, a - b.m_y);
 		}
-		// <summary>
+		/// <summary>
 		/// Divides a scalar by each component of the vector.
 		/// </summary>
 		public static Vec2r operator / ( Ratio a, Vec2r b ) {
@@ -488,5 +491,5 @@ namespace SystemEx.Numeric {
 			return m_x.GetHashCode() ^ m_y.GetHashCode();
 		}
 	}
-	/// @}
+	
 }

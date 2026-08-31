@@ -177,5 +177,5 @@ namespace SystemEx.Device.Memory {
         }
     }
 
-	/// @}
+	
 }

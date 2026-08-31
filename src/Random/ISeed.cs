@@ -79,6 +79,6 @@ namespace SystemEx.Random {
         void Update ( T value );
     }
 
-	/// @}
+	
 
 }

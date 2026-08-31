@@ -283,5 +283,5 @@ namespace SystemEx.Algorithms {
             return _elements;
         }
     }
-    /// @}
+    
 }

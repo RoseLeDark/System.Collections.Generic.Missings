@@ -143,5 +143,5 @@ namespace SystemEx.Threading {
             return _x;
         }
     }
-	/// @}
+	
 }

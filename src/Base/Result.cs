@@ -239,5 +239,5 @@ namespace SystemEx {
 		/// </summary>
 		private void AssertHandler ( bool condition, Result sender ) { }
 	}
-	/// @}
+	
 }

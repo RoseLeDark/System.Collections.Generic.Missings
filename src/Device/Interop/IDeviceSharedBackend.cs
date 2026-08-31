@@ -73,5 +73,5 @@ namespace SystemEx.Device.Intertropt {
         void CloseHardwareBuffer(ref object hardwareBuffer);
     }
 
-	/// @}
+	
 }

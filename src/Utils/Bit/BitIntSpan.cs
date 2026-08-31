@@ -407,6 +407,6 @@ namespace SystemEx.Utils {
         [Obsolete("GetHashCode() always throw an exception.")]
         public override int GetHashCode () => throw new NotSupportedException();
     }
-	/// @}
+	
 
 }

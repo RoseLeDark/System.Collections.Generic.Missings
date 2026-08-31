@@ -1,18 +1,3 @@
 <Solution>
-  <Configurations>
-    <Platform Name="Any CPU" />
-    <Platform Name="Windows" />
-  </Configurations>
-  <Project Path="Examples/01.Empty/01.Empty.csproj" Id="607b49e7-93f9-4f09-9948-e8a4eaf9bdf6">
-    <Platform Solution="Release|Windows" Project="x64" />
-  </Project>
-  <Project Path="Examples/02.Vector/02.Vector.csproj">
-    <Platform Solution="Release|Windows" Project="x64" />
-  </Project>
-  <Project Path="Examples/03.BitView/03.BitView.csproj" />
-  <Project Path="Examples/04.Hasher/04.Hasher.csproj" />
-  <Project Path="Examples/05.Thread/05.Thread.csproj" />
-  <Project Path="src/RoseLeDark.Collections.Missings.csproj">
-    <Platform Solution="Release|Windows" Project="x64" />
-  </Project>
+  <Project Path="src/SystemEx.csproj" />
 </Solution>

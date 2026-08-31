@@ -332,7 +332,7 @@ namespace SystemEx.Numeric {
 		public static Vec4r operator / ( Vec4r a, Ratio b ) {
 			return new Vec4r(a.m_x / b, a.m_y / b, a.m_z / b, a.m_w / b);
 		}
-		// <summary>
+		/// <summary>
 		/// Multiplies both components of the vector by a scalar.
 		/// </summary>
 		public static Vec4r operator * ( Vec4r a, Ratio b ) {
@@ -344,7 +344,7 @@ namespace SystemEx.Numeric {
 		public static Vec4r operator - ( Ratio a, Vec4r b ) {
 			return new Vec4r(a - b.m_x, a - b.m_y, a - b.m_z, a - b.m_w);
 		}
-		// <summary>
+		/// <summary>
 		/// Divides a scalar by each component of the vector.
 		/// </summary>
 		public static Vec4r operator / ( Ratio a, Vec4r b ) {
@@ -483,5 +483,5 @@ namespace SystemEx.Numeric {
 			return a.m_x > b && a.m_y > b && a.m_z > b && a.m_w > b;
 		}
 	}
-	/// @}
+	
 }

@@ -124,5 +124,5 @@ namespace SystemEx.Threading {
             base.Unlock();
         }
     }
-	/// @}
+	
 }

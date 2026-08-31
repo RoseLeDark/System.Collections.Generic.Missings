@@ -65,7 +65,10 @@ namespace SystemEx {
 		/// <summary>
 		/// Gets the human‑readable semantic version of the framework.
 		/// </summary>
-		public static string Version => "0.92.1902";
+		public static string Version => "0.95.3545-rc1";
+		/// <summary>
+		/// Gets the current code name
+		/// </summary>
 		public static string CodeName => "Lacking";
 
 		/// <summary>
@@ -93,18 +96,18 @@ namespace SystemEx {
 		/// <summary>
 		/// Gets the minor version component.
 		/// </summary>
-		public static int Minor => 92;
+		public static int Minor => 95;
 
 		/// <summary>
 		/// Gets the build number of this version.
 		/// </summary>
-		public static int Build => 1902;
+		public static int Build => 3545;
 
 		/// <summary>
 		/// Gets the integer‑encoded version number.
 		/// Useful for fast comparison and binary compatibility checks.
 		/// </summary>
-		public static uint iVersion => 0x00009201902;
+		public static uint iVersion => 0x00009503545;
 
 		/// <summary>
 		/// Indicates whether this build is a beta version.
@@ -136,7 +139,7 @@ namespace SystemEx {
 		/// If the framework is forked, contributors may set this value to identify
 		/// their fork, similar to how Linux kernel maintainers annotate their builds.
 		/// </summary>
-		public static string User => "";
+		public static string User => "rc1";
 
 		/// <summary>
 		/// Returns a formatted string containing framework information.
@@ -185,7 +188,7 @@ namespace SystemEx {
 		/// Determines whether the specified version is compatible with the current
 		/// SystemEx version. Compatibility is defined as:
 		/// - Same major version
-		/// - Requested minor version <= current minor version
+		/// - Requested minor version gt;= current minor version
 		/// 
 		/// This ensures backward compatibility within the same major version.
 		/// </summary>

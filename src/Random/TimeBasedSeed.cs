@@ -77,5 +77,5 @@ namespace SystemEx.Random {
             if ( m_seed.Length > 3 ) m_seed[3] = (uint)Guid.NewGuid().GetHashCode();
         }
     }
-	/// @}
+	
 }

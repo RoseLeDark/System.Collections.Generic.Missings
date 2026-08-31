@@ -73,7 +73,7 @@ namespace SystemEx.Hash {
     /// <summary>
     /// Interface for SystemEx hashing algorithms.  
     /// 
-    /// A hasher consumes a byte vector (<see cref="Vector{byte}"/>) and produces
+    /// A hasher consumes a byte vector (<see cref="Vector{T}"/>) and produces
     /// either a 32‑bit or 64‑bit hash.  
     /// 
     /// Implementations must be endian‑aware and iterator‑driven, following the
@@ -94,6 +94,6 @@ namespace SystemEx.Hash {
         /// </summary>
         Hash64 ComputeLong ( FixedVector<byte> input, ulong seed );
     }
-    /// @}
+    
 
 }

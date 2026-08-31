@@ -253,5 +253,5 @@ namespace SystemEx.Collections.Generic {
                 m_subSlices.Equals(other.m_subSlices);
         }
     }
-    /// @}
+    
 }

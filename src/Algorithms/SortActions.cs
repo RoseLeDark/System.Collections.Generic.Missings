@@ -492,5 +492,5 @@ namespace SystemEx.Algorithms {
             return arr;
         }
     }
-    /// @}
+    
 }

@@ -207,6 +207,6 @@ namespace SystemEx {
             return m_range.GetEnumerator();
         }
     }
-	/// @}
+	
 }
 

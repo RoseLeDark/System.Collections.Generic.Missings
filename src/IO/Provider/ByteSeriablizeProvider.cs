@@ -110,5 +110,5 @@ namespace SystemEx.IO.Provider {
         protected abstract object? CreateObjectFromEntrys(Map<string, byte[]> entries, Endian endian);
 
     }
-	/// @}
+	
 }

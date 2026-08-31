@@ -140,5 +140,5 @@ namespace SystemEx.Utils {
             return true;
         }
     }
-    /// @}
+    
 }

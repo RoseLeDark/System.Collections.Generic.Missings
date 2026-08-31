@@ -203,5 +203,5 @@ namespace SystemEx.Hash.Black {
             return output;
         }
     }
-    /// @}
+    
 }

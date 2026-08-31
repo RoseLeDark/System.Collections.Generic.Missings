@@ -57,6 +57,6 @@ namespace SystemEx.AI {
 		/// </returns>
 		bool Convert ( IModelTool<T> tool, out TAITOOL converted );
 	}
-	/// @}
+	
 
 }

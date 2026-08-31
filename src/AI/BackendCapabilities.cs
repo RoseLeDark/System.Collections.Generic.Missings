@@ -317,6 +317,6 @@ namespace SystemEx.AI {
         /// </summary>
         AI_BACKEND_CAPS_CUSTOM = 0x1FFF
     }
-	/// @}
+	
 
 }

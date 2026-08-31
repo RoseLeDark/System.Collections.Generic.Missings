@@ -155,5 +155,5 @@ namespace SystemEx.AI {
         }
          
     }
-	/// @}
+	
 }

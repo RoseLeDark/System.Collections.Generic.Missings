@@ -66,5 +66,5 @@ namespace SystemEx.AI {
 			Description = description;
 		}
 	}
-	/// @}
+	
 }

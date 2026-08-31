@@ -199,5 +199,5 @@ namespace SystemEx.Device.Intertropt {
             return m_Buffer.Length;
         }
     }
-	/// @}
+	
 }

@@ -74,6 +74,6 @@ namespace SystemEx.AI {
         // Custom
         AI_ENV_CUSTOM            = 0x3FFF
     }
-	/// @}
+	
 
 }

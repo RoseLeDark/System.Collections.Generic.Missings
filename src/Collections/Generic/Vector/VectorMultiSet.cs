@@ -454,5 +454,5 @@ namespace SystemEx.Collections.Generic {
         }
 
     }
-    /// @}
+    
 }

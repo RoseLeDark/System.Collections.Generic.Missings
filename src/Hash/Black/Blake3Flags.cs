@@ -64,5 +64,5 @@ namespace SystemEx.Hash.Black {
 		DERIVE_KEY_MATERIAL = 1 << 6,
     };
 
-	/// @}
+	
 }

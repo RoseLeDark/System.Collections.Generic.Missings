@@ -209,6 +209,6 @@ namespace SystemEx.Hash {
             return h ^ h >> 16;
         }
     }
-    /// @}
+    
 #endif
 }

@@ -332,5 +332,5 @@ namespace SystemEx.Drawing {
             );
         }
     }
-    /// @}
+    
 }

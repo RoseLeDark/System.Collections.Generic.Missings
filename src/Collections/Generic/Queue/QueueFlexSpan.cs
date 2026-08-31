@@ -334,6 +334,6 @@ namespace SystemEx.Collections.Generic {
             return m_pReference.Replace(pos, value);
         }
     }
-	/// @}
+	
 }
 

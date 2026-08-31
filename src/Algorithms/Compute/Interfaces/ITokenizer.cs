@@ -27,6 +27,6 @@ namespace SystemEx.Algorithms.Compute {
 		//IReadOnlyVector<string> Tokenize(string text);
 	}
 
-	/// @}
+	
 }
 

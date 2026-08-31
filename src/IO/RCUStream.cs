@@ -330,5 +330,5 @@ namespace SystemEx.IO {
 
 		#endregion
 	}
-	/// @}
+	
 }

@@ -676,5 +676,5 @@ namespace SystemEx.Numeric {
             return _ret;
         }
     }
-    /// @}
+    
 }

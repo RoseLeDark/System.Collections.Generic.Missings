@@ -92,13 +92,13 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Indicates whether the lock currently has available capacity.
         /// </summary>
-        public bool IsHeld => m_counter.Value <= m_min;
+        public bool IsLocked => m_counter.Value <= m_min;
 
 		/// <summary>
 		/// Indicates whether the lock is currently saturated (no capacity left).
 		/// </summary>
 		[Obsolete]
-		public bool IsLocked => IsHeld;
+		public bool IsHeld => m_counter.Value <= m_min;
 
 		/// <summary>
 		/// Counting spinlocks do not track thread ownership.
@@ -124,12 +124,12 @@ namespace SystemEx.Threading {
         /// </summary>
         public virtual T? Value {
             get {
-                if ( !IsLocked )
+                if ( !IsHeld )
                     throw new UnauthorizedAccessException();
                 return m_value;
             }
             set {
-                if ( !IsLocked )
+                if ( !IsHeld )
                     throw new UnauthorizedAccessException();
                 m_value = value;
             }
@@ -178,7 +178,7 @@ namespace SystemEx.Threading {
                     }
 
                     // Wenn keine Kapazität → sofort spinnen
-                    if ( IsLocked ) {
+                    if ( IsHeld ) {
                         Thread.SpinWait(1);
                         continue;
                     }
@@ -202,7 +202,7 @@ namespace SystemEx.Threading {
                 while ( true ) {
 
                     // Wenn keine Kapazität → sofort spinnen
-                    if ( IsLocked ) {
+                    if ( IsHeld ) {
                         Thread.SpinWait(1);
                         
                         continue;
@@ -279,5 +279,5 @@ namespace SystemEx.Threading {
             return false;
         }
     }
-	/// @}
+	
 }

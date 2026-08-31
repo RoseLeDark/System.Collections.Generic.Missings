@@ -18,6 +18,7 @@
 
 using System.Runtime.CompilerServices;
 using SystemEx.Collections.Generic;
+using SystemEx.Utils;
 
 
 namespace SystemEx.Numeric {
@@ -36,7 +37,7 @@ namespace SystemEx.Numeric {
 	/// Users must understand bitwise operations, as incorrect usage can 
 	/// intentionally overwrite or corrupt the underlying value.
 	/// </summary>
-	public struct Fast_Short : IFastType<ushort> {
+	public struct Fast_UShort : IFastType<ushort>, IComparable<Fast_UShort>, IComparableEx<Fast_UShort> {
         private ushort m_value;
         private byte m_size;
 
@@ -54,12 +55,12 @@ namespace SystemEx.Numeric {
         /// Initializes a new Fast_Short instance with an optional initial value.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Fast_Short () : this(0) { }
+        public Fast_UShort () : this(0) { }
 
         /// <summary>
         /// Initializes a new Fast_Short instance with an optional initial value.
         /// </summary>
-        public Fast_Short ( ushort value  ) {
+        public Fast_UShort ( ushort value  ) {
             m_value = value;
             m_size = sizeof(ushort) * 8;
         }
@@ -85,13 +86,13 @@ namespace SystemEx.Numeric {
         /// Produces the one's complement of the current value.
         /// All bits are inverted (bitwise NOT).
         /// </summary>
-        public IFastType<ushort> CmpOne () => new Fast_Short((ushort)~m_value);
+        public IFastType<ushort> CmpOne () => new Fast_UShort((ushort)~m_value);
         /// <summary>
         /// Produces the two's complement of the current value.
         /// This is equivalent to (~value + 1) and is commonly used
         /// for subtraction in low‑level arithmetic.
         /// </summary>
-        public IFastType<ushort> CmpTwo () => new Fast_Short((ushort)(~m_value + 1));
+        public IFastType<ushort> CmpTwo () => new Fast_UShort((ushort)(~m_value + 1));
 
         /// <summary>
         /// Flips (toggles) the bit at the specified position.
@@ -232,6 +233,200 @@ namespace SystemEx.Numeric {
             }
             return _set;
         }
-    }
-	/// @}
+
+		/// <summary>
+		/// Addition
+		/// </summary>
+		public Fast_UShort Add ( Fast_UShort oth ) {
+			m_value += oth.m_value; return this;
+		}
+		/// <summary>
+		/// Subtraktion
+		/// </summary>
+		public Fast_UShort Sub ( Fast_UShort oth ) {
+			m_value -= oth.m_value; return this;
+		}
+		/// <summary>
+		/// Multiplikation
+		/// </summary>
+		public Fast_UShort Mul ( Fast_UShort oth ) {
+			m_value *= oth.m_value; return this;
+		}
+		/// <summary>
+		/// Division
+		/// </summary>
+		public Pair<Fast_UShort, Fast_UShort> Div ( Fast_UShort oth ) {
+			m_value /= oth.m_value;
+			byte v = (byte)(m_value % oth.m_value);
+
+			return new(this, new(v));
+		}
+
+		public CompareResult CompareTo ( Fast_UShort a ) {
+			if ( m_value > a.m_value ) return CompareResult.Greater;
+			else if ( m_value < a.m_value ) return CompareResult.Less;
+
+			return CompareResult.Equal;
+		}
+		int IComparable<Fast_UShort>.CompareTo ( Fast_UShort a ) {
+			return (int)CompareTo(a);
+		}
+
+		public static Fast_UShort Min ( Fast_UShort a, Fast_UShort b ) {
+			return a.m_value < b.m_value ? a : b;
+		}
+		public static Fast_UShort Max ( Fast_UShort a, Fast_UShort b ) {
+			return a.m_value > b.m_value ? a : b;
+		}
+
+		/// <inheritdoc/>
+		public static bool operator == ( Fast_UShort a, Fast_UShort b ) {
+			return a.m_value == b.m_value;
+		}
+
+		/// <inheritdoc/>
+		public static bool operator != ( Fast_UShort a, Fast_UShort b ) {
+			return !(a == b);
+		}
+
+		/// <inheritdoc/>
+		public static bool operator <= ( Fast_UShort a, Fast_UShort b ) {
+			return a.m_value <= b.m_value;
+		}
+		/// <inheritdoc/>
+		public static bool operator >= ( Fast_UShort a, Fast_UShort b ) {
+			return a.m_value >= b.m_value;
+		}
+		/// <inheritdoc/>
+		public static bool operator < ( Fast_UShort a, Fast_UShort b ) {
+			return a.m_value < b.m_value;
+		}
+		/// <inheritdoc/>
+		public static bool operator > ( Fast_UShort a, Fast_UShort b ) {
+			return a.m_value > b.m_value;
+		}
+
+		public static Fast_UShort operator + ( Fast_UShort a, Fast_UShort b ) {
+			a.m_value += b.m_value;
+			return a;
+		}
+		public static Fast_UShort operator - ( Fast_UShort a, Fast_UShort b ) {
+			a.m_value -= b.m_value;
+			return a;
+		}
+		public static Fast_UShort operator - ( Fast_UShort a ) {
+			a.m_value = (byte)(-a.m_value);
+			return a;
+		}
+		public static Fast_UShort operator -- ( Fast_UShort a ) {
+			a.m_value--;
+			return a;
+		}
+		public static Fast_UShort operator ++ ( Fast_UShort a ) {
+			a.m_value++;
+			return a;
+		}
+		public static Fast_UShort operator * ( Fast_UShort a, Fast_UShort b ) {
+			a.m_value *= b.m_value;
+			return a;
+		}
+		public static Fast_UShort operator / ( Fast_UShort a, Fast_UShort b ) {
+			a.m_value /= b.m_value;
+			return a;
+		}
+
+		/// <summary>
+		/// Implicitly converts a byte value into an <see cref="Fast_UShort"/>.
+		/// </summary>
+		/// <param name="value">The byte value to convert.</param>
+		public static implicit operator Fast_UShort ( ushort value ) {
+			return new Fast_UShort(value);
+		}
+
+		public static implicit operator Fast_UShort ( Fast_Byte value ) {
+			return new Fast_UShort(value.Value);
+		}
+
+		/// <summary>
+		/// Implicitly converts a int value into an <see cref="Fast_UShort"/>.
+		/// </summary>
+		/// <param name="value">The int value to convert.</param>
+		public static implicit operator Fast_UShort ( int value ) {
+			return new Fast_UShort((ushort)value);
+		}
+
+		/// <summary>
+		/// Implicitly converts a uint value into an <see cref="Fast_UShort"/>.
+		/// </summary>
+		/// <param name="value">The uint value to convert.</param>
+		public static implicit operator Fast_UShort ( uint value ) {
+			return new Fast_UShort((ushort)value);
+		}
+
+		/// <summary>
+		/// Explicitly extracts the underlying value from an <see cref="Fast_UShort"/>.
+		/// </summary>
+		/// <param name="opt">The optional instance to extract from.</param>
+		/// <returns>The stored value.</returns>
+		public static explicit operator ushort ( Fast_UShort opt ) {
+			return opt.m_value;
+		}
+
+		/// <summary>
+		/// Explicitly extracts the underlying value from an <see cref="Fast_UShort"/>.
+		/// </summary>
+		/// <param name="opt">The optional instance to extract from.</param>
+		/// <returns>The stored value.</returns>
+		public static explicit operator int ( Fast_UShort opt ) {
+			return opt.m_value;
+		}
+
+		/// <inheritdoc/>
+		public override bool Equals ( object? obj ) {
+			if ( obj is Fast_UShort key )
+				return Equals(key);
+			return false;
+		}
+
+		/// <inheritdoc/>
+		public bool Equals ( Fast_UShort b ) {
+			return this.m_value == b.m_value;
+		}
+
+		public bool Equals ( ushort b ) {
+			return this.m_value == b;
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode () {
+			return m_value.GetHashCode();
+		}
+		/// <inheritdoc/>
+		public override string ToString () {
+			return m_value.ToString();
+		}
+
+		public static Fast_UShort operator & ( Fast_UShort a, Fast_UShort b ) {
+			return (ushort)(a.m_value & b.m_value);
+		}
+		public static Fast_UShort operator % ( Fast_UShort a, Fast_UShort b ) {
+			return (ushort)(a.m_value % b.m_value);
+		}
+		public static Fast_UShort operator | ( Fast_UShort a, Fast_UShort b ) {
+			return (ushort)(a.m_value | b.m_value);
+		}
+		public static Fast_UShort operator ^ ( Fast_UShort a, Fast_UShort b ) {
+			return (ushort)(a.m_value ^ b.m_value);
+		}
+
+		public static Fast_UShort operator << ( Fast_UShort a, Fast_UShort b ) {
+			a.m_value = (ushort)(a.m_value << b.m_value);
+			return a;
+		}
+		public static Fast_UShort operator >> ( Fast_UShort a, Fast_UShort b ) {
+			a.m_value = (ushort)(a.m_value >> b.m_value);
+			return a;
+		}
+	}
+	
 }

@@ -97,6 +97,6 @@ namespace SystemEx.Collections.Generic {
         ITypeBuffer<T> Clone ();
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-	/// @}
+	
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

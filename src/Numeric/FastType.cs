@@ -209,5 +209,5 @@ namespace SystemEx.Numeric {
 		public IFastType<T> Combine ( IFastType<T> other );
 	}
 
-	/// @}
+	
 }

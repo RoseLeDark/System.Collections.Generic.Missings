@@ -25,7 +25,7 @@ namespace SystemEx.Collections.Generic {
 	/// </summary>
 	/// <typeparam name="T">The type of elements stored in the queue.</typeparam>
 	public interface IBinQueue<T> : IDeque {
-        // <summary>
+        /// <summary>
         /// Adds a new element to the queue. If the queue is full, the oldest
         /// element is removed automatically before inserting the new one.
         /// </summary>
@@ -39,6 +39,6 @@ namespace SystemEx.Collections.Generic {
 
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

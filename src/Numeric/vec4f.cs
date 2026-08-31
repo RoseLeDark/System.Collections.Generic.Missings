@@ -364,7 +364,7 @@ namespace SystemEx.Numeric {
         public static Vec4f operator / ( Vec4f a, float b ) {
             return new Vec4f(a.m_x / b, a.m_y / b, a.m_z / b, a.m_w / b);
         }
-        // <summary>
+        /// <summary>
         /// Multiplies both components of the vector by a scalar.
         /// </summary>
         public static Vec4f operator * ( Vec4f a, float b ) {
@@ -376,7 +376,7 @@ namespace SystemEx.Numeric {
         public static Vec4f operator - ( float a, Vec4f b ) {
             return new Vec4f(a - b.m_x, a - b.m_y, a - b.m_z, a - b.m_w);
         }
-        // <summary>
+        /// <summary>
         /// Divides a scalar by each component of the vector.
         /// </summary>
         public static Vec4f operator / ( float a, Vec4f b ) {
@@ -515,5 +515,5 @@ namespace SystemEx.Numeric {
             return a.m_x > b && a.m_y > b && a.m_z > b && a.m_w > b;
         }
     }
-    /// @}
+    
 }

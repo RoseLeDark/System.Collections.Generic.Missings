@@ -95,7 +95,7 @@ namespace SystemEx.Algorithms {
         Vector< Pair<long, Optional<T> > > Where ( ref TContainer container, Func<Optional<T>, CompareResult> func );
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    /// @}
-    /// @}
+    
+    
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }

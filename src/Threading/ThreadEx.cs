@@ -163,7 +163,7 @@ namespace SystemEx.Threading {
         private Object? m_userData;
         private int m_retval;
         private bool m_bRunning;
-        protected volatile EventGroup<Fast_Int> m_eventGroup;
+        protected volatile EventGroup<Fast_UInt> m_eventGroup;
 
         private Spinlock m_continuemutex;
         private Spinlock m_runningMutex;
@@ -248,7 +248,7 @@ namespace SystemEx.Threading {
             m_runningMutex = new Spinlock();
             m_contextMutext = new MutexLock($"{strName}_cmt");
 
-            m_eventGroup = new EventGroup<Fast_Int>();
+            m_eventGroup = new EventGroup<Fast_UInt>();
 
             OnTask = null;
             OnBegin = null;
@@ -899,5 +899,5 @@ namespace SystemEx.Threading {
             }
         }
     }
-	/// @}
+	
 }
