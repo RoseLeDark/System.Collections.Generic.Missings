@@ -1,5 +1,4 @@
-﻿
-/* 
+﻿/* 
  * SPDX-License-Identifier: EUPL-1.2
  *
  * Copyright (c) 2026 Amber-Sophia Schröck <ambersophia.schroeck@mail.de>
@@ -15,13 +14,7 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SystemEx.Random {
-	/// \addtogroup Random
-	/// @{
+namespace SystemEx.Rand {
 
 	/// <summary>
 	/// Provides a seed implementation based on a simple integer value. The input

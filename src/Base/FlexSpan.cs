@@ -169,11 +169,14 @@ namespace SystemEx {
         /// End index of the view (exclusive).
         /// </summary>
         public long End => m_lEnd;
-
         /// <summary>
-        /// Provides ref-access to the element at the given index within the view.
+        /// Get the current mode
         /// </summary>
-        public ref T this[int index] {
+        public FlexSpanMode Mode => m_eMode;
+		/// <summary>
+		/// Provides ref-access to the element at the given index within the view.
+		/// </summary>
+		public ref T this[long index] {
             get => ref ElementAt(index);
         }
 

@@ -17,24 +17,20 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SystemEx.Rand.Engine;
 
-namespace SystemEx.Random {
-	/// \addtogroup Random
-	/// @{
+namespace SystemEx.Rand {
 
 	/// <summary>
-	/// Provides a simple interface for generating random numbers using the ISAAC algorithm.
+	/// Provides a simple interface for generating random numbers using varibale Engines algorithm.
 	/// </summary>
-	public sealed class Randx {
-        private readonly Isaac32Engine _core;
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Randx"/> class with the specified
-        /// </summary>
-        /// <param name="seedA">The first seed value.</param>
-        /// <param name="seedB">The second seed value.</param>
-        /// <param name="seedC">The third seed value.</param>
-        public Randx ( uint seedA = 0, uint seedB = 0, uint seedC = 0 ) {
-            _core = new Isaac32Engine(seedA, seedB, seedC);
+	public  class GenericRand<TEngine> where TEngine : IRandomEngine {
+        private readonly TEngine _core;
+
+        public IRandomEngine DefaultEngine { get { return _core; } }
+
+		public GenericRand ( TEngine engine) {
+            _core = engine;
         }
         /// <summary>
         /// Generates the next random 32-bit number in the sequence.
@@ -121,5 +117,4 @@ namespace SystemEx.Random {
             return Next64();
         }
     }
-	
 }

@@ -17,7 +17,7 @@
  */
 using SystemEx.Hash;
 
-namespace SystemEx.Random {
+namespace SystemEx.Rand {
 	/// \addtogroup Random
 	/// @{
     

@@ -1,9 +1,26 @@
 # 📝 SystemEx Changelog
 
-<<<<<<< HEAD
-## ⭐ [0.95.5000‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
+## ⭐ [0.95.5645‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
 
-## Added
+### Changed
+- Rename namespace `SystemEx.Random` to `SystemEx.Rand`
+- `Isaac32Engine` is now in `SystemEx.Rand.Engine` and impl `IRandomEngine`
+- `Isaac32Engine` and `MTwisterEngine` used now his own Seed impl - his namens ends with {EngineName}Seed
+
+### Added 
+- Added to `SystemEx.Rand`:
+    - Added `GenericRand`: Provides a simple interface for generating random numbers using varibale Engines algorithm. 
+    - Added `IRandomEngine`: Defines the contract for a deterministic 32-bit random number generator engine. 
+      Implementations provide a reproducible sequence of unsigned 32-bit values
+    - Added new Random engine: `MTwisterEngine` Implements the MT19937 32-bit Mersenne Twister random number generator.
+- Added `SystemEx.Random`: Provides a high‑level wrapper around the Base Class Library (BCL) System.Random and added usale functions.
+- Added `SystemEx.Threading.LightMMQueue`:  A bounded lock‑free multi‑producer, multi‑consumer (MPMC) queue. 
+
+---
+
+## [0.95.5000‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
+
+### Added
 - Added full UE‑Float suite:
   - `FloatUE5M2b32` — 32‑Bit UE‑Format mit 5‑Bit Exponent, 2‑Bit Mantissa, block‑kompatibel
   - `FloatUE5M2` — kompakte UE‑Variante für Low‑Precision‑Pipelines
@@ -30,25 +47,23 @@
   
 - Added `LightFutex`: Provides a lightweight reentrant futex-like synchronization primitive.
 
-## Changed
+### Changed
 - Updated `IFloat`:
   - `BiddenBit` ist jetzt vom Typ `TSelf` statt `ushort`
   - Ermöglicht konsistente Self‑Type‑Propagation über alle Float‑Formate
   - Verbessert generische Kompatibilität mit UMX‑Blöcken und UE‑Formaten
 
-## Improved
+### Improved
 - Unified naming and documentation across all UE‑Float and MX‑Float classes
 - Enhanced determinism of rounding and normalization in all new float formats
 - Improved internal consistency of exponent/mantissa handling across UE‑Suite
 - Strengthened generic compatibility for UMX‑Float‑Pipeline (`Float8UMX<T>`)
 
+---
 
 ## [0.95.3545‑rc1] 28.08.2026 — internal Preview for 1.0 → Lacking
-=======
-## ⭐ [0.95.3545‑beta] 28.08.2026 — internal Preview for 1.0 → Lacking
->>>>>>> a9db8acbd303475c7f1c3e2e83aae168d3e7d78f
 
-## Added
+### Added
 - Added full generic CRC wrapper `CrC<TC32, TC64>`:
   - Allows pairing any CRC‑32 and CRC‑64 variant in a single hasher
   - Fully compatible with `IHash` pipeline (Compute + ComputeLong)
@@ -77,7 +92,7 @@
   - Missing BigDecimal members (`Precision`, tuple‑constructor, `GetHashCode`)
   - Internal rational constructor (`BigDecimal(BigInteger numerator, BigInteger denominator)`)
 
-## Changed
+### Changed
 - Updated `CRC32` and `CRC64` base classes:
   - Polynomial setter now resets rolling state deterministically
   - Unified table generation semantics across all CRC variants
@@ -92,19 +107,19 @@
   - `GetHashCode()` now explicitly documented as normalization‑based
   - Ensures canonical hash generation independent of mantissa/exponent representation
 
-## Improved
+### Improved
 - Consistent naming and documentation across all CRC variant classes
 - Unified rolling semantics for CRC‑32 and CRC‑64 engines
 - Improved clarity of BigDecimal internal constructors and normalization behavior
 - Enhanced maintainability of hash subsystem through generic CRC composition
 
-
+---
 
 ## [0.95.xxx] 26.08.2026 intern Preview for 1.0 -> Lacking
-## Rename
+### Rename
 - Rename Latch To LightLatch and add ConditionVariable support
 
-## Added
+### Added
 - Add Thread Invoke System 
 - Add readmes at all examples
 

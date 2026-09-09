@@ -1,0 +1,64 @@
+name: Release RoseLeDark.Collections.Missings
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag / version to release (e.g. v1.2.3 or 4.0.0). If empty, use the current tag on ref.'
+        required: false
+      prerelease:
+        description: 'Mark release as pre-release?'
+        required: false
+        default: 'false'
+  push:
+    tags:
+      - 'v*.*.*' 
+      - '*.*.*'  
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+              10.0.x
+              9.0.x
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+      - name: Determine release tag
+        id: vars
+        run: |
+          # If a manual tag_name was supplied, use that, otherwise use the current ref/tag name.
+          if [ -n "${{ github.event.inputs.tag_name }}" ]; then
+            echo "tag=${{ github.event.inputs.tag_name }}" >> "$GITHUB_OUTPUT"
+          else
+            # refs/tags/v1.2.3 -> v1.2.3
+            echo "tag=${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: ${{ steps.vars.outputs.tag }}
+          draft: false
+          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

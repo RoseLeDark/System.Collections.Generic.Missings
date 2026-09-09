@@ -15,10 +15,7 @@
  * changes and the date.
  */
 
-namespace SystemEx.Random {
-
-	/// \addtogroup Random
-	/// @{
+namespace SystemEx.Rand {
 
 	/// <summary>
 	/// Represents a generic seed source for random number generators.

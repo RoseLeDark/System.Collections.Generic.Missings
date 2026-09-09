@@ -17,7 +17,7 @@
 
 using System.Text;
 using SystemEx.Collections.Generic;
-using SystemEx.Random;
+using SystemEx.Rand;
 
 namespace SystemEx.Utils {
 
@@ -45,15 +45,33 @@ namespace SystemEx.Utils {
         /// Internal pseudo‑random generator used for all random operations.
         /// </summary>
 #if !TEST
-        static readonly Randx r = new Randx(1,2,3);
+        static Randx r = new Randx( (uint)DateTime.Now.ToBinary(), (uint)Thread.CurrentThread.ManagedThreadId, Framework.iVersion);
+
+        internal static void Setup ( uint v ) {
+			r = new Randx(v, (uint)Thread.CurrentThread.ManagedThreadId, Framework.iVersion);
+		}
+		internal static void SetupWithSeed ( ISeed seed ) {
+			r = new Randx(seed);
+		}
 #else
-        static readonly System.Random r = new System.Random((int)DateTime.Now.ToBinary());
+        static System.Random r = new System.Random((int)DateTime.Now.ToBinary());
+
+        internal static void Setup ( uint v ) {
+			r = new System.Random((int)v);
+		}
+        internal static void SetupWithSeed ( ISeed seed ) {
+			r = new System.Random(seed[0] );
+		}
 #endif
-        #region Char
-        /// <summary>
-        /// Default character set for simple passwords (letters, digits, symbols).
-        /// </summary>
-        private static char[] PasswordChars = {
+
+
+
+
+		#region Char
+		/// <summary>
+		/// Default character set for simple passwords (letters, digits, symbols).
+		/// </summary>
+		private static char[] PasswordChars = {
             'A','B','C','D','E','F','G','H','I','J','K','L','M',
             'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
             'a','b','c','d','e','f','g','h','i','j','k','l','m',
@@ -140,6 +158,7 @@ namespace SystemEx.Utils {
             return _c;
         }
         #endregion
+
         #region BYTE
         /// <summary>
         /// Returns a random byte in the full byte range.
@@ -429,6 +448,7 @@ namespace SystemEx.Utils {
 
 
         #endregion
+
         /// <summary>
         /// Returns an array of random bytes of the specified size.
         /// </summary>
@@ -457,7 +477,7 @@ namespace SystemEx.Utils {
             return buffer;
         }
 
-
-    }
+		
+	}
     
 }

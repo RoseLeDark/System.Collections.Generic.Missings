@@ -18,9 +18,7 @@
 
 using SystemEx.Threading;
 
-namespace SystemEx.Random {
-	/// \addtogroup Random
-	/// @{
+namespace SystemEx.Rand {
 
 	/// <summary>
 	/// Defines the available mixing strategies used to combine two random seeds.

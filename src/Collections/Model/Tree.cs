@@ -5,8 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using SystemEx.Collections.Generic;
 using SystemEx.Drawing;
-using SystemEx.Random;
-using static System.Net.Mime.MediaTypeNames;
+using SystemEx.Rand;
 
 #if USE_DEVBUILD_UNSTABLE 
 

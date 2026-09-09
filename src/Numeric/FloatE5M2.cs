@@ -40,7 +40,7 @@ namespace SystemEx.Numeric {
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	[HashAlgorithm(typeof(BernsteinHash), Endian.System)]
-	internal struct FloatE5M2 : IFP8<FloatE5M2> {
+	public struct FloatE5M2 : IFP8<FloatE5M2> {
 		private Fast_Byte m_baseBytes;
 
 		/// <summary>Raw 8‑bit storage (FP8 E5M2 encoded).</summary>

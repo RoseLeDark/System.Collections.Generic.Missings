@@ -4,8 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.95.5023-rc1</Version>
-    <FileVersion>0.95.5023</FileVersion>
+    <Version>0.95.5645-rc2</Version>
+    <FileVersion>0.95.5645</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Company>Amber-Sophia Schröck</Company>
     <Authors>Amber-Sophia Schröck</Authors>
@@ -33,14 +33,14 @@
     <RootNamespace>SystemEx</RootNamespace>
     <AssemblyTitle>RoseLeDark.Collections.Missings</AssemblyTitle>
     <NuGetAuditMode>all</NuGetAuditMode>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>AnyCPU;x64;x86;ARM32;ARM64</Platforms>
     <Configurations>Debug;Release</Configurations>
     <OutputType>Library</OutputType>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <IsTrimmable>true</IsTrimmable>
     <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
     <Deterministic>true</Deterministic>
-
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <Description># SystemEx — NuGet Package Description (copy‑ready)
 
 **SystemEx** is a modular, low‑level extension framework for .NET, developed by a single author over several months.  
@@ -133,47 +133,22 @@ Constructive feedback is welcome.
 </Description>
     <DelaySign>True</DelaySign>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageReleaseNotes>
-## ⭐ [0.95.5000‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
+    <PackageReleaseNotes>## ⭐ [0.95.5645‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
 
-## Added
-- Added full UE‑Float suite:
-  - `FloatUE5M2b32` — 32‑Bit UE‑Format mit 5‑Bit Exponent, 2‑Bit Mantissa, block‑kompatibel
-  - `FloatUE5M2` — kompakte UE‑Variante für Low‑Precision‑Pipelines
-  - `FloatUE4M3` — 4‑Bit Exponent, 3‑Bit Mantissa, optimiert für Embedded‑DSP
-  - `FloatUE4M3MX` — MX‑Block‑Version mit gemeinsamem Exponent
-  - `FloatE5M2` — klassisches E5M2‑Format mit deterministischer Rundung
-  - `FloatE4M3` — E4M3‑Format mit SystemEx‑konformer Normalisierung
+### Changed
+- Rename namespace `SystemEx.Random` to `SystemEx.Rand`
+- `Isaac32Engine` is now in `SystemEx.Rand.Engine` and impl `IRandomEngine`
+- `Isaac32Engine` and `MTwisterEngine` used now his own Seed impl - his namens ends with {EngineName}Seed
 
-- Added full standard float suite:
-  - `Float32` — deterministische IEEE‑754‑kompatible Implementierung
-  - `Float64` — präzise 64‑Bit‑Float‑Engine mit SystemEx‑Rounding
-
-- Added generic UMX‑float:
-  - `Float8UMX&lt;T&gt;` — 8‑Bit MX‑Float mit generischem Basistyp und gemeinsamem Exponent
-
-- Added `INT4`:
-  - Minimaler 4‑Bit signed Zweierkomplement‑Typ
-  - Vollständig bitweise implementiert über `Fast_Byte`
-  - Add/Sub/Mul/Div rein bitlogisch (Carry in Bit 5, Temp‑Bits 6–7)
-  - Vollständige Operatorunterstützung (`+ - * / % &amp; | ^ &lt; &gt; &lt;= &gt;= == !=`)
-
-- Added interface:
-  - `IP8UMXEnable&lt;TBase&gt;` — aktiviert UMX‑Block‑Funktionalität für generische Basistypen
-  
-- Added `LightFutex`: Provides a lightweight reentrant futex-like synchronization primitive.
-
-## Changed
-- Updated `IFloat`:
-  - `BiddenBit` ist jetzt vom Typ `TSelf` statt `ushort`
-  - Ermöglicht konsistente Self‑Type‑Propagation über alle Float‑Formate
-  - Verbessert generische Kompatibilität mit UMX‑Blöcken und UE‑Formaten
-
-## Improved
-- Unified naming and documentation across all UE‑Float and MX‑Float classes
-- Enhanced determinism of rounding and normalization in all new float formats
-- Improved internal consistency of exponent/mantissa handling across UE‑Suite
-- Strengthened generic compatibility for UMX‑Float‑Pipeline (`Float8UMX&lt;T&gt;`)</PackageReleaseNotes>
+### Added 
+- Added to `SystemEx.Rand`:
+    - Added `GenericRand`: Provides a simple interface for generating random numbers using varibale Engines algorithm. 
+    - Added `IRandomEngine`: Defines the contract for a deterministic 32-bit random number generator engine. 
+      Implementations provide a reproducible sequence of unsigned 32-bit values
+    - Added new Random engine: `MTwisterEngine` Implements the MT19937 32-bit Mersenne Twister random number generator.
+- Added `SystemEx.Random`: Provides a high‑level wrapper around the Base Class Library (BCL) System.Random and added usale functions.
+- Added `SystemEx.Threading.LightMMQueue`:  A bounded lock‑free multi‑producer, multi‑consumer (MPMC) queue. 
+                        </PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
@@ -183,7 +158,55 @@ Constructive feedback is welcome.
     <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM32'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM32'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <IsPublishable>True</IsPublishable>
+    <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IsPublishable>True</IsPublishable>
     <IsTrimmable>True</IsTrimmable>
     <IsAotCompatible>True</IsAotCompatible>

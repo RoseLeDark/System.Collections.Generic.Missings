@@ -16,14 +16,54 @@
  */
 using System;
 
-namespace SystemEx.Random {
-	/// \addtogroup Random
-	/// @{
+namespace SystemEx.Rand.Engine {
+	/// <summary>
+	/// Represents the seed container used by the <see cref="Isaac32Engine"/>.
+	/// Stores the three 32-bit seed values required for initializing the ISAAC
+	/// random number generator.
+	/// </summary>
+	public struct Isaac32EngineSeed : ISeed {
+		private uint[] m_seed;
+
+		/// <summary>
+		/// Gets or sets the seed value at the specified index.
+		/// </summary>
+		/// <param name="i">The index of the seed value.</param>
+		/// <returns>The seed value at the specified index.</returns>
+		public uint this[int i] { get => m_seed[i]; set => m_seed[i] = value; }
+
+		/// <summary>
+		/// Gets the number of seed values stored in this seed container.
+		/// </summary>
+		public int Length => m_seed.Length;
+
+		/// <summary>
+		/// Returns the underlying array of seed values.
+		/// </summary>
+		/// <returns>An array containing all seed values.</returns>
+		public uint[] GetSeed () {
+			return m_seed;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Isaac32EngineSeed"/> struct
+		/// using the specified 32-bit seed values. If fewer than three values are
+		/// provided, the remaining values default to zero.
+		/// </summary>
+		/// <param name="a">The first seed value.</param>
+		/// <param name="b">The second seed value.</param>
+		/// <param name="c">The third seed value.</param>
+		public Isaac32EngineSeed ( uint a = 0, uint b = 0, uint c = 0 ) {
+			m_seed = new uint[] { a, b, c };
+		}
+	}
+
 
 	/// <summary>
 	/// Represents the ISAAC 32-bit random number generator.
 	/// </summary>
-	public sealed class Isaac32Engine {
+	public sealed class Isaac32Engine : IRandomEngine {
+       
         private const uint GoldenRatio = 0x9e3779b9u; // dein TGoldenRatio für 32 Bit
         private const int Size = 256;
 
@@ -32,18 +72,24 @@ namespace SystemEx.Random {
         private readonly uint[] m_mem = new uint[Size];
         private uint m_a, m_b, m_c;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Isaac32Engine"/> class using
-        /// a seed object implementing <see cref="ISeed"/>. The first three values of
-        /// the seed are used as the primary ISAAC seeds (a, b, c). Any additional
-        /// values are forwarded as the optional seed array s in Seed(a, b, c, s) >.
-        /// </summary>
-        /// <param name="seed">
-        /// The seed object used to initialize the engine. If the seed contains more
-        /// than three values, the remaining values are passed as the seed array.
-        /// </param>
-        public Isaac32Engine (ISeed seed) {
-            var arr = seed.GetSeed();
+        private ISeed m_startSeed;
+
+        public ISeed StartSeed => m_startSeed;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Isaac32Engine"/> class using
+		/// a seed object implementing <see cref="ISeed"/>. The first three values of
+		/// the seed are used as the primary ISAAC seeds (a, b, c). Any additional
+		/// values are forwarded as the optional seed array s in Seed(a, b, c, s) >.
+		/// </summary>
+		/// <param name="seed">
+		/// The seed object used to initialize the engine. If the seed contains more
+		/// than three values, the remaining values are passed as the seed array.
+		/// </param>
+		public Isaac32Engine (ISeed seed) {
+			m_startSeed = seed;
+
+			var arr = seed.GetSeed();
             int len = arr.Length;
 
             uint a = len > 0 ? arr[0] : 0;
@@ -66,6 +112,7 @@ namespace SystemEx.Random {
         /// <param name="b">The second seed value.</param>
         /// <param name="c">The third seed value.</param>
         public Isaac32Engine ( uint a = 0, uint b = 0, uint c = 0 ) {
+			m_startSeed = new Isaac32EngineSeed(a, b, c);
             Seed(a, b, c, null);
         }
         /// <summary>

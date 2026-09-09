@@ -16,9 +16,7 @@
  */
 using SystemEx.Hash;
 
-namespace SystemEx.Random {
-	/// \addtogroup Random
-	/// @{
+namespace SystemEx.Rand {
 
 	/// <summary>
 	/// Provides a time‑based seed implementation using <see cref="DateTime"/> as
