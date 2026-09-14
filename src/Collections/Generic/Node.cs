@@ -22,29 +22,44 @@ using System.Xml.Linq;
 
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup Collections
-	/// @{
 
-	/// <summary>
-	/// Defines the supported traversal orders for <see cref="Node{T}"/> structures.
-	/// </summary>
-	public enum TraversOrder {
-        /// <summary>Visit the current node before its children and siblings.</summary>
-        Preorder,
+    public interface INode {
+        DateTime CreatenTime { get; }
+        DateTime UpdateTime { get; set;  }
 
-        /// <summary>Visit the left subtree, then the node, then the right subtree (not implemented).</summary>
-        Inorder,
 
-        /// <summary>Visit children and siblings before the current node.</summary>
-        Postorder,
-
-        /// <summary>Traverse the linked list in forward direction.</summary>
-        ListOrder,
-
-        /// <summary>Traverse the linked list in reverse direction.</summary>
-        ReservListOrder
     }
+	public interface INode<TValue> : INode {
+        bool HasValue { get; }
+        TValue? Value { get; set; }
+	}
+	public interface INode<TChilds, TValue> : INode<TValue>
+	    where TChilds : INode<TChilds, TValue> {
+		int CountChilds { get; }
 
+        bool IsChild ( int id );
+		TChilds? GetChild ( int id );
+
+        bool IsEnd {  get; }
+
+        
+	}
+
+
+	public interface INode<TChilds, TParent, TValue> : INode<TChilds, TValue>
+		where TChilds : INode<TChilds, TParent, TValue>
+		where TParent : INode<TChilds, TParent, TValue> {
+        TParent? Parent { get; }
+
+        bool IsParent { get; }
+
+		bool IsRoot { get; }
+	}
+
+	
+
+	
+/*
     /// <summary>
     /// Iterator for navigating through a doubly linked <see cref="Node{T}"/> chain.
     /// Supports random access, forward/backward movement, foreach enumeration,
@@ -753,7 +768,7 @@ namespace SystemEx.Collections.Generic {
    
 
     }
-
+    */
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
     
 #pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

@@ -14,14 +14,7 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
-using System;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Text;
-
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup Collections
-	/// @{
 
 	/// <summary>
 	/// Defines the minimal functionality required for a generic vextzu

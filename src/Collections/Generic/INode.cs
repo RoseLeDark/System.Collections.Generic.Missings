@@ -16,30 +16,5 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup Collections
-	/// @{
-
-	/// <summary>
-	/// Defines the basic contract for a node in a multi‑linked structure,
-	/// such as a tree, graph, or intrusive node network.
-	/// Provides access to the stored value and metadata about child counts.
-	/// </summary>
-	/// <typeparam name="T">The type of value stored in the node.</typeparam>
-	public interface INode<T> {
-
-        /// <summary>
-        /// Gets or sets the value stored in this node.
-        /// </summary>
-        T? Value { get; set; }
-
-        /// <summary>
-        /// Gets the number of child nodes associated with this node.
-        /// Returns <c>null</c> if the implementation does not support child tracking.
-        /// </summary>
-        long? NChilds { get; }
-
-    }
-#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    
-#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
+	
 }
