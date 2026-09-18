@@ -111,6 +111,7 @@ namespace SystemEx {
 		/// <returns>The current builder instance.</returns>
 		public ResultBuilder Assert ( bool condition, string message ) {
 			m_result.Assert(condition, message);
+   m_i = m_result.Count -1;
 			return this;
 		}
 
@@ -121,6 +122,7 @@ namespace SystemEx {
 		/// <returns>The current builder instance.</returns>
 		public ResultBuilder Catch ( Exception ex ) {
 			m_result.Catch(ex);
+   m_i = m_result.Count-1;
 			return this;
 		}
 
