@@ -130,7 +130,7 @@ namespace SystemEx.Numeric {
 			var _man = value.Mantissa;
 
 			if ( _exp == 0 ) {
-				_ret = BigInteger.Zero;
+				_ret = BigInteger.One;
 			} else if ( _exp < 0 ) {
 				var _nExp = -(long)_exp;
 				if ( _nExp > int.MaxValue && _nExp > 100_000_000 )
