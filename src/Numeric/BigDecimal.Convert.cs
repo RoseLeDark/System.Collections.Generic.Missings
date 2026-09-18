@@ -136,7 +136,7 @@ namespace SystemEx.Numeric {
 				if ( _nExp > int.MaxValue && _nExp > 100_000_000 )
 					throw new OverflowException();
 
-				_ret = _man * PowerOfTen((int)_nExp);
+				_ret = _man * PowerOfTen((int)_exp);
 			} else {
 				BigInteger remainder;
 				_ret = BigInteger.DivRem(_man, PowerOfTen(_exp), out remainder);
