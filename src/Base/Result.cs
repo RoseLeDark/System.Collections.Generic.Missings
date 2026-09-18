@@ -206,7 +206,7 @@ namespace SystemEx {
 
 			if(! condition ) {
 				m_isSuccess = false;
-				m_result[Count] = text;
+				this[Count+1] = text;
 
 				OnAssert?.Invoke(condition, this);
 			}
