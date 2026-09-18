@@ -64,7 +64,7 @@ namespace SystemEx {
 		/// <param name="value">The value to append.</param>
 		/// <returns>The current builder instance.</returns>
 		public ResultBuilder Add ( object value ) {
-			m_result[m_result.Count] = value;
+			m_result[m_result.Count-1] = value;
 			return this;
 		}
 
@@ -91,7 +91,7 @@ namespace SystemEx {
 		public ResultBuilder Try ( Func<object> func ) {
 			try {
 				var value = func();
-				m_result[m_result.Count] = value;
+				m_result[m_result.Count-1] = value;
 			} catch ( Exception ex ) {
 				m_result.Catch(ex);
 			}
