@@ -41,12 +41,14 @@ namespace SystemEx {
 		/// The underlying result instance being constructed.
 		/// </summary>
 		private Result m_result;
+  private int m_i;
 
 		/// <summary>
 		/// Initializes a new <see cref="ResultBuilder"/> with an empty result.
 		/// </summary>
 		public ResultBuilder () {
 			m_result = new Result();
+   m_i = -1;
 		}
 
 		/// <summary>
@@ -64,7 +66,8 @@ namespace SystemEx {
 		/// <param name="value">The value to append.</param>
 		/// <returns>The current builder instance.</returns>
 		public ResultBuilder Add ( object value ) {
-			m_result[m_result.Count-1] = value;
+   m_i++;
+			m_result[m_i] = value;
 			return this;
 		}
 
@@ -91,7 +94,8 @@ namespace SystemEx {
 		public ResultBuilder Try ( Func<object> func ) {
 			try {
 				var value = func();
-				m_result[m_result.Count-1] = value;
+    m_i++;
+				m_result[m_i] = value;
 			} catch ( Exception ex ) {
 				m_result.Catch(ex);
 			}
