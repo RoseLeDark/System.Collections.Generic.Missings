@@ -58,6 +58,7 @@ namespace SystemEx {
 		/// <param name="existing">The result to wrap.</param>
 		public ResultBuilder ( Result existing ) {
 			m_result = existing;
+   m_i = m_result.Count - 1;
 		}
 
 		/// <summary>
