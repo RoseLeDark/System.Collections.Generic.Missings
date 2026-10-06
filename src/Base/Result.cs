@@ -225,6 +225,14 @@ namespace SystemEx {
 			if(m_innerExption != null) throw m_innerExption;
 		}
 
+		/// <summary>
+		/// Adds a message and an optional value to the result.
+		/// </summary>
+		public Result Add(string message, object? value = null) {
+			this[Count] = message;
+			if (value != null) this[Count] = value;
+			return this;
+		}
 
 
 		/// <summary>
