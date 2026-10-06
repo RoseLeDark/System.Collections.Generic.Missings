@@ -16,8 +16,7 @@
  */
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup Collections
-	/// @{
+	
 
 	/// <summary>
 	/// Represents a logical sub‑stack inside a shared stack buffer.
