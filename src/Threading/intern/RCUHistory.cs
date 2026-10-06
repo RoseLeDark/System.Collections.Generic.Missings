@@ -40,7 +40,12 @@ namespace SystemEx.Threading.intern {
 	/// </summary>
 	internal sealed class RCUHistory<T> {
 		private Pair<TimeOnly, T?>[] m_entry;
-		private byte m_index;
+		private ByteIndex m_index;
+
+		public byte Index { 
+			get => m_index.Value;
+			set => m_index.Value = value; 
+		}
 
 		/// <summary>
 		/// Initializes a new <see cref="RCUHistory{T}"/> instance with an empty
@@ -48,7 +53,7 @@ namespace SystemEx.Threading.intern {
 		/// </summary>
 		public RCUHistory () {
 			m_entry = new Pair<TimeOnly, T?>[2];
-			m_index = 0;
+			m_index = new ByteIndex(0);
 		}
 
 		/// <summary>
@@ -77,14 +82,21 @@ namespace SystemEx.Threading.intern {
 		public void Push ( T? entry ) {
 			var ts = TimeOnly.FromDateTime(DateTime.UtcNow);
 	
-			if ( m_index == 0 ) { m_entry[0] = new Pair<TimeOnly, T?>(ts, entry); m_index = 1; }
-			if ( m_index == 1 ) { m_entry[1] = new Pair<TimeOnly, T?>(ts, entry); m_index = 2; }
-
-			if ( m_index == 2 ) {
-				if( m_entry[1].First < ts) {
-					m_entry[0] = m_entry[1];
+			switch (Index) {
+				case 0:
+					m_entry[0] = new Pair<TimeOnly, T?>(ts, entry);
+					Index = 1;
+					break;
+				case 1:
 					m_entry[1] = new Pair<TimeOnly, T?>(ts, entry);
-				}
+					Index = 2;
+					break;
+				case 2:
+					if (m_entry[1].First < ts) {
+						m_entry[0] = m_entry[1];
+						m_entry[1] = new Pair<TimeOnly, T?>(ts, entry);
+					}
+					break;
 			}
 		}
 
@@ -156,29 +168,29 @@ namespace SystemEx.Threading.intern {
 			ret = default(T);
 			bool _ret = false;
 
-			if (m_index == 0) {
+			if (Index == 0) {
 				ret = def;
 				_ret = true;
 			}
-			if(m_index == 1) {
+			if(Index == 1) {
 
 				if ( haveWriter ) {
 					ret = def;
 					_ret = true;
 				} else {
-					m_index = 0;
+					Index = 0;
 					ret = m_entry[0].Second;
 					_ret = true;
 				}
 			}
 
-			if( m_index == 2 ) {
+			if( Index == 2 ) {
 				
 				if( haveWriter ) {
 					ret = m_entry[0].Second;
 					_ret = true;
 				} else {
-					m_index = 1;
+					Index = 1;
 					ret = m_entry[1].Second;
 					_ret = true;
 				}
