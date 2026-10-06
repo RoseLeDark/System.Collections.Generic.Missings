@@ -256,7 +256,7 @@ namespace SystemEx {
             else if ( a.IsNull && b.IsSome ) _ret = false;
             else if ( a.IsSome && b.IsNull ) _ret = false;
             else 
-                _ret = a.Value!.GetHashCode() == b.Value!.GetHashCode() ;
+                _ret = a.GetHashCode() == b.GetHashCode() ;
 
             return _ret;
         }
@@ -268,7 +268,7 @@ namespace SystemEx {
             else if ( a.IsNull && b is not null ) _ret = false;
             else if ( a.IsSome && b is null ) _ret = false;
             else
-                _ret = a.Value!.GetHashCode() == b!.GetHashCode();
+                _ret = a.GetHashCode() == b!.GetHashCode();
 
             return _ret;
         }
@@ -292,9 +292,7 @@ namespace SystemEx {
 
         /// <inheritdoc/>
         public override int GetHashCode () {
-            if ( m_value == null ) return 0;
-
-            return m_value!.GetHashCode();
+            return  ( m_value == null ) ? 0 : m_value.GetHashCode();
         }
 
 		 /// <summary>
@@ -306,7 +304,7 @@ namespace SystemEx {
                 ? m_value?.ToString() ?? "null"
                 : "unspecified";
         }
-      
+
         /// <summary>
         /// Creates a new <see cref="Optional{T}"/> instance containing the specified value.
         /// </summary>
