@@ -65,7 +65,7 @@ namespace SystemEx {
 		/// <summary>
 		/// Gets the human‑readable semantic version of the framework.
 		/// </summary>
-		public static string Version => "0.95.5645‑rc2";
+		public static string Version => "0.95.5645‑rc3";
 		/// <summary>
 		/// Gets the current code name
 		/// </summary>
