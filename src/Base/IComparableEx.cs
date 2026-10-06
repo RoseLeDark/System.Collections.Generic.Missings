@@ -19,7 +19,80 @@ using SystemEx.Numeric;
 using SystemEx.Utils;
 
 namespace SystemEx {
+	/// <summary>
+	/// Specifies the result of a comparison between two values.
+	/// 
+	/// <para>
+	/// This enumeration is used by <see cref="CompFunc{T}"/> and the generic
+	/// algorithms in <see cref="Algorithm"/> to express ordering relations
+	/// between two operands <c>A</c> and <c>B</c>. It generalizes the usual
+	/// "less/greater/equal" semantics with additional states for "equal but
+	/// smaller" and "equal but larger" to support nuanced ordering logic.
+	/// </para>
+	/// </summary>
+	public enum CompareResult : sbyte {
+		/// <summary>
+		/// Alias for <see cref="CompareResult.AIsSmallerB"/>. Indicates that
+		/// the first operand is strictly smaller than the second.
+		/// </summary>
+		Less = AIsSmallerB,
 
+		/// <summary>
+		/// Alias for <see cref="CompareResult.AIsLargerB"/>. Indicates that
+		/// the first operand is strictly larger than the second.
+		/// </summary>
+		Greater = 1,
+
+		/// <summary>
+		/// Alias for <see cref="CompareResult.AIsEqualSmallerB"/>. Indicates
+		/// that the first operand is equal to the second but considered
+		/// "smaller" in a secondary ordering dimension.
+		/// </summary>
+		EqualLess = AIsEqualSmallerB,
+
+		/// <summary>
+		/// Alias for <see cref="CompareResult.AIsEqualLargerB"/>. Indicates
+		/// that the first operand is equal to the second but considered
+		/// "larger" in a secondary ordering dimension.
+		/// </summary>
+		EqualGreater = AIsEqualLargerB,
+
+		/// <summary>
+		/// The first operand <c>A</c> is strictly larger than the second
+		/// operand <c>B</c>.
+		/// </summary>
+		AIsLargerB = 1,
+
+		/// <summary>
+		/// The first operand <c>A</c> is strictly smaller than the second
+		/// operand <c>B</c>.
+		/// </summary>
+		AIsSmallerB = -1,
+
+		/// <summary>
+		/// The operands <c>A</c> and <c>B</c> are considered equal in the
+		/// primary ordering dimension.
+		/// </summary>
+		Equal = 0,
+
+		/// <summary>
+		/// The operands are equal in the primary dimension, but <c>A</c> is
+		/// treated as "greater" in a secondary dimension (e.g. tie‑breaking).
+		/// </summary>
+		AIsEqualLargerB = 2,
+
+		/// <summary>
+		/// The operands are equal in the primary dimension, but <c>A</c> is
+		/// treated as "smaller" in a secondary dimension.
+		/// </summary>
+		AIsEqualSmallerB = 3,
+
+		/// <summary>
+		/// One or both operands are <c>null</c>, or the comparison function
+		/// cannot produce a meaningful ordering result.
+		/// </summary>
+		Null = 10
+	}
 	/// <summary>
 	/// Provides an extended and strongly typed comparison contract for SystemEx.
 	/// 

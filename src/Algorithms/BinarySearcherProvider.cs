@@ -15,8 +15,10 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+ using SystemEx;
 using SystemEx.Collections.Generic;
 using SystemEx.Utils;
+
 
 namespace SystemEx.Algorithms {
 
@@ -82,7 +84,7 @@ namespace SystemEx.Algorithms {
                 Optional<T> item = container.ElementAt(mid);
                 if ( item.IsNull ) continue;
 
-                if ( comp.Compare(item.Value, value) == Utils.CompareResult.Equal  ) {
+                if ( comp.Compare(item.Value, value) == CompareResult.Equal  ) {
                     // Found one → expand to count all
                     _ret++;
 
@@ -91,7 +93,7 @@ namespace SystemEx.Algorithms {
                         Optional<T> _i2 = container.ElementAt(i);
                         if ( item.IsNull ) continue;
 
-                        if ( comp.Compare(_i2.Value, value) == Utils.CompareResult.Equal )
+                        if ( comp.Compare(_i2.Value, value) == CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -102,7 +104,7 @@ namespace SystemEx.Algorithms {
                         Optional<T> _i2 = container.ElementAt(i);
                         if ( item.IsNull ) continue;
 
-                        if (  comp.Compare(_i2.Value, value) == Utils.CompareResult.Equal )
+                        if (  comp.Compare(_i2.Value, value) == CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -139,7 +141,7 @@ namespace SystemEx.Algorithms {
                         Optional<T> _i2 = container.ElementAt(i);
                         if ( item.IsNull ) continue;
 
-                        if (func(container.ElementAt(i).Value!) == Utils.CompareResult.Equal )
+                        if (func(container.ElementAt(i).Value!) == CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -150,7 +152,7 @@ namespace SystemEx.Algorithms {
                         Optional<T> _i2 = container.ElementAt(i);
                         if ( item.IsNull ) continue;
 
-                        if ( func(container.ElementAt(i).Value!)  == Utils.CompareResult.Equal )
+                        if ( func(container.ElementAt(i).Value!)  == CompareResult.Equal )
                             _ret++;
                         else
                             break;
@@ -181,7 +183,7 @@ namespace SystemEx.Algorithms {
                 if ( item.IsNull ) continue;
 
 
-                if ( func(item.Value!) == Utils.CompareResult.Equal ) {
+                if ( func(item.Value!) == CompareResult.Equal ) {
                     // Found one → expand to count all
                     //if ( func(item) )
                     result.PushBack(new Pair<long, Optional<T> >(mid, item.Value!));
@@ -191,7 +193,7 @@ namespace SystemEx.Algorithms {
                         Optional<T> _i2 = container.ElementAt(i);
                         if ( item.IsNull ) continue;
 
-                        if ( func(_i2.Value!) == Utils.CompareResult.Equal )
+                        if ( func(_i2.Value!) == CompareResult.Equal )
                             result.PushBack(new Pair<long, Optional<T> >(i, _i2.Value!));
                         else
                             break;
@@ -202,7 +204,7 @@ namespace SystemEx.Algorithms {
                         Optional<T> _i2 = container.ElementAt(i);
                         if ( item.IsNull ) continue;
 
-                        if (  func(_i2.Value!) == Utils.CompareResult.Equal )
+                        if (  func(_i2.Value!) == CompareResult.Equal )
                             result.PushBack(new Pair<long, Optional<T> >(i, _i2.Value! ));
                         else
                             break;
