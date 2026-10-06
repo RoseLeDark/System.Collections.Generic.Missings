@@ -297,15 +297,24 @@ namespace SystemEx {
             return m_value!.GetHashCode();
         }
 
-		public override string ToString () {
-			string _ret = "";
+		 /// <summary>
+        /// Returns a string representation of this object.
+        /// </summary>
+        public override string ToString()
+        {
+            return m_hasValue 
+                ? m_value?.ToString() ?? "null"
+                : "unspecified";
+        }
+      
+        /// <summary>
+        /// Creates a new <see cref="Optional{T}"/> instance containing the specified value.
+        /// </summary>
+        public static Optional<T> Some ( T value ) {
+            return new Optional<T>(value);
+        }
 
-            if ( m_value == null ) _ret = "Optional<T>.NONE";
-            else _ret = m_value.ToString()!;
 
-            return _ret;
-
-		}
 
 		internal void SetValue ( T? value ) {
 			if ( value == null ) {
