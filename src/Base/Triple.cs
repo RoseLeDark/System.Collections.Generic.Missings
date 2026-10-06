@@ -391,7 +391,7 @@ namespace SystemEx {
         /// Converts a <see cref="Triple"/> into its Kleene value:
         /// True, False, or Nin.
         /// </summary>
-        private static triple V ( Triple t ) => t.Equals(triple.True) ? triple.True :
+        internal static triple V ( Triple t ) => t.Equals(triple.True) ? triple.True :
                                         t.Equals(triple.False) ? triple.False :
                                         triple.Nin;
     }
