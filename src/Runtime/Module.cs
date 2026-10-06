@@ -51,7 +51,77 @@ using ProcLoader = SystemEx.Runtime.InteropServices.Platform.NoSupportProcLoader
 #endif
 
 namespace SystemEx.Runtime {
-	
+    /// <summary>
+    /// Represents a loaded native module (DLL, SO, or DYLIB).  
+    /// A <see cref="Module"/> encapsulates the operating system handle of the
+    /// loaded library and provides helper methods for resolving exported
+    /// functions and unloading the module.
+    /// </summary>
+    public class Function<TReturn, TDelegate> : IDisposable
+         where TDelegate : Delegate {
+        /// <summary>
+        /// Gets the raw pointer to the native function.
+        /// </summary>
+        public IntPtr Pointer { get; private set; }
+        /// <summary>
+        /// Gets the name of the function as specified when loading it from the module.
+        /// </summary>
+        public string Name { get; private set; }
+
+        private bool m_disposed = false;
+
+        private Module m_module;
+
+        /// <summary>
+        /// Initializes a new <see cref="Function{TReturn, TDelegate}"/> instance with the specified
+        /// function pointer and name.
+        /// </summary>
+        internal Function(IntPtr pointer, string name, Module parent)
+        {
+            Pointer = pointer;
+            Name = name;
+            m_module = parent;
+        }
+        /// <summary>
+        /// Gets a managed delegate that wraps the native function pointer.
+        /// </summary>
+        public TDelegate GetDelegate()
+        {
+            if (Pointer == IntPtr.Zero)
+                throw new InvalidOperationException($"Function '{Name}' has a null pointer.");
+
+            return Marshal.GetDelegateForFunctionPointer<TDelegate>(Pointer);
+        }
+        /// <summary>
+        /// Invokes the native function with the specified arguments and returns the result.
+        /// </summary>
+        public TReturn? Call(params object[] args)
+        {
+            var del = GetDelegate();
+            var dnobj = del.DynamicInvoke(args);
+
+            return (dnobj == null) ? default : (TReturn)dnobj;
+        }
+        // Implement IDisposable.
+        // Do not make this method virtual.
+        // A derived class should not be able to override this method.
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            // Check to see if Dispose has already been called.
+            if(!this.m_disposed) {
+                if(disposing) {
+                    m_module.RemoveRef();
+                }
+                m_disposed = true;
+            }
+        }
+    }
+
 	/// <summary>
 	/// Represents a loaded native module (DLL, SO, or DYLIB).  
 	/// A <see cref="Module"/> encapsulates the operating system handle of the
@@ -59,6 +129,9 @@ namespace SystemEx.Runtime {
 	/// functions and unloading the module.
 	/// </summary>
 	public class Module {
+        private int m_count;
+        private bool m_loaded ;
+
         /// <summary>
         /// Gets the native handle of the loaded module.  
         /// This value corresponds to the OS‑specific library handle returned by
@@ -78,6 +151,8 @@ namespace SystemEx.Runtime {
             this.Handle = v;
             this.Name = System.IO.Path.GetFileName(strPath);
             this.Path = System.IO.Path.GetDirectoryName(strPath)!;
+            m_count = 0;
+            m_loaded = true;
         }
 
         /// <summary>
@@ -100,7 +175,7 @@ namespace SystemEx.Runtime {
         /// <returns>
         /// Zero on success, or a non‑zero error code depending on the backend.
         /// </returns>
-        internal static int Unload ( Module module ) {
+        public static int Unload ( Module module ) {
             return ProcLoader.FreeLibrary(module);
         }
 
@@ -114,12 +189,13 @@ namespace SystemEx.Runtime {
         /// <returns>
         /// A new <see cref="Module"/> instance if loading succeeds; otherwise <c>null</c>.
         /// </returns>
-        internal static Module? LoadModule ( string name, string path ) {
+        public static Module? LoadModule ( string name, string path ) {
             Module? _ret = null;
             string new_path = System.IO.Path.Combine(path, name);
 
             if ( System.IO.File.Exists(new_path) )
                 _ret = ProcLoader.LoadLibrary(new_path);
+            
 
             return _ret;
         }
@@ -133,7 +209,7 @@ namespace SystemEx.Runtime {
         /// <returns>
         /// A new <see cref="Module"/> instance if loading succeeds; otherwise <c>null</c>.
         /// </returns>
-        internal static Module? LoadModule ( string name ) {
+        public static Module? LoadModule ( string name ) {
             Module? _ret = null;
             string new_path = ProcLoader.NO_PATH;
 
@@ -146,28 +222,61 @@ namespace SystemEx.Runtime {
         }
 
         /// <summary>
-        /// Resolves a function exported by the native module using the active
-        /// platform backend loader.  
-        /// The returned pointer is obtained through the OS‑specific implementation
-        /// of <see cref="ProcLoader"/>, which internally calls:
-        /// <list type="bullet">
-        /// <item><description><c>GetProcAddress</c> on Windows</description></item>
-        /// <item><description><c>dlsym</c> on Linux</description></item>
-        /// <item><description><c>dlsym</c> on macOS</description></item>
-        /// </list>
-        /// The caller is responsible for converting the returned pointer into a
-        /// managed delegate if required.
+        /// Loads a module by searching platform‑specific library paths.  
+        /// The backend resolves the correct file location using mechanisms such as
+        /// <c>LD_LIBRARY_PATH</c>, <c>DYLD_LIBRARY_PATH</c>, or Windows search rules.
         /// </summary>
-        /// <param name="func">The name of the exported native function.</param>
+        /// <param name="name">The module file name.</param>
         /// <returns>
-        /// A raw function pointer (<see cref="IntPtr"/>).  
-        /// Returns <see cref="IntPtr.Zero"/> if the function cannot be resolved.
+        /// A new <see cref="Module"/> instance if loading succeeds; otherwise <c>null</c>.
         /// </returns>
         internal IntPtr LoadFunc ( string func ) {
-            return ProcLoader.LoadFunction(this, func);
+            if(!m_loaded) return IntPtr.Zero;
+
+            try {
+                IntPtr x = ProcLoader.LoadFunction(this, func);
+                return x;
+            } catch
+            {
+                return IntPtr.Zero;
+            }
+        }
+
+        /// <summary>
+        /// Resolves a function exported by the native module using the active
+        /// platform backend loader.  
+        /// </summary>
+        public Function<TReturn, TDelegate>? LoadFunc<TReturn, TDelegate> ( string func ) where TDelegate : Delegate {
+            if(!m_loaded) return null;
+
+            Function<TReturn, TDelegate>? _ret = null;
+            IntPtr ptr = ProcLoader.LoadFunction(this, func);
+            
+
+            if ( ptr != IntPtr.Zero ) {
+                _ret = new Function<TReturn, TDelegate>(ptr, func, this);
+                
+            }
+            if(_ret != null) {m_count++; }
+
+            return _ret;
+        }
+
+        internal int RemoveRef()
+        {
+            if(!m_loaded) return -1;
+
+            m_count--;
+            if(m_count <= 0)
+                Unload(this);
+            return m_count;
+        }
+        internal int AddRef()
+        {
+            if(!m_loaded) return -1;
+
+            m_count++;
+            return m_count;
         }
     }
-#pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
-    
-#pragma warning restore CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 }
