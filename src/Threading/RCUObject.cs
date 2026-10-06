@@ -62,7 +62,9 @@ namespace SystemEx.Threading {
 		/// Index of the reader epoch counter inside the <see cref="Result"/> container.
 		/// </summary>
 		public static readonly byte COUNT_INDEX = 2;
-
+#if DEBUG
+		public static readonly byte PROP_INDEX = 3;
+#endif
 		private T? m_object;
 		private Epoch m_epochReader;
 		private ILock m_writerLock;
@@ -155,7 +157,9 @@ namespace SystemEx.Threading {
 				_res[VALUE_INDEX] = m_object;
 				_res[STATE_INDEX] = m_writerLock.IsHeld ? RCUState.Update : RCUState.Current;
 				_res[COUNT_INDEX] = m_epochReader.Value;
-
+#if DEBUG
+				_res[PROP_INDEX] = new byte[] { VALUE_INDEX,STATE_INDEX,COUNT_INDEX  };
+#endif
 				return _res;
 			}
 		}
