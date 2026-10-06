@@ -22,8 +22,7 @@ namespace SystemEx.Threading {
     /// <summary>
     /// Represents a thread-safe index counter that can be incremented, decremented, and compared atomically.
     /// </summary>
-    public struct Index : IEquatable<Index>, 
-                          IEquatableEx<long>,
+    public struct Index : IEquatable<Index>,
                             IComparable<Index>, 
                             IComparableEx<Index>,
                             IComparable<long>,

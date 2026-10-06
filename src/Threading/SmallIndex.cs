@@ -22,10 +22,8 @@ namespace SystemEx.Threading {
     /// <summary>
     /// Represents a thread-safe index counter that can be incremented, decremented, and compared atomically.
     /// </summary>
-    public struct SmallIndex : IEquatable<SmallIndex>, 
-                          IEquatableEx<int>,
-                            IComparable<SmallIndex>, 
-                            IComparableEx<SmallIndex>,
+    public struct SmallIndex : IEquatable<SmallIndex>,
+                            IComparable<SmallIndex>,
                             IComparable<int>,
                             IComparableEx<int>,
                             IFormattable {
@@ -68,25 +66,25 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Prefix increment.
         /// </summary>
-        public long Increment ()
+        public int Increment ()
             => Interlocked.Increment(ref m_value);
 
         /// <summary>
         /// Prefix decrement.
         /// </summary>
-        public long Decrement ()
+        public int Decrement ()
             => Interlocked.Decrement(ref m_value);
 
         /// <summary>
         /// Postfix increment.
         /// </summary>
-        public long IncrementPost ()
+        public int IncrementPost ()
             => Interlocked.Exchange(ref m_value, Volatile.Read(ref m_value) + 1);
 
         /// <summary>
         /// Postfix decrement.
         /// </summary>
-        public long DecrementPost ()
+        public int DecrementPost ()
             => Interlocked.Exchange(ref m_value, Volatile.Read(ref m_value) - 1);
 
         /// <summary>

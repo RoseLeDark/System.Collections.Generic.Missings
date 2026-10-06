@@ -23,7 +23,6 @@ namespace SystemEx.Threading {
     /// Represents a thread-safe index counter that can be incremented, decremented, and compared atomically.
     /// </summary>
     public struct ByteIndex : IEquatable<ByteIndex>, 
-                          IEquatableEx<byte>,
                             IComparable<ByteIndex>, 
                             IComparableEx<ByteIndex>,
                             IComparable<byte>,
@@ -53,7 +52,7 @@ namespace SystemEx.Threading {
         /// Assigns the value of another index.
         /// </summary>
         public ByteIndex Assign ( ByteIndex other ) {
-            byteerlocked.Exchange(ref m_value, other.m_value);
+            Interlocked.Exchange(ref m_value, other.m_value);
             return this;
         }
 
@@ -61,33 +60,47 @@ namespace SystemEx.Threading {
 		/// Assigns a  value.
 		/// </summary>
 		public ByteIndex Assign ( byte value ) {
-			byteerlocked.Exchange(ref m_value, value);
+			Interlocked.Exchange(ref m_value, value);
 			return this;
 		}
 
         /// <summary>
         /// Prefix increment.
         /// </summary>
-        public long Increment ()
-            => byteerlocked.Increment(ref m_value);
+        public byte Increment ()
+        {
+            var _oldValue = Volatile.Read(ref m_value);
+            return Interlocked.Exchange(ref m_value, (byte)(_oldValue + 1));
+        }
 
         /// <summary>
         /// Prefix decrement.
         /// </summary>
-        public long Decrement ()
-            => byteerlocked.Decrement(ref m_value);
+        public byte Decrement ()
+        {
+            var _oldValue = Volatile.Read(ref m_value);
+            return Interlocked.Exchange(ref m_value, (byte)(_oldValue - 1));
+        }
 
         /// <summary>
         /// Postfix increment.
         /// </summary>
-        public long IncrementPost ()
-            => byteerlocked.Exchange(ref m_value, Volatile.Read(ref m_value) + 1);
+        public byte IncrementPost ()
+        {
+            var _oldValue = Volatile.Read(ref m_value);
+            Interlocked.Exchange(ref m_value, (byte)(_oldValue + 1));
+            return _oldValue;
+        }
 
         /// <summary>
         /// Postfix decrement.
         /// </summary>
-        public long DecrementPost ()
-            => byteerlocked.Exchange(ref m_value, Volatile.Read(ref m_value) - 1);
+        public byte DecrementPost ()
+        {
+            var _oldValue = Volatile.Read(ref m_value);
+            Interlocked.Exchange(ref m_value, (byte)(_oldValue - 1));
+            return _oldValue;
+        }
 
         /// <summary>
 		/// Standard override for equality comparison.
@@ -101,7 +114,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Standard override for hash code generation.
         /// </summary>
-        public override byte GetHashCode ()
+        public override int GetHashCode ()
             => Volatile.Read(ref m_value).GetHashCode();
 
        
@@ -135,7 +148,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Compares the index to another index.
         /// </summary>
-        byte IComparable<ByteIndex>.CompareTo(ByteIndex other)
+        int IComparable<ByteIndex>.CompareTo(ByteIndex other)
         {
             return Value.CompareTo(other.Value);
         }
@@ -149,7 +162,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Compares the index to a value.
         /// </summary>
-        byte IComparable<byte>.CompareTo(byte other)
+        int IComparable<byte>.CompareTo(byte other)
         {
             return Value.CompareTo(other);
         }
@@ -167,7 +180,7 @@ namespace SystemEx.Threading {
         /// Prefix decrement operator (--x).
         /// </summary>
         public static ByteIndex operator -- ( ByteIndex a ) {
-            byteerlocked.Decrement(ref a.m_value);
+            a.Decrement();
             return a;
         }
 
@@ -175,7 +188,7 @@ namespace SystemEx.Threading {
         /// Prefix increment operator (++x).
         /// </summary>
         public static ByteIndex operator ++ ( ByteIndex a ) {
-            byteerlocked.Increment(ref a.m_value);
+            a.Increment();
             return a;
         }
 
@@ -183,16 +196,16 @@ namespace SystemEx.Threading {
         /// Adds a  value to the counter atomically.
         /// </summary>
         public static ByteIndex operator + ( ByteIndex a, byte value ) {
-            byteerlocked.Add(ref a.m_value, value);
-            return a;
+            var _oldValue = Volatile.Read(ref a.m_value);
+            return Interlocked.Exchange(ref a.m_value, (byte)(_oldValue + value));
         }
 
         /// <summary>
         /// Subtracts a  value from the counter atomically.
         /// </summary>
         public static ByteIndex operator - ( ByteIndex a, byte value ) {
-            byteerlocked.Add(ref a.m_value, -value);
-            return a;
+            var _oldValue = Volatile.Read(ref a.m_value);
+            return Interlocked.Exchange(ref a.m_value, (byte)(_oldValue - value));
         }
         /// <summary>
         /// Compares two counters for equality using atomic reads.
