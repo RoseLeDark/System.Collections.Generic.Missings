@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <OutputPath>..\build\</OutputPath>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.95.5645-rc2</Version>
-    <FileVersion>0.95.5645</FileVersion>
+    <Version>0.95.6000-rc3</Version>
+    <FileVersion>0.95.6000</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Company>Amber-Sophia Schröck</Company>
     <Authors>Amber-Sophia Schröck</Authors>
