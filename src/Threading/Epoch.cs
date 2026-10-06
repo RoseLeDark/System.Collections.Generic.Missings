@@ -44,7 +44,7 @@ namespace SystemEx.Threading {
 		/// <summary>
 		/// Returns <c>true</c> when the epoch indicates active readers.
 		/// </summary>
-		public bool IsTrue => Interlocked.Read(ref value.m_value) > 1;
+		public bool IsTrue => Interlocked.Read(ref m_value) > 1;
 
 		/// <summary>
 		/// Initializes a new <see cref="Epoch"/> instance with an initial
@@ -101,7 +101,7 @@ namespace SystemEx.Threading {
 		/// <summary>
 		/// is this equal with other 
 		/// </summary>
-        public override bool Equals([NotNullWhen(true)] object? obj)
+        public override bool Equals(object obj)
         {
             if(obj is Epoch other)
 			{
@@ -109,6 +109,13 @@ namespace SystemEx.Threading {
 			}
 			return false;
         }
+		public override int GetHashCode()
+		{
+			return Value.GetHashCode();
+		}
+
+		
+		
 		
 		/// <summary>
 		/// is epoch a same with b
