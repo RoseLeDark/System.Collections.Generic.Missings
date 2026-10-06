@@ -19,8 +19,7 @@ using SystemEx.Base;
 using SystemEx.Utils;
 
 namespace SystemEx.Collections.Generic {
-	/// \addtogroup Collections
-	/// @{
+
 
 	/// <summary>
 	/// Specifies the access mode of a <see cref="Cache"/> instance.
@@ -77,10 +76,11 @@ namespace SystemEx.Collections.Generic {
         /// Gets or sets the internal lock state.
         /// </summary>
         protected bool IsLocked { get { return m_isLocked; }  set => m_isLocked = value;  }
-        /// <summary>
+        
+		/// <summary>
         /// Provides indexed access to the raw buffer.
         /// </summary>
-        public byte this[int adress] {
+        public byte this[long adress] {
             get {  return m_rawBuffer[adress]; }
             set {  m_rawBuffer[adress] = value; }
         }
