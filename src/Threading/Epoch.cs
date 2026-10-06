@@ -44,7 +44,7 @@ namespace SystemEx.Threading {
 		/// <summary>
 		/// Returns <c>true</c> when the epoch indicates active readers.
 		/// </summary>
-		public bool IsTrue => Interlocked.Read(ref m_value) > 1;
+		public bool IsTrue => Interlocked.Read(ref m_value) >= 1;
 
 		/// <summary>
 		/// Initializes a new <see cref="Epoch"/> instance with an initial
@@ -136,7 +136,7 @@ namespace SystemEx.Threading {
         /// </summary>
         public static bool operator true(Epoch value)
         {
-			return Interlocked.Read(ref value.m_value) > 1;
+			return Interlocked.Read(ref value.m_value) > 0;
 		}
 
 		/// <summary>

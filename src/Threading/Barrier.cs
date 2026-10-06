@@ -206,14 +206,14 @@ namespace SystemEx.Threading {
 			m_context = new AtomicLock();
 		}
 
-		public long WaitOpen( uint waitMS = 10 ) {
+		public long WaitOpen( TimeOut waitMS ) {
 			while(true) {
 				if ( (int)m_current.Value == m_max ) {
 					m_current.Assign(m_min);
 					break;
 				}
 
-				Thread.SpinWait((int)waitMS);
+				Thread.SpinWait(waitMS.Milliseconds);
 			}
 
 			m_hold.Unlock();
@@ -267,7 +267,7 @@ namespace SystemEx.Threading {
 		/// If the barrier is already open, the call returns immediately.
 		/// </summary>
 		public void Wait () {
-			while (! m_context.IsHeld) { Thread.Yield(); }
+			while (! m_context.IsHeld) { Thread.Yield(); Thread.Sleep(2); }
 		}
 
 		/// <summary>

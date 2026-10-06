@@ -40,9 +40,9 @@ namespace SystemEx.Threading.intern {
 	/// </summary>
 	internal sealed class RCUHistory<T> {
 		private Pair<TimeOnly, T?>[] m_entry;
-		private ByteIndex m_index;
+		private SmallIndex m_index;
 
-		public byte Index { 
+		public int Index { 
 			get => m_index.Value;
 			set => m_index.Value = value; 
 		}
@@ -53,7 +53,7 @@ namespace SystemEx.Threading.intern {
 		/// </summary>
 		public RCUHistory () {
 			m_entry = new Pair<TimeOnly, T?>[2];
-			m_index = new ByteIndex(0);
+			m_index = new SmallIndex(0);
 		}
 
 		/// <summary>
