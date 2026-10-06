@@ -224,18 +224,16 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Attempts to acquire capacity using busy‑wait atomic operations.
         /// </summary>
-        public virtual bool Lock ( TimeSpan span ) {
+        public virtual bool Lock ( TimeOut span ) {
             // Unendlich warten, wenn TimeSpan extrem groß ist 
-            if ( span == Timeout.InfiniteTimeSpan || span.TotalMilliseconds > int.MaxValue )
+            if ( span == TimeOut.Infinite || span.Milliseconds > int.MaxValue )
                 return Lock(-1);
 
             // Negative oder Null → kein Warten
-            if ( span <= TimeSpan.Zero )
+            if ( span.Milliseconds <= 0)
                 return Lock(0);
 
-            // Normale Umrechnung
-            int ms = (int)span.TotalMilliseconds;
-            return Lock(ms);
+            return Lock(span);
         }
         /// <summary>
         /// Releases capacity by performing an atomic increment.
@@ -267,7 +265,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Counting spinlocks do not support wait/pulse semantics.
         /// </summary>
-        public virtual bool Wait ( TimeSpan span, bool exitContext ) {
+        public virtual bool Wait ( TimeOut span, bool exitContext ) {
             return false;
         }
     }

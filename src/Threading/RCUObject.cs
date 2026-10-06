@@ -77,8 +77,8 @@ namespace SystemEx.Threading {
 		/// permitted when no readers are active.
 		/// </summary>
 		public T? Value {
-			get => (T?)ReadValue().Get(VALUE_INDEX);
-			set => WriteValue( value );
+			get => (T?)ReadValue(TimeOut.Infinite).Get(VALUE_INDEX);
+			set => WriteValue( value, TimeOut.Infinite );
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace SystemEx.Threading {
 		/// </list>
 		/// </para>
 		/// </summary>
-		public Result ValueWithState => ReadValue();
+		public Result ValueWithState => ReadValue(TimeOut.Infinite);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RCUObject{T}"/> class
@@ -131,7 +131,7 @@ namespace SystemEx.Threading {
 		/// <exception cref="InvalidOperationException">
 		/// Thrown when one or more readers are active during the write attempt.
 		/// </exception>
-		public void WriteValue ( T? value , int timeout = -1) {
+		public void WriteValue ( T? value , TimeOut timeout) {
 			
 			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, timeout) ) {
 				if ( m_epochReader )
@@ -148,7 +148,7 @@ namespace SystemEx.Threading {
 		/// activity even in the presence of exceptions.
 		/// </summary>
 		/// <returns>The currently stored value.</returns>
-		public Result ReadValue (int timeout = -1 ) {
+		public Result ReadValue (TimeOut timeout ) {
 			using (var _le = new UniqueEpoch(ref m_epochReader) ) {
 				var _res = new Result();
 
@@ -201,8 +201,8 @@ namespace SystemEx.Threading {
 			if ( obj == null ) return false;
 
 			bool _ret = false;
-			var _thisValue = ReadValue().GetAs<T>(0);
-			var _otherValue = obj.ReadValue().GetAs<T>(0);
+			var _thisValue = ReadValue(TimeOut.Infinite).GetAs<T>(0);
+			var _otherValue = obj.ReadValue(TimeOut.Infinite).GetAs<T>(0);
 
 			if ( _thisValue.HasValue && _otherValue.HasValue ) {
 				_ret = _thisValue.Value!.Equals(_otherValue.Value);
@@ -217,7 +217,7 @@ namespace SystemEx.Threading {
 		/// access.
 		/// </summary>
 		public override int GetHashCode () {
-			var _thisValue = ReadValue().GetAs<T>(0); 
+			var _thisValue = ReadValue(TimeOut.Infinite).GetAs<T>(0); 
 			return _thisValue.Value!.GetHashCode();
 		}
 
@@ -226,7 +226,7 @@ namespace SystemEx.Threading {
 		/// using RCU semantics and converted via its <c>ToString()</c> implementation.
 		/// </summary>
 		public override string ToString () {
-			var _thisValue = ReadValue().GetAs<T>(0);
+			var _thisValue = ReadValue(TimeOut.Infinite).GetAs<T>(0);
 
 			return _thisValue.ToString();
 		}

@@ -15,7 +15,7 @@
  * changes and the date.
  */
 
-
+using SystemEx;
 
 namespace SystemEx.Threading {
 
@@ -44,7 +44,7 @@ namespace SystemEx.Threading {
 		/// Timeout in milliseconds used when acquiring the lock. A value of <c>-1</c>
 		/// indicates an immediate attempt.
 		/// </param>
-		public ScopedLock ( ref TLOCK ulock, int ms = -1 ) {
+		public ScopedLock ( ref TLOCK ulock, TimeOut ms) {
 			m_lock = ref ulock;
 			m_lock.Lock(ms);
 		}
@@ -82,7 +82,7 @@ namespace SystemEx.Threading {
 			where TLOCK : ILock {
 
 		private ref TLOCK m_lock;
-		private readonly int m_iMS;
+		private readonly TimeOut m_iMS;
 
 		/// <summary>
 		/// Initializes a new scoped unlock. The provided lock is released immediately,
@@ -94,7 +94,7 @@ namespace SystemEx.Threading {
 		/// Timeout in milliseconds used when reacquiring the lock. A value of <c>-1</c>
 		/// indicates an immediate attempt.
 		/// </param>
-		public ScopedUnlock ( ref TLOCK ulock, int ms = -1 ) {
+		public ScopedUnlock ( ref TLOCK ulock, TimeOut ms  ) {
 			m_lock = ref ulock;
 			m_iMS = ms;
 			m_lock.Unlock();
@@ -164,7 +164,7 @@ namespace SystemEx.Threading {
 		/// <exception cref="UnauthorizedAccessException">
 		/// Thrown when the lock cannot be acquired within the specified timeout.
 		/// </exception>
-		public ScopedLock ( ref TLOCK l, ref T value, int timeout = -1 ) {
+		public ScopedLock ( ref TLOCK l, ref T value, TimeOut timeout ) {
 			m_lock = ref l;
 
 			if ( !m_lock.Lock(timeout) )

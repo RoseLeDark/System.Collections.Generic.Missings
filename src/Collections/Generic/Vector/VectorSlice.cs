@@ -66,7 +66,7 @@ namespace SystemEx.Collections.Generic {
         /// </summary>
         internal bool IsOwner(int id) {
 
-			using ( var _l = new ScopedLock<LightLock>(ref m_lock) ) {
+			using ( var _l = new ScopedLock<LightLock>(ref m_lock, TimeOut.Infinite) ) {
                 return  m_managedID == id;
             }
         }
@@ -81,7 +81,7 @@ namespace SystemEx.Collections.Generic {
 		internal Result SetOwner (int id) {
 
 			try {
-				using ( var _l = new ScopedLock<LightLock>(ref m_lock) ) {
+				using ( var _l = new ScopedLock<LightLock>(ref m_lock, TimeOut.Infinite) ) {
                     if ( !HasOwner ) {
                         m_managedID = id;
                         return new Result(true);
@@ -101,7 +101,7 @@ namespace SystemEx.Collections.Generic {
 		/// <c>true</c> if ownership was successfully unassigned; otherwise <c>false</c>.
 		internal Result UnsetOwner(int id) {
             try {
-                using ( var _l = new ScopedLock<LightLock>(ref m_lock) ) {
+                using ( var _l = new ScopedLock<LightLock>(ref m_lock, TimeOut.Infinite) ) {
                     if ( m_managedID == Thread.CurrentThread.ManagedThreadId ) {
                         m_managedID = -1;
 						return new Result(true);

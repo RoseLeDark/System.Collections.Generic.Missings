@@ -94,7 +94,7 @@ namespace SystemEx.Threading {
         /// <c>true</c> if the mutex was successfully acquired;
         /// otherwise, <c>false</c>.
         /// </returns>
-        public override bool Lock ( int ms ) {
+        public override bool Lock ( TimeOut ms ) {
             bool _ret = false;
 
             if ( base.Lock(ms) ) {

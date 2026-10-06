@@ -62,7 +62,7 @@ namespace SystemEx.Threading {
         /// <returns>
         /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
         /// </returns>
-        public bool Lock (TimeSpan span) {
+        public bool Lock (TimeOut span) {
             if ( m_bLocked ) return false;
 
             try {
@@ -74,28 +74,6 @@ namespace SystemEx.Threading {
             return m_bLocked;
         }
 
-        /// <summary>
-        /// Attempts to acquire the lock using a millisecond timeout. A negative value
-        /// indicates an immediate, non‑blocking attempt. Positive values are forwarded
-        /// to <see cref="Monitor.TryEnter(object, int, ref bool)"/>.
-        /// </summary>
-        /// <param name="ms">Timeout in milliseconds, or <c>-1</c> for immediate attempt.</param>
-        /// <returns>
-        /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
-        /// </returns>
-        public bool Lock ( int ms = -1) {
-
-			if ( m_bLocked ) return false;
-
-			try {
-				Monitor.TryEnter(m_lock, ms, ref m_bLocked);
-			} catch {
-				m_lock = new object();
-				Monitor.TryEnter(m_lock, ms, ref m_bLocked);
-			}
-			return m_bLocked;
-
-		}
         /// <summary>
         /// Releases the internal lock. Every successful call to <see cref="Lock(TimeSpan)"/>
         /// or <see cref="Lock(int)"/> must be paired with a corresponding call to
@@ -121,7 +99,7 @@ namespace SystemEx.Threading {
         /// <returns>
         /// <c>true</c> if the wait completed due to a pulse; otherwise <c>false</c>.
         /// </returns>
-        public bool Wait ( TimeSpan span, bool exitContext ) => Monitor.Wait(m_lock, span, exitContext);
+        public bool Wait ( TimeOut span, bool exitContext ) => Monitor.Wait(m_lock, span, exitContext);
 
         /// <summary>
         /// Attempts to acquire the lock using a <see cref="TimeSpan"/> timeout.

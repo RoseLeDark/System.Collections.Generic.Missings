@@ -34,18 +34,7 @@ namespace SystemEx.Threading {
         /// <returns>
         /// <c>true</c> if the lock was successfully acquired; otherwise <c>false</c>.
         /// </returns>
-        bool Lock ( int ms );
-
-        /// <summary>
-        /// Attempts to acquire the lock using a <see cref="TimeSpan"/> timeout.
-        /// Implementations should block until the lock is acquired or the timeout
-        /// expires.
-        /// </summary>
-        /// <param name="span">Maximum duration to wait for the lock.</param>
-        /// <returns>
-        /// <c>true</c> if the lock was successfully acquired; otherwise <c>false</c>.
-        /// </returns>
-        bool Lock ( TimeSpan span );
+        bool Lock ( TimeOut ms  );
 
         /// <summary>
         /// Releases the lock. Every successful call to <see cref="Lock(int)"/> or
@@ -58,7 +47,7 @@ namespace SystemEx.Threading {
         /// Temporarily releases the lock and suspends the current thread until a
         /// notification is received or the specified timeout expires. Upon completion,
         /// the lock is automatically reacquired. This method provides a generalized
-        /// wait‑and‑reacquire pattern similar to <see cref="Monitor.Wait(object, TimeSpan, bool)"/>.
+        /// wait‑and‑reacquire pattern similar to <see cref="Monitor.Wait(object, TimeOut, bool)"/>.
         /// </summary>
         /// <param name="span">Maximum duration to wait for a notification.</param>
         /// <param name="exitContext">
@@ -67,7 +56,7 @@ namespace SystemEx.Threading {
         /// <returns>
         /// <c>true</c> if the wait completed due to a notification; otherwise <c>false</c>.
         /// </returns>
-        bool Wait ( TimeSpan span, bool exitContext );
+        bool Wait ( TimeOut span, bool exitContext );
 
         /// <summary>
         /// Attempts to acquire the lock without

@@ -39,7 +39,7 @@ namespace SystemEx.Threading {
 			m_lock = lockType;
 		}
 
-		public void Arrive ( int maxWait = -1 ) {
+		public void Arrive ( TimeOut maxWait ) {
 			m_lock.Lock(maxWait);
 
 			m_counter--;
@@ -50,7 +50,7 @@ namespace SystemEx.Threading {
 			m_lock.Unlock();
 		}
 
-		public void Wait (ref LightThread thread, int maxWait = -1) {
+		public void Wait (ref LightThread thread, TimeOut maxWait) {
 			m_lock.Lock(maxWait);
 
 			if ( m_counter == 0 ) {

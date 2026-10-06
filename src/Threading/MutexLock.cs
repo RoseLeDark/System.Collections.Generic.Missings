@@ -102,7 +102,7 @@ namespace SystemEx.Threading {
         /// <returns>
         /// <c>true</c> if the mutex was acquired; otherwise <c>false</c>.
         /// </returns>
-        public bool Lock ( TimeSpan span ) =>
+        public bool Lock ( TimeOut span ) =>
             (m_bLocked = m_isMutex.WaitOne(span));
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace SystemEx.Threading {
 		/// <returns>
 		/// <c>true</c> if the mutex was acquired; otherwise <c>false</c>.
 		/// </returns>
-		public bool TryLock ( TimeSpan span ) =>
+		public bool TryLock ( TimeOut span ) =>
 			(m_bLocked = m_isMutex.WaitOne(span));
 
 		/// <summary>
@@ -144,24 +144,12 @@ namespace SystemEx.Threading {
         /// <returns>
         /// <c>true</c> if the event was signaled; otherwise <c>false</c>.
         /// </returns>
-        public bool Wait ( TimeSpan span, bool exitContext ) {
+        public bool Wait ( TimeOut span, bool exitContext ) {
             Unlock();
-            bool r = m_evntHandle.WaitOne(span);
-            Lock(TimeSpan.Zero);
+            bool r = m_evntHandle.WaitOne(span.Milliseconds, exitContext);
+            Lock(TimeOut.Zero);
             return r;
         }
-
-        /// <summary>
-        /// Attempts to acquire the OS‑level mutex within the specified timeout in milliseconds.
-        /// </summary>
-        /// <param name="ms">Timeout in milliseconds.</param>
-        /// <returns>
-        /// <c>true</c> if the mutex was acquired; otherwise <c>false</c>.
-        /// </returns>
-        public bool Lock ( int ms ) {
-            return (m_bLocked = m_isMutex.WaitOne(ms));
-        }
-
     }
 	
 }

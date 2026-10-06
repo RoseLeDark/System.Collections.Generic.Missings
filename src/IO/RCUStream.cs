@@ -80,7 +80,7 @@ namespace SystemEx.IO {
 					return m_origStream.Position;
 				}
 			} set {
-				using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+				using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 					if ( m_epochReads )
 						throw new InvalidOperationException("Readers active");
 
@@ -107,7 +107,7 @@ namespace SystemEx.IO {
 		}
 		/// <inheritdoc/>
 		public override void WriteByte ( byte value ) {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -118,7 +118,7 @@ namespace SystemEx.IO {
 		/// <inheritdoc/>
 		public override void Write ( byte[] buffer, int offset, int count ) {
 
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -168,7 +168,7 @@ namespace SystemEx.IO {
 
 		/// <inheritdoc/>
 		public override long Seek ( long offset, SeekOrigin origin ) {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -178,7 +178,7 @@ namespace SystemEx.IO {
 
 		/// <inheritdoc/>
 		public override void SetLength ( long value ) {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -188,7 +188,7 @@ namespace SystemEx.IO {
 
 		/// <inheritdoc/>
 		public override void Flush () {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 

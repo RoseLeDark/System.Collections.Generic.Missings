@@ -49,7 +49,7 @@ namespace SystemEx.Threading {
 		/// The timeout in milliseconds. A value of <c>-1</c> indicates an
 		/// infinite wait.
 		/// </param>
-		public void WriteValue ( T? value, int timeoutms );
+		public void WriteValue ( T? value, TimeOut timeoutms );
 
 		/// <summary>
 		/// Reads the protected value using the underlying lock. The operation may
@@ -70,7 +70,7 @@ namespace SystemEx.Threading {
 		/// A <see cref="Result"/> containing the retrieved value and optional
 		/// metadata.
 		/// </returns>
-		public Result ReadValue ( int timeoutms );
+		public Result ReadValue ( TimeOut timeoutms );
 	}
 	
 }

@@ -44,7 +44,7 @@ namespace SystemEx.Collections.Generic {
 				}
 			}
 			set {
-				using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+				using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 					if ( m_epochReads )
 						throw new InvalidOperationException("Readers active");
 
@@ -132,7 +132,7 @@ namespace SystemEx.Collections.Generic {
 				}
 			}
 			set {
-				using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+				using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 					if ( m_epochReads )
 						throw new InvalidOperationException("Readers active");
 
@@ -197,7 +197,7 @@ namespace SystemEx.Collections.Generic {
 		/// Set Cache to Zero
 		/// </summary>
 		public void SetZero () {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -208,7 +208,7 @@ namespace SystemEx.Collections.Generic {
 		/// See SetZero
 		/// </summary>
 		public void Clear () {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -222,7 +222,7 @@ namespace SystemEx.Collections.Generic {
 		/// </summary>
 
 		public ulong Seek ( SeekOrigin org, int pos ) {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -235,7 +235,7 @@ namespace SystemEx.Collections.Generic {
 		/// </summary>
 
 		public virtual ulong WriteRange ( ulong start, ulong iend, byte[] data ) {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -249,7 +249,7 @@ namespace SystemEx.Collections.Generic {
 
 		public virtual ulong WriteRange ( ulong position, byte[] data ) {
 
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -264,7 +264,7 @@ namespace SystemEx.Collections.Generic {
 
 		public ulong WriteRange ( ulong position, FixedVector<byte> data ) {
 
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -285,7 +285,7 @@ namespace SystemEx.Collections.Generic {
 		/// <exception cref="InvalidOperationException"></exception>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public int Write ( byte[] buffer, int offset, int count ) {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -298,7 +298,7 @@ namespace SystemEx.Collections.Generic {
 		/// </summary>
 
 		public byte[] ToArray () {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 
@@ -310,7 +310,7 @@ namespace SystemEx.Collections.Generic {
 		/// using exclusive RCU semantics.
 		/// </summary>
 		public FixedVector<byte> ToArrayEx () {
-			using ( var lk = new ScopedLock<ILock>(ref m_writerLock) ) {
+			using ( var lk = new ScopedLock<ILock>(ref m_writerLock, TimeOut.Infinite) ) {
 				if ( m_epochReads )
 					throw new InvalidOperationException("Readers active");
 

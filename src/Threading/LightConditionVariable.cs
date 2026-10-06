@@ -93,7 +93,7 @@ namespace SystemEx.Threading {
             m_lockable = new LightLock();
             m_strName = strName;
 
-#if GDEBUG
+#if DEBUG
             OnAdd = null;
             OnBroadcast = null;
 #endif
@@ -106,7 +106,7 @@ namespace SystemEx.Threading {
 		/// not involve any advanced signaling semantics.
 		/// </summary>
 		public void Signal () {
-            m_lockable.Lock();
+            m_lockable.Lock(TimeOut.Infinite);
 
             if ( m_waits.IsEmpty ) return;
 
@@ -127,7 +127,7 @@ namespace SystemEx.Threading {
         /// Each thread in the FIFO wait‑list is resumed in order.
         /// </summary>
         public void Broadcast () {
-            m_lockable.Lock();
+            m_lockable.Lock(TimeOut.Infinite);
 
             while ( !m_waits.IsEmpty ) {
                 Optional<LightThread> _th;
@@ -164,7 +164,7 @@ namespace SystemEx.Threading {
         /// Clear all Waiter from the Wait Queue
         /// </summary>
         public void Clear () {
-            m_lockable.Lock();
+            m_lockable.Lock(TimeOut.Infinite);
             m_waits.Clear();
             m_lockable.Unlock();
         }
@@ -178,7 +178,7 @@ namespace SystemEx.Threading {
         /// </summary>
         /// <param name="task">The thread to add to the wait‑list.</param>
         internal void Add ( LightThread task ) {
-            m_lockable.Lock();
+            m_lockable.Lock(TimeOut.Infinite);
             m_waits.PushBack(task);
 #if DEBUG
 			if ( OnAdd != null ) OnAdd.Invoke(this, task, m_waits.Count);
@@ -197,7 +197,7 @@ namespace SystemEx.Threading {
 		/// operations, and the current number of waiting threads.
 		/// </returns>
 		public string DumpDebug () {
-            m_lockable.Lock();
+            m_lockable.Lock(TimeOut.Infinite);
 
             var sb = new StringBuilder();
 

@@ -246,7 +246,7 @@ namespace SystemEx.Threading {
 		LightLock l = new LightLock();
 
 		public int Arrive (uint n) {
-			using ( var _l = new ScopedLock<LightLock>(ref l) ) {
+			using ( var _l = new ScopedLock<LightLock>(ref l, TimeOut.Infinite) ) {
 
 				while ( n != 0 ) {
 					m_current++;

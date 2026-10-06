@@ -194,7 +194,7 @@ namespace SystemEx.Rand {
 
             int _l = System.Math.Min(other.Length, m_usable.Length);
 
-            m_lLock.Lock();
+            m_lLock.Lock(TimeOut.Infinite);
 
             switch ( type ) {
             case SeedMix.Addition: for ( int i = 0 ; i < _l ; i++ ) m_usable[i] += other[i]; break;

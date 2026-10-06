@@ -98,7 +98,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Acquires the lock using busy‑wait atomic operations.
         /// </summary>
-        public bool Lock ( int span ) {
+        public bool Lock ( TimeOut span ) {
             // span is ignored, matching the C++ version
             while ( Interlocked.CompareExchange(ref m_locked, 1, 0) != 0 )
                 Thread.SpinWait(1);
@@ -127,7 +127,7 @@ namespace SystemEx.Threading {
         /// <summary>
         /// Spinlocks do not support wait/pulse semantics.
         /// </summary>
-        public bool Wait ( TimeSpan span, bool exitContext ) {
+        public bool Wait ( TimeOut span, bool exitContext ) {
             return false;
         }
 

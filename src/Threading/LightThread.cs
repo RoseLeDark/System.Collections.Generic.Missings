@@ -102,13 +102,13 @@ namespace SystemEx.Threading {
         /// <c>true</c> if the logical wait state was successfully reacquired;
         /// otherwise <c>false</c>.
         /// </returns>
-        public bool Wait ( ref LightConditionVariable cv, ref ILock cvl, int timeoutMs = -1) {
+        public bool Wait ( ref LightConditionVariable cv, ref ILock cvl, TimeOut timeoutMs) {
             LockRunning();
 
             cv.Add(this);
 
             cvl.Unlock();
-            bool _ret = m_waitState.Lock (-1);
+            bool _ret = m_waitState.Lock (TimeOut.Infinite);
 #if DEBUG
             cv.TotalWaits++;
 #endif
@@ -116,7 +116,7 @@ namespace SystemEx.Threading {
 
             //task_utils::notify_take(true, timeOut);
             bool _os = true;
-            if( timeoutMs > 0 ) _os = m_block.WaitOne(timeoutMs);
+            if( timeoutMs.Milliseconds > 0 ) _os = m_block.WaitOne(timeoutMs);
             else _os = m_block.WaitOne();
 
             UnlockRunning();

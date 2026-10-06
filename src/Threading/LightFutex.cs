@@ -73,7 +73,7 @@ namespace SystemEx.Threading {
 		/// otherwise, <c>false</c>.
 		/// </returns>
 		public bool Lock ( int ms ) {
-			return Lock(new TimeSpan(ms));
+			return Lock(new TimeOut(ms));
 		}
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace SystemEx.Threading {
 		/// <returns>
 		/// <c>true</c> if the futex was acquired or reentered; otherwise, <c>false</c>.
 		/// </returns>
-		public bool Lock ( TimeSpan span ) {
+		public bool Lock ( TimeOut span ) {
 			bool _ret = false;
 
 			// Reentrant acquisition or immediate denial
@@ -146,7 +146,7 @@ namespace SystemEx.Threading {
 		/// <returns>
 		/// <c>true</c> if the wait handle was signaled; otherwise, <c>false</c>.
 		/// </returns>
-		public bool Wait ( TimeSpan span, bool exitContext ) {
+		public bool Wait ( TimeOut span, bool exitContext ) {
 			return m_wait.WaitOne(span, exitContext);
 		}
 	}

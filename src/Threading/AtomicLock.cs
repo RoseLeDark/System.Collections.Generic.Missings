@@ -63,16 +63,10 @@ namespace SystemEx.Threading {
 		/// Attempts to acquire the lock within the specified timeout.
 		/// Throws an exception if another thread already owns the lock.
 		/// </summary>
-		public bool Lock ( int ms ) {
-			return internalLock(ms, true);
+		public bool Lock ( TimeOut ms ) {
+			return internalLock(ms.Milliseconds, true);
 		}
-		/// <summary>
-		/// Attempts to acquire the lock within the specified time span.
-		/// Throws an exception if another thread already owns the lock.
-		/// </summary>
-		public bool Lock ( TimeSpan span ) {
-			return internalLock(span.Milliseconds, true);
-		}
+
 		/// <summary>
 		/// Attempts to acquire the lock without throwing exceptions.
 		/// Returns <c>true</c> if the lock was acquired; otherwise <c>false</c>.
@@ -91,7 +85,7 @@ namespace SystemEx.Threading {
 		/// Not implemented. Always returns <c>false</c>.
 		/// Included only to satisfy the <see cref="ILock{T}"/> interface.
 		/// </summary>
-		public bool Wait ( TimeSpan span, bool exitContext ) {
+		public bool Wait ( TimeOut span, bool exitContext ) {
 			return false;
 		}
 		/// <summary>
@@ -99,13 +93,13 @@ namespace SystemEx.Threading {
 		/// If <paramref name="ecxp"/> is <c>true</c>, an exception is thrown when
 		/// another thread already owns the lock.
 		/// </summary>
-		private bool internalLock ( int ms, bool ecxp ) {
+		private bool internalLock ( TimeOut ms, bool ecxp ) {
 			if ( IsHeldbyCurrent ) return true;
 			if ( IsHeld ) if ( ecxp ) throw new Exception("Held by other thread"); else return false;
 
 			var lockTaken = false;
 
-			if ( ms <= 0 ) {
+			if ( ms.Milliseconds <= 0 ) {
 
 				while ( !lockTaken ) {
 					lockTaken = Interlocked.Exchange(ref m_lock, Thread.CurrentThread.ManagedThreadId) == 0;
@@ -116,7 +110,7 @@ namespace SystemEx.Threading {
 
 				var sw = System.Diagnostics.Stopwatch.StartNew();
 
-				while ( !lockTaken && sw.ElapsedMilliseconds < ms ) {
+				while ( !lockTaken && sw.ElapsedMilliseconds < ms.Milliseconds ) {
 					lockTaken = Interlocked.Exchange(ref m_lock, Thread.CurrentThread.ManagedThreadId) == 0;
 					if ( !lockTaken )
 						Thread.SpinWait(1);

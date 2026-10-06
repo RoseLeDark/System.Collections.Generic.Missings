@@ -52,11 +52,11 @@ namespace SystemEx.Threading {
 		/// </summary>
 		public T? Value {
 			get {
-				using ( var _l = new ScopedLock<ILock>(ref m_lock) ) {
+				using ( var _l = new ScopedLock<ILock>(ref m_lock, TimeOut.Infinite) ) {
 					return m_value;
 				}
 			}
-			set => WriteValue(value);
+			set => WriteValue(value, TimeOut.Infinite);
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace SystemEx.Threading {
 		}
 
 	
-		public Result ReadValue (int timeoutms = -1 ) {
+		public Result ReadValue (TimeOut timeoutms ) {
 			try {
 				using ( var _l = new ScopedLock<ILock>(ref m_lock, timeoutms) ) {
 					Result _res = new Result();
@@ -106,7 +106,7 @@ namespace SystemEx.Threading {
 		/// <c>true</c> if the lock was acquired and the value updated;
 		/// otherwise <c>false</c>.
 		/// </returns>
-		public void WriteValue ( T? value, int timeoutms = -1 ) {
+		public void WriteValue ( T? value, TimeOut timeoutms  ) {
 			using ( var _l = new ScopedLock<ILock>(ref m_lock, timeoutms) ) {
 				m_value = value;
 			}
@@ -134,11 +134,11 @@ namespace SystemEx.Threading {
 			if ( obj == null ) return false;
 
 			bool _ret = false;
-			var _thisValue = ReadValue();
-			var _otherValue = obj.ReadValue();
+			var _thisValue = ReadValue(TimeOut.Infinite).Get();
+			var _otherValue = obj.ReadValue(TimeOut.Infinite).Get();
 
-			if ( _thisValue.Get() != null && _otherValue.Get() != null ) {
-				_ret = _thisValue.Get()!.Equals(_otherValue.Get());
+			if ( _thisValue != null && _otherValue != null ) {
+				_ret = _thisValue.Equals(_otherValue);
 			}
 			return _ret;
 		}

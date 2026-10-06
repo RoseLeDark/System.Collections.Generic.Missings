@@ -76,12 +76,12 @@ namespace SystemEx.Threading {
         /// </summary>
         /// <param name="ms">Timeout in milliseconds, or <c>-1</c> for immediate entry.</param>
         /// <returns><c>true</c> if the lock was acquired; otherwise <c>false</c>.</returns>
-        public bool Lock ( int ms ) {
+        public bool Lock ( TimeOut ms  ) {
 			var lockTaken = false;
 
             if ( m_spin.IsHeldByCurrentThread ) return true;
 
-			if ( ms <= 0 ) {
+			if ( ms.Milliseconds <= 0 ) {
 
 				while ( !lockTaken ) {
 					m_spin.TryEnter(ref lockTaken);
@@ -92,7 +92,7 @@ namespace SystemEx.Threading {
 				
 				var sw = System.Diagnostics.Stopwatch.StartNew();
 
-				while ( !lockTaken && sw.ElapsedMilliseconds < ms ) {
+				while ( !lockTaken && sw.ElapsedMilliseconds < ms.Milliseconds ) {
 					m_spin.TryEnter(0, ref lockTaken);
 					if ( !lockTaken )
 						Thread.SpinWait(1);
@@ -103,37 +103,7 @@ namespace SystemEx.Threading {
 			return m_isLocked;
 		}
 
-        /// <summary>
-        /// Attempts to acquire the lock using a <see cref="TimeSpan"/> timeout.
-        /// </summary>
-        /// <param name="span">Maximum duration to attempt acquiring the lock.</param>
-        /// <returns><c>true</c> if the lock was acquired; otherwise <c>false</c>.</returns>
-        public bool Lock ( TimeSpan span ) {
-			var lockTaken = false;
-
-			if ( span.Ticks <= 0 ) {
-
-				while ( !lockTaken  ) {
-					m_spin.TryEnter(ref lockTaken);
-					if ( !lockTaken )
-						Thread.SpinWait(1);
-				}
-
-			} else {
-                
-                var sw = System.Diagnostics.Stopwatch.StartNew();
-
-                while ( !lockTaken && sw.Elapsed < span ) {
-                    m_spin.TryEnter(0, ref lockTaken);
-                    if ( !lockTaken )
-                        Thread.SpinWait(1);
-                }
-
-               
-            }
-			m_isLocked = lockTaken;
-			return m_isLocked;
-        }
+        
 
         /// <summary>
         /// Releases the lock by exiting the underlying <see cref="SpinLock"/>. The caller
@@ -155,7 +125,7 @@ namespace SystemEx.Threading {
         /// Spin locks do not support wait‑and‑pulse semantics. This method always returns
         /// <c>false</c> and performs no operation.
         /// </summary>
-        public bool Wait ( TimeSpan span, bool exitContext ) {
+        public bool Wait ( TimeOut span, bool exitContext ) {
             return false;
         }
 
