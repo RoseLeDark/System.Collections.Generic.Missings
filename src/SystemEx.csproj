@@ -11,7 +11,7 @@
     <Authors>Amber-Sophia Schröck</Authors>
     <Copyright>© 2026 KSchattenfeld - Licensed under the EUPL</Copyright>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\RoseLeDark.Collections.Missings.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\SystemEx.snk</AssemblyOriginatorKeyFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>

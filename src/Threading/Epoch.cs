@@ -15,6 +15,9 @@
  * changes and the date.
  */
 
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
 namespace SystemEx.Threading {
 
 	/// <summary>
@@ -23,7 +26,7 @@ namespace SystemEx.Threading {
 	/// a reader epoch, and each call to <see cref="Leave"/> exits it. Writers
 	/// may only proceed when the epoch value indicates that no readers are active.
 	/// </summary>
-	public struct Epoch {
+	public struct Epoch : IEquatable<Epoch> {
 		private long m_value;
 
 		/// <summary>
@@ -37,6 +40,11 @@ namespace SystemEx.Threading {
 		/// Writers are allowed only when no readers are active.
 		/// </summary>
 		public bool CanWrite => Interlocked.Read(ref m_value) <= 0;
+
+		/// <summary>
+		/// Returns <c>true</c> when the epoch indicates active readers.
+		/// </summary>
+		public bool IsTrue => Interlocked.Read(ref value.m_value) > 1;
 
 		/// <summary>
 		/// Initializes a new <see cref="Epoch"/> instance with an initial
@@ -67,10 +75,60 @@ namespace SystemEx.Threading {
 		public static bool IsAfter ( Epoch a, Epoch b )
 			=> Interlocked.Read(ref a.m_value) > Interlocked.Read(ref b.m_value);
 
+        
 		/// <summary>
-		/// Returns <c>true</c> when the epoch indicates active readers.
+		/// Epoch as string
 		/// </summary>
-		public static bool operator true ( Epoch value ) {
+        public string ToString(IFormatProvider? provider)
+        {
+            return Value.ToString(provider);
+        }
+		/// <summary>
+		/// is this equal with other
+		/// </summary>
+		public bool Equals(Epoch other)
+        {
+            return this.Value == other.Value;	
+        }
+
+		/// <summary>
+		/// Epoch as string
+		/// </summary>
+        public override string ToString()
+        {
+            return Value.ToString(CultureInfo.CurrentCulture);
+        }
+		/// <summary>
+		/// is this equal with other 
+		/// </summary>
+        public override bool Equals([NotNullWhen(true)] object? obj)
+        {
+            if(obj is Epoch other)
+			{
+				return this.Value == other.Value;	
+			}
+			return false;
+        }
+		
+		/// <summary>
+		/// is epoch a same with b
+		/// </summary>
+		public static bool operator == (Epoch a, Epoch b)
+		{
+			return a.Value == b.Value;
+		}
+		/// <summary>
+		/// is epoch a not same with b
+		/// </summary>
+		public static bool operator != (Epoch a, Epoch b)
+		{
+			return !(a==b);
+		}
+		/// <summary>
+        /// Returns <c>true</c> when the epoch indicates active readers.
+        /// </summary>
+        public static bool operator true(Epoch value)
+        {
 			return Interlocked.Read(ref value.m_value) > 1;
 		}
 
@@ -86,8 +144,9 @@ namespace SystemEx.Threading {
 		/// whether active readers are present.
 		/// </summary>
 		public static explicit operator bool ( Epoch value ) {
-			return Interlocked.Read(ref value.m_value) > 1;
+			return Interlocked.Read(ref value.m_value) > 0;
 		}
+
 	}
 
 
