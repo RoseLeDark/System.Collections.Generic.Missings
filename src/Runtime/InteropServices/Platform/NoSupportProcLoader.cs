@@ -96,6 +96,12 @@ namespace SystemEx.Runtime.InteropServices.Platform {
             Console.WriteLine("Load Simulator: GetLibaryPath '{0}'", dllname);
             return NO_PATH;
         }
+        public static string GetFromPath ( string path, string module ) {
+            string _ret = NO_PATH;
+
+             Console.WriteLine("Load Simulator: GetFromPath {0} {1} ", path, module);
+            return _ret;
+        }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.
 	

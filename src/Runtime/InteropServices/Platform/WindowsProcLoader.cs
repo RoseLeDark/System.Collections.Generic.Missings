@@ -33,7 +33,7 @@ namespace SystemEx.Runtime.InteropServices.Platform {
 	/// This backend supports loading dynamic libraries (.dll).
 	/// </summary>
 	[SupportedOSPlatform("windows")]
-    public class WindowsProcLoader  {
+    public static class WindowsProcLoader  {
         
         /// <summary>
         /// The name of the Windows system library that provides native
@@ -134,6 +134,17 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         /// </returns>
         public static string GetLibaryPath(string dllname) {
             return dllname;
+        }
+        public static string GetFromPath ( string path, string module ) {
+            string _ret = NO_PATH;
+
+            foreach ( var file in Directory.GetFiles(path) ) {
+                if ( Path.GetFileName(file) == module ) {
+                    _ret = Path.Combine(path, file);
+                }
+            }
+
+            return _ret;
         }
     }
 #pragma warning disable CS1587 // Der XML-Kommentar ist auf keinem gültigen Sprachelement abgelegt.

@@ -127,7 +127,7 @@ namespace SystemEx.Runtime.InteropServices.Platform {
         /// Searches a directory for a file matching the requested module name.
         /// Returns the full path if found, otherwise <see cref="NO_PATH"/>.
         /// </summary>
-        private static string GetFromPath ( string path, string module ) {
+        public static string GetFromPath ( string path, string module ) {
             string _ret = NO_PATH;
 
             foreach ( var file in Directory.GetFiles(path) ) {
