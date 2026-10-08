@@ -267,9 +267,9 @@ namespace SystemEx.AI {
                 environment.PushBack(AIEnv.AI_ENV_OS_MACOS, true);
 
             // Architecture
-            if ( RuntimeInformation.OSArchitecture == Architecture.X64 )
+            if ( Framework.Maschine == Architecture.x64 )
                 environment.PushBack(AIEnv.AI_ENV_ARCH_X64, true);
-            else if ( RuntimeInformation.OSArchitecture == Architecture.Arm64 )
+            else if ( Framework.Maschine == Architecture.ARM64 )
                 environment.PushBack(AIEnv.AI_ENV_ARCH_ARM64, true);
 
             // Runtime

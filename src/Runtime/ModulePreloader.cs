@@ -15,16 +15,10 @@
  * changes and the date.
  */
 using SystemEx;
+using SystemEx.Runtime.Backend.Loader;
 
- namespace SystemEx.Runtime {
+namespace SystemEx.Runtime {
 
-    public enum Architecture {
-        X86,
-        X64,
-        ARM,
-        ARM64,
-        Unknown
-    }
 
     public class ModulePreloader
     {
@@ -39,14 +33,14 @@ using SystemEx;
             m_path = System.IO.Path.GetFullPath(path);
             m_modules = new List<Module>();
         }
-        public ModulePreloader(string path, Architecture architecture)
+        public ModulePreloader(string path, Platform architecture)
         {
             m_path = System.IO.Path.GetFullPath(path);
             m_path = System.IO.Path.Combine(m_path, architecture.ToString());
 
             m_modules = new List<Module>();
         }
-        public ModulePreloader(string path, string  systemPath, Architecture architecture)
+        public ModulePreloader(string path, string  systemPath, Platform architecture)
         {
             m_path = System.IO.Path.GetFullPath(path);
             m_path = System.IO.Path.Combine(m_path, systemPath);
@@ -92,6 +86,7 @@ using SystemEx;
 
                 } catch (Exception ex) {
                     result.Catch(ex);
+                    return result;
                 } 
             }
             return result;
@@ -99,15 +94,17 @@ using SystemEx;
 
         public void UnloadAll()
         {
-            foreach (Module module in m_modules)
+            for(int i = m_modules.Count - 1; i >= 0; i--)
             {
-                if(module.RemoveRef() == 0)
-                    m_modules.Remove(module);
+                if(m_modules[i].RemoveRef() == 0)
+                    m_modules.RemoveAt(i);
             }
         }
 
         public void Unload(Module module)
         {
+            if(module == null) return;
+
             if (m_modules.Contains(module))
             {
                 if(module.RemoveRef() == 0)

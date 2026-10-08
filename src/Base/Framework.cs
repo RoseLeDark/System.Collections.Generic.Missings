@@ -14,10 +14,18 @@
  * If you modify this file, retain this notice and add a short description of your
  * changes and the date.
  */
+using BRuntime = System.Runtime.InteropServices;
 
 namespace SystemEx {
 
-
+	public enum Platform
+    {
+        Windows,
+        Linux,
+        MacOs,
+        FreeBSD,
+        Other
+    }
 
 	/// <summary>
 	/// Provides metadata about the SystemEx framework, including versioning,
@@ -79,15 +87,36 @@ namespace SystemEx {
 		/// - MacOS
 		/// - AnyCPU (fallback)
 		/// </summary>
-#if WINDOWS
-		public static string API => "Windows";
-#elif LINUX
-		public static string API => "Linux";
-#elif MACOS
-		public static string API => "MacOS";
-#else
-		public static string API => "AnyCPU";
-#endif
+		public static Platform API
+        {
+            get
+            {
+                if      (BRuntime.RuntimeInformation.IsOSPlatform(BRuntime.OSPlatform.Windows)) return Platform.Windows;
+                else if (BRuntime.RuntimeInformation.IsOSPlatform(BRuntime.OSPlatform.Linux)) return Platform.Windows;
+                else if (BRuntime.RuntimeInformation.IsOSPlatform(BRuntime.OSPlatform.OSX)) return Platform.MacOs;
+                else if (BRuntime.RuntimeInformation.IsOSPlatform(BRuntime.OSPlatform.FreeBSD)) return Platform.FreeBSD;
+
+                return Platform.Other;
+            }
+        }
+
+        public static Architecture Maschine
+		{
+			get
+			{
+				return BRuntime.RuntimeInformation.OSArchitecture switch
+				{
+					BRuntime.Architecture.X86 => Architecture.x86,
+					BRuntime.Architecture.X64 => Architecture.x86,
+					BRuntime.Architecture.Arm64 => Architecture.ARM64,
+					BRuntime.Architecture.Arm => Architecture.ARM,
+					BRuntime.Architecture.RiscV64 => Architecture.RiscV64,
+					_ => Architecture.Other
+				};
+
+			}
+		}
+
 		/// <summary>
 		/// Gets the major version component.
 		/// </summary>
@@ -219,7 +248,7 @@ namespace SystemEx {
 		/// <returns>A formatted build identifier string.</returns>
 		public static string BuildString() {
 			var _isBeta = IsBeta ? "-bt" : "";
-			var _forked = IsForked ? User == string.Empty ? "-fk" : $"-{User}" : "";
+			var _forked = IsForked ? String.IsNullOrEmpty(User) ? "-fk" : $"-{User}" : "";
 
 			return $"SystemEx-{Version}-{CodeName}{_isBeta}{_forked}";
 		}
