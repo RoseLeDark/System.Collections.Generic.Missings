@@ -1,6 +1,7 @@
 
 param(
-    [string]$Configuration = "Release"
+    [string]$Configuration = "Release",
+    [string]$PackageVersion = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -10,19 +11,23 @@ function InfoMessage {
     Write-Host "`n=== $Message ==="
 }
 
-$repoRoot = Split-Path -Parent $PSScriptRoot
-Set-Location $repoRoot
+InfoMessage "Clean"
+Remove-Item -Path  "build/publish/*.nupkg"  -Force -ErrorAction SilentlyContinue  
+Remove-Item -Path  "build/publish/*.snupkg"  -Force -ErrorAction SilentlyContinue 
+
 
 InfoMessage "Restore"
 dotnet restore
 
 InfoMessage "Build"
 dotnet build SystemEx.slnx --configuration $Configuration --no-restore
+Remove-Item -Path  bin/ -Force -ErrorAction SilentlyContinue 
+
 
 InfoMessage "Pack"
 $packArgs = @(
     "pack",
-    "src/SystemEx.csproj",
+    "src/RoseLeDark.Collections.Missings.csproj",
     "--configuration", $Configuration,
     "--no-build",
     "--output", "build/publish",
@@ -33,8 +38,6 @@ if (-not [string]::IsNullOrWhiteSpace($PackageVersion)) {
     $packArgs += "/p:PackageVersion=$PackageVersion"
 }
 
+ 
+
 dotnet @packArgs
-
-
-InfoMessage "Push"
-nuget push "build/publish/*.nupkg"
