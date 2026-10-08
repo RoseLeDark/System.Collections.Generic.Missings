@@ -1029,14 +1029,15 @@ WARN_LOGFILE           =
 INPUT                  = src \
                          ARCHITECTURE.md \
                          AUTHORS.md \
+                         MAINTAINERS.md \
                          CHANGELOG.md \
                          CODE_OF_CONDUCT.md \
                          CONTRIBUTING.md \
-                         FAQ.md \
+                         BUILD.md \
                          LICENSE.md \
-                         MAINTAINERS.md \
-                         README.md \
-                         BUILD.md
+                         FAQ.md \
+                         README.md 
+                         
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses

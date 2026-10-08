@@ -715,10 +715,12 @@ A dedicated **FlexListSpan** type will be added later to enable FlexSpan‑style
 
 ### Changed
   - Moved device memory types (`DeviceBuffer`, `DeviceSharedBuffer<TDeviceSharedBackend>`) to ``SystemEx.Device.Memory``.
-  - Moved native interop and backend implementations (`UnmanagedObject`, `RamSharedBackend`, `IDeviceSharedBackend`, platform kernel loaders) to ``SystemEx.Device.Interop``.
+  - Moved native interop and backend implementations (`UnmanagedObject`, `RamSharedBackend`, `IDeviceSharedBackend`, 
+    platform kernel loaders) to ``SystemEx.Device.Interop``.
   - Kept kernel and execution interfaces (`IKernel<TBackend>`, `RamKernel`, kernel lifecycle orchestration) under ``SystemEx.Device``.
-- Removed legacy `SystemEx.Device.Memory.Missings` layout and deprecated `System.Memory.Missings` placements; types have been relocated to the new namespaces above.
-- Updated internal references and XML docs to reflect new namespace locations.
+  - Removed legacy `SystemEx.Device.Memory.Missings` layout and deprecated `System.Memory.Missings` placements; 
+    types have been relocated to the new namespaces above.
+  - Updated internal references and XML docs to reflect new namespace locations.
 
 ### Added
 - Migration guidance notes and quick reference mapping for common types:

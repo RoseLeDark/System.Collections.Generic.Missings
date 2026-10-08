@@ -44,9 +44,6 @@ namespace SystemEx.Threading {
 		/// Initializes a new instance of the <see cref="LightLock"/> struct.
 		/// A dedicated lock object is created for use with <see cref="Monitor"/>.
 		/// </summary>
-		/// <param name="strName">
-		/// Optional human‑readable name used for diagnostics or debugging.
-		/// </param>
 		public LightLock () {
             m_lock = new object();
             m_bLocked = false;
@@ -106,7 +103,6 @@ namespace SystemEx.Threading {
         /// This method is functionally identical to <see cref="Lock(TimeSpan)"/> but
         /// semantically expresses a non‑blocking intent.
         /// </summary>
-        /// <param name="span">Maximum duration to wait for the lock.</param>
         /// <returns>
         /// <c>true</c> if the lock was acquired; otherwise <c>false</c>.
         /// </returns>

@@ -48,7 +48,6 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Initializes a new instance of the ColorR10G10B10FormatSchema class with the specified endianness.
         /// </summary>
-        /// <param name="endian"></param>
         public ColorR10G10B10FormatSchema(Endian endian)  {
             Endian = endian;
 
@@ -74,7 +73,7 @@ namespace SystemEx.Drawing {
         /// <summary>
         /// Gets the byte representation of the specified object for the given field name.
         /// /// </summary>
-        /// <param name="objx">The object to serialize.</param>
+        /// <param name="obj">The object to serialize.</param>
         /// <param name="name">The name of the field to serialize.</param>
         /// <param name="endian">The endianness for the binary representation.</param>
         /// <returns>The byte array representing the serialized field, or null if not found.</returns>

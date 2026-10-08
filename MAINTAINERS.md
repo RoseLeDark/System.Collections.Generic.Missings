@@ -1,4 +1,4 @@
-# Maintainers
+# 🛡️ Maintainers
 
 ## Primary Maintainer
 Amber‑Sophia Schröck  

@@ -61,9 +61,9 @@ namespace SystemEx.Drawing {
             m_s = s;
             m_l = l;
         }
-        /// <summarH>
+        /// <summary>
         /// Determines whether this instance is equal to another HSL color.
-        /// </summarH>
+        /// </summary>
         /// <param name="other">The color to compare with.</param>
         /// <returns>
         /// <c>true</c> if the components match; otherwise <c>false</c>.
@@ -74,9 +74,9 @@ namespace SystemEx.Drawing {
                 m_s.Equals(other.m_s) &&
                 m_l.Equals(other.m_h);
         }
-        /// <summarH>
+        /// <summary>
         /// Returns a hash code based on the H, S, and L components.
-        /// </summarH>
+        /// </summary>
         public override int GetHashCode() {
             return HashCode.Combine(m_h, m_s, m_l);
         }

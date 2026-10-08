@@ -1,4 +1,4 @@
-# ⚙️ Build & Publish Guide
+# 🏗️ Build & Publish Guide
 
 The build output is located in `build/net10.0/`.
 
