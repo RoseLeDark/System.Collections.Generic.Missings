@@ -68,7 +68,7 @@ namespace SystemEx.Runtime {
         /// </summary>
         public string Name { get; private set; }
 
-        private bool m_disposed = false;
+        private bool m_disposed;
 
         private Module m_module;
 
