@@ -20,13 +20,20 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SystemEx.Collections.Generic {
 
+    public class MapException : Exception
+    {
+        public MapException() 
+            : base() { }
+
+        public MapException(string message) 
+            : base(message) { }
+
+        public MapException(string message, Exception innerException) 
+            : base(message, innerException) { }
+
+    }
 	/// <summary>
 	/// Represents a sparse, linear key–value container.
-	/// 
-	/// <para>
-	/// The container behaves similarly to a sparse vector: inactive slots remain
-	/// allocated but are ignored during enumeration and lookup.
-	/// </para>
 	/// 
 	/// <para>
 	/// Automatic growth is controlled through <see cref="GrowSize"/> and
@@ -168,7 +175,8 @@ namespace SystemEx.Collections.Generic {
                         index = i; break;
                     }
                 }
-                if ( index == -1 ) throw new Exception("No Elements in the list");
+                if ( index == -1 ) return null;
+
                 return m_elements[index];
             }
         }
@@ -189,7 +197,7 @@ namespace SystemEx.Collections.Generic {
                         index = i; break;
                     }
                 }
-                if ( index == -1 ) throw new Exception("No Elements in the list");
+                if ( index == -1 ) return null;
                 return m_elements[index];
             }
         }
@@ -291,7 +299,7 @@ namespace SystemEx.Collections.Generic {
 		/// </summary>
 		public Map<T, TU> AsSegment ( long start, long length ) {
             if ( start < 0 || length < 0 )
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("start,lenght");
 
             // Ensure the segment lies fully inside the internal buffer
             ArgumentOutOfRangeException.ThrowIfLessThan((start + length), m_elements.Length);
@@ -598,8 +606,8 @@ namespace SystemEx.Collections.Generic {
 		/// Thrown when the slot is inactive.
 		/// </exception>
 		public Pair<T, TU> ElementAt ( long index ) {
-            if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException();
-            if ( m_state[index] == 0 ) throw new Exception("No element on this position");
+            if ( IsEmpty || index >= Length ) throw new ArgumentOutOfRangeException(nameof(index));
+            if ( m_state[index] == 0 ) throw new MapException("No element on this position");
             return m_elements[index];
         }
 		/// <summary>
@@ -642,12 +650,12 @@ namespace SystemEx.Collections.Generic {
             if ( mode == TraversMode.Forwards ) {
                 for ( long i = start ; i < end ; i++ ) {
                     if ( m_state[i] == 1 )
-                        func(m_elements[i]);
+                        if(func != null) func(m_elements[i]);
                 }
             } else if ( mode == TraversMode.Backwards ) {
                 for ( long i = end ; i >= start ; i-- ) {
                     if ( m_state[i] == 1 )
-                        func(m_elements[i]);
+                        if(func != null) func(m_elements[i]);
                 }
             }
         }
@@ -957,6 +965,8 @@ namespace SystemEx.Collections.Generic {
             return GetEnumerator();
         }
 #if REPLAYE
+
+        TODO: EINBAUEN !!! ERINNERUNG
 
 		/// <summary>
         /// Creates a FlexSpan view over the entire map starting at index 0.
