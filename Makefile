@@ -35,5 +35,6 @@ push:
 		exit 1; \
 	fi
 	@echo "=== Push ==="
+	
 	dotnet nuget push "build/publish/*.nupkg" --api-key $(API_KEY) --source "https://api.nuget.org/v3/index.json" --skip-duplicate
 	dotnet nuget push "build/publish/*.snupkg" --api-key $(API_KEY) --source "https://api.nuget.org/v3/index.json" --skip-duplicate
