@@ -1,0 +1,4 @@
+[*.cs]
+
+# CA1024: Nach Möglichkeit Eigenschaften verwenden
+dotnet_diagnostic.CA1024.severity = none
