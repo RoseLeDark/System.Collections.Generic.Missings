@@ -134,22 +134,7 @@ Constructive feedback is welcome.
 </Description>
     <DelaySign>True</DelaySign>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageReleaseNotes>## ⭐ [0.95.5645‑rc1] 31.08.2026 — internal Preview for 1.0 → Lacking
-
-### Changed
-- Rename namespace `SystemEx.Random` to `SystemEx.Rand`
-- `Isaac32Engine` is now in `SystemEx.Rand.Engine` and impl `IRandomEngine`
-- `Isaac32Engine` and `MTwisterEngine` used now his own Seed impl - his namens ends with {EngineName}Seed
-
-### Added 
-- Added to `SystemEx.Rand`:
-    - Added `GenericRand`: Provides a simple interface for generating random numbers using varibale Engines algorithm. 
-    - Added `IRandomEngine`: Defines the contract for a deterministic 32-bit random number generator engine. 
-      Implementations provide a reproducible sequence of unsigned 32-bit values
-    - Added new Random engine: `MTwisterEngine` Implements the MT19937 32-bit Mersenne Twister random number generator.
-- Added `SystemEx.Random`: Provides a high‑level wrapper around the Base Class Library (BCL) System.Random and added usale functions.
-- Added `SystemEx.Threading.LightMMQueue`:  A bounded lock‑free multi‑producer, multi‑consumer (MPMC) queue. 
-                        </PackageReleaseNotes>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../PackageReleaseNotes.md"))</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 

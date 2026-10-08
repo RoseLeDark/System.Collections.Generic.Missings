@@ -366,3 +366,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 build/*
+PackageReleaseNotes.md
