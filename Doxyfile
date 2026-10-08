@@ -1030,6 +1030,7 @@ INPUT                  = src \
                          ARCHITECTURE.md \
                          AUTHORS.md \
                          MAINTAINERS.md \
+                         SECURITY.md \
                          CHANGELOG.md \
                          CODE_OF_CONDUCT.md \
                          CONTRIBUTING.md \
