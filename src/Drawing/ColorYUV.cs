@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// Represents a YUV color using floating‑point components.

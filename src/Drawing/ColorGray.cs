@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// The ColorGray class represents a grayscale color using a single floating-point component.

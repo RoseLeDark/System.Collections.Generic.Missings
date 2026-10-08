@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// Represents a compact N‑Color classification based on the HWB color model.

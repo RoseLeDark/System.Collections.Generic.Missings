@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// Represents a color in the CIE XYZ color space using floating‑point components.

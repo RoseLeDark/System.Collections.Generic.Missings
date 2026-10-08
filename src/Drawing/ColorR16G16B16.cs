@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// Represents a color with 16‑bit precision per channel (R16G16B16),

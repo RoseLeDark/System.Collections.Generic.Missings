@@ -102,10 +102,6 @@ namespace SystemEx.Threading {
 		/// <param name="timeoutms">
 		/// The timeout in milliseconds. A value of <c>-1</c> waits indefinitely.
 		/// </param>
-		/// <returns>
-		/// <c>true</c> if the lock was acquired and the value updated;
-		/// otherwise <c>false</c>.
-		/// </returns>
 		public void WriteValue ( T? value, TimeOut timeoutms  ) {
 			using ( var _l = new ScopedLock<ILock>(ref m_lock, timeoutms) ) {
 				m_value = value;

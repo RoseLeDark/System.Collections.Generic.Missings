@@ -19,9 +19,7 @@ using SystemEx.Collections.Generic;
 
 namespace SystemEx.Drawing {
 
-	/// \addtogroup Drawing
-	/// @{
-    
+
 	/// <summary>
 	/// Represents a mathematical 2D canvas storing color values of type <typeparamref name="T"/>.
 	/// This interface defines a deterministic data structure that models a rectangular grid of

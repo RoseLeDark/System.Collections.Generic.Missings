@@ -16,8 +16,6 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// A color in the CMY (Cyan–Magenta–Yellow) color space using floating‑point components.

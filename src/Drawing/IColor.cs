@@ -18,8 +18,6 @@
 using System.Runtime.InteropServices;
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// Represents a color in a specific color space and provides methods for color manipulation.

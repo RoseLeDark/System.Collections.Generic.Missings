@@ -16,15 +16,11 @@
  */
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
-
 	/// <summary>
 	/// Represents a color in the HSV (Hue–Saturation–Value) color space using
 	/// floating‑point components.  
 	/// Provides hue‑aware interpolation, component manipulation, arithmetic
 	/// operations, and normalization utilities. 
-	/// <Note> The Main Color in this Libary</Note>
 	/// </summary>
 	public struct ColorHSV : IColor<ColorHSV>, IEquatable<ColorHSV>, IComparable<ColorHSV> {
         internal float m_hue;         // 0–360°

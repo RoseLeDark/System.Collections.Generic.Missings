@@ -19,8 +19,6 @@ using SystemEx.Collections.Generic;
 
 
 namespace SystemEx.Drawing {
-    /// \addtogroup Drawing
-    /// @{
 
     /// <summary>
     /// Specifies the mathematical blend operation used when combining a layer

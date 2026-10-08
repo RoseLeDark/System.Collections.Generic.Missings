@@ -19,8 +19,6 @@
 using SystemEx.Base;
 
 namespace SystemEx.Drawing {
-	/// \addtogroup Drawing
-	/// @{
 
 	/// <summary>
 	/// Provides conversion utilities between different color spaces such as
